@@ -6,8 +6,8 @@ import { FaArrowRight } from "react-icons/fa";
 import Input from "../Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-const LoginModal = () => {
-  const { isOpenLoginModal, onCloseLoginModal, onOpenSignUpModal } =
+const SignUpModal = () => {
+  const { isOpenSignUpModal, onCloseSignUpModal, onOpenLoginModal } =
     useContext(AppContext);
 
   const {
@@ -22,9 +22,9 @@ const LoginModal = () => {
   });
 
   const toggle = useCallback(() => {
-    onCloseLoginModal();
-    onOpenSignUpModal();
-  }, [onCloseLoginModal, onOpenSignUpModal]);
+    onCloseSignUpModal();
+    onOpenLoginModal();
+  }, [onCloseSignUpModal, onOpenLoginModal]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
@@ -46,10 +46,31 @@ const LoginModal = () => {
           placeholder="Password"
           type="password"
           required
+          rules={{
+            pattern:
+              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+          }}
           register={register}
           errors={errors}
         />
       </div>
+      <span
+        className={clsx("mt-4 block text-sm text-muted-foreground sm:text-xs")}
+      >
+        By creating an account, you agree to our
+        <a
+          className={clsx(
+            "ml-1 cursor-pointer text-foreground hover:underline",
+          )}
+        >
+          Terms of Service
+        </a>
+        <span className="mx-1">&</span>
+        <a className={clsx("cursor-pointer text-foreground hover:underline")}>
+          Privacy Policy
+        </a>
+      </span>
+
       <button
         type="submit"
         className={clsx(
@@ -65,21 +86,21 @@ const LoginModal = () => {
 
   return (
     <Modal
-      title="Login"
+      title="Create Account"
       subtitle={
         <p className="text-sm text-muted-foreground">
-          Don't have an account?
+          Already a member?
           <button onClick={toggle} className="text-foreground hover:underline">
-            Create one here.
+            Login here.
           </button>
         </p>
       }
-      text="Login"
-      isOpen={isOpenLoginModal}
-      onClose={onCloseLoginModal}
+      text="Sign Up"
+      isOpen={isOpenSignUpModal}
+      onClose={onCloseSignUpModal}
       content={bodyContent}
     />
   );
 };
 
-export default LoginModal;
+export default SignUpModal;

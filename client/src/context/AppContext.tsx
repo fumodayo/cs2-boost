@@ -8,7 +8,7 @@ type Theme = "dark" | "light";
 type Currency = "vnd" | "usd";
 type Modal = false | true;
 
-type AppContext = {
+type AppContextType = {
   theme: Theme;
   setTheme: React.Dispatch<React.SetStateAction<Theme>>;
   currency: Currency;
@@ -16,9 +16,12 @@ type AppContext = {
   isOpenLoginModal: Modal;
   onOpenLoginModal: () => void;
   onCloseLoginModal: () => void;
+  isOpenSignUpModal: Modal;
+  onOpenSignUpModal: () => void;
+  onCloseSignUpModal: () => void;
 };
 
-export const AppContext = createContext<AppContext | null>(null);
+export const AppContext = createContext<AppContextType>({} as AppContextType);
 
 export default function AppContextProvider({ children }: ContextProviderProps) {
   const storedTheme = localStorage.getItem("theme");
@@ -45,6 +48,16 @@ export default function AppContextProvider({ children }: ContextProviderProps) {
     setIsOpenLoginModal(false);
   };
 
+  const [isOpenSignUpModal, setIsOpenSignUpModal] = useState<Modal>(false);
+
+  const onOpenSignUpModal = () => {
+    setIsOpenSignUpModal(true);
+  };
+
+  const onCloseSignUpModal = () => {
+    setIsOpenSignUpModal(false);
+  };
+
   useEffect(() => {
     currency && localStorage.setItem("currency", currency);
   }, [currency]);
@@ -61,7 +74,7 @@ export default function AppContextProvider({ children }: ContextProviderProps) {
     }
   }, [theme]);
 
-  const contextValue: AppContext = {
+  const contextValue: AppContextType = {
     theme,
     setTheme,
     currency,
@@ -69,6 +82,9 @@ export default function AppContextProvider({ children }: ContextProviderProps) {
     isOpenLoginModal,
     onOpenLoginModal,
     onCloseLoginModal,
+    isOpenSignUpModal,
+    onOpenSignUpModal,
+    onCloseSignUpModal,
   };
 
   return (

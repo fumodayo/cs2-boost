@@ -1,9 +1,6 @@
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Transition } from "@headlessui/react";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import clsx from "clsx";
 import {
-  FaArrowRight,
   FaDiscord,
   FaGoogle,
   FaSteam,
@@ -11,7 +8,6 @@ import {
   FaTwitch,
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import Input from "../Input";
 import { IconType } from "react-icons";
 
 const socialMedia = [
@@ -93,7 +89,6 @@ interface ModalProps {
   title?: string;
   subtitle?: React.ReactNode;
   text?: string;
-  isDescription?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -103,14 +98,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   subtitle,
   text,
-  isDescription,
 }) => {
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    setShowModal(isOpen);
-  }, [isOpen]);
-
   const handleClose = useCallback(() => {
     setTimeout(() => {
       onClose();
@@ -136,7 +124,7 @@ const Modal: React.FC<ModalProps> = ({
               "order-1 hidden rounded-r-lg bg-cover bg-center md:block md:w-1/2",
             )}
           >
-            <img src="/src/assets/illustrations/login-bg.png" alt="logo" />
+            <img className="w-full h-full object-cover" src="/src/assets/illustrations/login-bg.png" alt="logo" />
           </div>
           <div
             className={clsx(
@@ -147,12 +135,6 @@ const Modal: React.FC<ModalProps> = ({
               {title}
             </h2>
             {subtitle}
-            {/* <p className="text-sm text-muted-foreground">
-                  Don't have an account?
-                  <button className="text-foreground hover:underline">
-                    Create one here.
-                  </button>
-                </p> */}
             <div className="mt-8">
               <div className="space-y-8">
                 <div
@@ -180,42 +162,7 @@ const Modal: React.FC<ModalProps> = ({
                     className={clsx("w-1/5 border-b border-border lg:w-1/4")}
                   />
                 </div>
-                <form>
-                  <Input />
-                  {!isDescription && (
-                    <span
-                      className={clsx(
-                        "mt-4 block text-sm text-muted-foreground sm:text-xs",
-                      )}
-                    >
-                      By creating an account, you agree to our
-                      <a
-                        className={clsx(
-                          "ml-1 cursor-pointer text-foreground hover:underline",
-                        )}
-                      >
-                        Terms of Service
-                      </a>
-                      <span className="mx-1">&</span>
-                      <a
-                        className={clsx(
-                          "cursor-pointer text-foreground hover:underline",
-                        )}
-                      >
-                        Privacy Policy
-                      </a>
-                    </span>
-                  )}
-                  <button
-                    type="submit"
-                    className={clsx(
-                      "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5",
-                    )}
-                  >
-                    Continue
-                    <FaArrowRight className="ml-2" />
-                  </button>
-                </form>
+                {content}
               </div>
             </div>
           </div>

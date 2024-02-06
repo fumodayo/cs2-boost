@@ -6,11 +6,13 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import LoginModal from "./components/Modals/LoginModal";
+import SignUpModal from "./components/Modals/SignUpModal";
 
 function App() {
   return (
     <BrowserRouter>
       <LoginModal />
+      <SignUpModal />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
