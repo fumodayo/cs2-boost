@@ -2,6 +2,7 @@ import { IoIosSunny } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
 import { IoChevronDownOutline } from "react-icons/io5";
+import { FaArrowRight } from "react-icons/fa6";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
@@ -13,7 +14,11 @@ import MenuLanguage from "./Common/MenuLanguage";
 import MenuTheme from "./Common/MenuTheme";
 import MenuGame from "./Common/MenuGame";
 
-const Navbar = () => {
+interface NavbarProps {
+  isNonSticky?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
   const { t, i18n } = useTranslation();
 
   const { theme, currency, onOpenLoginModal } = useContext(AppContext);
@@ -37,15 +42,15 @@ const Navbar = () => {
     <header className="relative">
       <nav
         className={`${
-          sticky
+          sticky || isNonSticky
             ? clsx(
-                "fixed top-0 z-40 w-full border-b border-border px-4",
+                "fixed top-0 z-30 w-full border-b border-border px-4",
                 "before:absolute before:inset-0 before:bg-card-alt before:p-px before:transition-all before:duration-200",
                 "sm:px-6 lg:px-8 lg:before:bg-card-surface/75 lg:before:backdrop-blur-xl",
                 "dark:border-transparent dark:before:bg-[#151824] dark:lg:before:bg-[#151824]/50",
               )
             : clsx(
-                "fixed top-0 z-40 w-full border-b border-transparent px-4",
+                "fixed top-0 z-30 w-full border-b border-transparent px-4",
                 "sm:px-6 lg:px-8",
                 "dark:border-transparent",
               )
@@ -84,13 +89,12 @@ const Navbar = () => {
                 <button
                   type="button"
                   className={clsx(
-                    "relative flex h-11 items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-full border border-muted-foreground bg-secondary-light px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-                    "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                    "relative flex h-11 items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-full border border-muted-foreground/20 bg-secondary-light px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                   )}
                 >
                   <img
                     src="/src/assets/illustrations/target.svg"
-                    className="h-5 w-5 fill-muted-foreground"
+                    className="h-5 w-5 fill-muted-foreground opacity-50"
                     alt="target"
                   />
                   <div className="mx-1 capitalize">{t("Select Game")}</div>
@@ -108,6 +112,31 @@ const Navbar = () => {
           </div>
           <div className="flex items-center">
             <div className={clsx("hidden items-center space-x-2", "lg:flex")}>
+              {/** MENU THEME */}
+              <PopoverPrimitive.Root>
+                <PopoverPrimitive.Trigger>
+                  <button
+                    type="button"
+                    className={clsx(
+                      "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                    )}
+                  >
+                    {theme === "dark" ? (
+                      <FaMoon />
+                    ) : (
+                      <IoIosSunny className="text-2xl" />
+                    )}
+                  </button>
+                </PopoverPrimitive.Trigger>
+                <PopoverPrimitive.Content
+                  side="bottom"
+                  align="start"
+                  className="backdrop-brightness-5 absolute z-50 min-w-[180px] translate-y-3 overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
+                >
+                  <MenuTheme />
+                </PopoverPrimitive.Content>
+              </PopoverPrimitive.Root>
+
               {/** MENU LANGUAGE */}
               <PopoverPrimitive.Root>
                 <PopoverPrimitive.Trigger>
@@ -135,45 +164,18 @@ const Navbar = () => {
                   <MenuLanguage />
                 </PopoverPrimitive.Content>
               </PopoverPrimitive.Root>
-
-              {/** MENU THEME */}
-              <PopoverPrimitive.Root>
-                <PopoverPrimitive.Trigger>
-                  <button
-                    type="button"
-                    className={clsx(
-                      "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent font-medium text-secondary-light-foreground outline-none transition-colors",
-                      "sm:h-9 sm:w-9",
-                      "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary-light focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                    )}
-                  >
-                    {theme === "dark" ? (
-                      <FaMoon />
-                    ) : (
-                      <IoIosSunny className="text-2xl" />
-                    )}
-                  </button>
-                </PopoverPrimitive.Trigger>
-                <PopoverPrimitive.Content
-                  side="bottom"
-                  align="start"
-                  className="backdrop-brightness-5 absolute z-50 min-w-[180px] translate-y-3 overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
-                >
-                  <MenuTheme />
-                </PopoverPrimitive.Content>
-              </PopoverPrimitive.Root>
             </div>
-            <div className="relative ml-4 flow-root lg:ml-6">
+            <div className="relative flow-root ml-4">
               {/** MODAL LOGIN/REGISTER */}
               <button
                 onClick={handleOpenLoginModal}
                 type="button"
                 className={clsx(
-                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                  "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                 )}
               >
                 {t("Log in")}
+                <FaArrowRight className="ml-2" />
               </button>
             </div>
           </div>

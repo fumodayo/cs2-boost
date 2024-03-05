@@ -19,7 +19,7 @@ const MenuGame = () => {
       {games.map((game) => (
         <a
           className={clsx(
-            "relative flex w-full cursor-default select-none items-center rounded-md px-2 py-2.5 text-sm outline-none transition-colors hover:bg-accent hover:text-secondary-light-foreground focus:bg-accent focus:text-accent-foreground",
+            "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
           )}
           href={game.link}
         >

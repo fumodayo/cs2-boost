@@ -10,21 +10,21 @@ import { AppContext } from "../../context/AppContext";
 const services = [
   {
     icon: <IoRocketSharp />,
-    title: "boosting",
+    title: "Boosting",
     subtitle:
       "Ranking up and progressing has never been easier and more stress-free",
     label: "Rank Up Now",
   },
   {
     icon: <GiSamuraiHelmet />,
-    title: "accounts",
+    title: "Accounts",
     subtitle:
       "Step up your game with our vast catalog of affordable, top-quality accounts",
     label: "Browse Accounts",
   },
   {
     icon: <FaGraduationCap />,
-    title: "coaching",
+    title: "Coaching",
     subtitle: "Expert coaching by former C9 analysts, LCS players, and more",
     label: "Get Coaching",
   },
@@ -51,7 +51,7 @@ const Information = () => {
         )}
       >
         {t(
-          "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered",
+          "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered"
         )}
       </p>
       <img
@@ -109,7 +109,7 @@ const Information = () => {
                   "hover:brightness-110 focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                 )}
               >
-                {service.label} →
+                {t(service.label)} →
               </button>
             </div>
           </div>

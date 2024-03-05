@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { IconType } from "react-icons";
+import { useTranslation } from "react-i18next";
 
 const socialMedia = [
   {
@@ -99,6 +100,7 @@ const Modal: React.FC<ModalProps> = ({
   subtitle,
   text,
 }) => {
+  const { t } = useTranslation();
   const handleClose = useCallback(() => {
     setTimeout(() => {
       onClose();
@@ -110,12 +112,14 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-background backdrop-blur-sm">
+    <div
+      data-state={isOpen ? "open" : "closed"}
+      className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80"
+    >
       <div
+        data-state={isOpen ? "open" : "closed"}
         className={clsx(
-          "fixed top-1/2 z-50 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
-          "sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
-          "focus:outline-none",
+          "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
         )}
       >
         <div className="flex w-full overflow-hidden rounded-lg bg-card">
@@ -124,7 +128,11 @@ const Modal: React.FC<ModalProps> = ({
               "order-1 hidden rounded-r-lg bg-cover bg-center md:block md:w-1/2",
             )}
           >
-            <img className="w-full h-full object-cover" src="/src/assets/illustrations/login-bg.png" alt="logo" />
+            <img
+              className="h-full w-full object-cover"
+              src="/src/assets/illustrations/login-bg.png"
+              alt="logo"
+            />
           </div>
           <div
             className={clsx(
@@ -132,7 +140,7 @@ const Modal: React.FC<ModalProps> = ({
             )}
           >
             <h2 className="font-display mb-2 text-3xl font-semibold text-foreground">
-              {title}
+              {title && t(title)}
             </h2>
             {subtitle}
             <div className="mt-8">
@@ -156,7 +164,7 @@ const Modal: React.FC<ModalProps> = ({
                     className={clsx("w-1/5 border-b border-border lg:w-1/4")}
                   />
                   <div className="text-center text-xs capitalize text-muted-foreground">
-                    Or {text} with email
+                    {t("Or")} {text && t(text)} {t("with email")}
                   </div>
                   <span
                     className={clsx("w-1/5 border-b border-border lg:w-1/4")}

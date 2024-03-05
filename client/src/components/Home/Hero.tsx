@@ -1,21 +1,24 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const cards = [
-  { value: "counter-strike-2", label: "Counter Strike 2", isComing: true },
-  { value: "lol-wild-rift", label: "Lol: Wild Rift", isComing: false },
-  { value: "overwatch-2", label: "Overwatch 2", isComing: false },
-  { value: "rocket-league", label: "Rocket League", isComing: false },
-  { value: "teamfight-tactics", label: "Teamfight Tactics", isComing: false },
-  { value: "valorant", label: "Valorant", isComing: false },
-  { value: "world-of-warcraft", label: "World of Warcraft", isComing: false },
-  { value: "league-of-legends", label: "League of Legends", isComing: false },
-  { value: "destiny-2", label: "Destiny 2", isComing: false },
-  { value: "apex-legends", label: "Apex Legends", isComing: false },
+  { value: "counter-strike-2", label: "Counter Strike 2", available: true },
+  { value: "lol-wild-rift", label: "Lol: Wild Rift", available: false },
+  { value: "overwatch-2", label: "Overwatch 2", available: false },
+  { value: "rocket-league", label: "Rocket League", available: false },
+  { value: "teamfight-tactics", label: "Teamfight Tactics", available: false },
+  { value: "valorant", label: "Valorant", available: false },
+  { value: "world-of-warcraft", label: "World of Warcraft", available: false },
+  { value: "league-of-legends", label: "League of Legends", available: false },
+  { value: "destiny-2", label: "Destiny 2", available: false },
+  { value: "apex-legends", label: "Apex Legends", available: false },
 ];
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
   const [hoverItem, setHoverItem] = useState("league-of-legends");
 
@@ -110,12 +113,13 @@ const Hero = () => {
         >
           {cards.map((card) => (
             <a
+              onClick={() => card.available && navigate(card.value)}
               onMouseEnter={() => setHoverItem(card.value)}
               className="game-card-group group relative flex w-auto flex-col items-start gap-3 leading-5"
             >
               <div
                 className={`game-card-image-wrapper relative overflow-clip ${
-                  !card.isComing && "!opacity-10 blur-[1px]"
+                  !card.available && "!opacity-10 blur-[1px]"
                 }`}
               >
                 <img
@@ -132,7 +136,7 @@ const Hero = () => {
                   {card.label}
                 </div>
               </div>
-              {!card.isComing && (
+              {!card.available && (
                 <div className="absolute bottom-1/2 left-0 right-0 mx-auto inline-flex w-fit items-center rounded-full bg-secondary/75 px-2 py-1 text-xs font-medium text-foreground opacity-100 ring-1 ring-inset ring-secondary">
                   {t("Coming Soon")}
                 </div>

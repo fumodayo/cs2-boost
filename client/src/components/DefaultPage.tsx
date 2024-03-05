@@ -1,0 +1,123 @@
+import React from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import clsx from "clsx";
+import Sidebar from "./Sidebar";
+import Services from "./Home/Services";
+import { useTranslation } from "react-i18next";
+
+interface DefaultPageProps {
+  children: React.ReactNode;
+}
+
+const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="bg-background">
+      <Navbar isNonSticky />
+      <div className="h-full w-full">
+        <main>
+          {/* BANNER */}
+          <div className="absolute -z-10 w-full">
+            <div className="relative h-[60vh] overflow-hidden">
+              <img
+                src="/src/assets/counter-strike-2/banner.png"
+                className={clsx(
+                  "h-full w-full object-cover saturate-0",
+                  "dark:hidden",
+                )}
+                style={{ objectPosition: "0px 40%" }}
+                alt="Counter Strike 2"
+              />
+              <img
+                src="/src/assets/counter-strike-2/banner.png"
+                className={clsx(
+                  "hidden h-full w-full object-cover saturate-0",
+                  "dark:block",
+                )}
+                style={{ objectPosition: "0px 40%" }}
+                alt="Counter Strike 2"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background to-background/90 backdrop-blur-sm" />
+            </div>
+          </div>
+          {/* CONTENT */}
+          <div className={clsx("px-4", "sm:px-6 lg:px-8")}>
+            <div className="mx-auto max-w-[1550px] py-24">
+              <div
+                className={clsx(
+                  "flex grid-cols-1 gap-4",
+                  "lg:grid lg:grid-cols-[auto,2fr,auto] lg:grid-rows-[auto,1fr] lg:flex-row",
+                )}
+              >
+                <Sidebar />
+                <div className="lg:col-start-2 lg:col-end-4">
+                  <div className="mx-auto max-w-[1400px]">
+                    <div className="max-w-screen-lg">
+                      {/* NAVIGATION */}
+                      <nav className="hidden sm:flex">
+                        <ol className="flex items-center gap-x-2">
+                          <li>
+                            <div className="flex items-center">
+                              <a
+                                className="text-xs font-medium text-muted-foreground hover:text-foreground"
+                                href="#"
+                              >
+                                Home
+                              </a>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="12"
+                                width="8"
+                                viewBox="0 0 320 512"
+                                className="fill-muted-foreground/50"
+                              >
+                                <path d="M319.9 0H248.8L.1 512H71.2L319.9 0z"></path>
+                              </svg>
+                              <div className="ml-2 text-xs font-medium text-foreground">
+                                Counter Strike 2
+                              </div>
+                            </div>
+                          </li>
+                        </ol>
+                      </nav>
+
+                      {/* TITLE */}
+                      <div className="my-4 flex items-center gap-4">
+                        <img
+                          src="https://cdn.gameboost.com/games/counter-strike-2/logo/card.svg"
+                          alt="cs2"
+                          className="-ml-px h-16 w-16"
+                        />
+                        <div>
+                          <h1 className="text-3xl font-bold text-foreground">
+                            {t("CS2 Boost & Carry Services")}
+                          </h1>
+                          <p className="text-sm text-muted-foreground">
+                            {t("Buy CS2 Boosting & Carry services")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    {children}
+                    <div className="relative my-20">
+                      <Services />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default DefaultPage;

@@ -30,7 +30,8 @@
   opacity: 0.2;
   mix-blend-mode: hard-light;
 
-  box-shadow: 0 0 0 30px rgba(89, 155, 252, 0.7),
+  box-shadow:
+    0 0 0 30px rgba(89, 155, 252, 0.7),
     0 0 60px 60px rgba(89, 155, 252, 0.5),
     0 0 120px 90px rgba(89, 155, 252, 0.3),
     0 0 240px 160px rgba(89, 155, 252, 0.2);
@@ -40,149 +41,155 @@
   html {
     font-family: "Manrope", sans-serif;
   }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
   :root[data-theme="light"] {
-    --background: 218, 29%, 97%;
-    --foreground: 235, 27%, 9%;
-    --card: 0, 0%, 100%;
-    --card-foreground: 222.2, 84%, 4.9%;
-    --card-alt: 0, 0%, 100%;
-    --card-alt-foreground: 222.2, 84%, 4.9%;
-    --card-surface: 0, 0%, 100%;
-    --card-surface-foreground: 222.2, 84%, 4.9%;
-    --popover: 0, 0%, 100%;
-    --popover-foreground: 222.2, 84%, 4.9%;
-    --primary: 221.2, 83.2%, 53.3%;
-    --primary-hover: 217, 100%, 60%;
-    --primary-foreground: 0, 0%, 100%;
-    --primary-ring: 213.12, 93.9%, 67.84%, 0.3;
-    --primary-light: 217, 100%, 60%, 0.1;
-    --primary-light-hover: 217, 100%, 60%, 0.2;
-    --primary-light-foreground: 222, 83%, 53%;
-    --secondary: 0, 0%, 98%;
-    --secondary-hover: 0, 0%, 96%;
-    --secondary-foreground: 0, 0%, 9%;
-    --secondary-ring: 0, 0%, 83%;
-    --secondary-light: 217.89, 10.61%, 64.9%, 0.1;
-    --secondary-light-hover: 217.89, 10.61%, 64.9%, 0.2;
-    --secondary-light-foreground: 0, 0%, 9%;
-    --danger: 360, 84%, 60%;
-    --danger-hover: 0, 91%, 71%;
-    --danger-foreground: 0, 0%, 100%;
-    --danger-ring: 0, 90.6%, 70.78%, 0.2;
-    --danger-light: 0, 90.6%, 70.78%, 0.1;
-    --danger-light-hover: 0, 90.6%, 70.78%, 0.2;
-    --danger-light-foreground: 0, 72%, 60%;
-    --success: 142, 76%, 36%;
-    --success-hover: 142, 70%, 45%;
-    --success-foreground: 0, 0%, 100%;
-    --success-ring: 142.09, 70.56%, 45.29%, 0.2;
-    --success-ring-full: 142.09, 70.56%, 45.29%;
-    --success-light: 141.89, 69.16%, 58.04%, 0.1;
-    --success-light-hover: 141.89, 69.16%, 58.04%, 0.2;
-    --success-light-foreground: 142, 76%, 36%;
-    --warning: 47.9, 95.8%, 53.1%;
-    --warning-hover: 48, 95%, 59%;
-    --warning-foreground: 26, 83.3%, 14.1%;
-    --warning-ring: 47.95, 95.82%, 53.14%, 0.3;
-    --warning-light: 47.95, 95.82%, 53.14%, 0.1;
-    --warning-light-hover: 47.95, 95.82%, 53.14%, 0.2;
-    --warning-light-foreground: 40, 95%, 40%;
-    --info: 243, 75%, 59%;
-    --info-hover: 239, 85%, 67%;
-    --info-foreground: 0, 0%, 100%;
-    --info-ring: 234.45, 89.47%, 73.92%, 0.3;
-    --info-light: 234.45, 89.47%, 73.92%, 0.1;
-    --info-light-hover: 234.45, 89.47%, 73.92%, 0.2;
-    --info-light-foreground: 243, 75%, 59%;
-    --muted: 210, 40%, 96.5%;
-    --muted-foreground: 215.4, 16.3%, 46.9%;
-    --accent: 210, 40%, 96.1%;
-    --accent-foreground: 222.2, 47.4%, 11.2%;
-    --destructive: 0, 84.2%, 60.2%;
-    --destructive-foreground: 210, 40%, 98%;
-    --border: 214.3, 25.8%, 89.4%;
-    --input: 214.3, 25.8%, 89.4%;
-    --field: 0, 0%, 100%;
-    --field-ring: 0, 0%, 83%;
-    --field-ring-hover: 0, 0%, 75%;
-    --field-foreground: 222.2, 84%, 4.9%;
-    --radio: 210, 16%, 90%;
-    --radio-hover: 210, 16%, 100%;
-    --radio-foreground: 222.2, 84%, 4.9%;
-    --ring: 221.2, 83.2%, 53.3%;
+    --background: 218deg 29% 97%;
+    --foreground: 235deg 27% 9%;
+    --card: 0deg 0% 100%;
+    --card-foreground: 222.2deg 84% 4.9%;
+    --card-alt: 0deg 0% 100%;
+    --card-alt-foreground: 222.2deg 84% 4.9%;
+    --card-surface: 0deg 0% 100%;
+    --card-surface-foreground: 222.2deg 84% 4.9%;
+    --popover: 0deg 0% 100%;
+    --popover-foreground: 222.2deg 84% 4.9%;
+    --primary: 221.2deg 83.2% 53.3%;
+    --primary-hover: 217deg 100% 60%;
+    --primary-foreground: 0deg 0% 100%;
+    --primary-ring: 213.12deg 93.9% 67.84%;
+    --primary-light: 217deg 100% 60%;
+    --primary-light-hover: 217deg 100% 60%;
+    --primary-light-foreground: 222deg 83% 53%;
+    --secondary: 0deg 0% 98%;
+    --secondary-hover: 0deg 0% 96%;
+    --secondary-foreground: 0deg 0% 9%;
+    --secondary-ring: 0deg 0% 83%;
+    --secondary-light: 217.89deg 10.61% 64.9%;
+    --secondary-light-hover: 217.89deg 10.61% 64.9%;
+    --secondary-light-foreground: 0deg 0% 9%;
+    --danger: 360deg 84% 60%;
+    --danger-hover: 0deg 91% 71%;
+    --danger-foreground: 0deg 0% 100%;
+    --danger-ring: 0deg 90.6% 70.78%;
+    --danger-light: 0deg 90.6% 70.78%;
+    --danger-light-hover: 0deg 90.6% 70.78%;
+    --danger-light-foreground: 0deg 72% 60%;
+    --success: 142deg 76% 36%;
+    --success-hover: 142deg 70% 45%;
+    --success-foreground: 0deg 0% 100%;
+    --success-ring: 142.09deg 70.56% 45.29%;
+    --success-ring-full: 142.09deg 70.56% 45.29%;
+    --success-light: 141.89deg 69.16% 58.04%;
+    --success-light-hover: 141.89deg 69.16% 58.04%;
+    --success-light-foreground: 142deg 76% 36%;
+    --warning: 47.9deg 95.8% 53.1%;
+    --warning-hover: 48deg 95% 59%;
+    --warning-foreground: 26deg 83.3% 14.1%;
+    --warning-ring: 47.95deg 95.82% 53.14%;
+    --warning-light: 47.95deg 95.82% 53.14%;
+    --warning-light-hover: 47.95deg 95.82% 53.14%;
+    --warning-light-foreground: 40deg 95% 40%;
+    --info: 243deg 75% 59%;
+    --info-hover: 239deg 85% 67%;
+    --info-foreground: 0deg 0% 100%;
+    --info-ring: 234.45deg 89.47% 73.92%;
+    --info-light: 234.45deg 89.47% 73.92%;
+    --info-light-hover: 234.45deg 89.47% 73.92%;
+    --info-light-foreground: 243deg 75% 59%;
+    --muted: 210deg 40% 96.5%;
+    --muted-foreground: 215.4deg 16.3% 46.9%;
+    --accent: 210deg 40% 96.1%;
+    --accent-foreground: 222.2deg 47.4% 11.2%;
+    --destructive: 0deg 84.2% 60.2%;
+    --destructive-foreground: 210deg 40% 98%;
+    --border: 214.3deg 25.8% 89.4%;
+    --input: 214.3deg 25.8% 89.4%;
+    --field: 0deg 0% 100%;
+    --field-ring: 0deg 0% 83%;
+    --field-ring-hover: 0deg 0% 75%;
+    --field-foreground: 222.2deg 84% 4.9%;
+    --radio: 210deg 16% 90%;
+    --radio-hover: 210deg 16% 100%;
+    --radio-foreground: 222.2deg 84% 4.9%;
+    --ring: 221.2deg 83.2% 53.3%;
     --radius: 0.5rem;
   }
 
   :root[data-theme="dark"] {
-    --background: 223, 20%, 7%;
-    --foreground: 0, 0%, 98%;
-    --card: 220, 20%, 9%;
-    --card-foreground: 225, 11%, 93%;
-    --card-surface: 225, 14%, 11%;
-    --card-surface-foreground: 225, 11%, 93%;
-    --card-alt: 225, 17%, 9%;
-    --card-alt-foreground: 225, 11%, 93%;
-    --popover: 218, 14%, 11%;
-    --popover-foreground: 0, 0%, 98%;
-    --primary: 221.2, 83.2%, 53.3%;
-    --primary-hover: 217, 100%, 60%;
-    --primary-foreground: 0, 0%, 98%;
-    --primary-ring: 213.12, 93.9%, 67.84%, 0.3;
-    --primary-light: 217, 100%, 60%, 0.1;
-    --primary-light-hover: 217, 100%, 60%, 0.2;
-    --primary-light-foreground: 217, 100%, 70%;
-    --secondary: 220, 10%, 17%;
-    --secondary-hover: 220, 10%, 23%;
-    --secondary-foreground: 0, 0%, 98%;
-    --secondary-ring: 217.89, 10.61%, 64.9%, 0.2;
-    --secondary-light: 217.89, 10.61%, 64.9%, 0.1;
-    --secondary-light-hover: 217.89, 10.61%, 64.9%, 0.2;
-    --secondary-light-foreground: 0, 0%, 92%;
-    --danger: 360, 84%, 60%;
-    --danger-hover: 0, 91%, 71%;
-    --danger-foreground: 0, 0%, 98%;
-    --danger-ring: 0, 90.6%, 70.78%, 0.2;
-    --danger-light: 0, 90.6%, 70.78%, 0.1;
-    --danger-light-hover: 0, 90.6%, 70.78%, 0.2;
-    --danger-light-foreground: 0, 92.5%, 65.7%;
-    --success: 142, 76%, 36%;
-    --success-hover: 142, 70%, 45%;
-    --success-foreground: 0, 0%, 98%;
-    --success-ring: 142.09, 70.56%, 45.29%, 0.2;
-    --success-ring-full: 142.09, 70.56%, 45.29%;
-    --success-light: 141.89, 69.16%, 58.04%, 0.1;
-    --success-light-hover: 141.89, 69.16%, 58.04%, 0.2;
-    --success-light-foreground: 141.89, 69.16%, 58.04%;
-    --warning: 47.9, 95.8%, 53.1%;
-    --warning-hover: 48, 95%, 59%;
-    --warning-foreground: 26, 83.3%, 14.1%;
-    --warning-ring: 47.95, 95.82%, 53.14%, 0.2;
-    --warning-light: 47.95, 95.82%, 53.14%, 0.1;
-    --warning-light-hover: 47.95, 95.82%, 53.14%, 0.2;
-    --warning-light-foreground: 45.4, 93.39%, 47.45%;
-    --info: 243, 75%, 59%;
-    --info-hover: 239, 85%, 67%;
-    --info-foreground: 0, 0%, 98%;
-    --info-ring: 234.45, 89.47%, 73.92%, 0.3;
-    --info-light: 234.45, 89.47%, 73.92%, 0.1;
-    --info-light-hover: 234.45, 89.47%, 73.92%, 0.2;
-    --info-light-foreground: 234.45, 89.47%, 73.92%;
-    --muted: 218, 14%, 11%;
-    --muted-foreground: 240, 5%, 64.9%;
-    --accent: 220, 10%, 17%;
-    --accent-foreground: 0, 0%, 98%;
-    --destructive: 0, 62.8%, 30.6%;
-    --destructive-foreground: 0, 0%, 98%;
-    --border: 213, 13%, 14%;
-    --input: 220, 10%, 17%;
-    --field: 225, 17%, 9%;
-    --field-ring: 223, 8%, 17%;
-    --field-ring-hover: 220, 6%, 30%;
-    --field-foreground: 0, 0%, 98%;
-    --radio: 227, 8%, 23%;
-    --radio-hover: 227, 7%, 26%;
-    --radio-foreground: 0, 0%, 98%;
-    --ring: 220, 10%, 17%;
+    --background: 223deg 20% 7%;
+    --foreground: 0deg 0% 98%;
+    --card: 220deg 20% 9%;
+    --card-foreground: 225deg 11% 93%;
+    --card-surface: 225deg 14% 11%;
+    --card-surface-foreground: 225deg 11% 93%;
+    --card-alt: 225deg 17% 9%;
+    --card-alt-foreground: 225deg 11% 93%;
+    --popover: 218deg 14% 11%;
+    --popover-foreground: 0deg 0% 98%;
+    --primary: 221.2deg 83.2% 53.3%;
+    --primary-hover: 217deg 100% 60%;
+    --primary-foreground: 0deg 0% 98%;
+    --primary-ring: 213.12deg 93.9% 67.84%;
+    --primary-light: 217deg 100% 60%;
+    --primary-light-hover: 217deg 100% 60%;
+    --primary-light-foreground: 217deg 100% 70%;
+    --secondary: 220deg 10% 17%;
+    --secondary-hover: 220deg 10% 23%;
+    --secondary-foreground: 0deg 0% 98%;
+    --secondary-ring: 217.89deg 10.61% 64.9%;
+    --secondary-light: 217.89deg 10.61% 64.9%;
+    --secondary-light-hover: 217.89deg 10.61% 64.9%;
+    --secondary-light-foreground: 0deg 0% 92%;
+    --danger: 360deg 84% 60%;
+    --danger-hover: 0deg 91% 71%;
+    --danger-foreground: 0deg 0% 98%;
+    --danger-ring: 0deg 90.6% 70.78%;
+    --danger-light: 0deg 90.6% 70.78%;
+    --danger-light-hover: 0deg 90.6% 70.78%;
+    --danger-light-foreground: 0deg 92.5% 65.7%;
+    --success: 142deg 76% 36%;
+    --success-hover: 142deg 70% 45%;
+    --success-foreground: 0deg 0% 98%;
+    --success-ring: 142.09deg 70.56% 45.29%;
+    --success-ring-full: 142.09deg 70.56% 45.29%;
+    --success-light: 141.89deg 69.16% 58.04%;
+    --success-light-hover: 141.89deg 69.16% 58.04%;
+    --success-light-foreground: 141.89deg 69.16% 58.04%;
+    --warning: 47.9deg 95.8% 53.1%;
+    --warning-hover: 48deg 95% 59%;
+    --warning-foreground: 26deg 83.3% 14.1%;
+    --warning-ring: 47.95deg 95.82% 53.14%;
+    --warning-light: 47.95deg 95.82% 53.14%;
+    --warning-light-hover: 47.95deg 95.82% 53.14%;
+    --warning-light-foreground: 45.4deg 93.39% 47.45%;
+    --info: 243deg 75% 59%;
+    --info-hover: 239deg 85% 67%;
+    --info-foreground: 0deg 0% 98%;
+    --info-ring: 234.45deg 89.47% 73.92%;
+    --info-light: 234.45deg 89.47% 73.92%;
+    --info-light-hover: 234.45deg 89.47% 73.92%;
+    --info-light-foreground: 234.45deg 89.47% 73.92%;
+    --muted: 218deg 14% 11%;
+    --muted-foreground: 240deg 5% 64.9%;
+    --accent: 220deg 10% 17%;
+    --accent-foreground: 0deg 0% 98%;
+    --destructive: 0deg 62.8% 30.6%;
+    --destructive-foreground: 0deg 0% 98%;
+    --border: 213deg 13% 14%;
+    --input: 220deg 10% 17%;
+    --field: 225deg 17% 9%;
+    --field-ring: 223deg 8% 17%;
+    --field-ring-hover: 220deg 6% 30%;
+    --field-foreground: 0deg 0% 98%;
+    --radio: 227deg 8% 23%;
+    --radio-hover: 227deg 7% 26%;
+    --radio-foreground: 0deg 0% 98%;
+    --ring: 220deg 10% 17%;
     --radius: 0.5rem;
   }
 }
@@ -322,4 +329,56 @@
     #15181e
   );
   content: "";
+}
+
+.tippy-box[data-theme~="light"] {
+  backdrop-filter: brightness(0.5);
+  border-radius: 0.375rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.tippy-box[data-theme~="dark"] {
+  backdrop-filter: brightness(0.5);
+  border-radius: 0.375rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.scroll-custom {
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--bg-primary));
+    border-radius: 0.375rem;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 0.375rem;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary-hover));
+  }
+}
+
+.rc-slider-dot {
+  visibility: hidden !important;
 }

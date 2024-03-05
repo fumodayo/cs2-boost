@@ -5,8 +5,11 @@ import clsx from "clsx";
 import { FaArrowRight } from "react-icons/fa";
 import Input from "../Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 const SignUpModal = () => {
+  const { t } = useTranslation();
+
   const { isOpenSignUpModal, onCloseSignUpModal, onOpenLoginModal } =
     useContext(AppContext);
 
@@ -57,17 +60,17 @@ const SignUpModal = () => {
       <span
         className={clsx("mt-4 block text-sm text-muted-foreground sm:text-xs")}
       >
-        By creating an account, you agree to our
+        {t("By creating an account, you agree to our")}
         <a
           className={clsx(
             "ml-1 cursor-pointer text-foreground hover:underline",
           )}
         >
-          Terms of Service
+          {t("Terms of Service")}
         </a>
         <span className="mx-1">&</span>
         <a className={clsx("cursor-pointer text-foreground hover:underline")}>
-          Privacy Policy
+          {t("Privacy Policy")}
         </a>
       </span>
 
@@ -78,7 +81,7 @@ const SignUpModal = () => {
           "sm:py-2.5",
         )}
       >
-        Continue
+        {t("Continue")}
         <FaArrowRight className="ml-2" />
       </button>
     </form>
@@ -89,9 +92,9 @@ const SignUpModal = () => {
       title="Create Account"
       subtitle={
         <p className="text-sm text-muted-foreground">
-          Already a member?
+          {t("Already a member")}?
           <button onClick={toggle} className="text-foreground hover:underline">
-            Login here.
+            {t("Login here")}.
           </button>
         </p>
       }

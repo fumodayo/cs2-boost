@@ -7,6 +7,7 @@ import {
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 interface InputProps {
   id: string;
@@ -29,6 +30,7 @@ const Input: React.FC<InputProps> = ({
   rules,
   errors,
 }) => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword((show) => !show);
 
@@ -38,7 +40,7 @@ const Input: React.FC<InputProps> = ({
     <div className="relative w-full">
       <input
         id={id}
-        placeholder={placeholder}
+        placeholder={placeholder && t(placeholder)}
         disabled={disabled}
         type={type === "password" ? (showPassword ? "text" : "password") : type}
         {...register(id, { required, ...rules })}

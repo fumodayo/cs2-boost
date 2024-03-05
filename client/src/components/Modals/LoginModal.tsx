@@ -5,8 +5,11 @@ import clsx from "clsx";
 import { FaArrowRight } from "react-icons/fa";
 import Input from "../Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 const LoginModal = () => {
+  const { t } = useTranslation();
+
   const { isOpenLoginModal, onCloseLoginModal, onOpenSignUpModal } =
     useContext(AppContext);
 
@@ -57,7 +60,7 @@ const LoginModal = () => {
           "sm:py-2.5",
         )}
       >
-        Continue
+        {t("Continue")}
         <FaArrowRight className="ml-2" />
       </button>
     </form>
@@ -68,9 +71,9 @@ const LoginModal = () => {
       title="Login"
       subtitle={
         <p className="text-sm text-muted-foreground">
-          Don't have an account?
+          {t("Don't have an account")}?
           <button onClick={toggle} className="text-foreground hover:underline">
-            Create one here.
+            {t("Create one here")}.
           </button>
         </p>
       }
