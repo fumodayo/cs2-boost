@@ -12,6 +12,7 @@ import Game from "./pages/Game";
 import Premie from "./pages/Premie";
 import Wingman from "./pages/Wingman";
 import FarmExp from "./pages/FarmExp";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="sign-up" element={<SignUp />} />
           <Route path="sign-in" element={<SignIn />} />
+          <Route path="checkout" element={<Checkout />} />
           <Route path="counter-strike-2/*">
             <Route index element={<Game />} />
             <Route path="premie" element={<Premie />} />
