@@ -13,6 +13,7 @@ import Premie from "./pages/Premie";
 import Wingman from "./pages/Wingman";
 import FarmExp from "./pages/FarmExp";
 import Checkout from "./pages/Checkout";
+import Boosts from "./pages/user/Boosts";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
             <Route path="premie" element={<Premie />} />
             <Route path="wingman" element={<Wingman />} />
             <Route path="level-farming" element={<FarmExp />} />
+          </Route>
+          <Route path="dashboard">
+            <Route index element={<Boosts />} />
+            <Route path="boosts" element={<Boosts />} />
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="profile" element={<Profile />} />

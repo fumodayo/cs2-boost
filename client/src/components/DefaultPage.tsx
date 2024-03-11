@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import clsx from "clsx";
-import Sidebar from "./Sidebar";
+import MiniSidebar from "./MiniSidebar";
 import Services from "./Home/Services";
 import { useTranslation } from "react-i18next";
 
@@ -51,7 +51,7 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                   "lg:grid lg:grid-cols-[auto,2fr,auto] lg:grid-rows-[auto,1fr] lg:flex-row",
                 )}
               >
-                <Sidebar />
+                <MiniSidebar />
                 <div className="lg:col-start-2 lg:col-end-4">
                   <div className="mx-auto max-w-[1400px]">
                     <div className="max-w-screen-lg">

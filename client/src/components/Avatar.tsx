@@ -33,6 +33,10 @@ interface AvatarItemProps {
   icon?: IconType;
 }
 
+interface AvatarProps {
+  children: React.ReactNode;
+}
+
 const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
   return (
     <DropdownMenu.Item className="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
@@ -46,7 +50,7 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
   );
 };
 
-const Avatar = () => {
+const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const { theme, setTheme } = useContext(AppContext);
 
   const handleThemeChange = (selected: string) => {
@@ -55,18 +59,7 @@ const Avatar = () => {
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary">
-          <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">
-            <img
-              src="/src/assets/avatar.png"
-              alt="user"
-              className="h-full w-full rounded-full object-cover"
-            />
-          </div>
-          <span className="sr-only">Open user menu for user</span>
-        </button>
-      </DropdownMenu.Trigger>
+      <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content className="backdrop-brightness-5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 min-w-[8rem] overflow-visible rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
           <div className="flex items-center gap-x-3 px-2 py-2 text-sm font-medium">

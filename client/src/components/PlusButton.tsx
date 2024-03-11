@@ -1,0 +1,118 @@
+import * as Popover from "@radix-ui/react-popover";
+import { FaPlus, FaCheck } from "react-icons/fa6";
+import { IoSearch } from "react-icons/io5";
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { useMemo, useState } from "react";
+import { matchSorter } from "match-sorter";
+
+type Option = {
+  image?: string;
+  value: string;
+  name: string;
+};
+
+interface PlusButtonProps {
+  name: string;
+  options: Option[];
+}
+
+const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  const matches = useMemo(() => {
+    if (!searchValue) return options;
+    const keys = ["label", "value"];
+    const filteredLanguages = matchSorter(options, searchValue, { keys });
+    return filteredLanguages;
+  }, [searchValue, options]);
+
+  const handleCheckboxChange = (languageValue: string) => {
+    setSelectedValues((prevSelectedValues) => {
+      if (prevSelectedValues.includes(languageValue)) {
+        // Remove the value if it's already selected
+        return prevSelectedValues.filter((val) => val !== languageValue);
+      } else {
+        // Add the value if it's not selected
+        return [...prevSelectedValues, languageValue];
+      }
+    });
+  };
+
+  return (
+    <Popover.Root>
+      <Popover.Trigger asChild>
+        <button className="inline-flex h-8 items-center justify-center rounded-md border border-dashed border-input bg-transparent px-3 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+          <FaPlus className="mr-2" />
+          {name}
+          {selectedValues.length > 0 && (
+            <>
+              <div className="mx-2 h-4 w-px shrink-0 bg-secondary" />
+              <div className="hidden space-x-1 lg:flex">
+                {selectedValues.map((selectedValue) => {
+                  const matchingOption = options.find(
+                    (option) => option.value === selectedValue,
+                  );
+                  return (
+                    <div
+                      key={selectedValue}
+                      className="inline-flex items-center rounded-sm border border-transparent bg-secondary px-1 py-0.5 text-xs font-normal text-secondary-foreground transition-colors hover:bg-secondary/80 focus:outline-none  focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    >
+                      {matchingOption ? matchingOption.name : selectedValue}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </button>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-[200px] rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-none">
+          <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground">
+            {/* SEARCH */}
+            <div className="flex items-center border-b px-3">
+              <IoSearch className="mr-0.5 shrink-0 text-muted-foreground" />
+              <input
+                className="flex h-10 w-full rounded-lg border-transparent bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground focus:border-0 focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50"
+                type="text"
+                placeholder={name}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </div>
+            <div className="scroll-sm max-h-[300px] overflow-y-auto overflow-x-hidden">
+              <div className="scroll-sm max-h-[250px] overflow-hidden overflow-y-scroll p-1 text-foreground">
+                {matches.map(({ name, value: languageValue, image }) => (
+                  <Checkbox.Root
+                    className="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                    id={languageValue}
+                    onCheckedChange={() => handleCheckboxChange(languageValue)}
+                    checked={selectedValues.includes(languageValue)}
+                  >
+                    <Checkbox.Indicator>
+                      {selectedValues.includes(languageValue) && (
+                        <FaCheck className=" text-success" />
+                      )}
+                    </Checkbox.Indicator>
+                    {image && (
+                      <img
+                        src={`/src/assets/${image}/logo.svg`}
+                        className="ml-1 h-4 w-4 flex-shrink-0"
+                      />
+                    )}
+                    <label className="ml-1" htmlFor={languageValue}>
+                      {name}
+                    </label>
+                  </Checkbox.Root>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+};
+
+export default PlusButton;

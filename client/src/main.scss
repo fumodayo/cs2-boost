@@ -6,6 +6,10 @@
 
 @import url("https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css");
 
+$large: 1550px;
+$medium: 1024px;
+$small: 640px;
+
 .fi {
   width: 24px;
   height: 24px;
@@ -381,4 +385,18 @@
 
 .rc-slider-dot {
   visibility: hidden !important;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+
+  @media screen and (min-width: $small) {
+    padding: 1.5rem;
+  }
+
+  @media screen and (min-width: $medium) {
+    padding: 2rem;
+  }
 }

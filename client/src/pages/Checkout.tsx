@@ -132,7 +132,18 @@ const Checkout = () => {
                 </a>
 
                 {/* AVATAR */}
-                <Avatar />
+                <Avatar>
+                  <button className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary">
+                    <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">
+                      <img
+                        src="/src/assets/avatar.png"
+                        alt="user"
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    </div>
+                    <span className="sr-only">Open user menu for user</span>
+                  </button>
+                </Avatar>
               </div>
 
               {/* CONTENT */}

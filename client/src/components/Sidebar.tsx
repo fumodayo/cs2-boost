@@ -1,149 +1,131 @@
-import clsx from "clsx";
-import { IconType } from "react-icons";
-import { GiDiamondHard } from "react-icons/gi";
-import { GiBroadsword } from "react-icons/gi";
-import { LuSwords } from "react-icons/lu";
-import { HiSparkles } from "react-icons/hi2";
-import { Link, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import Avatar from "./Avatar";
+import { IoGrid } from "react-icons/io5";
+import { HiMiniRocketLaunch } from "react-icons/hi2";
+import { GiSamuraiHelmet } from "react-icons/gi";
+import { BiSolidCog } from "react-icons/bi";
 
-const serviceItems = [
+const sidebarItems = [
   {
-    icon: HiSparkles,
-    label: "Services",
-    value: "services",
+    title: "MAIN",
+    items: [
+      {
+        label: "Dashboard",
+        value: "dashboard",
+        icon: IoGrid,
+        active: false,
+      },
+    ],
   },
   {
-    icon: GiDiamondHard,
-    label: "Level Farming",
-    value: "level-farming",
+    title: "ORDERS",
+    items: [
+      {
+        label: "Boosts List",
+        value: "boosts",
+        icon: HiMiniRocketLaunch,
+        active: false,
+      },
+      {
+        label: "Accounts List",
+        value: "accounts-list",
+        icon: GiSamuraiHelmet,
+        active: false,
+      },
+    ],
   },
   {
-    icon: GiBroadsword,
-    label: "Premie",
-    value: "premie",
-  },
-  {
-    icon: LuSwords,
-    label: "Wingman",
-    value: "wingman",
+    title: "ACCOUNT",
+    items: [
+      {
+        label: "Settings",
+        value: "settings",
+        icon: BiSolidCog,
+        active: false,
+      },
+    ],
   },
 ];
 
-interface ServiceItemProps {
-  icon?: IconType;
-  label?: string;
-  value?: string;
-  active?: string;
-}
-
-const ServiceItem: React.FC<ServiceItemProps> = ({
-  icon: Icon,
-  label,
-  value,
-  active,
-}) => {
-  const { t } = useTranslation();
-
-  const linkTo =
-    value === "services" ? "/counter-strike-2" : `/counter-strike-2/${value}`;
-
-  return (
-    <div>
-      {value === active ? (
-        <li>
-          <Link
-            className={clsx(
-              "tab-active group flex items-center gap-x-3 rounded-md bg-accent p-2 pl-3 text-sm font-medium leading-6 text-foreground backdrop-blur-sm dark:bg-white/10",
-            )}
-            to={linkTo}
-          >
-            <span>{Icon && <Icon className="text-base" />}</span>
-            <b>{label && t(label)}</b>
-          </Link>
-        </li>
-      ) : (
-        <li>
-          <Link
-            to={linkTo}
-            className={clsx(
-              "group my-1 flex items-center gap-x-3 rounded-md p-2 pl-3 text-sm font-medium leading-6 text-muted-foreground",
-              "hover:bg-accent hover:text-foreground",
-            )}
-          >
-            <span>{Icon && <Icon className="text-base" />}</span>
-            <span className="whitespace-nowrap">{label && t(label)}</span>
-          </Link>
-        </li>
-      )}
-    </div>
-  );
-};
-
 const Sidebar = () => {
-  const { pathname } = useLocation();
-  // Tách đường dẫn thành các đoạn bằng dấu "/"
-  const segments = pathname.split("/").filter(Boolean);
-
-  // Nếu có nhiều hơn 1 đoạn, lấy đoạn cuối cùng. Ngược lại, sử dụng giá trị mặc định "services"
-  const slug = segments.length > 1 ? segments.pop() : "services";
-
   return (
-    <div
-      className={clsx(
-        "relative hidden max-w-[224px]",
-        "lg:row-span-2 lg:block",
-      )}
-    >
-      <div className="sticky top-20">
-        <div
-          className={clsx(
-            "mb-4 w-56 rounded-lg bg-card-surface px-4 py-6 shadow-md",
-            "transition-all duration-200",
-            "sm:px-6",
-          )}
-        >
-          <div className="absolute inset-0 h-36 overflow-hidden rounded-t-lg">
-            <img
-              src="/src/assets/counter-strike-2/banner.png"
-              className="h-full w-full object-cover"
-              style={{ objectPosition: "0px 40%" }}
-              alt="Banner"
-            />
-            <div
-              className={clsx(
-                "absolute inset-0 bg-gradient-to-t from-card-surface backdrop-blur-[2px]",
-                "dark:to-card-surface/75",
-              )}
-            />
-          </div>
-          <div className="pointer-events-none relative flex items-center">
-            <img
-              src="/src/assets/counter-strike-2/card/text.png"
-              className="h-[66px] w-44"
-              alt="Game Title"
-            />
-            <span className="sr-only">Counter Strike 2</span>
-          </div>
-          <nav className="relative mt-6 flex flex-col">
-            <ul className="flex flex-1 flex-col gap-y-9 border-border">
-              <li>
-                <ul className="-mx-2 space-y-1 border-border">
-                  <div className="my-4">
-                    {serviceItems.map((item) => (
-                      <ServiceItem
-                        key={item.value}
-                        label={item.label}
-                        icon={item.icon}
-                        value={item.value}
-                        active={slug}
-                      />
-                    ))}
-                  </div>
+    <div className="hidden flex-col border-r border-border bg-card-alt xl:fixed xl:inset-y-0 xl:z-20 xl:flex xl:w-64">
+      {/* HEADER */}
+      <div className="border-b border-border bg-card-surface px-4 py-4">
+        <a className="relative" href="#">
+          <img
+            src="/src/assets/brand/icon-text-dark.png"
+            className="block h-8 w-[100px] dark:hidden"
+            alt="Counter Strike 2"
+          />
+          <img
+            src="/src/assets/brand/icon-text.png"
+            className="hidden h-8 w-[100px] dark:block"
+            alt="Counter Strike 2"
+          />
+        </a>
+      </div>
+
+      {/* CONTENT */}
+      <div className="flex grow flex-col gap-y-5 overflow-y-auto px-4 py-4">
+        <nav className="flex flex-1 flex-col">
+          <ul className="flex flex-1 flex-col gap-y-7">
+            {sidebarItems.map(({ title, items }) => (
+              <li key={title}>
+                <h3 className="mb-2 px-2 text-xs font-medium uppercase tracking-wide text-card-alt-foreground">
+                  {title}
+                </h3>
+                <ul>
+                  {items.map((item) => (
+                    <li key={item.label}>
+                      {item.label === "Dashboard" ? (
+                        <a className="group pointer-events-none mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground opacity-50 hover:bg-muted hover:text-card-alt-foreground">
+                          <item.icon className="mr-3 w-4 flex-shrink-0 text-base text-muted-foreground group-hover:text-card-alt-foreground" />
+                          {item.label}
+                        </a>
+                      ) : (
+                        <a className="group mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-card-alt-foreground">
+                          <item.icon className="mr-3 w-4 flex-shrink-0 text-base text-muted-foreground group-hover:text-card-alt-foreground" />
+                          {item.label}
+                        </a>
+                      )}
+                    </li>
+                  ))}
                 </ul>
               </li>
-            </ul>
-          </nav>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      {/* FOOTER */}
+      <div className="mt-auto border-t border-border bg-card-surface px-4 py-4">
+        <div className="flex items-center justify-between">
+          <Avatar>
+            <button className="text-left">
+              <div className="flex items-center">
+                <div className="relative block h-8 w-8 shrink-0 rounded-full text-sm">
+                  <img
+                    src="/src/assets/avatar.png"
+                    alt="user"
+                    className="h-full w-full rounded-full object-cover"
+                  />
+
+                  {/* ACTIVE */}
+                  <span className="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-card" />
+                </div>
+
+                {/* USERNAME / ROLE */}
+                <div className="ml-2.5 truncate">
+                  <div className="text-sm font-medium text-foreground">
+                    User name
+                  </div>
+                  <div className="truncate text-xs text-muted-foreground">
+                    Client Mode
+                  </div>
+                </div>
+              </div>
+            </button>
+          </Avatar>
         </div>
       </div>
     </div>
