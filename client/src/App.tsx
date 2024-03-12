@@ -14,6 +14,7 @@ import Wingman from "./pages/Wingman";
 import FarmExp from "./pages/FarmExp";
 import Checkout from "./pages/Checkout";
 import Boosts from "./pages/user/Boosts";
+import BoostId from "./pages/user/BoostId";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="dashboard">
             <Route index element={<Boosts />} />
             <Route path="boosts" element={<Boosts />} />
+            <Route path="boosts/:id" element={<BoostId />} />
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="profile" element={<Profile />} />

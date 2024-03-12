@@ -9,7 +9,7 @@ interface TooltipProps {
 
 const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
   const { theme } = useContext(AppContext);
-  
+
   return (
     <Tippy
       content={content}
@@ -19,7 +19,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
       duration={300}
       theme={theme}
     >
-      {children}
+      <div>{children}</div>
     </Tippy>
   );
 };
