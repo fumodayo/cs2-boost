@@ -400,3 +400,9 @@ $small: 640px;
     padding: 2rem;
   }
 }
+
+@layer components {
+  .active-tab {
+    @apply bg-card text-foreground shadow-sm ring-border;
+  }
+}

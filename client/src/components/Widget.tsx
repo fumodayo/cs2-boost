@@ -2,18 +2,32 @@ import { FaCheck } from "react-icons/fa6";
 import Copy from "./Copy";
 
 interface BoostItem {
-  id: string;
-  title: string;
-  game: string;
-  server: string;
-  startRating: number;
-  endRating: number;
-  area: string;
-  price: number;
-  status: string;
-  type: string;
-  startRank: string;
-  endRank: string;
+  id?: string;
+  title?: string;
+  game?: string;
+  server?: string;
+  startRating?: number;
+  endRating?: number;
+  area?: string;
+  price?: number;
+  status?: string;
+  type?: string;
+  startRank?: string;
+  endRank?: string;
+  username?: string;
+  handle?: string;
+  email?: string;
+  language?: string;
+  games?: string;
+  full_name?: string;
+  country?: string;
+  city?: string;
+  postal_code?: string;
+  address?: string;
+  phone_number?: string;
+  national_id?: string;
+  gender?: string;
+  date_of_birth?: string;
 }
 
 interface WidgetProps {
@@ -140,6 +154,20 @@ const Widget: React.FC<WidgetProps> = ({
     price,
     startRank,
     endRank,
+    username,
+    handle,
+    email,
+    language,
+    games,
+    full_name,
+    country,
+    city,
+    postal_code,
+    address,
+    phone_number,
+    national_id,
+    gender,
+    date_of_birth,
   } = boostItem || {};
 
   const selectedStartRank = rankOptions.find(
@@ -170,6 +198,21 @@ const Widget: React.FC<WidgetProps> = ({
                   {header === "start rating" && <span>{startRating}</span>}
                   {header === "end rating" && <span>{endRating}</span>}
                   {header === "title" && <span>{title}</span>}
+                  {header === "username" && <span>{username}</span>}
+                  {header === "handle" && <span>{handle}</span>}
+                  {header === "user ID" && <span>{id}</span>}
+                  {header === "email address" && <span>{email}</span>}
+                  {header === "language" && <span>{language}</span>}
+                  {header === "games" && <span>{games}</span>}
+                  {header === "full name" && <span>{full_name}</span>}
+                  {header === "country" && <span>{country}</span>}
+                  {header === "city" && <span>{city}</span>}
+                  {header === "postal code" && <span>{postal_code}</span>}
+                  {header === "address" && <span>{address}</span>}
+                  {header === "phone" && <span>{phone_number}</span>}
+                  {header === "national ID" && <span>{national_id}</span>}
+                  {header === "gender" && <span>{gender}</span>}
+                  {header === "birth date" && <span>{date_of_birth}</span>}
                   {header === "boost id" && (
                     <span className="flex items-center gap-1">
                       #{id}

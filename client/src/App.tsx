@@ -15,6 +15,8 @@ import FarmExp from "./pages/FarmExp";
 import Checkout from "./pages/Checkout";
 import Boosts from "./pages/user/Boosts";
 import BoostId from "./pages/user/BoostId";
+import Accounts from "./pages/user/Accounts";
+import Settings from "./pages/user/Settings";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             <Route index element={<Boosts />} />
             <Route path="boosts" element={<Boosts />} />
             <Route path="boosts/:id" element={<BoostId />} />
+            <Route path="accounts" element={<Accounts />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="profile" element={<Profile />} />
