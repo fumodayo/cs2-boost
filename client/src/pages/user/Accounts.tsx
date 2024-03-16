@@ -1,4 +1,4 @@
-import UserPage from "../../components/UserPage";
+import UserPage from "../../components/Layouts/UserPage";
 import DataTable from "../../components/DataTable";
 import { FaRocket } from "react-icons/fa6";
 

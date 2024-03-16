@@ -1,10 +1,8 @@
-import { useContext } from "react";
 interface RadioButtonProps {
   checked: boolean;
 }
 
 const RadioButton: React.FC<RadioButtonProps> = ({ checked }) => {
-
   return (
     <>
       {checked ? (

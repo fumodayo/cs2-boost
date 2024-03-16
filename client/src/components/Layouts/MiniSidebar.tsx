@@ -1,11 +1,12 @@
 import clsx from "clsx";
+import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import { IconType } from "react-icons";
 import { GiDiamondHard } from "react-icons/gi";
 import { GiBroadsword } from "react-icons/gi";
 import { LuSwords } from "react-icons/lu";
 import { HiSparkles } from "react-icons/hi2";
-import { Link, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 const serviceItems = [
   {
@@ -20,8 +21,8 @@ const serviceItems = [
   },
   {
     icon: GiBroadsword,
-    label: "Premie",
-    value: "premie",
+    label: "Premier",
+    value: "premier",
   },
   {
     icon: LuSwords,
@@ -54,7 +55,8 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
         <li>
           <Link
             className={clsx(
-              "tab-active group flex items-center gap-x-3 rounded-md bg-accent p-2 pl-3 text-sm font-medium leading-6 text-foreground backdrop-blur-sm dark:bg-white/10",
+              "tab-active group flex items-center gap-x-3 rounded-md bg-accent p-2 pl-3 text-sm font-medium leading-6 text-foreground backdrop-blur-sm",
+              "dark:bg-white/10",
             )}
             to={linkTo}
           >

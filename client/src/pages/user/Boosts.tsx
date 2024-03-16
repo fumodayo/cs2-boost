@@ -1,4 +1,4 @@
-import UserPage from "../../components/UserPage";
+import UserPage from "../../components/Layouts/UserPage";
 import { FaRocket } from "react-icons/fa6";
 import DataTable from "../../components/DataTable";
 
@@ -66,7 +66,7 @@ const Boosts = () => {
           <div className="flex items-center justify-end gap-2 sm:justify-normal md:ml-4 md:mt-0">
             <a
               className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-              href="#"
+              href="/"
             >
               <FaRocket className="mr-2" />
               Buy New Boost

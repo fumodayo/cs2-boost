@@ -1,5 +1,5 @@
 import { FaCheck } from "react-icons/fa6";
-import Copy from "./Copy";
+import Copy from "./Common/Copy";
 
 interface BoostItem {
   id?: string;

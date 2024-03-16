@@ -1,33 +1,35 @@
+import { useContext, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
+import clsx from "clsx";
+
 import { HiOutlineCursorClick } from "react-icons/hi";
 import { FaCreditCard } from "react-icons/fa";
 import { IoPlayForward } from "react-icons/io5";
 import { GiPartyPopper } from "react-icons/gi";
-import { debounce } from "lodash";
-import { useContext, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+
 import { AppContext } from "../../context/AppContext";
-import clsx from "clsx";
 
 const introduction = [
   {
-    icon: <HiOutlineCursorClick />,
+    icon: HiOutlineCursorClick,
     title: "Select Service",
     subtitle: "Select the game, service and customize your order",
   },
   {
-    icon: <FaCreditCard />,
+    icon: FaCreditCard,
     title: "Secure Payment",
     subtitle:
       "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!",
   },
   {
-    icon: <IoPlayForward />,
+    icon: IoPlayForward,
     title: "Order Starts",
     subtitle:
       "Sit back, relax and enjoy - We will take care of everything for you",
   },
   {
-    icon: <GiPartyPopper />,
+    icon: GiPartyPopper,
     title: "Order Completed",
     subtitle:
       "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us",
@@ -165,12 +167,13 @@ const Introduction = () => {
           {introduction.map((intro, index) =>
             currentIntroIndex === index ? (
               <div
+                key={index}
                 className={clsx(
                   "relative flex w-full cursor-default gap-6 overflow-hidden rounded-xl bg-primary p-6 text-xl text-primary-foreground",
                   "transition-all duration-300",
                 )}
               >
-                {intro.icon}
+                <intro.icon />
                 <div className="flex flex-col gap-3">
                   <h3 className="font-display text-lg font-bold">
                     {t(intro.title)}
@@ -186,6 +189,7 @@ const Introduction = () => {
               </div>
             ) : (
               <div
+                key={index}
                 onClick={() => {
                   setCurrentIntroIndex(index);
                 }}
@@ -195,7 +199,7 @@ const Introduction = () => {
                   "hover:bg-accent",
                 )}
               >
-                {intro.icon}
+                <intro.icon />
                 <div className="flex flex-col gap-3">
                   <div className="font-display text-lg font-bold">
                     {t(intro.title)}

@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src"],
+  "include": ["src", "src/components/Layouts/Sidebar.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

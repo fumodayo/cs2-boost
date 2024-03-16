@@ -1,17 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
+import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import clsx from "clsx";
 import MiniSidebar from "./MiniSidebar";
-import Services from "./Home/Services";
-import { useTranslation } from "react-i18next";
+import Services from "../Home/Services";
+
+const serviceItems = [
+  {
+    label: "Services",
+    value: "services",
+  },
+  {
+    label: "Level Farming",
+    value: "level-farming",
+  },
+  {
+    label: "Premier",
+    value: "premier",
+  },
+  {
+    label: "Wingman",
+    value: "wingman",
+  },
+];
 
 interface DefaultPageProps {
   children: React.ReactNode;
 }
 
 const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const segments = pathname.split("/").filter(Boolean);
+  const slug = segments.length > 1 ? segments.pop() : null;
+
+  const selectedMode = serviceItems.find((item) => item.value === slug);
 
   return (
     <div className="bg-background">
@@ -61,8 +91,11 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                           <li>
                             <div className="flex items-center">
                               <a
-                                className="text-xs font-medium text-muted-foreground hover:text-foreground"
-                                href="#"
+                                className={clsx(
+                                  "text-xs font-medium text-muted-foreground",
+                                  "hover:text-foreground",
+                                )}
+                                href="/"
                               >
                                 Home
                               </a>
@@ -79,11 +112,41 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                               >
                                 <path d="M319.9 0H248.8L.1 512H71.2L319.9 0z"></path>
                               </svg>
-                              <div className="ml-2 text-xs font-medium text-foreground">
+                              <a
+                                className={clsx(
+                                  "text-xs font-medium text-muted-foreground",
+                                  "ml-1 hover:text-foreground",
+                                )}
+                                href="/counter-strike-2"
+                              >
                                 Counter Strike 2
-                              </div>
+                              </a>
                             </div>
                           </li>
+                          {selectedMode && (
+                            <li>
+                              <div className="flex items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  height="12"
+                                  width="8"
+                                  viewBox="0 0 320 512"
+                                  className="fill-muted-foreground/50"
+                                >
+                                  <path d="M319.9 0H248.8L.1 512H71.2L319.9 0z"></path>
+                                </svg>
+                                <a
+                                  className={clsx(
+                                    "text-xs font-medium text-muted-foreground",
+                                    "ml-1 hover:text-foreground",
+                                  )}
+                                  href={`/counter-strike-2/${slug}`}
+                                >
+                                  {selectedMode.label}
+                                </a>
+                              </div>
+                            </li>
+                          )}
                         </ol>
                       </nav>
 

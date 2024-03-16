@@ -1,7 +1,8 @@
-import UserPage from "../../components/UserPage";
+import UserPage from "../../components/Layouts/UserPage";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import * as Popover from "@radix-ui/react-popover";
 import {
+  FaArrowRight,
   FaCalendarDay,
   FaCreditCard,
   FaEllipsisVertical,
@@ -10,10 +11,12 @@ import {
 } from "react-icons/fa6";
 import { BsTrash } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
-import Copy from "../../components/Copy";
+import Copy from "../../components/Common/Copy";
 import Widget from "../../components/Widget";
 import { FaUsers, FaFingerprint, FaPlus } from "react-icons/fa6";
 import * as Dialog from "@radix-ui/react-dialog";
+import Input from "../../components/Input";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 const BoostId = () => {
   const boostItem = {
@@ -65,6 +68,22 @@ const BoostId = () => {
       icon: FaCalendarDay,
     },
   ];
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+      backup_code: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+  };
 
   return (
     <UserPage>
@@ -131,10 +150,46 @@ const BoostId = () => {
                       <FaEdit className="mr-2 w-5 text-center text-muted-foreground" />
                       Edit Boost
                     </button>
-                    <button className="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm text-danger-light-foreground outline-none transition-colors hover:bg-danger-light focus:bg-danger-light focus:text-danger-light-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-                      <BsTrash className="mr-2 w-5 text-center text-danger-light-foreground" />
-                      Delete Boost
-                    </button>
+                    <Dialog.Root>
+                      <Dialog.Trigger>
+                        <button className="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm text-danger-light-foreground outline-none transition-colors hover:bg-danger-light focus:bg-danger-light focus:text-danger-light-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                          <BsTrash className="mr-2 w-5 text-center text-danger-light-foreground" />
+                          Delete Boost
+                        </button>
+                      </Dialog.Trigger>
+                      <Dialog.Portal>
+                        <Dialog.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" />
+                        <Dialog.Content className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-card p-6 shadow-lg duration-200 sm:rounded-lg md:w-full">
+                          <div className="flex flex-col space-y-2 text-center sm:text-left">
+                            {/* CONTENT */}
+                            <Dialog.Title className="text-lg font-semibold text-foreground">
+                              Delete Boost
+                            </Dialog.Title>
+                            <Dialog.Description className="text-sm text-muted-foreground">
+                              Are you sure you want to delete this boost?
+                            </Dialog.Description>
+
+                            {/* FOOTER */}
+                            <div className="mt-3.5 flex flex-col space-y-2 sm:flex-row sm:justify-end sm:space-x-2 sm:space-y-0">
+                              <Dialog.Close>
+                                <button
+                                  type="button"
+                                  className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                                >
+                                  Cancel
+                                </button>
+                              </Dialog.Close>
+                              <button
+                                type="button"
+                                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                              >
+                                Confirm <FaArrowRight className="ml-1" />
+                              </button>
+                            </div>
+                          </div>
+                        </Dialog.Content>
+                      </Dialog.Portal>
+                    </Dialog.Root>
                   </Popover.Content>
                 </Popover.Portal>
               </Popover.Root>
@@ -226,25 +281,52 @@ const BoostId = () => {
                             </div>
                           </div>
                           <form className="space-y-5 py-5">
-                            <div className="w-full">
-                              <div className="mb-1 flex justify-between">
-                                <label className="block text-sm font-medium leading-6 text-foreground/90">
-                                  Email
-                                </label>
-                              </div>
-                              <div className="relative">
-                                <input
-                                  className="block w-full rounded-md border-0 bg-field py-1.5 text-field-foreground shadow-sm ring-1 ring-field-ring placeholder:text-muted-foreground hover:ring-field-ring-hover focus:ring-field-ring-hover disabled:pointer-events-none disabled:opacity-50 sm:text-sm"
-                                  placeholder="email"
-                                />
-                              </div>
+                            <Input
+                              id="email"
+                              label="Email"
+                              placeholder="someone@email.com"
+                              style="h-12"
+                              required
+                              register={register}
+                              errors={errors}
+                            />
+                            <Input
+                              id="email"
+                              label="Password"
+                              placeholder="password"
+                              type="password"
+                              style="h-12"
+                              required
+                              register={register}
+                              errors={errors}
+                            />
+                            <div className="col-span-full">
+                              <Input
+                                id="backup_code"
+                                label="Backup Code"
+                                placeholder="backup code"
+                                style="h-12"
+                                required
+                                register={register}
+                                errors={errors}
+                              />
+                              <a
+                                href="https://store.steampowered.com/twofactor/manage"
+                                className="mt-1 text-sm leading-6 text-muted-foreground hover:underline sm:text-xs"
+                              >
+                                How to Generate Steam Guard Backup Codes ?
+                              </a>
                             </div>
                           </form>
                         </div>
 
                         {/* FOOTER */}
                         <div className="flex flex-shrink-0 flex-row-reverse gap-3 rounded-b-xl border-t border-border bg-card-surface px-4 py-4">
-                          <button className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:py-2.5">
+                          <button
+                            type="submit"
+                            onClick={handleSubmit(onSubmit)}
+                            className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:py-2.5"
+                          >
                             <FaPlus className="mr-2" />
                             Add Account
                           </button>
@@ -290,7 +372,10 @@ const BoostId = () => {
                 </div>
               </div>
               <div className="flex items-center border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
-                <a className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-success-light-foreground outline-none transition-colors hover:bg-success-light focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
+                <a
+                  href="/checkout"
+                  className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-success-light-foreground outline-none transition-colors hover:bg-success-light focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                >
                   Pay Now →
                 </a>
               </div>

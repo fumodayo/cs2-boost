@@ -1,5 +1,7 @@
 import clsx from "clsx";
+
 import { useTranslation } from "react-i18next";
+
 import { BsJoystick } from "react-icons/bs";
 import { FaRightToBracket } from "react-icons/fa6";
 
@@ -33,19 +35,25 @@ const Stepup = () => {
       </p>
       <div className="mt-8 flex items-center gap-x-4">
         <button
+          type="button"
           onClick={() =>
             window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
           }
           className={clsx(
-            "blue-glow relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-[#0B6CFB] px-6 py-3 text-sm font-medium text-white outline-none ring-inset transition-colors hover:brightness-110 focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5 dark:ring-1 dark:ring-[#1a13a1]/50",
+            "blue-glow relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-[#0B6CFB] px-6 py-3 text-sm font-medium text-white outline-none ring-inset transition-colors",
+            "hover:brightness-110 focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            "dark:ring-1 dark:ring-[#1a13a1]/50 sm:py-2.5",
           )}
         >
           <BsJoystick className="mr-2.5" />
           {t("Select Game")}
         </button>
         <button
+          type="button"
           className={clsx(
-            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5",
+            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
+            "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            "sm:py-2.5",
           )}
         >
           <FaRightToBracket className="mr-2" />

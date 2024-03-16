@@ -1,7 +1,9 @@
 import React from "react";
-import Tooltip from "./Tooltip";
+
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+
+import Tooltip from "../Tooltip";
 
 interface BoardProps {
   services: { [key: string]: { label: string | number; note?: string }[] };

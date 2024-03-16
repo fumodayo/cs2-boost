@@ -1,7 +1,8 @@
-import { useTranslation } from "react-i18next";
 import { useContext, useEffect } from "react";
-import { AppContext } from "../../context/AppContext";
+import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+
+import { AppContext } from "../../context/AppContext";
 
 interface CardServiceProps {
   image_number: string;
@@ -87,62 +88,67 @@ const Services = () => {
   const { t } = useTranslation();
 
   return (
-    <div
-      className={clsx(
-        "relative z-20 mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4",
-        "sm:px-6 xl:px-8",
-      )}
-    >
-      <h2
+    <div id="services">
+      <div
         className={clsx(
-          "font-display mx-auto text-center text-4xl font-bold tracking-tight text-foreground",
-          "md:mx-0",
+          "relative z-20 mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-4",
+          "sm:px-6 xl:px-8",
         )}
       >
-        {t("Gaming Services Just Got Better")}
-      </h2>
-      <p
-        className={clsx(
-          "mx-auto mt-4 text-center text-foreground",
-          "md:mx-0",
-        )}
-      >
-        {t("We are setting the new standard in the gaming industry.")}
-      </p>
-      <div className="mt-20 grid w-full grid-cols-5 gap-4">
-        <div className={clsx("col-span-5 w-full", "lg:col-span-2")}>
-          <CardService
-            image_number="1"
-            title="Instant 24/7 Human Support"
-            subtitle="No bots, no ChatGPT – just humans"
-          />
-        </div>
-        <div
-          className={clsx("col-span-5 grid grid-cols-2 gap-4", "lg:col-span-3")}
+        <h2
+          className={clsx(
+            "font-display mx-auto text-center text-4xl font-bold tracking-tight text-foreground",
+            "md:mx-0",
+          )}
         >
-          <div className={clsx("col-span-2 w-full", "md:col-span-1")}>
+          {t("Gaming Services Just Got Better")}
+        </h2>
+        <p
+          className={clsx(
+            "mx-auto mt-4 text-center text-foreground",
+            "md:mx-0",
+          )}
+        >
+          {t("We are setting the new standard in the gaming industry.")}
+        </p>
+        <div className="mt-20 grid w-full grid-cols-5 gap-4">
+          <div className={clsx("col-span-5 w-full", "lg:col-span-2")}>
             <CardService
-              image_number="3"
-              title="3-6% Cashback on all purchases"
+              image_number="1"
+              title="Instant 24/7 Human Support"
+              subtitle="No bots, no ChatGPT – just humans"
             />
           </div>
-          <div className={clsx("col-span-2 w-full", "md:col-span-1")}>
-            <CardService
-              image_number="2"
-              title="Full Privacy & Anonymity"
-              subtitle="Who are you? We don't know"
-            />
-          </div>
-          <div className="col-span-2">
-            <CardService
-              image_number="4"
-              title="Secure & Instant Payments"
-              subtitle="Buy gaming services with PaysafeCard, Apple Pay, and more"
-            />
+          <div
+            className={clsx(
+              "col-span-5 grid grid-cols-2 gap-4",
+              "lg:col-span-3",
+            )}
+          >
+            <div className={clsx("col-span-2 w-full", "md:col-span-1")}>
+              <CardService
+                image_number="3"
+                title="3-6% Cashback on all purchases"
+              />
+            </div>
+            <div className={clsx("col-span-2 w-full", "md:col-span-1")}>
+              <CardService
+                image_number="2"
+                title="Full Privacy & Anonymity"
+                subtitle="Who are you? We don't know"
+              />
+            </div>
+            <div className="col-span-2">
+              <CardService
+                image_number="4"
+                title="Secure & Instant Payments"
+                subtitle="Buy gaming services with PaysafeCard, Apple Pay, and more"
+              />
+            </div>
           </div>
         </div>
+        <Circle />
       </div>
-      <Circle />
     </div>
   );
 };

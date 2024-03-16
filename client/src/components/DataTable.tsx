@@ -6,7 +6,7 @@ import {
   FaRegEyeSlash,
 } from "react-icons/fa6";
 import { IconType } from "react-icons";
-import PlusButton from "./PlusButton";
+import PlusButton from "./Buttons/PlusButton";
 import { PiSlidersHorizontal } from "react-icons/pi";
 import Separator from "./Separator";
 import { FaCheck } from "react-icons/fa6";
@@ -422,20 +422,24 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
           <div className="hidden items-center space-x-2 sm:flex">
             <p className="text-sm font-medium">Rows per page</p>
             <Select.Root>
-              <Select.Trigger asChild>
+              <Select.Trigger>
                 <button className="flex h-8 w-[70px] items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-                  <span className="cursor-none">15</span>
-                  <FaChevronDown className="h-4 w-4 opacity-50" />
+                  <Select.Value placeholder="15" />
+                  <Select.Icon>
+                    <FaChevronDown className="h-4 w-4 opacity-50" />
+                  </Select.Icon>
                 </button>
               </Select.Trigger>
               <Select.Portal>
-                <Select.Content className="bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
-                  <Select.Group>
-                    <Select.Item value="1">2</Select.Item>
-                    <Select.Item value="1">2</Select.Item>
-                    <Select.Item value="1">2</Select.Item>
-                    <Select.Item value="1">2</Select.Item>
-                  </Select.Group>
+                <Select.Content className="bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg z-40">
+                  <Select.Viewport>
+                    <Select.Group>
+                      <Select.Item value="1">2</Select.Item>
+                      <Select.Item value="1">2</Select.Item>
+                      <Select.Item value="1">2</Select.Item>
+                      <Select.Item value="1">2</Select.Item>
+                    </Select.Group>
+                  </Select.Viewport>
                 </Select.Content>
               </Select.Portal>
             </Select.Root>

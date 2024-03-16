@@ -2,13 +2,13 @@ import { useContext, useMemo, useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";
-import DefaultPage from "../components/DefaultPage";
+import DefaultPage from "../components/Layouts/DefaultPage";
 import Checkout from "../components/Checkout";
 import { totalTimeOfPremie } from "../utils/totalTimeOfPremie";
 import { totalCostOfPremie } from "../utils/totalCostOfPremie";
 import ChooseServer from "../components/ChooseServer";
 import Info from "../components/Info";
-import Board from "../components/Board";
+import Board from "../components/Common/Board";
 import { AppContext } from "../context/AppContext";
 import Tooltip from "rc-tooltip";
 import { useTranslation } from "react-i18next";
@@ -417,7 +417,7 @@ const Premie = () => {
           beginText="My Rating"
           lastText="Desired Rating"
           server={server}
-          mode="premie"
+          mode="premier"
           currentRating={currentRating}
           desiredRating={desiredRating}
           totalTime={totalTimeOfBoostPremie}

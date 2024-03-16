@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+
 import Discovery from "../Discovery";
 
 const questions = [
@@ -78,8 +79,8 @@ const Questions = () => {
               "lg:col-span-3 lg:mt-0",
             )}
           >
-            {questions.map((item) => (
-              <Discovery title={item.title} subtitle={item.subtitle} />
+            {questions.map(({ title, subtitle }) => (
+              <Discovery key={title} title={title} subtitle={subtitle} />
             ))}
           </div>
         </div>

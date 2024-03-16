@@ -1,6 +1,8 @@
 import { useState } from "react";
-import Tooltip from "./Tooltip";
+
 import { FaCheck, FaCopy } from "react-icons/fa6";
+
+import Tooltip from "../Tooltip";
 
 const Copy = ({ text }: { text: string }) => {
   const [isCopy, setCopy] = useState(false);

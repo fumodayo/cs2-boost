@@ -1,12 +1,14 @@
+import { useContext } from "react";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+
 import { IconType } from "react-icons";
 import { IoPeople } from "react-icons/io5";
 import { BsRocketTakeoff } from "react-icons/bs";
 import { FaCalendarDay } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
-import { useContext } from "react";
+
 import { AppContext } from "../../context/AppContext";
-import { useTranslation } from "react-i18next";
 
 const quantities = [
   {
@@ -63,8 +65,7 @@ export const QuantityItem: React.FC<QuantityItemProps> = ({
       {active ? (
         <div
           className={clsx(
-            "relative flex h-[280px] flex-col justify-center overflow-hidden rounded-xl border border-[#3686fc] bg-[#0B6BFB] p-6 text-primary-foreground shadow-md transition-transform duration-300 md:h-[340px]",
-            "transition-transform duration-300",
+            "relative flex h-[280px] flex-col justify-center overflow-hidden rounded-xl border border-[#3686fc] bg-[#0B6BFB] p-6 text-primary-foreground shadow-md transition-transform duration-300",
             "md:h-[340px]",
           )}
           style={{ boxShadow: "0px 15px 84px 0px rgba(11, 108, 251, 0.13)" }}
@@ -100,8 +101,7 @@ export const QuantityItem: React.FC<QuantityItemProps> = ({
       ) : (
         <div
           className={clsx(
-            "relative flex h-[280px] flex-col justify-center overflow-hidden rounded-xl bg-card p-6 text-primary-foreground shadow-md",
-            "transition-transform duration-300",
+            "relative flex h-[280px] flex-col justify-center overflow-hidden rounded-xl bg-card p-6 text-primary-foreground shadow-md transition-transform duration-300",
             "md:h-[340px]",
             "dark:bg-[#141825]/75",
           )}
@@ -183,13 +183,14 @@ const Quantity = () => {
           "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
         )}
       >
-        {quantities.map((item) => (
+        {quantities.map(({ icon, title, subtitle, label, active }) => (
           <QuantityItem
-            icon={item.icon}
-            title={item.title}
-            subtitle={item.subtitle}
-            label={item.label}
-            active={item.active}
+            key={title}
+            icon={icon}
+            title={title}
+            subtitle={subtitle}
+            label={label}
+            active={active}
           />
         ))}
       </div>

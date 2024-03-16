@@ -1,5 +1,11 @@
-import Widget from "../Widget";
+import clsx from "clsx";
+import * as Dialog from "@radix-ui/react-dialog";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
 import { FaDesktop, FaEye, FaTrashCan, FaXmark } from "react-icons/fa6";
+
+import Widget from "../Widget";
+import Input from "../Input";
 
 const userInfo = {
   username: "Sơn Thái",
@@ -20,12 +26,36 @@ const headers = [
 ];
 
 const General = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      confirm: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+  };
+
   return (
-    <div className="mx-auto grid grid-cols-1 grid-rows-1 items-start gap-x-5 gap-y-5 lg:mx-0 lg:grid-cols-3">
+    <div
+      className={clsx(
+        "mx-auto grid grid-cols-1 grid-rows-1 items-start gap-x-5 gap-y-5",
+        "lg:mx-0 lg:grid-cols-3",
+      )}
+    >
       {/* CREDIT */}
 
       {/* INFORMATION */}
-      <div className="space-y-4 lg:col-span-2 lg:row-span-2 lg:row-end-2 lg:space-y-6">
+      <div
+        className={clsx(
+          "space-y-4",
+          "lg:col-span-2 lg:row-span-2 lg:row-end-2 lg:space-y-6",
+        )}
+      >
         <Widget
           titleHeader="User Information"
           headers={headers}
@@ -33,8 +63,18 @@ const General = () => {
         />
 
         {/* DELETE ACCOUNT */}
-        <div className="grad-valorant-immortal rounded-lg bg-card bg-gradient-to-br via-card to-card to-50% px-4 py-5 shadow ring-1 ring-danger-ring sm:p-6">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          className={clsx(
+            "rounded-lg bg-card bg-gradient-to-br via-card to-card to-50% px-4 py-5 shadow ring-1 ring-danger-ring",
+            "sm:p-6",
+          )}
+        >
+          <div
+            className={clsx(
+              "flex flex-col gap-6",
+              "sm:flex-row sm:items-center sm:justify-between",
+            )}
+          >
             <div>
               <h3 className="text-base font-semibold leading-6 text-foreground">
                 Delete Account
@@ -44,10 +84,102 @@ const General = () => {
                 you will lose all the store credit and loyalty coins you have.
               </div>
             </div>
-            <button className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
-              <FaTrashCan className="mr-2" />
-              Delete Account
-            </button>
+            <Dialog.Root>
+              <Dialog.Trigger>
+                <button
+                  className={clsx(
+                    "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
+                    "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                  )}
+                >
+                  <FaTrashCan className="mr-2" />
+                  Delete Account
+                </button>
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 z-40 bg-background/80" />
+                <Dialog.Content
+                  className={clsx(
+                    "min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all",
+                    "focus:outline-none ",
+                    "sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
+                  )}
+                >
+                  {/* HEADER */}
+                  <div
+                    className={clsx(
+                      "flex items-center justify-between px-6 pb-0 pt-6",
+                      "sm:pt-5",
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <div className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-red-400 text-sm text-white ring-2 ring-red-500/30">
+                          <FaTrashCan />
+                        </div>
+                      </div>
+                      <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
+                        Delete Account
+                      </Dialog.Title>
+                    </div>
+                    <Dialog.Close>
+                      <button
+                        type="button"
+                        className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
+                      >
+                        <span className="sr-only">Close</span>
+                        <FaXmark className="flex h-5 w-5 items-center justify-center" />
+                      </button>
+                    </Dialog.Close>
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="p-6">
+                    <div className="mb-4 w-full text-sm">
+                      Enter your username to confirm the deletion of your
+                      account.
+                    </div>
+                    <span className="font-mono mb-4 inline-flex w-full items-center rounded-md bg-secondary-light px-4 py-3 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
+                      Sơn Thái
+                    </span>
+                    <Input
+                      register={register}
+                      errors={errors}
+                      style="h-9"
+                      id="confirm"
+                      placeholder="Enter your username"
+                    />
+                  </div>
+
+                  {/* FOOTER */}
+                  <div
+                    className={clsx(
+                      "flex flex-row-reverse items-center gap-2 border-t border-border bg-muted/50 px-6 py-6",
+                      "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
+                    )}
+                  >
+                    <button
+                      type="submit"
+                      onClick={handleSubmit(onSubmit)}
+                      className={clsx(
+                        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
+                        "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      )}
+                    >
+                      Delete Account
+                    </button>
+                    <Dialog.Close asChild>
+                      <button
+                        type="button"
+                        className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                      >
+                        Cancel
+                      </button>
+                    </Dialog.Close>
+                  </div>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
           </div>
         </div>
 

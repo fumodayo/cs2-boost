@@ -1,12 +1,12 @@
 import clsx from "clsx";
 
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Layouts/Navbar";
 import Introduction from "../components/Home/Introduction";
 import Services from "../components/Home/Services";
 import Quantity from "../components/Home/Quantity";
 import Questions from "../components/Home/Questions";
 import Stepup from "../components/Home/Stepup";
-import Footer from "../components/Footer";
+import Footer from "../components/Layouts/Footer";
 import Information from "../components/Home/Information";
 import Hero from "../components/Home/Hero";
 
@@ -19,7 +19,7 @@ const Home = () => {
       <main
         className={clsx(
           "relative isolate overflow-hidden",
-          " dark:bg-[#0F111B]",
+          "dark:bg-[#0F111B]",
         )}
       >
         {/* HERO */}

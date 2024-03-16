@@ -1,4 +1,6 @@
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+
 import {
   FaFacebook,
   FaInstagram,
@@ -6,38 +8,33 @@ import {
   FaYoutube,
   FaTiktok,
   FaDiscord,
-  FaMoon,
 } from "react-icons/fa";
-import { IoIosSunny } from "react-icons/io";
-import Tippy from "@tippyjs/react";
 import { LuMessagesSquare } from "react-icons/lu";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
-import MenuLanguage from "./Common/MenuLanguage";
-import { useTranslation } from "react-i18next";
-import { useContext } from "react";
-import { AppContext } from "../context/AppContext";
-import MenuTheme from "./Common/MenuTheme";
+
+import MenuLanguage from "../Common/MenuLanguage";
+import MenuTheme from "../Common/MenuTheme";
+import Tooltip from "../Tooltip";
 
 const social = [
   {
     name: "facebook",
-    icon: <FaFacebook />,
+    icon: FaFacebook,
   },
   {
     name: "instagram",
-    icon: <FaInstagram />,
+    icon: FaInstagram,
   },
   {
     name: "x",
-    icon: <FaTwitter />,
+    icon: FaTwitter,
   },
   {
     name: "youtube",
-    icon: <FaYoutube />,
+    icon: FaYoutube,
   },
   {
     name: "tiktok",
-    icon: <FaTiktok />,
+    icon: FaTiktok,
   },
 ];
 
@@ -106,16 +103,16 @@ const TaskItem: React.FC<TaskItemProps> = ({ name, tasks }) => {
         {name}
       </h3>
       <ul className="space-y-3.5">
-        {tasks?.map((task) => (
-          <li>
+        {tasks?.map(({ name, link }) => (
+          <li key={name}>
             <a
               className={clsx(
                 "font-medium leading-relaxed text-muted-foreground",
                 "dark:hover:text-foreground",
               )}
-              href={`${task.link}`}
+              href={`${link}`}
             >
-              {task.name}
+              {name}
             </a>
           </li>
         ))}
@@ -125,8 +122,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ name, tasks }) => {
 };
 
 const Footer = () => {
-  const { t, i18n } = useTranslation();
-  const { theme, currency } = useContext(AppContext);
+  const { t } = useTranslation();
 
   return (
     <footer className={clsx("relative z-20 mx-auto ", "dark:bg-[#0F111A]")}>
@@ -151,8 +147,8 @@ const Footer = () => {
           )}
         >
           <div className={clsx("flex flex-wrap", "lg:-m-8")}>
-            {services.map((item) => (
-              <TaskItem name={item.name} tasks={item.tasks} />
+            {services.map(({ name, tasks }) => (
+              <TaskItem key={name} name={name} tasks={tasks} />
             ))}
 
             <div
@@ -179,17 +175,21 @@ const Footer = () => {
                 >
                   <button
                     type="button"
-                    className={
-                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5"
-                    }
+                    className={clsx(
+                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                      "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "sm:py-2.5",
+                    )}
                   >
                     <LuMessagesSquare className="mr-2 text-xl" />
                     {t("Let's Chat")}
                   </button>
                   <a
-                    href=""
+                    href="_blank"
                     className={clsx(
-                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md !bg-[#5865f2] bg-secondary px-5 py-3 text-sm font-medium !text-white text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:!bg-[#6773f4] hover:bg-secondary-hover hover:!ring-[#5865f2] focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5",
+                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md !bg-[#5865f2] bg-secondary px-5 py-3 text-sm font-medium !text-white text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors ",
+                      "hover:!bg-[#6773f4] hover:bg-secondary-hover hover:!ring-[#5865f2] focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "sm:py-2.5",
                     )}
                   >
                     <FaDiscord className="mr-2 text-xl" />
@@ -198,62 +198,10 @@ const Footer = () => {
                 </div>
                 <div className="flex w-full flex-1 items-center gap-x-2">
                   {/* MENU LANGUAGE */}
-                  <PopoverPrimitive.Root>
-                    <PopoverPrimitive.Trigger>
-                      <button
-                        type="button"
-                        className={clsx(
-                          "relative inline-flex h-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-                          "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary-light focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                        )}
-                      >
-                        <span
-                          className={`fi fis fi-${
-                            i18n.language === "en" ? "gb" : "vn"
-                          } mr-2 rounded-xl`}
-                        />
-                        {i18n.language === "en"
-                          ? t("English")
-                          : t("Vietnamese")}
-                        <span className="mx-2">/</span>
-                        {currency === "vnd" ? t("VND") : t("US Dollar")}
-                      </button>
-                    </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Content
-                      side="bottom"
-                      align="start"
-                      className="backdrop-brightness-5 absolute z-50 min-w-[400px] translate-y-3 overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
-                    >
-                      <MenuLanguage />
-                    </PopoverPrimitive.Content>
-                  </PopoverPrimitive.Root>
+                  <MenuLanguage />
 
                   {/** MENU THEME */}
-                  <PopoverPrimitive.Root>
-                    <PopoverPrimitive.Trigger>
-                      <button
-                        type="button"
-                        className={clsx(
-                          "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent font-medium text-secondary-light-foreground outline-none transition-colors",
-                          "sm:h-9 sm:w-9",
-                          "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary-light focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                        )}
-                      >
-                        {theme === "dark" ? (
-                          <FaMoon />
-                        ) : (
-                          <IoIosSunny className="text-2xl" />
-                        )}
-                      </button>
-                    </PopoverPrimitive.Trigger>
-                    <PopoverPrimitive.Content
-                      side="bottom"
-                      align="start"
-                      className="backdrop-brightness-5 absolute z-50 min-w-[180px] translate-y-3 overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
-                    >
-                      <MenuTheme />
-                    </PopoverPrimitive.Content>
-                  </PopoverPrimitive.Root>
+                  <MenuTheme />
                 </div>
               </div>
             </div>
@@ -281,9 +229,9 @@ const Footer = () => {
           </div>
           <div className="w-auto">
             <div className="flex flex-wrap gap-x-2">
-              <div className="w-auto">
+              <div className="flex w-auto">
                 {social.map((item) => (
-                  <Tippy content={item.name}>
+                  <Tooltip key={item.name} content={item.name}>
                     <a
                       href={`https://${item.name}.com`}
                       className={clsx(
@@ -293,9 +241,9 @@ const Footer = () => {
                       target="_blank"
                     >
                       <span className="sr-only">{item.name}</span>
-                      {item.icon}
+                      <item.icon />
                     </a>
-                  </Tippy>
+                  </Tooltip>
                 ))}
               </div>
             </div>

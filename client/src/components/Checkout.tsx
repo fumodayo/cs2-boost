@@ -11,6 +11,9 @@ import { RxGlobe } from "react-icons/rx";
 import { GiDiamondHard, GiBroadsword } from "react-icons/gi";
 import { LuSwords } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import Input from "./Input";
+import { useExchangeRate } from "../hooks/useSwapCurrency";
 
 type ExtraOption = {
   name: string;
@@ -78,8 +81,8 @@ const listOfServices = [
   },
   {
     icon: GiBroadsword,
-    label: "Premie",
-    value: "premie",
+    label: "Premier",
+    value: "premier",
   },
   {
     icon: LuSwords,
@@ -202,6 +205,20 @@ const Checkout: React.FC<CheckoutProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      promo_code: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+  };
+
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
   const selectedCurrentRank = rankOptions.find(
@@ -234,6 +251,9 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     return costWithExtraOptions.toFixed(2);
   }, [cost, extraOptions, selectedOptions]);
+
+  const exchangeRate = useExchangeRate("usd", "vnd");
+  console.log(exchangeRate);
 
   return (
     <div className="gap-5 lg:col-span-2 xl:col-span-2">
@@ -385,20 +405,27 @@ const Checkout: React.FC<CheckoutProps> = ({
                 </label>
               </div>
               <div className="relative">
-                <input
-                  className="block w-full rounded-md border-0 bg-field py-1.5 text-field-foreground shadow-sm ring-1 ring-field-ring placeholder:text-muted-foreground hover:ring-field-ring-hover focus:ring-field-ring-hover disabled:pointer-events-none disabled:opacity-50 sm:text-sm"
-                  placeholder={t("Enter discount code")}
-                  type="text"
+                <Input
+                  register={register}
+                  errors={errors}
+                  style="h-7"
+                  id="promo_code"
+                  placeholder="Discount Code"
                 />
               </div>
             </div>
-            <button className="relative ml-1 inline-flex h-9 items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-8">
+            <button
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              className="relative ml-1 inline-flex h-9 items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-8"
+            >
               {t("Apply")}
             </button>
           </div>
         </div>
         <div className="mt-6 flex items-end justify-between">
           <p className="text-lg text-muted-foreground">{t("Total Price")}:</p>
+          {}
           {totalCost && cost > 0 && (
             <div className="flex flex-row items-end gap-2">
               <span className="bg-gradient-to-l from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold tracking-tight text-transparent">

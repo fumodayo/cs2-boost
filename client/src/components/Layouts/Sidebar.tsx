@@ -1,8 +1,13 @@
-import Avatar from "./Avatar";
+import clsx from "clsx";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { IoGrid } from "react-icons/io5";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { GiSamuraiHelmet } from "react-icons/gi";
 import { BiSolidCog } from "react-icons/bi";
+
+import Logo from "../Common/Logo";
+import Avatar from "../Common/Avatar";
 
 const sidebarItems = [
   {
@@ -27,7 +32,7 @@ const sidebarItems = [
       },
       {
         label: "Accounts List",
-        value: "accounts-list",
+        value: "accounts",
         icon: GiSamuraiHelmet,
         active: false,
       },
@@ -47,22 +52,21 @@ const sidebarItems = [
 ];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const segments = pathname.split("/").filter(Boolean);
+  const slug = segments.length > 1 ? segments.pop() : null;
+
   return (
-    <div className="hidden flex-col border-r border-border bg-card-alt xl:fixed xl:inset-y-0 xl:z-20 xl:flex xl:w-64">
+    <div
+      className={clsx(
+        "hidden flex-col border-r border-border bg-card-alt",
+        "xl:fixed xl:inset-y-0 xl:z-20 xl:flex xl:w-64",
+      )}
+    >
       {/* HEADER */}
       <div className="border-b border-border bg-card-surface px-4 py-4">
-        <a className="relative" href="#">
-          <img
-            src="/src/assets/brand/icon-text-dark.png"
-            className="block h-8 w-[100px] dark:hidden"
-            alt="Counter Strike 2"
-          />
-          <img
-            src="/src/assets/brand/icon-text.png"
-            className="hidden h-8 w-[100px] dark:block"
-            alt="Counter Strike 2"
-          />
-        </a>
+        <Logo />
       </div>
 
       {/* CONTENT */}
@@ -78,12 +82,27 @@ const Sidebar = () => {
                   {items.map((item) => (
                     <li key={item.label}>
                       {item.label === "Dashboard" ? (
-                        <a className="group pointer-events-none mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground opacity-50 hover:bg-muted hover:text-card-alt-foreground">
-                          <item.icon className="mr-3 w-4 flex-shrink-0 text-base text-muted-foreground group-hover:text-card-alt-foreground" />
+                        <a
+                          className={clsx(
+                            "group pointer-events-none mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground opacity-50",
+                            "hover:bg-muted hover:text-card-alt-foreground",
+                          )}
+                        >
+                          <item.icon
+                            className={clsx(
+                              ", mr-3 w-4 flex-shrink-0 text-base text-muted-foreground",
+                              "group-hover:text-card-alt-foreground",
+                            )}
+                          />
                           {item.label}
                         </a>
                       ) : (
-                        <a className="group mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-card-alt-foreground">
+                        <a
+                          onClick={() => navigate(`/dashboard/${item.value}`)}
+                          className={`${
+                            item.value === slug && "bg-muted"
+                          } group mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-card-alt-foreground`}
+                        >
                           <item.icon className="mr-3 w-4 flex-shrink-0 text-base text-muted-foreground group-hover:text-card-alt-foreground" />
                           {item.label}
                         </a>

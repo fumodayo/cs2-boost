@@ -1,11 +1,13 @@
-import { useCallback, useContext } from "react";
-import Modal from "./Modal";
-import { AppContext } from "../../context/AppContext";
 import clsx from "clsx";
-import { FaArrowRight } from "react-icons/fa";
-import Input from "../Input";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
+import { FaArrowRight } from "react-icons/fa";
+
+import { AppContext } from "../../context/AppContext";
+import Modal from "./Modal";
+import Input from "../Input";
 
 const LoginModal = () => {
   const { t } = useTranslation();
@@ -56,7 +58,8 @@ const LoginModal = () => {
       <button
         type="submit"
         className={clsx(
-          "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+          "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+          "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
           "sm:py-2.5",
         )}
       >

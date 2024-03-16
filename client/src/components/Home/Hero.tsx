@@ -47,7 +47,12 @@ const Hero = () => {
               />
             </div>
           )}
-          <div className="absolute inset-0 -m-5 bg-gradient-to-t from-background/95 from-50% dark:hidden" />
+          <div
+            className={clsx(
+              "absolute inset-0 -m-5 bg-gradient-to-t from-background/95 from-50%",
+              "dark:hidden",
+            )}
+          />
           <div
             className={clsx(
               "absolute inset-0 -m-5 hidden bg-gradient-to-t from-background via-background/95 to-background/95 backdrop-blur-sm",
@@ -81,7 +86,7 @@ const Hero = () => {
               {t("The")}
               <span
                 className={clsx(
-                  "max-w-max bg-gradient-to-tl from-blue-500 via-blue-600 to-blue-700 bg-clip-text  text-transparent",
+                  "max-w-max bg-gradient-to-tl from-blue-500 via-blue-600 to-blue-700 bg-clip-text text-transparent",
                   "dark:from-blue-600 dark:via-blue-500 dark:to-blue-600",
                 )}
               >
@@ -107,36 +112,40 @@ const Hero = () => {
         {/* CARDS */}
         <div
           className={clsx(
-            "flex flex-wrap items-center justify-between gap-x-4 gap-y-6 sm:justify-center",
-            "sm:gap-x-6 sm:gap-y-8",
+            "flex flex-wrap items-center justify-between gap-x-4 gap-y-6",
+            "sm:justify-center sm:gap-x-6 sm:gap-y-8",
           )}
         >
-          {cards.map((card) => (
+          {cards.map(({ value, available, label }) => (
             <a
-              onClick={() => card.available && navigate(card.value)}
-              onMouseEnter={() => setHoverItem(card.value)}
+              key={label}
+              onClick={() => available && navigate(value)}
+              onMouseEnter={() => setHoverItem(value)}
               className="game-card-group group relative flex w-auto flex-col items-start gap-3 leading-5"
             >
               <div
                 className={`game-card-image-wrapper relative overflow-clip ${
-                  !card.available && "!opacity-10 blur-[1px]"
+                  !available && "!opacity-10 blur-[1px]"
                 }`}
               >
                 <img
-                  src={`/src/assets/${card.value}/card/bg.png`}
-                  className="game-card-image group-hover:rounded-md"
+                  src={`/src/assets/${value}/card/bg.png`}
+                  className={clsx("game-card-image", "group-hover:rounded-md")}
                 />
                 <img
-                  src={`/src/assets/${card.value}/card/text.png`}
-                  className="game-card-text-image group-hover:translate3d-custom group-hover:scale-110"
+                  src={`/src/assets/${value}/card/text.png`}
+                  className={clsx(
+                    "game-card-text-image",
+                    "group-hover:translate3d-custom group-hover:scale-110",
+                  )}
                 />
               </div>
               <div className="flex max-w-full items-center truncate">
                 <div className="flex-1 justify-between gap-1 truncate font-medium tracking-tight">
-                  {card.label}
+                  {label}
                 </div>
               </div>
-              {!card.available && (
+              {!available && (
                 <div className="absolute bottom-1/2 left-0 right-0 mx-auto inline-flex w-fit items-center rounded-full bg-secondary/75 px-2 py-1 text-xs font-medium text-foreground opacity-100 ring-1 ring-inset ring-secondary">
                   {t("Coming Soon")}
                 </div>

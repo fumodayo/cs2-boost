@@ -2,8 +2,11 @@ import { RadioGroup } from "@headlessui/react";
 import clsx from "clsx";
 import { useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import RadioButton from "../components/RadioButton";
-import Avatar from "../components/Avatar";
+import RadioButton from "../components/Buttons/RadioButton";
+import Avatar from "../components/Common/Avatar";
+import Logo from "../components/Common/Logo";
+import Input from "../components/Input";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 const modeOfPayment = [
   {
@@ -45,6 +48,20 @@ const modeOfPayment = [
 const Checkout = () => {
   const [mode, setMode] = useState("debit_cards");
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      promo_code: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    // console.log(data);
+  };
+
   return (
     <main>
       <div className="fixed left-0 top-0 hidden h-full w-1/2 bg-background lg:block" />
@@ -82,13 +99,20 @@ const Checkout = () => {
               <div className="flex items-end">
                 <div className="w-full">
                   <div className="relative">
-                    <input
-                      className="block h-9 w-full flex-grow rounded-md border-0 bg-field py-1.5 text-field-foreground shadow-sm ring-1 ring-field-ring placeholder:text-muted-foreground hover:ring-field-ring-hover focus:ring-field-ring-hover disabled:pointer-events-none disabled:opacity-50 sm:text-sm"
+                    <Input
+                      register={register}
+                      errors={errors}
+                      style="h-9"
+                      id="promo_code"
                       placeholder="Discount Code"
                     />
                   </div>
                 </div>
-                <button className="relative ml-1.5 inline-flex items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9">
+                <button
+                  type="submit"
+                  onClick={handleSubmit(onSubmit)}
+                  className="relative ml-1.5 inline-flex items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9"
+                >
                   Apply
                 </button>
               </div>
@@ -118,18 +142,7 @@ const Checkout = () => {
             <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
               {/* HEADING */}
               <div className="flex items-center justify-between">
-                <a className="relative" href="/">
-                  <img
-                    className={clsx("block h-8 w-[100px]", "dark:hidden")}
-                    src="/src/assets/brand/icon-text-dark.png"
-                    alt="CS2 Boost Logo"
-                  />
-                  <img
-                    className={clsx("hidden h-8 w-[100px]", "dark:block")}
-                    src="/src/assets/brand/icon-text.png"
-                    alt="CS2 Boost Logo"
-                  />
-                </a>
+                <Logo />
 
                 {/* AVATAR */}
                 <Avatar>

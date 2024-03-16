@@ -1,12 +1,16 @@
-import DefaultPage from "../components/DefaultPage";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+
 import { FaRightToBracket } from "react-icons/fa6";
 import {
   TbCircle1Filled,
   TbCircle2Filled,
   TbCircle3Filled,
 } from "react-icons/tb";
+
+import DefaultPage from "../components/Layouts/DefaultPage";
 import Discovery from "../components/Discovery";
-import { useTranslation } from "react-i18next";
 
 const stepToBuy = [
   {
@@ -22,44 +26,6 @@ const stepToBuy = [
     label: "Make a secured payment & enjoy your Boost",
   },
 ];
-
-const GameMode = ({
-  title,
-  subtitle,
-  image,
-}: {
-  title: string;
-  subtitle: string;
-  image: string;
-  link: string;
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <a className="group w-full hover:cursor-pointer">
-      <div className="overflow-hidden rounded-2xl">
-        <img
-          src={`/src/assets/counter-strike-2/services/${image}.png`}
-          alt={title}
-          className="h-80 w-full transform object-cover transition-transform duration-300 group-hover:scale-110"
-        />
-      </div>
-      <div className="mt-4 h-28 rounded-2xl border border-border bg-card px-4 py-2 transition duration-300 group-hover:bg-accent sm:h-36 sm:px-8 sm:py-4 md:h-32 lg:h-24">
-        <div className="flex items-center gap-2">
-          <div className="w-full">
-            <p className="text-base font-bold sm:text-lg">{t(title)}</p>
-            <div className="flex justify-between">
-              <p className="text-xs text-muted-foreground sm:text-sm">
-                {t(subtitle)}
-              </p>
-              <FaRightToBracket className="text-xl text-muted-foreground sm:text-2xl" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  );
-};
 
 const boostingServices = [
   {
@@ -111,27 +77,99 @@ const modeOfGame = [
   },
 ];
 
+const GameMode = ({
+  title,
+  subtitle,
+  image,
+  link,
+}: {
+  title: string;
+  subtitle: string;
+  image: string;
+  link: string;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Link
+      to={`/counter-strike-2/${link}`}
+      className={clsx("group w-full", "hover:cursor-pointer")}
+    >
+      <div className="overflow-hidden rounded-2xl">
+        <img
+          src={`/src/assets/counter-strike-2/services/${image}.png`}
+          alt={title}
+          className={clsx(
+            "h-80 w-full transform object-cover transition-transform duration-300 ",
+            "group-hover:scale-110",
+          )}
+        />
+      </div>
+      <div
+        className={clsx(
+          "mt-4 h-28 rounded-2xl border border-border bg-card px-4 py-2 transition duration-300 ",
+          "group-hover:bg-accent sm:h-36 sm:px-8 sm:py-4 md:h-32 lg:h-24",
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-full">
+            <p className={clsx("text-base font-bold", "sm:text-lg")}>
+              {t(title)}
+            </p>
+            <div className="flex justify-between">
+              <p
+                className={clsx("text-xs text-muted-foreground", "sm:text-sm")}
+              >
+                {t(subtitle)}
+              </p>
+              <FaRightToBracket
+                className={clsx("text-xl text-muted-foreground", "sm:text-2xl")}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
 const Game = () => {
   const { t } = useTranslation();
 
   return (
     <DefaultPage>
       <div>
-        <div className="col-span-4 my-4 flex w-full gap-8 lg:col-span-4 xl:col-span-5">
+        <div
+          className={clsx(
+            "col-span-4 my-4 flex w-full gap-8",
+            "lg:col-span-4 xl:col-span-5",
+          )}
+        >
           <div className="flex w-full justify-between gap-4">
-            {modeOfGame.map((item) => (
+            {modeOfGame.map(({ title, subtitle, image, link }) => (
               <GameMode
-                title={item.title}
-                subtitle={item.subtitle}
-                image={item.image}
-                link={item.link}
+                key={title}
+                title={title}
+                subtitle={subtitle}
+                image={image}
+                link={link}
               />
             ))}
           </div>
         </div>
-        <div className="col-span-4 my-4 flex w-full gap-8 lg:col-span-4 xl:col-span-5">
+        <div
+          className={clsx(
+            "col-span-4 my-4 flex w-full gap-8",
+            "lg:col-span-4 xl:col-span-5",
+          )}
+        >
           <div className="mt-14 flex w-full flex-col gap-20">
-            <div className="mb-4 flex w-full flex-col items-stretch gap-10 md:flex-row">
+            <div
+              className={clsx(
+                "mb-4 flex w-full flex-col items-stretch gap-10",
+                "md:flex-row",
+              )}
+            >
               <img
                 src={`/src/assets/counter-strike-2/services/How-to-buy.png`}
                 alt="How to buy Premier or Wingman Boost"
@@ -161,19 +199,22 @@ const Game = () => {
           </div>
         </div>
 
-        <div className="relative w-full overflow-hidden pt-8 sm:pt-12">
+        <div
+          className={clsx("relative w-full overflow-hidden pt-8", "sm:pt-12")}
+        >
           <div className="relative flex w-full flex-col">
             <div className="flex flex-col">
-              <h2 className="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+              <h2
+                className={clsx(
+                  "font-display text-xl font-bold tracking-tight text-foreground",
+                  "sm:text-2xl",
+                )}
+              >
                 <span>{t("FAQs About Counter Strike 2 Boosting")}</span>
               </h2>
               <div className="relative flex flex-col pt-5">
-                {boostingServices.map((item, idx) => (
-                  <Discovery
-                    key={idx}
-                    title={item.title}
-                    subtitle={item.subtitle}
-                  />
+                {boostingServices.map(({ title, subtitle }, idx) => (
+                  <Discovery key={idx} title={title} subtitle={subtitle} />
                 ))}
               </div>
             </div>

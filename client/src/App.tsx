@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./layouts/PrivateRoute";
 import LoginModal from "./components/Modals/LoginModal";
 import SignUpModal from "./components/Modals/SignUpModal";
 import Game from "./pages/Game";
@@ -17,6 +17,7 @@ import Boosts from "./pages/user/Boosts";
 import BoostId from "./pages/user/BoostId";
 import Accounts from "./pages/user/Accounts";
 import Settings from "./pages/user/Settings";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="counter-strike-2/*">
             <Route index element={<Game />} />
-            <Route path="premie" element={<Premie />} />
+            <Route path="premier" element={<Premie />} />
             <Route path="wingman" element={<Wingman />} />
             <Route path="level-farming" element={<FarmExp />} />
           </Route>
@@ -46,6 +47,7 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="profile" element={<Profile />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </React.Suspense>
     </BrowserRouter>

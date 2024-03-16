@@ -1,5 +1,8 @@
 import { useCallback, useState } from "react";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
+
+import { IconType } from "react-icons";
 import {
   FaDiscord,
   FaGoogle,
@@ -8,8 +11,6 @@ import {
   FaTwitch,
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { IconType } from "react-icons";
-import { useTranslation } from "react-i18next";
 
 const socialMedia = [
   {
@@ -71,7 +72,8 @@ const SocialService: React.FC<SocialServiceProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       className={clsx(
         "relative inline-flex flex-1 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-        `hover:bg-secondary-hover hover:!text-neutral-100 focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5`,
+        "hover:bg-secondary-hover hover:!text-neutral-100 focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+        "sm:py-2.5",
       )}
       style={{
         ...dynamicStyles,
@@ -119,13 +121,15 @@ const Modal: React.FC<ModalProps> = ({
       <div
         data-state={isOpen ? "open" : "closed"}
         className={clsx(
-          "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
+          "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
+          "focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
         )}
       >
         <div className="flex w-full overflow-hidden rounded-lg bg-card">
           <div
             className={clsx(
-              "order-1 hidden rounded-r-lg bg-cover bg-center md:block md:w-1/2",
+              "order-1 hidden rounded-r-lg bg-cover bg-center",
+              "md:block md:w-1/2",
             )}
           >
             <img
@@ -136,7 +140,8 @@ const Modal: React.FC<ModalProps> = ({
           </div>
           <div
             className={clsx(
-              "order-0 mx-auto w-full p-8 py-12 sm:max-w-lg sm:p-14 md:w-1/2",
+              "order-0 mx-auto w-full p-8 py-12",
+              "sm:max-w-lg sm:p-14 md:w-1/2",
             )}
           >
             <h2 className="font-display mb-2 text-3xl font-semibold text-foreground">
@@ -147,27 +152,28 @@ const Modal: React.FC<ModalProps> = ({
               <div className="space-y-8">
                 <div
                   className={clsx(
-                    "flex items-center justify-between gap-2 sm:gap-2",
+                    "flex items-center justify-between gap-2",
+                    "sm:gap-2",
                   )}
                 >
                   {/* SOCIAL */}
-                  {socialMedia.map((item) => (
+                  {socialMedia.map(({ icon, subtitle, color }) => (
                     <SocialService
-                      icon={item.icon}
-                      subtitle={item.subtitle}
-                      color={item.color}
+                      icon={icon}
+                      subtitle={subtitle}
+                      color={color}
                     />
                   ))}
                 </div>
                 <div className="flex items-center justify-between">
                   <span
-                    className={clsx("w-1/5 border-b border-border lg:w-1/4")}
+                    className={clsx("w-1/5 border-b border-border", "lg:w-1/4")}
                   />
                   <div className="text-center text-xs capitalize text-muted-foreground">
                     {t("Or")} {text && t(text)} {t("with email")}
                   </div>
                   <span
-                    className={clsx("w-1/5 border-b border-border lg:w-1/4")}
+                    className={clsx("w-1/5 border-b border-border", "lg:w-1/4")}
                   />
                 </div>
                 {content}
@@ -179,7 +185,9 @@ const Modal: React.FC<ModalProps> = ({
           onClick={handleClose}
           type="button"
           className={clsx(
-            "absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-secondary-light p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-7 sm:w-7 md:text-white/80",
+            "absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-secondary-light p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors ",
+            "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            "sm:h-7 sm:w-7 md:text-white/80",
           )}
         >
           <span className="sr-only">Close</span>
