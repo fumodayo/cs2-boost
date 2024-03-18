@@ -2,6 +2,13 @@ import clsx from "clsx";
 import { useCallback, useContext } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import {
+  authStart,
+  authSuccess,
+  authFailure,
+} from "../../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 import { FaArrowRight } from "react-icons/fa";
 
@@ -11,6 +18,8 @@ import Input from "../Input";
 
 const SignUpModal = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.user);
 
   const { isOpenSignUpModal, onCloseSignUpModal, onOpenLoginModal } =
     useContext(AppContext);
@@ -31,8 +40,26 @@ const SignUpModal = () => {
     onOpenLoginModal();
   }, [onCloseSignUpModal, onOpenLoginModal]);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    try {
+      dispatch(authStart());
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(authFailure("This email is already taken"));
+        return;
+      }
+      dispatch(authSuccess(data));
+      onCloseSignUpModal();
+    } catch (error) {
+      dispatch(authFailure("This email is already taken"));
+    }
   };
 
   const bodyContent = (
@@ -45,6 +72,7 @@ const SignUpModal = () => {
           rules={{ pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/ }}
           register={register}
           errors={errors}
+          failure={error}
         />
         <Input
           id="password"
@@ -57,6 +85,7 @@ const SignUpModal = () => {
           }}
           register={register}
           errors={errors}
+          failure={error}
         />
       </div>
       <span
@@ -77,6 +106,7 @@ const SignUpModal = () => {
       </span>
 
       <button
+        disabled={loading}
         type="submit"
         className={clsx(
           "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
@@ -84,7 +114,7 @@ const SignUpModal = () => {
           "sm:py-2.5",
         )}
       >
-        {t("Continue")}
+        {loading ? "...Loading" : t("Continue")}
         <FaArrowRight className="ml-2" />
       </button>
     </form>

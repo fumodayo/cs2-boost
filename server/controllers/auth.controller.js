@@ -5,14 +5,32 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
-
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
-
+  const { email, password } = req.body;
   try {
-    await newUser.save();
-    res.status(201).json({ message: "User created successfully" });
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return next(errorHandler(400, "This email is already taken"));
+    }
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({
+      username: email,
+      email,
+      password: hashedPassword,
+    });
+
+    const validUser = await newUser.save();
+
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const { password: userPassword, ...rest } = validUser._doc;
+
+    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+
+    res
+      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .status(201)
+      .json(rest);
   } catch (error) {
     next(error);
   }
@@ -67,7 +85,7 @@ export const google = async (req, res, next) => {
           Math.floor(Math.random() * 10000).toString(),
         email: req.body.email,
         password: hashedPassword,
-        profilePicture: req.body.photo,
+        profile_picture: req.body.photo,
       });
       await newUser.save();
 
@@ -86,4 +104,8 @@ export const google = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+export const signout = async (req, res) => {
+  res.clearCookie("access_token").status(200).json("Signout success");
 };

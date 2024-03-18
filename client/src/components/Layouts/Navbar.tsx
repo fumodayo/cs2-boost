@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
 
@@ -6,9 +7,11 @@ import { FaBars } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 
 import { AppContext } from "../../context/AppContext";
+import { RootState } from "../../redux/store";
 import MenuLanguage from "../Common/MenuLanguage";
 import MenuTheme from "../Common/MenuTheme";
 import MenuGame from "../Common/MenuGame";
+import Avatar from "../Common/Avatar";
 
 interface NavbarProps {
   isNonSticky?: boolean;
@@ -16,6 +19,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
   const { t } = useTranslation();
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   const { onOpenLoginModal } = useContext(AppContext);
 
@@ -85,24 +89,39 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
           <div className="flex items-center">
             <div className={clsx("hidden items-center space-x-2", "lg:flex")}>
               {/** MENU THEME */}
-              <MenuTheme />
+              {!currentUser && <MenuTheme />}
 
               {/** MENU LANGUAGE */}
               <MenuLanguage />
             </div>
             <div className="relative ml-4 flow-root">
               {/** MODAL LOGIN/REGISTER */}
-              <button
-                type="button"
-                onClick={handleOpenLoginModal}
-                className={clsx(
-                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                  "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                )}
-              >
-                {t("Log in")}
-                <FaArrowRight className="ml-2" />
-              </button>
+              {currentUser ? (
+                <Avatar>
+                  <button className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary">
+                    <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">
+                      <img
+                        src={currentUser?.profile_picture}
+                        alt={currentUser.username}
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    </div>
+                    <span className="sr-only">Open user menu for user</span>
+                  </button>
+                </Avatar>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleOpenLoginModal}
+                  className={clsx(
+                    "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+                    "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                  )}
+                >
+                  {t("Log in")}
+                  <FaArrowRight className="ml-2" />
+                </button>
+              )}
             </div>
           </div>
         </div>

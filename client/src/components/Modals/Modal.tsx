@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { authSuccess } from "../../redux/user/userSlice";
 
 import { IconType } from "react-icons";
 import {
@@ -11,6 +12,10 @@ import {
   FaTwitch,
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../utils/firebase";
+import { useDispatch } from "react-redux";
+import { AppContext } from "../../context/AppContext";
 
 const socialMedia = [
   {
@@ -66,8 +71,38 @@ const SocialService: React.FC<SocialServiceProps> = ({
       }
     : {};
 
+  const dispatch = useDispatch();
+  const { onCloseLoginModal, onCloseSignUpModal } = useContext(AppContext);
+
+  const handleGoogleClick = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
+
+      const result = await signInWithPopup(auth, provider);
+      const res = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        }),
+      });
+      const data = await res.json();
+      dispatch(authSuccess(data));
+      onCloseLoginModal();
+      onCloseSignUpModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <a
+      onClick={handleGoogleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={clsx(
@@ -159,6 +194,7 @@ const Modal: React.FC<ModalProps> = ({
                   {/* SOCIAL */}
                   {socialMedia.map(({ icon, subtitle, color }) => (
                     <SocialService
+                      key={subtitle}
                       icon={icon}
                       subtitle={subtitle}
                       color={color}

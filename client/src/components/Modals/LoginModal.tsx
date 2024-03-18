@@ -2,14 +2,24 @@ import clsx from "clsx";
 import { useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FaArrowRight } from "react-icons/fa";
 
 import { AppContext } from "../../context/AppContext";
+import {
+  authStart,
+  authSuccess,
+  authFailure,
+} from "../../redux/user/userSlice";
+import { RootState } from "../../redux/store";
 import Modal from "./Modal";
 import Input from "../Input";
 
 const LoginModal = () => {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.user);
+
   const { t } = useTranslation();
 
   const { isOpenLoginModal, onCloseLoginModal, onOpenSignUpModal } =
@@ -31,8 +41,28 @@ const LoginModal = () => {
     onOpenSignUpModal();
   }, [onCloseLoginModal, onOpenSignUpModal]);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    try {
+      dispatch(authStart());
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(authFailure("Wrong password or email"));
+        return;
+      }
+
+      dispatch(authSuccess(data));
+      onCloseLoginModal();
+    } catch (error) {
+      dispatch(authFailure("Sai mật khẩu hoặc tài khoản"));
+    }
   };
 
   const bodyContent = (
@@ -45,6 +75,7 @@ const LoginModal = () => {
           rules={{ pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/ }}
           register={register}
           errors={errors}
+          failure={error}
         />
         <Input
           id="password"
@@ -53,9 +84,11 @@ const LoginModal = () => {
           required
           register={register}
           errors={errors}
+          failure={error}
         />
       </div>
       <button
+        disabled={loading}
         type="submit"
         className={clsx(
           "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
@@ -63,7 +96,7 @@ const LoginModal = () => {
           "sm:py-2.5",
         )}
       >
-        {t("Continue")}
+        {loading ? "Loading..." : t("Continue")}
         <FaArrowRight className="ml-2" />
       </button>
     </form>

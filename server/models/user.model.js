@@ -16,10 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profilePicture: {
+    profile_picture: {
       type: String,
       default:
-        "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
+        "https://lh3.googleusercontent.com/ogw/AF2bZyieFPjFR8czkbCUMbZMA7xvXviWzpPKBimyXYUnKQ=s32-c-mo",
     },
   },
   { timestamps: true }

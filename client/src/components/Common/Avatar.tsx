@@ -11,21 +11,23 @@ import { FaPalette, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
 import Separator from "../Separator";
 import { AppContext } from "../../context/AppContext";
 import clsx from "clsx";
+import { useDispatch } from "react-redux";
+import { signOut } from "../../redux/user/userSlice";
 
 const services = [
   {
     label: "My Boosts",
-    link: "#",
+    link: "boosts",
     icon: BsRocketTakeoffFill,
   },
   {
     label: "My Accounts",
-    link: "#",
+    link: "accounts",
     icon: GiSamuraiHelmet,
   },
   {
     label: "Settings",
-    link: "#",
+    link: "settings",
     icon: HiCog6Tooth,
   },
 ];
@@ -50,7 +52,10 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
         "focus:bg-accent focus:text-accent-foreground",
       )}
     >
-      <a className="flex items-center justify-center" href={link}>
+      <a
+        className="flex items-center justify-center"
+        href={`/dashboard/${link}`}
+      >
         {Icon && (
           <Icon className="mr-2 w-5 text-center text-base text-muted-foreground" />
         )}
@@ -61,10 +66,21 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
 };
 
 const Avatar: React.FC<AvatarProps> = ({ children }) => {
+  const dispatch = useDispatch();
+
   const { theme, setTheme } = useContext(AppContext);
 
   const handleThemeChange = (selected: Theme) => {
     setTheme(selected);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/user/signout");
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -142,8 +158,9 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
               "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm text-danger-light-foreground outline-none transition-colors",
               "focus:bg-danger-light focus:text-danger-light-foreground",
             )}
+            onClick={handleSignOut}
           >
-            <a className="flex items-center justify-center" href="">
+            <a className="flex items-center justify-center">
               <FaSignOutAlt className="mr-2 w-5 text-center text-danger-light-foreground" />
               Logout
             </a>

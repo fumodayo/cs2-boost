@@ -13,7 +13,7 @@ import { LuSwords } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "./Input";
-import { useExchangeRate } from "../hooks/useSwapCurrency";
+import { useExchangeRate } from "../hooks/useExchangeRate";
 
 type ExtraOption = {
   name: string;

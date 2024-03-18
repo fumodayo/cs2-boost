@@ -20,6 +20,7 @@ interface InputProps {
   errors: FieldErrors;
   style?: string;
   label?: string;
+  failure?: string | boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -33,6 +34,7 @@ const Input: React.FC<InputProps> = ({
   errors,
   style,
   label,
+  failure,
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -75,6 +77,9 @@ const Input: React.FC<InputProps> = ({
               <FaEyeSlash onClick={togglePassword} size={18} />
             )}
           </span>
+        )}
+        {failure && !error && (
+          <p className="mt-1 text-sm text-red-400">{failure}</p>
         )}
         {/* ERRORS PATTERN */}
         {error?.type === "required" && (
