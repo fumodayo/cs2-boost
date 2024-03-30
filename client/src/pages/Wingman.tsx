@@ -333,6 +333,7 @@ const Wingman = () => {
           beginText="My Rank"
           lastText="Desired Rank"
           server={server}
+          title="wingman"
           mode="wingman"
           currentRanking={currentRank}
           desiredRanking={desiredRank}

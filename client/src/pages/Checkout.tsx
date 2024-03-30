@@ -7,6 +7,9 @@ import Avatar from "../components/Common/Avatar";
 import Logo from "../components/Common/Logo";
 import Input from "../components/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { formatMoney } from "../utils/formatMoney";
 
 const modeOfPayment = [
   {
@@ -47,6 +50,7 @@ const modeOfPayment = [
 
 const Checkout = () => {
   const [mode, setMode] = useState("debit_cards");
+  const { currentCart } = useSelector((state: RootState) => state.cart);
 
   const {
     register,
@@ -62,6 +66,12 @@ const Checkout = () => {
     // console.log(data);
   };
 
+  if (!currentCart) {
+    return null;
+  }
+
+  console.log(currentCart.end_exp);
+
   return (
     <main>
       <div className="fixed left-0 top-0 hidden h-full w-1/2 bg-background lg:block" />
@@ -76,7 +86,7 @@ const Checkout = () => {
             <dl>
               <dt className="text-sm font-medium">Amount due</dt>
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-foreground">
-                $24.39
+                {formatMoney(currentCart.currency, currentCart.price)}
               </dd>
             </dl>
             <ul className="divide-y divide-border text-sm font-medium">
@@ -87,11 +97,29 @@ const Checkout = () => {
                   className="h-12 w-12 flex-none rounded-md object-cover object-center"
                 />
                 <div className="flex-auto space-y-1">
-                  <h3 className="text-foreground">Arena 2v2, 0 1400, US</h3>
-                  <p>Arena 2v2</p>
+                  <h3 className="capitalize text-foreground">
+                    {currentCart.title}
+
+                    {currentCart.start_rating && currentCart.end_rating && (
+                      <>
+                        ({currentCart.start_rating} → {currentCart.end_rating})
+                      </>
+                    )}
+                    {currentCart.start_exp && currentCart.end_exp && (
+                      <>
+                        ({currentCart.start_exp} → {currentCart.end_exp})
+                      </>
+                    )}
+                    {currentCart.start_rank && currentCart.end_rank && (
+                      <>
+                        ({currentCart.start_rank.replace("_", " ")} → {currentCart.end_rank.replace("_", " ")})
+                      </>
+                    )}
+                  </h3>
+                  <p>{currentCart.type}</p>
                 </div>
                 <p className="flex-none text-base font-medium text-foreground">
-                  $24.39
+                  {formatMoney(currentCart.currency, currentCart.price)}
                 </p>
               </li>
             </ul>
@@ -118,13 +146,15 @@ const Checkout = () => {
               </div>
               <div className="flex items-center justify-between">
                 <dt>Subtotal</dt>
-                <dd>$24.39</dd>
+                <dd>{formatMoney(currentCart.currency, currentCart.price)}</dd>
               </div>
 
               <div className="border-t border-border pt-6">
                 <div className="flex items-center justify-between text-foreground">
                   <dt className="text-base">Total</dt>
-                  <dd className="text-base">$24.39</dd>
+                  <dd className="text-base">
+                    {formatMoney(currentCart.currency, currentCart.price)}
+                  </dd>
                 </div>
               </div>
             </dl>

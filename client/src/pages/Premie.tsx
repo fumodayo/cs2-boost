@@ -417,6 +417,7 @@ const Premie = () => {
           beginText="My Rating"
           lastText="Desired Rating"
           server={server}
+          title="premier"
           mode="premier"
           currentRating={currentRating}
           desiredRating={desiredRating}

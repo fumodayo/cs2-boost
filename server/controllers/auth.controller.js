@@ -15,7 +15,12 @@ export const signup = async (req, res, next) => {
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
     const newUser = new User({
-      username: email,
+      // Example: fumodayo1701@gmail.com -> fumodayo-1701-2788 
+      username:
+        email.split("@")[0].replace(/\d+/g, (match) => "-" + match) +
+        "-" +
+        Math.floor(Math.random() * 10000).toString(),
+      user_id: Math.floor(Math.random() * 1000000).toString(),
       email,
       password: hashedPassword,
     });
@@ -80,8 +85,10 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
+        // Example: fumo dayo -> fumo-dayo-17283
         username:
-          req.body.name.split(" ").join("").toLowerCase() +
+          req.body.name.split(" ").join("-").toLowerCase() +
+          "-" +
           Math.floor(Math.random() * 10000).toString(),
         email: req.body.email,
         password: hashedPassword,

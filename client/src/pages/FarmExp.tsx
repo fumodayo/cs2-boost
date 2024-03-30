@@ -166,8 +166,9 @@ const FarmExp = () => {
     return Math.floor(totalExp(startPoint, endPoint) / 60);
   }, [startPoint, endPoint]);
 
+  // Mỗi 1 exp = 100 VND
   const totalCostOfFarmExp = useMemo(() => {
-    const total = totalExp(startPoint, endPoint) * 10;
+    const total = totalExp(startPoint, endPoint) * 100;
     return total;
   }, [startPoint, endPoint]);
 
@@ -304,8 +305,9 @@ const FarmExp = () => {
           lastText="Desired Exp"
           server={"1"}
           mode="level-farming"
-          currentRating={startPoint}
-          desiredRating={endPoint}
+          title="level farming"
+          currentExp={startPoint}
+          desiredExp={endPoint}
           totalTime={totalTimeOfFarmExp}
           cost={totalCostOfFarmExp}
           extraOptions={extraOptions}

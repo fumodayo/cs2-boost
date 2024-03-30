@@ -1,49 +1,5 @@
-import {
-  FaEarthAsia,
-  FaEarthAfrica,
-  FaEarthEurope,
-  FaEarthAmericas,
-} from "react-icons/fa6";
-import { BsGlobeAsiaAustralia } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
-
-const listOfCountries = [
-  {
-    name: "Africa",
-    value: "AF",
-    icon: FaEarthAfrica,
-  },
-  {
-    name: "Asia",
-    value: "AS",
-    icon: FaEarthAsia,
-  },
-  {
-    name: "Australia",
-    value: "AU",
-    icon: BsGlobeAsiaAustralia,
-  },
-  {
-    name: "China",
-    value: "CN",
-    icon: FaEarthAsia,
-  },
-  {
-    name: "Europe",
-    value: "EU",
-    icon: FaEarthEurope,
-  },
-  {
-    name: "North America",
-    value: "NA",
-    icon: FaEarthAmericas,
-  },
-  {
-    name: "South America",
-    value: "SA",
-    icon: FaEarthAmericas,
-  },
-];
+import { listOfCountries } from "../constants";
 
 interface ChooseServerProps {
   server?: string;

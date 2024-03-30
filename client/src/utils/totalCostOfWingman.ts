@@ -548,30 +548,31 @@ export const totalCostOfWingman = (
   // Lấy thông tin về server cụ thể
   const selectedServer = servers.find((s) => s.name === server);
 
-  // Lấy index của currentRank và desiredRank trong mảng ranks
-  const currentIndex = selectedServer?.costs.findIndex(
-    (rank) => rank.name === currentRank,
-  );
-  const desiredIndex = selectedServer?.costs.findIndex(
-    (rank) => rank.name === desiredRank,
-  );
+  if (selectedServer) {
+    // Lấy index của currentRank và desiredRank trong mảng ranks
+    const currentIndex = selectedServer.costs.findIndex(
+      (rank) => rank.name === currentRank,
+    );
+    const desiredIndex = selectedServer.costs.findIndex(
+      (rank) => rank.name === desiredRank,
+    );
 
-  if (currentIndex && desiredIndex) {
-    // Tính toán giá trị dựa trên bonus
-    const currentBonus = selectedServer?.costs
-      .slice(0, currentIndex + 1)
-      .reduce((sum, rank) => sum + rank.bonus, 0);
+    if (currentIndex !== -1 && desiredIndex !== -1) {
+      // Tính toán giá trị dựa trên bonus
+      const currentBonus = selectedServer.costs
+        .slice(0, currentIndex + 1)
+        .reduce((sum, rank) => sum + rank.bonus, 0);
+      const desiredBonus = selectedServer.costs
+        .slice(0, desiredIndex + 1)
+        .reduce((sum, rank) => sum + rank.bonus, 0);
 
-    const desiredBonus = selectedServer?.costs
-      .slice(0, desiredIndex + 1)
-      .reduce((sum, rank) => sum + rank.bonus, 0);
-
-    if (desiredBonus && currentBonus) {
-      // Tính toán tổng chi phí dựa trên công thức đã cung cấp
-      const totalCost = (desiredBonus - currentBonus) * 1;
-
-      return totalCost;
+      // Kiểm tra giá trị của currentBonus và desiredBonus
+      if (desiredBonus > 0 && currentBonus > 0) {
+        // Tính toán tổng chi phí dựa trên công thức đã cung cấp
+        const totalCost = (desiredBonus - currentBonus) * 10000;
+        return totalCost;
+      }
     }
   }
-  return 0;
+  return -1; // Trả về -1 nếu không tìm thấy server
 };

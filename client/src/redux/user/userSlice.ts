@@ -1,13 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-type User = {
-  _id: string;
-  username: string;
-  email: string;
-  profile_picture: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import { User } from "../../types";
 
 interface CounterState {
   theme: string;

@@ -1,19 +1,20 @@
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { GoClockFill } from "react-icons/go";
-import {
-  FaEarthAsia,
-  FaEarthAfrica,
-  FaEarthEurope,
-  FaEarthAmericas,
-} from "react-icons/fa6";
-import { BsGlobeAsiaAustralia } from "react-icons/bs";
 import { RxGlobe } from "react-icons/rx";
 import { GiDiamondHard, GiBroadsword } from "react-icons/gi";
 import { LuSwords } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "./Input";
-import { useExchangeRate } from "../hooks/useExchangeRate";
+import { AppContext } from "../context/AppContext";
+import { useExchangeMoney } from "../hooks/useExchangeMoney";
+import { useDispatch, useSelector } from "react-redux";
+import { addCartStart, addCartSuccess } from "../redux/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
+import { formatMoney } from "../utils/formatMoney";
+import { RootState } from "../redux/store";
+import { Order } from "../types";
+import { listOfCountries, rankOptions } from "../constants";
 
 type ExtraOption = {
   name: string;
@@ -22,10 +23,13 @@ type ExtraOption = {
 };
 
 interface CheckoutProps {
+  title?: string;
   beginText?: string;
   lastText?: string;
   server?: string;
   mode?: string;
+  currentExp?: number;
+  desiredExp?: number;
   currentRating?: number;
   desiredRating?: number;
   currentRanking?: string;
@@ -34,44 +38,6 @@ interface CheckoutProps {
   cost: number;
   extraOptions: ExtraOption[];
 }
-
-const listOfCountries = [
-  {
-    name: "Africa",
-    value: "AF",
-    icon: FaEarthAfrica,
-  },
-  {
-    name: "Asia",
-    value: "AS",
-    icon: FaEarthAsia,
-  },
-  {
-    name: "Australia",
-    value: "AU",
-    icon: BsGlobeAsiaAustralia,
-  },
-  {
-    name: "China",
-    value: "CN",
-    icon: FaEarthAsia,
-  },
-  {
-    name: "Europe",
-    value: "EU",
-    icon: FaEarthEurope,
-  },
-  {
-    name: "North America",
-    value: "NA",
-    icon: FaEarthAmericas,
-  },
-  {
-    name: "South America",
-    value: "SA",
-    icon: FaEarthAmericas,
-  },
-];
 
 const listOfServices = [
   {
@@ -91,110 +57,14 @@ const listOfServices = [
   },
 ];
 
-type RankOption = {
-  name: string;
-  value: string;
-  image: string;
-};
-
-const rankOptions: RankOption[] = [
-  {
-    name: "Silver 1",
-    value: "silver_1",
-    image: "SILVER_1__WINGAME",
-  },
-  {
-    name: "Silver 2",
-    value: "silver_2",
-    image: "SILVER_2__WINGAME",
-  },
-  {
-    name: "Silver 3",
-    value: "silver_3",
-    image: "SILVER_3__WINGAME",
-  },
-  {
-    name: "Silver 4",
-    value: "silver_4",
-    image: "SILVER_4__WINGAME",
-  },
-  {
-    name: "Silver Elite",
-    value: "silver_elite",
-    image: "SILVER_ELITE__WINGAME",
-  },
-  {
-    name: "Silver Elite Master",
-    value: "silver_elite_master",
-    image: "SILVER_ELITE_MASTER__WINGAME",
-  },
-  {
-    name: "Glob Nova 1",
-    value: "glob_nova_1",
-    image: "GOLD_NOVA_1__WINGAME",
-  },
-  {
-    name: "Glob Nova 2",
-    value: "glob_nova_2",
-    image: "GOLD_NOVA_2__WINGAME",
-  },
-  {
-    name: "Glob Nova 3",
-    value: "glob_nova_3",
-    image: "GOLD_NOVA_3__WINGAME",
-  },
-  {
-    name: "Glob Nova Master",
-    value: "glob_nova_master",
-    image: "GOLD_NOVA_MASTER__WINGAME",
-  },
-  {
-    name: "Master Guardian 1",
-    value: "master_guardian_1",
-    image: "MASTER_GUADIAN_1__WINGAME",
-  },
-  {
-    name: "Master Guardian 2",
-    value: "master_guardian_2",
-    image: "MASTER_GUARDIAN_2__WINGAME",
-  },
-  {
-    name: "Master Guardian Elite",
-    value: "master_guardian_elite",
-    image: "MASTER_GUARDIAN_ELITE__WINGAME",
-  },
-  {
-    name: "Distinguished Master Guardian",
-    value: "distinguished_master_guardian",
-    image: "DISTINGUISHED__MASTER__GUARDIAN__WINGAME",
-  },
-  {
-    name: "Legendary Eagle",
-    value: "legendary_eagle",
-    image: "LEGENDARY__EAGLE__WINGAME",
-  },
-  {
-    name: "Legendary Eagle Master",
-    value: "legendary_eagle_master",
-    image: "LEGENDARY__EAGLE__MASTER__WINGAME",
-  },
-  {
-    name: "Supreme",
-    value: "supreme",
-    image: "SUPREME__WINGAME",
-  },
-  {
-    name: "Global Elite",
-    value: "global_elite",
-    image: "GLOBAL_ELITE__WINGAME",
-  },
-];
-
 const Checkout: React.FC<CheckoutProps> = ({
+  title,
   beginText,
   lastText,
   server,
   mode,
+  currentExp,
+  desiredExp,
   currentRating,
   desiredRating,
   currentRanking,
@@ -204,6 +74,10 @@ const Checkout: React.FC<CheckoutProps> = ({
   extraOptions,
 }) => {
   const { t } = useTranslation();
+  const { currency, onOpenLoginModal } = useContext(AppContext);
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -249,11 +123,58 @@ const Checkout: React.FC<CheckoutProps> = ({
         (extraOptions[index].extra / 100) * costWithExtraOptions;
     });
 
-    return costWithExtraOptions.toFixed(2);
+    return costWithExtraOptions;
   }, [cost, extraOptions, selectedOptions]);
 
-  const exchangeRate = useExchangeRate("usd", "vnd");
-  console.log(exchangeRate);
+  const totalOptions = useMemo(() => {
+    const options: string[] = [];
+    selectedOptions.forEach((index: number) => {
+      options.push(extraOptions[index].name);
+    });
+    return options;
+  }, [extraOptions, selectedOptions]);
+
+  const exchangeMoney = useExchangeMoney(totalCost);
+
+  const handleCreateOrder = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    dispatch(addCartStart());
+
+    const order: Order = {
+      options: totalOptions,
+      title: title,
+      game: "counter strike 2",
+      type: title,
+      price: Math.round(exchangeMoney * 100) / 100,
+      currency: currency,
+      // Farm Exp
+      start_exp: currentExp,
+      end_exp: desiredExp,
+      // Premier
+      server: server,
+      start_rating: currentRating,
+      end_rating: desiredRating,
+      // Wingman
+      start_rank: currentRanking,
+      end_rank: desiredRanking,
+    };
+
+    if (!currentUser) {
+      onOpenLoginModal();
+      return;
+    }
+
+    await fetch("/api/order/create-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    });
+
+    dispatch(addCartSuccess(order));
+    navigate("/checkout");
+  };
 
   return (
     <div className="gap-5 lg:col-span-2 xl:col-span-2">
@@ -425,18 +346,20 @@ const Checkout: React.FC<CheckoutProps> = ({
         </div>
         <div className="mt-6 flex items-end justify-between">
           <p className="text-lg text-muted-foreground">{t("Total Price")}:</p>
-          {}
-          {totalCost && cost > 0 && (
+          {exchangeMoney && exchangeMoney > 0 && (
             <div className="flex flex-row items-end gap-2">
               <span className="bg-gradient-to-l from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold tracking-tight text-transparent">
-                ${totalCost}
+                {formatMoney(currency, exchangeMoney)}
               </span>
             </div>
           )}
         </div>
 
         {server ? (
-          <button className="text-md mt-4 w-full rounded-md bg-blue-600 py-2 font-semibold text-foreground hover:bg-blue-700">
+          <button
+            onClick={handleCreateOrder}
+            className="text-md mt-4 w-full rounded-md bg-blue-600 py-2 font-semibold text-foreground hover:bg-blue-700"
+          >
             {t("Buy Now")} →
           </button>
         ) : (

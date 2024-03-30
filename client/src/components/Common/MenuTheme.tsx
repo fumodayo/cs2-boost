@@ -7,8 +7,7 @@ import { FaMoon } from "react-icons/fa6";
 import { IoIosSunny } from "react-icons/io";
 
 import { AppContext } from "../../context/AppContext";
-
-type Theme = "dark" | "light";
+import { Theme } from "../../types";
 
 const MenuTheme = () => {
   const { t } = useTranslation();

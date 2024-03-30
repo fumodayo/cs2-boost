@@ -8,6 +8,8 @@ import { BiSolidCog } from "react-icons/bi";
 
 import Logo from "../Common/Logo";
 import Avatar from "../Common/Avatar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const sidebarItems = [
   {
@@ -53,6 +55,8 @@ const sidebarItems = [
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state: RootState) => state.user);
+
   const { pathname } = useLocation();
   const segments = pathname.split("/").filter(Boolean);
   const slug = segments.length > 1 ? segments.pop() : null;
@@ -124,8 +128,8 @@ const Sidebar = () => {
               <div className="flex items-center">
                 <div className="relative block h-8 w-8 shrink-0 rounded-full text-sm">
                   <img
-                    src="/src/assets/avatar.png"
-                    alt="user"
+                    src={currentUser?.profile_picture}
+                    alt="profile picture"
                     className="h-full w-full rounded-full object-cover"
                   />
 
@@ -136,7 +140,7 @@ const Sidebar = () => {
                 {/* USERNAME / ROLE */}
                 <div className="ml-2.5 truncate">
                   <div className="text-sm font-medium text-foreground">
-                    User name
+                    {currentUser?.username}
                   </div>
                   <div className="truncate text-xs text-muted-foreground">
                     Client Mode

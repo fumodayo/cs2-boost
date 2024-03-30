@@ -19,6 +19,12 @@ import {
   HiOutlineChevronDoubleRight,
   HiChevronRight,
 } from "react-icons/hi";
+import { Order } from "../types";
+import { formatDistance } from "date-fns";
+import { vi, enUS } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
+import { formatMoney } from "../utils/formatMoney";
+import { listOfGame } from "../constants";
 
 interface ServiceButtonProps {
   value: string;
@@ -34,54 +40,25 @@ const ServiceButton: React.FC<ServiceButtonProps> = ({ value, icon: Icon }) => {
   );
 };
 
-const games = [
-  {
-    image: "counter-strike-2",
-    name: "Counter Strike 2",
-    value: "counter-strike-2",
-  },
-  { image: "lol-wild-rift", name: "Lol: Wild Rift", value: "lol-wild-rift" },
-  { image: "overwatch-2", name: "Overwatch 2", value: "overwatch-2" },
-  { image: "rocket-league", name: "Rocket League", value: "rocket-league" },
-  {
-    image: "teamfight-tactics",
-    name: "Teamfight Tactics",
-    value: "teamfight-tactics",
-  },
-  { image: "valorant", name: "Valorant", value: "valorant" },
-  {
-    image: "world-of-warcraft",
-    name: "World of Warcraft",
-    value: "world-of-warcraft",
-  },
-  {
-    image: "league-of-legends",
-    name: "League of Legends",
-    value: "league-of-legends",
-  },
-  { image: "destiny-2", name: "Destiny 2", value: "destiny-2" },
-  { image: "apex-legends", name: "Apex Legends", value: "apex-legends" },
-];
-
 const statuses = [
   {
-    name: "Pending",
+    label: "Pending",
     value: "pending",
   },
   {
-    name: "Processing",
+    label: "Processing",
     value: "processing",
   },
   {
-    name: "In Progress",
+    label: "In Progress",
     value: "in-progress",
   },
   {
-    name: "Completed",
+    label: "Completed",
     value: "completed",
   },
   {
-    name: "Inactive",
+    label: "Inactive",
     value: "inactive",
   },
 ];
@@ -149,22 +126,6 @@ const Header = ({ title }: { title: string }) => {
   );
 };
 
-interface DataTableProps {
-  headers: { name: string; value: string }[];
-  items: {
-    id: string;
-    title: string;
-    subtitle: string;
-    image: string;
-    username: string;
-    avatar: string;
-    status: string;
-    price: number;
-    updated_at: string;
-    booster_id: string;
-  }[];
-}
-
 interface NavigationButtonProps {
   icon: IconType;
   value: string | number;
@@ -203,12 +164,13 @@ const ArrowButton: React.FC<NavigationButtonProps> = ({
   );
 };
 
-interface NumberButtonProps {
+const NumberButton = ({
+  value,
+  active,
+}: {
   value: number;
   active?: boolean;
-}
-
-const NumberButton: React.FC<NumberButtonProps> = ({ value, active }) => {
+}) => {
   return (
     <button
       className={
@@ -222,7 +184,29 @@ const NumberButton: React.FC<NumberButtonProps> = ({ value, active }) => {
   );
 };
 
-const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
+interface DataTableProps {
+  headers: { name: string; value: string }[];
+  items: Order[];
+  searchKey: string;
+  gameKey: string[];
+  statusKey: string[];
+  onSearchKey: (value: string) => void;
+  onGameKey: (value: string[]) => void;
+  onStatusKey: (value: string[]) => void;
+}
+
+const DataTable: React.FC<DataTableProps> = ({
+  headers,
+  items,
+  searchKey,
+  gameKey,
+  statusKey,
+  onSearchKey,
+  onGameKey,
+  onStatusKey,
+}) => {
+  const { i18n } = useTranslation();
+
   const [columnVisibility, setColumnVisibility] =
     useState<ToggleColumn[]>(toggleColumns);
 
@@ -245,15 +229,27 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
           {/* SEARCH */}
           <div className="w-fit">
             <input
+              value={searchKey}
+              onChange={(e) => onSearchKey(e.target.value)}
               className="flex h-8 w-[150px] rounded-md border border-input bg-card-alt px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 lg:w-[250px]"
               placeholder="Search..."
               type="text"
             />
           </div>
           {/* GAME BUTTON */}
-          <PlusButton name="Game" options={games} />
+          <PlusButton
+            selectedValues={gameKey}
+            onSelectedValuesChange={(value: string[]) => onGameKey(value)}
+            name="Game"
+            options={listOfGame}
+          />
           {/* STATUS BUTTON */}
-          <PlusButton name="Status" options={statuses} />
+          <PlusButton
+            selectedValues={statusKey}
+            onSelectedValuesChange={(value: string[]) => onStatusKey(value)}
+            name="Status"
+            options={statuses}
+          />
         </div>
         {/* TOGGLE */}
         <DropdownMenu.Root>
@@ -300,28 +296,28 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
             <tbody className="bg-card-alt [&_tr:last-child]:border-0">
               {items.map(
                 ({
-                  id,
+                  boost_id,
                   title,
-                  subtitle,
-                  image,
-                  avatar,
-                  username,
-                  booster_id,
+                  type,
+                  user,
                   status,
-                  updated_at,
+                  updatedAt,
                   price,
+                  currency,
                 }) => (
                   <tr className="border-b text-muted-foreground transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                     {/* TITLE */}
                     {columnVisibility.find(
                       (column) => column.value === "title" && column.active,
                     ) && (
-                      <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        <a>
+                      <td className="cursor-pointer px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                        <a href={`/dashboard/boosts/${boost_id}`}>
                           <div className="flex items-center">
                             <div className="relative block h-8 w-8 shrink-0 rounded-lg text-sm">
                               <img
-                                src={image}
+                                src={
+                                  "https://cdn.gameboost.com/games/world-of-warcraft/logo/card.svg"
+                                }
                                 alt={title}
                                 className="h-full w-full rounded-lg object-cover"
                               />
@@ -331,7 +327,7 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                                 {title}
                               </div>
                               <div className="truncate text-xs text-muted-foreground">
-                                {subtitle}
+                                {type}
                               </div>
                             </div>
                           </div>
@@ -344,7 +340,7 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                       (column) => column.value === "id" && column.active,
                     ) && (
                       <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        #{id}
+                        #{boost_id}
                       </td>
                     )}
 
@@ -353,21 +349,23 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                       (column) => column.value === "client" && column.active,
                     ) && (
                       <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        <div className="flex items-center">
-                          <div className="relative block h-6 w-6 shrink-0 rounded-full text-xs">
-                            <img
-                              src={avatar}
-                              alt={username}
-                              className="h-full w-full rounded-full object-cover"
-                            />
-                            <span className="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-green-400 ring-2 ring-card" />
-                          </div>
-                          <div className="ml-2.5 truncate">
-                            <div className="text-sm font-medium text-foreground">
-                              <span className="text-xs">{username}</span>
+                        {user && (
+                          <div className="flex items-center">
+                            <div className="relative block h-6 w-6 shrink-0 rounded-full text-xs">
+                              <img
+                                src={user.profile_picture}
+                                alt={user.username}
+                                className="h-full w-full rounded-full object-cover"
+                              />
+                              <span className="absolute bottom-0 right-0 block h-1.5 w-1.5 rounded-full bg-green-400 ring-2 ring-card" />
+                            </div>
+                            <div className="ml-2.5 truncate">
+                              <div className="text-sm font-medium text-foreground">
+                                <span className="text-xs">{user.username}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </td>
                     )}
 
@@ -376,7 +374,7 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                       (column) => column.value === "boosters" && column.active,
                     ) && (
                       <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        {booster_id}
+                        {boost_id}
                       </td>
                     )}
 
@@ -396,7 +394,9 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                       (column) => column.value === "price" && column.active,
                     ) && (
                       <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        <span className="text-foreground">{price}</span>
+                        <span className="text-foreground">
+                          {formatMoney(currency, price)}
+                        </span>
                       </td>
                     )}
 
@@ -404,11 +404,16 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                     {columnVisibility.find(
                       (column) =>
                         column.value === "updated_at" && column.active,
-                    ) && (
-                      <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                        <div className="cursor-default">{updated_at}</div>
-                      </td>
-                    )}
+                    ) &&
+                      updatedAt && (
+                        <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                          <div className="cursor-default">
+                            {formatDistance(updatedAt, new Date(), {
+                              locale: i18n.language === "vn" ? vi : enUS,
+                            })}
+                          </div>
+                        </td>
+                      )}
                   </tr>
                 ),
               )}
@@ -431,7 +436,7 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items }) => {
                 </button>
               </Select.Trigger>
               <Select.Portal>
-                <Select.Content className="bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg z-40">
+                <Select.Content className="z-40 bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
                   <Select.Viewport>
                     <Select.Group>
                       <Select.Item value="1">2</Select.Item>

@@ -1,6 +1,7 @@
 import { RadioGroup } from "@headlessui/react";
 import Tooltip from "../Tooltip";
 import { useTranslation } from "react-i18next";
+import { rankOptions } from "../../constants";
 
 interface ChooseRankProps {
   title: string;
@@ -8,105 +9,6 @@ interface ChooseRankProps {
   rank: string;
   setRank: (value: string) => void;
 }
-
-type RankOption = {
-  name: string;
-  value: string;
-  image: string;
-};
-
-const rankOptions: RankOption[] = [
-  {
-    name: "Silver 1",
-    value: "silver_1",
-    image: "SILVER_1__WINGAME",
-  },
-  {
-    name: "Silver 2",
-    value: "silver_2",
-    image: "SILVER_2__WINGAME",
-  },
-  {
-    name: "Silver 3",
-    value: "silver_3",
-    image: "SILVER_3__WINGAME",
-  },
-  {
-    name: "Silver 4",
-    value: "silver_4",
-    image: "SILVER_4__WINGAME",
-  },
-  {
-    name: "Silver Elite",
-    value: "silver_elite",
-    image: "SILVER_ELITE__WINGAME",
-  },
-  {
-    name: "Silver Elite Master",
-    value: "silver_elite_master",
-    image: "SILVER_ELITE_MASTER__WINGAME",
-  },
-  {
-    name: "Glob Nova 1",
-    value: "glob_nova_1",
-    image: "GOLD_NOVA_1__WINGAME",
-  },
-  {
-    name: "Glob Nova 2",
-    value: "glob_nova_2",
-    image: "GOLD_NOVA_2__WINGAME",
-  },
-  {
-    name: "Glob Nova 3",
-    value: "glob_nova_3",
-    image: "GOLD_NOVA_3__WINGAME",
-  },
-  {
-    name: "Glob Nova Master",
-    value: "glob_nova_master",
-    image: "GOLD_NOVA_MASTER__WINGAME",
-  },
-  {
-    name: "Master Guardian 1",
-    value: "master_guardian_1",
-    image: "MASTER_GUADIAN_1__WINGAME",
-  },
-  {
-    name: "Master Guardian 2",
-    value: "master_guardian_2",
-    image: "MASTER_GUARDIAN_2__WINGAME",
-  },
-  {
-    name: "Master Guardian Elite",
-    value: "master_guardian_elite",
-    image: "MASTER_GUARDIAN_ELITE__WINGAME",
-  },
-  {
-    name: "Distinguished Master Guardian",
-    value: "distinguished_master_guardian",
-    image: "DISTINGUISHED__MASTER__GUARDIAN__WINGAME",
-  },
-  {
-    name: "Legendary Eagle",
-    value: "legendary_eagle",
-    image: "LEGENDARY__EAGLE__WINGAME",
-  },
-  {
-    name: "Legendary Eagle Master",
-    value: "legendary_eagle_master",
-    image: "LEGENDARY__EAGLE__MASTER__WINGAME",
-  },
-  {
-    name: "Supreme",
-    value: "supreme",
-    image: "SUPREME__WINGAME",
-  },
-  {
-    name: "Global Elite",
-    value: "global_elite",
-    image: "GLOBAL_ELITE__WINGAME",
-  },
-];
 
 const ChooseRank: React.FC<ChooseRankProps> = ({
   title,
@@ -149,7 +51,7 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
           className="flex flex-wrap gap-2"
         >
           {rankOptions.map((item) => (
-            <Tooltip content={item.name}>
+            <Tooltip key={item.name} content={item.name}>
               <RadioGroup.Option
                 className="max-w-[80px] flex-grow sm:max-w-none sm:flex-grow-0"
                 value={item.value}

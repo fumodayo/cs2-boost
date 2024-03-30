@@ -4,12 +4,15 @@ import * as Tabs from "@radix-ui/react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { HiMiniRectangleStack } from "react-icons/hi2";
 import { FaPassport, FaXmark } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import General from "../../components/Settings/General";
 import IDVerification from "../../components/Settings/IDVerification";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "../../components/Input";
+import { useGetUserById } from "../../hooks/useGetUserById";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const tabHeaders = [
   {
@@ -25,6 +28,10 @@ const tabHeaders = [
 ];
 
 const Settings = () => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const user = useGetUserById(currentUser?._id);
+  const [loading, setLoading] = useState(true);
+
   const [activeTab, setActiveTab] = useState<string>("general");
 
   const handleTabChange = (value: string) => {
@@ -35,17 +42,30 @@ const Settings = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm<FieldValues>({
     defaultValues: {
-      username: "Son Thai",
+      username: user?.username,
       handle: "",
-      email: "thaigiui2016@gmail.com",
+      email: user?.email,
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+      setValue("username", user?.username || "");
+      setValue("email", user?.email || "");
+    }
+  }, [user,setValue]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <UserPage>

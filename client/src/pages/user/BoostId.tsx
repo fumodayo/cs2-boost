@@ -17,32 +17,30 @@ import { FaUsers, FaFingerprint, FaPlus } from "react-icons/fa6";
 import * as Dialog from "@radix-ui/react-dialog";
 import Input from "../../components/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { formatMoney } from "../../utils/formatMoney";
+import { format } from "date-fns";
+import { useGetOrderById } from "../../hooks/useGetOrderById";
 
 const BoostId = () => {
-  const boostItem = {
-    id: "17823",
-    title: "Arena 2v2",
-    game: "Counter Strike 2",
-    type: "Premier",
-    server: "US",
-    startRating: 0,
-    endRating: 10000,
-    area: "United States",
-    price: 15.2,
-    status: "pending",
-    startRank: "silver_1",
-    endRank: "distinguished_master_guardian",
-  };
+  const { id } = useParams();
+  
+  const order = useGetOrderById(id);
 
-  const headers = [
+  let headers = [
     "server",
     "start rating",
     "end rating",
     "start rank",
     "end rank",
   ];
-
-  const boostOptions = ["live stream"];
+  if (order.type === "premier") {
+    headers = ["server", "server", "start rating", "end rating"];
+  } else if (order.type === "wingman") {
+    headers = ["server", "start rank", "end rank"];
+  } else if (order.type === "level farming") {
+    headers = ["server", "start exp", "end exp"];
+  }
 
   const headerInformation = [
     "title",
@@ -56,14 +54,17 @@ const BoostId = () => {
 
   const paymentItems = [
     {
+      value: "discount",
       label: "No Discount",
       icon: FaTags,
     },
     {
+      value: "credit_card",
       label: "Debit/Credit cards (Ecommpay)",
       icon: FaCreditCard,
     },
     {
+      value: "created_at",
       label: "Mar 9th, 2024 - 1:49 am",
       icon: FaCalendarDay,
     },
@@ -115,14 +116,14 @@ const BoostId = () => {
                   </h1>
                   <p className="text-sm font-medium text-muted-foreground sm:truncate">
                     <div className="inline-flex flex-wrap items-center gap-1.5">
-                      <a className="cursor-pointer">#{boostItem.id}</a>
-                      <Copy text={boostItem.id} />
+                      <a className="cursor-pointer">#{order.boost_id}</a>
+                      <Copy text={order?.boost_id} />
                       <span> ⸱ </span>
-                      <div>{boostItem.title}</div>
+                      <div>{order.title}</div>
                       <span> ⸱ </span>
-                      <div>{boostItem.area}</div>
+                      <div>{order.server}</div>
                       <span> ⸱ </span>
-                      <div>{boostItem.price}</div>
+                      <div>{formatMoney(order.currency, order.price)}</div>
                     </div>
                   </p>
                 </div>
@@ -349,23 +350,32 @@ const BoostId = () => {
                 <div>
                   <p className="text-sm text-muted-foreground">Total Amount</p>
                   <h3 className="font-sans mt-1 text-base font-semibold text-card-surface-foreground">
-                    €15,20
+                    {formatMoney(order.currency, order.price)}
                   </h3>
                 </div>
                 <span className="inline-flex items-center rounded-md bg-secondary-light px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
-                  Unpaid
+                  {order.status}
                 </span>
               </div>
               <div className="px-0 pt-0 sm:px-6">
                 <div className="grid grid-cols-2 gap-y-4 py-6 lg:grid-cols-3">
-                  {paymentItems.map((payment) => (
-                    <div className="col-span-3 flex w-full flex-none items-center gap-x-4 px-4 sm:col-span-3 sm:px-0">
+                  {paymentItems.map((payment, idx) => (
+                    <div
+                      key={idx}
+                      className="col-span-3 flex w-full flex-none items-center gap-x-4 px-4 sm:col-span-3 sm:px-0"
+                    >
                       <dt className="w-5 flex-none text-center">
                         <span className="sr-only">{payment.label}</span>
                         <payment.icon className="text-muted-foreground" />
                       </dt>
                       <dd className="text-sm leading-6 text-muted-foreground">
-                        {payment.label}
+                        {order.createdAt && (
+                          <span>
+                            {payment.value === "created_at"
+                              ? format(order.createdAt, "MMM do, yyyy - h:mm a")
+                              : payment.label}
+                          </span>
+                        )}
                       </dd>
                     </div>
                   ))}
@@ -386,13 +396,18 @@ const BoostId = () => {
             <Widget
               titleHeader="Boost Data"
               headers={headers}
-              boostItem={boostItem}
+              boostItem={order}
             />
-            <Widget titleHeader="Boost Options" boostOptions={boostOptions} />
+            {order.options && order.options.length > 0 && (
+              <Widget
+                titleHeader="Boost Options"
+                boostOptions={order.options}
+              />
+            )}
             <Widget
               titleHeader="Boost Information"
               headers={headerInformation}
-              boostItem={boostItem}
+              boostItem={order}
             />
           </div>
         </div>

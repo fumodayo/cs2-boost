@@ -1,6 +1,8 @@
 import UserPage from "../../components/Layouts/UserPage";
 import { FaRocket } from "react-icons/fa6";
 import DataTable from "../../components/DataTable";
+import { useGetAllOrder } from "../../hooks/useGetAllOrder";
+import { useState } from "react";
 
 const headers = [
   {
@@ -33,23 +35,13 @@ const headers = [
   },
 ];
 
-const items = [
-  {
-    id: "121614",
-    title: "Arena 2v2, 0 1400, US",
-    subtitle: "Arena 2v2",
-    image: "https://cdn.gameboost.com/games/world-of-warcraft/logo/card.svg",
-    username: "User name",
-    avatar:
-      "https://cdn.gameboost.com/users/19918/avatar/conversions/AAcHTtdFRpMwux-WHt9RoMHs81i8OXPo9eQNI82d1caCUqQLRjU=s96-c-thumb.webp",
-    status: "pending",
-    price: 15.2,
-    updated_at: "a day ago",
-    booster_id: "_",
-  },
-];
-
 const Boosts = () => {
+  const [searchKey, onSearchKey] = useState<string>("");
+  const [gameKey, onGameKey] = useState<string[]>([]);
+  const [statusKey, onStatusKey] = useState<string[]>([]);
+
+  const orders = useGetAllOrder({ searchKey, gameKey, statusKey });
+
   return (
     <UserPage>
       <div className="container">
@@ -75,7 +67,16 @@ const Boosts = () => {
         </div>
 
         {/* INFORMATION */}
-        <DataTable headers={headers} items={items} />
+        <DataTable
+          headers={headers}
+          items={orders}
+          searchKey={searchKey}
+          gameKey={gameKey}
+          statusKey={statusKey}
+          onSearchKey={onSearchKey}
+          onGameKey={onGameKey}
+          onStatusKey={onStatusKey}
+        />
       </div>
       {/* HEADER */}
     </UserPage>

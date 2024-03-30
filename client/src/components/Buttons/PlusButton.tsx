@@ -7,20 +7,22 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 
 import { FaPlus, FaCheck } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
+import { ListOfGame } from "../../constants";
 
-type Option = {
-  image?: string;
-  value: string;
-  name: string;
-};
 
 interface PlusButtonProps {
   name: string;
-  options: Option[];
+  options: ListOfGame[];
+  selectedValues: string[];
+  onSelectedValuesChange: (value: string[]) => void;
 }
 
-const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+const PlusButton: React.FC<PlusButtonProps> = ({
+  name,
+  options,
+  selectedValues,
+  onSelectedValuesChange,
+}) => {
   const [searchValue, setSearchValue] = useState<string>("");
 
   const matches = useMemo(() => {
@@ -31,15 +33,10 @@ const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
   }, [searchValue, options]);
 
   const handleCheckboxChange = (languageValue: string) => {
-    setSelectedValues((prevSelectedValues) => {
-      if (prevSelectedValues.includes(languageValue)) {
-        // Remove the value if it's already selected
-        return prevSelectedValues.filter((val) => val !== languageValue);
-      } else {
-        // Add the value if it's not selected
-        return [...prevSelectedValues, languageValue];
-      }
-    });
+    const updatedValues = selectedValues.includes(languageValue)
+      ? selectedValues.filter((val) => val !== languageValue)
+      : [...selectedValues, languageValue];
+    onSelectedValuesChange(updatedValues);
   };
 
   return (
@@ -69,7 +66,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
                         "hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                       )}
                     >
-                      {matchingOption ? matchingOption.name : selectedValue}
+                      {matchingOption ? matchingOption.label : selectedValue}
                     </div>
                   );
                 })}
@@ -97,7 +94,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
             </div>
             <div className="scroll-sm max-h-[300px] overflow-y-auto overflow-x-hidden">
               <div className="scroll-sm max-h-[250px] overflow-hidden overflow-y-scroll p-1 text-foreground">
-                {matches.map(({ name, value: languageValue, image }) => (
+                {matches.map(({ label, value: languageValue, image }) => (
                   <Checkbox.Root
                     className={clsx(
                       "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
@@ -119,7 +116,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({ name, options }) => {
                       />
                     )}
                     <label className="ml-1" htmlFor={languageValue}>
-                      {name}
+                      {label}
                     </label>
                   </Checkbox.Root>
                 ))}

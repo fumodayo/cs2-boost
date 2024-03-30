@@ -11,8 +11,10 @@ import { FaPalette, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
 import Separator from "../Separator";
 import { AppContext } from "../../context/AppContext";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
+import { RootState } from "../../redux/store";
+import { Theme } from "../../types";
 
 const services = [
   {
@@ -31,8 +33,6 @@ const services = [
     icon: HiCog6Tooth,
   },
 ];
-
-type Theme = "dark" | "light";
 
 interface AvatarItemProps {
   label?: string;
@@ -69,6 +69,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const dispatch = useDispatch();
 
   const { theme, setTheme } = useContext(AppContext);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   const handleThemeChange = (selected: Theme) => {
     setTheme(selected);
@@ -97,14 +98,14 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
               />
             </div>
             <div className="flex flex-col truncate">
-              <p className="text-sm text-foreground">User Name</p>
+              <p className="text-sm text-foreground">{currentUser?.username}</p>
               <p className="truncate text-xs font-medium text-muted-foreground">
-                ID: 59162
+                ID: {currentUser?._id}
               </p>
             </div>
           </div>
           <Separator />
-          <AvatarItem label="Dashboard" link="#" icon={BsGrid1X2Fill} />
+          <AvatarItem label="Dashboard" link="" icon={BsGrid1X2Fill} />
           <Separator />
           {services.map(({ label, link, icon }) => (
             <AvatarItem key={label} label={label} link={link} icon={icon} />

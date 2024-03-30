@@ -5,8 +5,7 @@ import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 
 import { AppContext } from "../../context/AppContext";
-
-type Currency = "vnd" | "usd";
+import { Currency } from "../../types";
 
 const language = [
   {

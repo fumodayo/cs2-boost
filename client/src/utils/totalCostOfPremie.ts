@@ -286,6 +286,8 @@ export const totalCostOfPremie = (
     },
   ];
 
+  const moneyPerPoint = 5; // Tính theo 5 vnd cho mỗi điểm
+
   const selectedServer = servers.find((s) => s.name === server);
   if (selectedServer) {
     // Lọc ra các khoảng giá trị thuộc phạm vi từ startingPoint đến endPoint
@@ -297,9 +299,9 @@ export const totalCostOfPremie = (
     const totalBonus = relevantCosts.reduce((sum, cost) => sum + cost.bonus, 0);
 
     // Tính totalCost bằng cách nhân totalBonus với độ chênh lệch giữa endPoint và startingPoint
-    const totalCost = totalBonus * (endPoint - startingPoint);
+    const totalCost = totalBonus * (endPoint - startingPoint) * moneyPerPoint;
     return totalCost;
   }
   
-  return 0; // Trả về 0 nếu không tìm thấy server
+  return -1; // Trả về -1 nếu không tìm thấy server
 };

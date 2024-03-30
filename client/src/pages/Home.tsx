@@ -9,8 +9,11 @@ import Stepup from "../components/Home/Stepup";
 import Footer from "../components/Layouts/Footer";
 import Information from "../components/Home/Information";
 import Hero from "../components/Home/Hero";
+import { useExchangeMoney } from "../hooks/useExchangeMoney";
 
 const Home = () => {
+  const money = useExchangeMoney(50000);
+
   return (
     <div className="h-screen bg-background">
       {/* HEADER */}
