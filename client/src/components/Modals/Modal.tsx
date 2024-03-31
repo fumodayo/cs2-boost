@@ -16,6 +16,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { useDispatch } from "react-redux";
 import { AppContext } from "../../context/AppContext";
+import { useGetIP } from "../../hooks/useGetIP";
 
 const socialMedia = [
   {
@@ -73,6 +74,7 @@ const SocialService: React.FC<SocialServiceProps> = ({
 
   const dispatch = useDispatch();
   const { onCloseLoginModal, onCloseSignUpModal } = useContext(AppContext);
+  const location = useGetIP();
 
   const handleGoogleClick = async () => {
     try {
@@ -80,6 +82,7 @@ const SocialService: React.FC<SocialServiceProps> = ({
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, provider);
+
       const res = await fetch("/api/auth/google", {
         method: "POST",
         headers: {
@@ -89,9 +92,13 @@ const SocialService: React.FC<SocialServiceProps> = ({
           name: result.user.displayName,
           email: result.user.email,
           photo: result.user.photoURL,
+          ip: location?.IPv4,
+          country: location?.country_name,
+          city: location?.city,
         }),
       });
       const data = await res.json();
+
       dispatch(authSuccess(data));
       onCloseLoginModal();
       onCloseSignUpModal();

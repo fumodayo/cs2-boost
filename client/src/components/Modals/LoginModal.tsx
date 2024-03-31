@@ -15,6 +15,7 @@ import {
 import { RootState } from "../../redux/store";
 import Modal from "./Modal";
 import Input from "../Input";
+import { useGetIP } from "../../hooks/useGetIP";
 
 const LoginModal = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,8 @@ const LoginModal = () => {
 
   const { isOpenLoginModal, onCloseLoginModal, onOpenSignUpModal } =
     useContext(AppContext);
+
+  const location = useGetIP();
 
   const {
     register,
@@ -44,12 +47,18 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
+      const account = {
+        ...form,
+        ip: location?.IPv4,
+        country: location?.country_name,
+        city: location?.city,
+      };
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(account),
       });
       const data = await res.json();
 

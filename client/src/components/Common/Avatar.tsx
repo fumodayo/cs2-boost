@@ -13,6 +13,7 @@ import { signOut } from "../../redux/user/userSlice";
 import { RootState } from "../../redux/store";
 import { Theme } from "../../types";
 import { listOfServices } from "../../constants";
+import { useGetIP } from "../../hooks/useGetIP";
 
 interface AvatarItemProps {
   label?: string;
@@ -47,6 +48,7 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
 
 const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const dispatch = useDispatch();
+  const location = useGetIP();
 
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -57,7 +59,13 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
 
   const handleSignOut = async () => {
     try {
-      await fetch("/api/user/signout");
+      await fetch("/api/auth/signout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ip: location?.IPv4 }),
+      });
       dispatch(signOut());
     } catch (error) {
       console.log(error);
@@ -80,7 +88,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
             <div className="flex flex-col truncate">
               <p className="text-sm text-foreground">{currentUser?.username}</p>
               <p className="truncate text-xs font-medium text-muted-foreground">
-                ID: {currentUser?._id}
+                ID: {currentUser?.user_id}
               </p>
             </div>
           </div>

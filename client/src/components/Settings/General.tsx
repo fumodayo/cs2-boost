@@ -6,26 +6,13 @@ import { FaDesktop, FaEye, FaTrashCan, FaXmark } from "react-icons/fa6";
 
 import Widget from "../Widget";
 import Input from "../Input";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
-const userInfo = {
-  username: "Sơn Thái",
-  handle: "son-thai",
-  id: "#59162",
-  email: "thaigiui2016@gmail.com",
-  language: "_",
-  games: "_",
-};
-
-const headers = [
-  "username",
-  "handle",
-  "user ID",
-  "email address",
-  "language",
-  "games",
-];
+const headers = ["username", "user ID", "email address", "address"];
 
 const General = () => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const {
     register,
     handleSubmit,
@@ -59,7 +46,7 @@ const General = () => {
         <Widget
           titleHeader="User Information"
           headers={headers}
-          boostItem={userInfo}
+          boostItem={currentUser}
         />
 
         {/* DELETE ACCOUNT */}

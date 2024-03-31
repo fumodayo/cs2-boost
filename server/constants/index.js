@@ -11,3 +11,8 @@ export const ORDER_STATUS = {
   COMPLETED: "completed",
   IN_ACTIVE: "in active",
 };
+
+export const IP_STATUS = {
+  ONLINE: "online",
+  OFFLINE: "offline",
+};

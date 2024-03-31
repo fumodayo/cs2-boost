@@ -42,12 +42,14 @@ const Settings = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm<FieldValues>({
     defaultValues: {
       username: user?.username,
-      handle: "",
       email: user?.email,
+      password: "",
+      old_password: "",
+      new_password: "",
     },
   });
 
@@ -57,7 +59,7 @@ const Settings = () => {
       setValue("username", user?.username || "");
       setValue("email", user?.email || "");
     }
-  }, [user,setValue]);
+  }, [user, setValue]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
@@ -89,11 +91,13 @@ const Settings = () => {
                   </div>
                   <div className="pt-1.5 sm:truncate">
                     <h1 className="font-display flex flex-wrap items-center text-3xl font-semibold text-foreground sm:truncate sm:tracking-tight">
-                      Sơn Thái
+                      {currentUser?.username}
                     </h1>
                     <p className="text-sm font-medium text-muted-foreground sm:truncate">
                       <div className="inline-flex flex-wrap items-center gap-1">
-                        <div className="lowercase">@son-thai</div>
+                        <div className="lowercase">
+                          @{currentUser?.username}
+                        </div>
                         <span> ⸱ </span>
                         <div>9 boosts</div>
                         <span> ⸱ </span>
@@ -146,16 +150,6 @@ const Settings = () => {
                               placeholder="Enter your username"
                             />
 
-                            {/* HANDLE */}
-                            <Input
-                              label="Handle"
-                              register={register}
-                              errors={errors}
-                              style="h-9"
-                              id="handle"
-                              placeholder="Enter your handle"
-                            />
-
                             {/* EMAIL */}
                             <div className="col-span-full">
                               <Input
@@ -164,6 +158,7 @@ const Settings = () => {
                                 errors={errors}
                                 style="h-9"
                                 id="email"
+                                disabled
                                 placeholder="Enter your email"
                               />
                               <p className="mt-1 text-sm leading-6 text-muted-foreground sm:text-xs">
@@ -178,6 +173,32 @@ const Settings = () => {
                                 Avatar
                               </label>
                               <div className="media-library media-library-single media-library-empty"></div>
+                            </div>
+
+                            {/* PASSWORD */}
+                            <div className="col-span-full flex flex-col gap-2">
+                              <p className="text-sm leading-6 text-muted-foreground">
+                                Please enter your old password to change your
+                                password.
+                              </p>
+                              <Input
+                                label="Old Password"
+                                register={register}
+                                errors={errors}
+                                style="h-9"
+                                id="old_password"
+                                type="password"
+                                placeholder="Enter your old password"
+                              />
+                              <Input
+                                label="New Password"
+                                register={register}
+                                errors={errors}
+                                style="h-9"
+                                id="new_password"
+                                type="password"
+                                placeholder="Enter your new password"
+                              />
                             </div>
                           </form>
                         </div>

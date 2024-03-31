@@ -149,8 +149,8 @@ const Sidebar = () => {
                   <div className="text-sm font-medium text-foreground">
                     {currentUser?.username}
                   </div>
-                  <div className="truncate text-xs text-muted-foreground">
-                    Client Mode
+                  <div className="truncate text-xs capitalize text-muted-foreground">
+                    {currentUser?.role} mode
                   </div>
                 </div>
               </div>

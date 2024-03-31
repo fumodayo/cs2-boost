@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
-import { ROLE } from "../constants/index.js";
+import { IP_STATUS, ROLE } from "../constants/index.js";
+
+const IPLoggerSchema = new mongoose.Schema({
+  country: String,
+  city: String,
+  ip: String,
+  status: {
+    type: String,
+    enum: IP_STATUS,
+    default: IP_STATUS.ONLINE,
+  },
+});
 
 const userSchema = new mongoose.Schema(
   {
@@ -57,6 +68,7 @@ const userSchema = new mongoose.Schema(
     real_name: {
       type: String,
     },
+    ip_logger: [IPLoggerSchema],
   },
   { timestamps: true }
 );

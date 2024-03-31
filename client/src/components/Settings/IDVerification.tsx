@@ -2,32 +2,22 @@ import { FaPlay, FaXmark } from "react-icons/fa6";
 import Widget from "../Widget";
 import * as Dialog from "@radix-ui/react-dialog";
 import ReadQR from "../ReadQR";
-
-const userInfo = {
-  full_name: "_",
-  country: "_",
-  city: "_",
-  postal_code: "_",
-  address: "_",
-  phone_number: "_",
-  national_id: "_",
-  gender: "_",
-  date_of_birth: "_",
-};
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const headers = [
   "full name",
-  "country",
-  "city",
-  "postal code",
   "address",
   "phone",
-  "national ID",
   "gender",
   "birth date",
+  "CCCD number",
+  "CCCD issue date",
 ];
 
 const IDVerification = () => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+
   return (
     <div className="mx-auto grid grid-cols-1 grid-rows-1 items-start gap-x-5 gap-y-5 lg:mx-0 lg:grid-cols-3">
       {/* VERIFY */}
@@ -79,7 +69,7 @@ const IDVerification = () => {
         <Widget
           titleHeader="Personal Info"
           headers={headers}
-          boostItem={userInfo}
+          boostItem={currentUser}
         />
       </div>
     </div>

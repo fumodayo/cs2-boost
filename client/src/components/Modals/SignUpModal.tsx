@@ -15,6 +15,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { AppContext } from "../../context/AppContext";
 import Modal from "./Modal";
 import Input from "../Input";
+import { useGetIP } from "../../hooks/useGetIP";
 
 const SignUpModal = () => {
   const { t } = useTranslation();
@@ -23,6 +24,8 @@ const SignUpModal = () => {
 
   const { isOpenSignUpModal, onCloseSignUpModal, onOpenLoginModal } =
     useContext(AppContext);
+
+  const location = useGetIP();
 
   const {
     register,
@@ -43,12 +46,18 @@ const SignUpModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
+      const account = {
+        ...form,
+        ip: location?.IPv4,
+        country: location?.country_name,
+        city: location?.city,
+      };
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(account),
       });
       const data = await res.json();
       if (data.success === false) {
