@@ -78,7 +78,6 @@ const Boosts = () => {
           onStatusKey={onStatusKey}
         />
       </div>
-      {/* HEADER */}
     </UserPage>
   );
 };

@@ -3,9 +3,6 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import { IconType } from "react-icons";
 import { BsGrid1X2Fill } from "react-icons/bs";
-import { BsRocketTakeoffFill } from "react-icons/bs";
-import { GiSamuraiHelmet } from "react-icons/gi";
-import { HiCog6Tooth } from "react-icons/hi2";
 import { FaPalette, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
 
 import Separator from "../Separator";
@@ -15,24 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 import { RootState } from "../../redux/store";
 import { Theme } from "../../types";
-
-const services = [
-  {
-    label: "My Boosts",
-    link: "boosts",
-    icon: BsRocketTakeoffFill,
-  },
-  {
-    label: "My Accounts",
-    link: "accounts",
-    icon: GiSamuraiHelmet,
-  },
-  {
-    label: "Settings",
-    link: "settings",
-    icon: HiCog6Tooth,
-  },
-];
+import { listOfServices } from "../../constants";
 
 interface AvatarItemProps {
   label?: string;
@@ -107,9 +87,11 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
           <Separator />
           <AvatarItem label="Dashboard" link="" icon={BsGrid1X2Fill} />
           <Separator />
-          {services.map(({ label, link, icon }) => (
-            <AvatarItem key={label} label={label} link={link} icon={icon} />
-          ))}
+          {listOfServices
+            .filter((service) => service.label !== "Dashboard")
+            .map(({ label, link, icon }) => (
+              <AvatarItem key={label} label={label} link={link} icon={icon} />
+            ))}
           <Separator />
           <DropdownMenu.Sub>
             <DropdownMenu.SubTrigger

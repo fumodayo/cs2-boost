@@ -164,7 +164,7 @@ const Checkout: React.FC<CheckoutProps> = ({
       return;
     }
 
-    await fetch("/api/order/create-order", {
+    const res = await fetch("/api/order/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -172,8 +172,10 @@ const Checkout: React.FC<CheckoutProps> = ({
       body: JSON.stringify(order),
     });
 
+    const id = await res.json();
+
     dispatch(addCartSuccess(order));
-    navigate("/checkout");
+    navigate(`/checkout/${id}`);
   };
 
   return (

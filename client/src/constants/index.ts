@@ -1,3 +1,4 @@
+import { IconType } from "react-icons";
 import {
   FaEarthAsia,
   FaEarthAfrica,
@@ -5,7 +6,11 @@ import {
   FaEarthAmericas,
 } from "react-icons/fa6";
 import { BsGlobeAsiaAustralia } from "react-icons/bs";
-import { IconType } from "react-icons";
+import { BsRocketTakeoffFill } from "react-icons/bs";
+import { GiSamuraiHelmet } from "react-icons/gi";
+import { HiCog6Tooth } from "react-icons/hi2";
+import { BsGrid1X2Fill } from "react-icons/bs";
+import { MdOutlinePendingActions } from "react-icons/md";
 
 interface RankOption {
   name: string;
@@ -228,5 +233,39 @@ export const listOfGame: ListOfGame[] = [
     value: "apex-legends",
     href: "apex legends",
     available: false,
+  },
+];
+
+export interface ListOfService {
+  label?: string;
+  link?: string;
+  icon: IconType;
+}
+
+export const listOfServices: ListOfService[] = [
+  {
+    label: "Dashboard",
+    link: "",
+    icon: BsGrid1X2Fill,
+  },
+  {
+    label: "My Boosts",
+    link: "boosts",
+    icon: BsRocketTakeoffFill,
+  },
+  {
+    label: "Pending Boosts",
+    link: "pending-boosts",
+    icon: MdOutlinePendingActions,
+  },
+  {
+    label: "My Accounts",
+    link: "accounts",
+    icon: GiSamuraiHelmet,
+  },
+  {
+    label: "Settings",
+    link: "settings",
+    icon: HiCog6Tooth,
   },
 ];

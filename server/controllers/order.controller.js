@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from "../constants/index.js";
 import Order from "../models/order.model.js";
 
 export const getAllOrder = async (req, res, next) => {
@@ -73,7 +74,7 @@ export const createOrder = async (req, res, next) => {
 
     await newOrder.save();
 
-    res.status(201).json("Order created successfully");
+    res.status(201).json(newOrder.boost_id);
   } catch (error) {
     next(error);
   }
@@ -82,12 +83,32 @@ export const createOrder = async (req, res, next) => {
 export const getOrder = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const order = await Order.find({ boost_id: id }).populate({
-      path: "user",
-      select: "-password",
-    });
+    const order = await Order.find({ boost_id: id })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate("account");
 
     res.status(200).json(order[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const checkoutOrder = async (req, res, next) => {
+  try {
+    await Order.findOneAndUpdate(
+      { boost_id: req.params.id },
+      {
+        $set: {
+          status: ORDER_STATUS.IN_ACTIVE,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json("checkout success");
   } catch (error) {
     next(error);
   }

@@ -10,6 +10,7 @@ import Logo from "../Common/Logo";
 import Avatar from "../Common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { MdOutlinePendingActions } from "react-icons/md";
 
 const sidebarItems = [
   {
@@ -30,6 +31,12 @@ const sidebarItems = [
         label: "Boosts List",
         value: "boosts",
         icon: HiMiniRocketLaunch,
+        active: false,
+      },
+      {
+        label: "Pending Boosts List",
+        value: "pending-boosts",
+        icon: MdOutlinePendingActions,
         active: false,
       },
       {

@@ -24,7 +24,7 @@ import { useGetOrderById } from "../../hooks/useGetOrderById";
 
 const BoostId = () => {
   const { id } = useParams();
-  
+
   const order = useGetOrderById(id);
 
   let headers = [
@@ -76,14 +76,31 @@ const BoostId = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
       backup_code: "",
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const { username, password, backup_code } = data;
+    const account = {
+      order_id: id,
+      username: username,
+      password: password,
+      backup_code: backup_code,
+    };
+
+    const res = await fetch("/api/account/create-account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(account),
+    });
+
+    const back = await res.json();
+    location.reload();
   };
 
   return (
@@ -283,16 +300,16 @@ const BoostId = () => {
                           </div>
                           <form className="space-y-5 py-5">
                             <Input
-                              id="email"
-                              label="Email"
-                              placeholder="someone@email.com"
+                              id="username"
+                              label="Username"
+                              placeholder="someone..."
                               style="h-12"
                               required
                               register={register}
                               errors={errors}
                             />
                             <Input
-                              id="email"
+                              id="password"
                               label="Password"
                               placeholder="password"
                               type="password"
@@ -383,7 +400,7 @@ const BoostId = () => {
               </div>
               <div className="flex items-center border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
                 <a
-                  href="/checkout"
+                  href={`/checkout/${order.boost_id}`}
                   className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-success-light-foreground outline-none transition-colors hover:bg-success-light focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
                 >
                   Pay Now →

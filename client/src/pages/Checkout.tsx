@@ -7,9 +7,9 @@ import Avatar from "../components/Common/Avatar";
 import Logo from "../components/Common/Logo";
 import Input from "../components/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import { formatMoney } from "../utils/formatMoney";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetOrderById } from "../hooks/useGetOrderById";
 
 const modeOfPayment = [
   {
@@ -50,7 +50,9 @@ const modeOfPayment = [
 
 const Checkout = () => {
   const [mode, setMode] = useState("debit_cards");
-  const { currentCart } = useSelector((state: RootState) => state.cart);
+  const { id } = useParams();
+  const order = useGetOrderById(id);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -62,15 +64,28 @@ const Checkout = () => {
     },
   });
 
+  const handleCheckout = async () => {
+    const res = await fetch(`/api/order/checkout/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      return;
+    }
+    navigate("/dashboard");
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     // console.log(data);
   };
 
-  if (!currentCart) {
+  if (!order) {
     return null;
   }
-
-  console.log(currentCart.end_exp);
 
   return (
     <main>
@@ -86,7 +101,7 @@ const Checkout = () => {
             <dl>
               <dt className="text-sm font-medium">Amount due</dt>
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-foreground">
-                {formatMoney(currentCart.currency, currentCart.price)}
+                {formatMoney(order.currency, order.price)}
               </dd>
             </dl>
             <ul className="divide-y divide-border text-sm font-medium">
@@ -98,28 +113,29 @@ const Checkout = () => {
                 />
                 <div className="flex-auto space-y-1">
                   <h3 className="capitalize text-foreground">
-                    {currentCart.title}
+                    {order.title}
 
-                    {currentCart.start_rating && currentCart.end_rating && (
+                    {order.start_rating && order.end_rating && (
                       <>
-                        ({currentCart.start_rating} → {currentCart.end_rating})
+                        ({order.start_rating} → {order.end_rating})
                       </>
                     )}
-                    {currentCart.start_exp && currentCart.end_exp && (
+                    {order.start_exp && order.end_exp && (
                       <>
-                        ({currentCart.start_exp} → {currentCart.end_exp})
+                        ({order.start_exp} → {order.end_exp})
                       </>
                     )}
-                    {currentCart.start_rank && currentCart.end_rank && (
+                    {order.start_rank && order.end_rank && (
                       <>
-                        ({currentCart.start_rank.replace("_", " ")} → {currentCart.end_rank.replace("_", " ")})
+                        ({order.start_rank.replace("_", " ")} →{" "}
+                        {order.end_rank.replace("_", " ")})
                       </>
                     )}
                   </h3>
-                  <p>{currentCart.type}</p>
+                  <p>{order.type}</p>
                 </div>
                 <p className="flex-none text-base font-medium text-foreground">
-                  {formatMoney(currentCart.currency, currentCart.price)}
+                  {formatMoney(order.currency, order.price)}
                 </p>
               </li>
             </ul>
@@ -146,19 +162,22 @@ const Checkout = () => {
               </div>
               <div className="flex items-center justify-between">
                 <dt>Subtotal</dt>
-                <dd>{formatMoney(currentCart.currency, currentCart.price)}</dd>
+                <dd>{formatMoney(order.currency, order.price)}</dd>
               </div>
 
               <div className="border-t border-border pt-6">
                 <div className="flex items-center justify-between text-foreground">
                   <dt className="text-base">Total</dt>
                   <dd className="text-base">
-                    {formatMoney(currentCart.currency, currentCart.price)}
+                    {formatMoney(order.currency, order.price)}
                   </dd>
                 </div>
               </div>
             </dl>
-            <button className="relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5">
+            <button
+              onClick={handleCheckout}
+              className="relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5"
+            >
               Pay Now
               <FaArrowRight className="ml-2" />
             </button>

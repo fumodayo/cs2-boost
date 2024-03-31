@@ -46,3 +46,10 @@ export interface Order {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface Account {
+  user_id?: string;
+  username?: string;
+  password?: string;
+  backup_code?: string;
+}

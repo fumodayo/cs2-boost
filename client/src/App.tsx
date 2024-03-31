@@ -14,6 +14,7 @@ import BoostId from "./pages/user/BoostId";
 import Accounts from "./pages/user/Accounts";
 import Settings from "./pages/user/Settings";
 import NotFound from "./pages/NotFound";
+import PendingBoosts from "./pages/user/PendingBoosts";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <SignUpModal />
         <Routes>
           <Route index element={<Home />} />
-          <Route path="checkout" element={<Checkout />} />
+          <Route path="checkout/:id" element={<Checkout />} />
           <Route path="counter-strike-2/*">
             <Route index element={<Game />} />
             <Route path="premier" element={<Premie />} />
@@ -37,6 +38,7 @@ function App() {
               <Route path="boosts/:id" element={<BoostId />} />
               <Route path="accounts" element={<Accounts />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="pending-boosts" element={<PendingBoosts />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
