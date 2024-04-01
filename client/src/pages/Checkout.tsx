@@ -65,18 +65,20 @@ const Checkout = () => {
   });
 
   const handleCheckout = async () => {
-    const res = await fetch(`/api/order/checkout/${id}`, {
+    const res = await fetch(`/api/payment/create-payment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(order),
     });
 
     const data = await res.json();
-    if (data.success === false) {
-      return;
+    if (data.url) {
+      window.location.href = data.url;
     }
-    navigate("/dashboard");
+
+    // navigate("/dashboard");
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
