@@ -1,6 +1,12 @@
 import { ORDER_STATUS } from "../constants/index.js";
 import Order from "../models/order.model.js";
 
+/*
+ * GET ALL ORDER
+ * 1. GET ALL ORDER
+ * 2. FIND BY SEARCH KEY
+ * 3. FILTER BY GAME KEY AND STATUS KEY
+ */
 export const getAllOrder = async (req, res, next) => {
   const { id } = req.user;
   const { searchKey, gameKey, statusKey } = req.query;
@@ -33,6 +39,9 @@ export const getAllOrder = async (req, res, next) => {
   }
 };
 
+/*
+ * CREATE ORDER
+ */
 export const createOrder = async (req, res, next) => {
   const {
     title,
@@ -80,6 +89,9 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
+/*
+ * CREATE ORDER BY BOOST_ID
+ */
 export const getOrder = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -91,24 +103,6 @@ export const getOrder = async (req, res, next) => {
       .populate("account");
 
     res.status(200).json(order[0]);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const checkoutOrder = async (req, res, next) => {
-  try {
-    await Order.findOneAndUpdate(
-      { boost_id: req.params.id },
-      {
-        $set: {
-          status: ORDER_STATUS.IN_ACTIVE,
-        },
-      },
-      { new: true }
-    );
-
-    res.status(201).json("checkout success");
   } catch (error) {
     next(error);
   }

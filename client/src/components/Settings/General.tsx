@@ -6,12 +6,16 @@ import { FaDesktop, FaEye, FaTrashCan, FaXmark } from "react-icons/fa6";
 
 import Widget from "../Widget";
 import Input from "../Input";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../../redux/user/userSlice";
 
 const headers = ["username", "user ID", "email address", "address"];
 
 const General = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
   const {
     register,
@@ -23,8 +27,19 @@ const General = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    if (currentUser?.username === form.confirm) {
+      const res = await fetch(`/api/user/delete/${currentUser?._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (data.success === true) {
+        dispatch(signOut());
+        navigate("/");
+        return;
+      }
+    }
   };
 
   return (
@@ -127,7 +142,7 @@ const General = () => {
                       account.
                     </div>
                     <span className="font-mono mb-4 inline-flex w-full items-center rounded-md bg-secondary-light px-4 py-3 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
-                      Sơn Thái
+                      {currentUser?.username}
                     </span>
                     <Input
                       register={register}

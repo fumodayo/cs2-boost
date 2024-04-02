@@ -5,6 +5,12 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { IP_STATUS } from "../constants/index.js";
 
+/*
+ * SIGNUP
+ * 1. CHECK EXISTS USER IN DATABASE
+ * 2. CREATE USER
+ * 3. PUSH NEW IP INTO USER
+ */
 export const signup = async (req, res, next) => {
   const { email, password, ip, country, city } = req.body;
   try {
@@ -44,6 +50,13 @@ export const signup = async (req, res, next) => {
   }
 };
 
+/*
+ * LOGIN
+ * 1. CHECK EXISTS USER IN DATABASE
+ * 2. CHECK IP:
+ * - IF IP OLD, CHANGE IP STATUS: OFFLINE -> ONLINE
+ * - IF IP NEW, PUSH INTO USER
+ */
 export const signin = async (req, res, next) => {
   const { email, password, ip, country, city } = req.body;
   try {
@@ -89,6 +102,20 @@ export const signin = async (req, res, next) => {
   }
 };
 
+/*
+ * SIGNUP/ LOGIN BY GOOGLE ACCOUNT
+ * 1. CHECK EXISTS USER IN DATABASE:
+ * - IF HAVE USER: LOGIN
+ * - IF DONT HAVE USER: SIGNUP
+ * 2. LOGIN:
+ * - CHECK EXISTS USER IN DATABASE
+ * - CHECK IP:
+ * + IF IP OLD, CHANGE IP STATUS: OFFLINE -> ONLINE
+ * + IF IP NEW, PUSH INTO USER
+ * 3. SIGNUP:
+ * - CREATE USER
+ * - PUSH NEW IP INTO USER
+ */
 export const google = async (req, res, next) => {
   const { name, email, photo, ip, country, city } = req.body;
 
@@ -97,16 +124,14 @@ export const google = async (req, res, next) => {
     if (user) {
       let isNewIP = true;
 
-      // Check if the IP is already in the ip_logger array
       user.ip_logger.forEach((log) => {
         if (log.ip === ip) {
           isNewIP = false;
-          log.status = IP_STATUS.ONLINE; // Set status to online for existing IP
+          log.status = IP_STATUS.ONLINE;
         }
       });
 
       if (isNewIP) {
-        // If IP is not present, add it to the ip_logger array
         user.ip_logger.push({
           ip: ip,
           country: country,
@@ -115,7 +140,7 @@ export const google = async (req, res, next) => {
         });
       }
 
-      await user.save(); // Save the updated user
+      await user.save();
 
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
@@ -172,6 +197,12 @@ export const google = async (req, res, next) => {
   }
 };
 
+/*
+ * LOGOUT
+ * 1. CHECK EXISTS USER IN DATABASE
+ * 2. FIND IP AND UPDATE IP STATUS: ONLINE -> OFFLINE
+ * 3. CLEAR COOKIE
+ */
 export const signout = async (req, res) => {
   try {
     const { ip } = req.body;

@@ -1,9 +1,14 @@
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import User from "../models/user.model.js";
+import Order from "../models/order.model.js";
+import Account from "../models/account.model.js";
 import { ROLE } from "../constants/index.js";
 
-// GET USER
+/*
+ * GET USER
+ * - CHECK EXISTS USER IN DATABASE
+ */
 export const getUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can get only your account"));
@@ -46,20 +51,37 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-// DELETE USER
+/*
+ * DELETE USER
+ * 1. CHECK EXISTS USER IN DATABASE
+ * 2. DELETE USER BY ID
+ * 3. DELETE ALL ORDER BY ID
+ * 4. DELETE ALL ACCOUNT BY ID
+ * 5. CLEAR COOKIES
+ */
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can delete only your account!"));
   }
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json("User has been deleted...");
+    await Order.deleteMany({ user: req.params.id });
+    await Account.deleteMany({ user_id: req.params.id });
+    res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ success: true, message: "User has been deleted" });
   } catch (error) {
-    next(error);
+    next(errorHandler(401, error.message));
   }
 };
 
-// VERIFICATION USER: CLIENT -> BOOSTER
+/*
+ * VERIFICATION USER
+ * 1. CHECK EXISTS USER IN DATABASE
+ * 2. PUSH CCCD INFORMATION INTO USER
+ * 3. CHANGE USER ROLE: CLIENT -> BOOSTER
+ */
 export const verificationUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can verify only your account"));

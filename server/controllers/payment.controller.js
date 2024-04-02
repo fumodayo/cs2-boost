@@ -1,13 +1,17 @@
 import Stripe from "stripe";
-import Order from "../models/order.model.js";
-import { ORDER_STATUS } from "../constants/index.js";
+import dotenv from "dotenv";
 
-const stripe = Stripe(
-  "sk_test_51P0b8qB9f2IfrCxWpkTVPGAni4q3sQMF54HS4LIeviTs1dANI0xByFL5dhAJ07hAXdi40Bdiqexg5bOoIG4U2dNf00VBj2zFEl"
-);
+dotenv.config();
 
+const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+
+/*
+ * CHECKOUT ORDER
+ * 1. CREATE BILL PAYMENT BY STRIPE
+ * 2. CHANGE ORDER STATUS: PENDING -> IN_ACTIVE
+ */
 export const paymentOrder = async (req, res, next) => {
-  const { currency, game, price, type } = req.body;
+  const { currency, game, price, type, _id } = req.body;
   const { id } = req.user;
 
   try {
@@ -24,8 +28,8 @@ export const paymentOrder = async (req, res, next) => {
     };
     const customer = await stripe.customers.create({
       metadata: {
-        userId: id,
-        cart: JSON.stringify(orderItem),
+        user_id: id,
+        order_id: _id,
       },
     });
 
@@ -37,18 +41,9 @@ export const paymentOrder = async (req, res, next) => {
       cancel_url: "http://localhost:5173/",
     });
 
-    // await Order.findByIdAndUpdate(
-    //   _id,
-    //   {
-    //     $set: {
-    //       status: ORDER_STATUS.IN_ACTIVE,
-    //     },
-    //   },
-    //   { new: true }
-    // );
-
     res.status(201).json({ url: session.url });
   } catch (error) {
     next(error);
+    console.log(error);
   }
 };

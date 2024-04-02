@@ -3,19 +3,7 @@ import { useTranslation } from "react-i18next";
 import * as Popover from "@radix-ui/react-popover";
 
 import { IoChevronDownOutline } from "react-icons/io5";
-
-const games = [
-  { image: "counter-strike-2", name: "Counter Strike 2", link: "/counter-strike-2" },
-  { image: "lol-wild-rift", name: "Lol: Wild Rift", link: "/lol-wild-rift" },
-  { image: "overwatch-2", name: "Overwatch 2", link: "/overwatch-2" },
-  { image: "rocket-league", name: "Rocket League", link: "/rocket-league" },
-  { image: "teamfight-tactics", name: "Teamfight Tactics", link: "/teamfight-tactics" },
-  { image: "valorant", name: "Valorant", link: "/valorant" },
-  { image: "world-of-warcraft", name: "World of Warcraft", link: "/world-of-warcraft" },
-  { image: "league-of-legends", name: "League of Legends", link: "/league-of-legends" },
-  { image: "destiny-2", name: "Destiny 2", link: "/destiny-2" },
-  { image: "apex-legends", name: "Apex Legends", link: "/apex-legends" },
-];
+import { listOfGame } from "../../constants";
 
 const MenuGame = () => {
   const { t } = useTranslation();
@@ -44,20 +32,22 @@ const MenuGame = () => {
         align="start"
         className="backdrop-brightness-5 z-50 w-64 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border backdrop-blur-lg"
       >
-        {games.map(({ link, image, name }) => (
+        {listOfGame.map(({ href, image, label, available }) => (
           <a
-            key={name}
+            key={label}
             className={clsx(
               "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2.5 text-sm outline-none transition-colors",
-              "hover:bg-accent focus:bg-accent focus:text-accent-foreground",
+              available
+                ? "cursor-pointer hover:bg-accent focus:bg-accent focus:text-accent-foreground"
+                : "pointer-events-none opacity-30",
             )}
-            href={link}
+            href={`/${href}`}
           >
             <img
               className="mr-2 h-6 w-6"
               src={`/src/assets/${image}/logo.svg`}
             />
-            {name}
+            {label}
           </a>
         ))}
       </Popover.Content>

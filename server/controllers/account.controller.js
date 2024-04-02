@@ -1,7 +1,11 @@
 import Account from "../models/account.model.js";
 import Order from "../models/order.model.js";
 
-// CREATE ACCOUNT
+/*
+ * CREATE ACCOUNT
+ * 1. CREATE ACCOUNT
+ * 2. PUSH ACCOUNT_ID INTO ORDER
+ */
 export const createAccount = async (req, res, next) => {
   const { username, password, backup_code, order_id } = req.body;
   const { id } = req.user;

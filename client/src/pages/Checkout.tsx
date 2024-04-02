@@ -17,34 +17,40 @@ const modeOfPayment = [
     title: "Debit/Credit cards",
     subtitle: "We accept all major debit and credit cards",
     value: "debit_cards",
-  },
-  {
-    image: "apple_pay",
-    title: "Apple Pay",
-    value: "apple_pay",
-  },
-  {
-    image: "google_pay",
-    title: "Google Pay",
-    value: "google_pay",
-  },
-  {
-    image: "paysafe_card",
-    title: "Paysafe Card",
-    subtitle: "Prepaid card for online payments",
-    value: "paysafe_card",
-  },
-  {
-    image: "skrill",
-    title: "Skrill",
-    subtitle: "Skrill · Neteller · Rapid Transfer",
-    value: "skrill",
+    available: true,
   },
   {
     image: "stripe-alt",
     title: "Debit/Credit cards (Stripe)",
     subtitle: "Alternative cards payment method",
     value: "stripe-alt",
+    available: true,
+  },
+  {
+    image: "apple_pay",
+    title: "Apple Pay",
+    value: "apple_pay",
+    available: false,
+  },
+  {
+    image: "google_pay",
+    title: "Google Pay",
+    value: "google_pay",
+    available: false,
+  },
+  {
+    image: "paysafe_card",
+    title: "Paysafe Card",
+    subtitle: "Prepaid card for online payments",
+    value: "paysafe_card",
+    available: false,
+  },
+  {
+    image: "skrill",
+    title: "Skrill",
+    subtitle: "Skrill · Neteller · Rapid Transfer",
+    value: "skrill",
+    available: false,
   },
 ];
 
@@ -224,12 +230,13 @@ const Checkout = () => {
                     <RadioGroup.Option
                       key={item.value}
                       value={item.value}
+                      disabled={!item.available}
                       className={({ checked }) =>
                         `${
                           checked
                             ? "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio-hover px-6 py-4 text-start shadow-sm focus:outline-none sm:max-w-none sm:flex-grow-0"
                             : "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio/50 px-6 py-4 text-start hover:bg-radio focus:outline-none sm:max-w-none sm:flex-grow-0"
-                        }`
+                        } ${item.available ? "" : "opacity-40 pointer-events-none"}`
                       }
                     >
                       {({ checked }) => (
