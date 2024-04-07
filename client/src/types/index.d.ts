@@ -23,10 +23,17 @@ export interface User {
   updatedAt?: string;
 }
 
+export interface Conversation {
+  _id?: string;
+  participants?: string[];
+  messages?: Message[];
+}
 export interface Order {
   options?: Array<string>;
   title?: title;
   boost_id?: string;
+  booster_id?: string;
+  conversation?: string | Conversation;
   status?: string;
   game?: string;
   type?: string;
@@ -42,7 +49,7 @@ export interface Order {
   // Wingman
   start_rank?: string;
   end_rank?: string;
-  user?: User;
+  user?: string | User;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -52,4 +59,11 @@ export interface Account {
   username?: string;
   password?: string;
   backup_code?: string;
+}
+
+export interface Message {
+  _id?: string;
+  sender_id?: string;
+  receiver_id?: string;
+  message?: string;
 }

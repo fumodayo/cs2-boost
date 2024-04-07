@@ -3,8 +3,13 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userSlice from "./user/userSlice";
 import cartSlice from "./cart/cartSlice";
+import conversationSlice from "./conversation/conversationSlice";
 
-const rootReducer = combineReducers({ user: userSlice, cart: cartSlice });
+const rootReducer = combineReducers({
+  user: userSlice,
+  cart: cartSlice,
+  conversation: conversationSlice,
+});
 
 const persistsConfig = {
   key: "root",

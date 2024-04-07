@@ -1,7 +1,46 @@
-import { FaRocket } from "react-icons/fa6";
 import UserPage from "../../components/Layouts/UserPage";
+import DataTable from "../../components/DataTable";
+import { useState } from "react";
+import { usePendingOrder } from "../../hooks/usePendingOrder";
+
+const headers = [
+  {
+    name: "title",
+    value: "title",
+  },
+  {
+    name: "boost id",
+    value: "id",
+  },
+  {
+    name: "client",
+    value: "client",
+  },
+  {
+    name: "boosters",
+    value: "boosters",
+  },
+  {
+    name: "status",
+    value: "status",
+  },
+  {
+    name: "price",
+    value: "price",
+  },
+  {
+    name: "last updated",
+    value: "updated_at",
+  },
+];
 
 const PendingBoosts = () => {
+  const [searchKey, onSearchKey] = useState<string>("");
+  const [gameKey, onGameKey] = useState<string[]>([]);
+  const [statusKey, onStatusKey] = useState<string[]>([]);
+
+  const orders = usePendingOrder({ searchKey, gameKey, statusKey });
+
   return (
     <UserPage>
       <div className="container">
@@ -18,10 +57,16 @@ const PendingBoosts = () => {
         </div>
 
         {/* INFORMATION */}
-        {/* <DataTable
+        <DataTable
           headers={headers}
-          
-        /> */}
+          items={orders}
+          searchKey={searchKey}
+          gameKey={gameKey}
+          statusKey={statusKey}
+          onSearchKey={onSearchKey}
+          onGameKey={onGameKey}
+          onStatusKey={onStatusKey}
+        />
       </div>
     </UserPage>
   );

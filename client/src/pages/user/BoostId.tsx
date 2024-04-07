@@ -6,6 +6,7 @@ import {
   FaCalendarDay,
   FaCreditCard,
   FaEllipsisVertical,
+  FaSquareCheck,
   FaTags,
   FaXmark,
 } from "react-icons/fa6";
@@ -21,11 +22,20 @@ import { useParams } from "react-router-dom";
 import { formatMoney } from "../../utils/formatMoney";
 import { format } from "date-fns";
 import { useGetOrderById } from "../../hooks/useGetOrderById";
+import Conversation from "../../components/Messages/Conversation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { selectedConversation } from "../../redux/conversation/conversationSlice";
+import { Conversation as ConversationType } from "../../types";
 
 const BoostId = () => {
   const { id } = useParams();
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
 
   const order = useGetOrderById(id);
+  
+  dispatch(selectedConversation(order.conversation as ConversationType));
 
   let headers = [
     "server",
@@ -103,6 +113,14 @@ const BoostId = () => {
     location.reload();
   };
 
+  const handleAcceptBoost = async () => {
+    const res = await fetch(`/api/order/accept-order/${order.boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+  };
+
   return (
     <UserPage>
       {/* HEADER */}
@@ -152,6 +170,15 @@ const BoostId = () => {
                 <HiMiniRocketLaunch className="mr-2" />
                 Complete Payment
               </a>
+              {currentUser?.role === "booster" && (
+                <a
+                  onClick={handleAcceptBoost}
+                  className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <FaSquareCheck className="mr-2" />
+                  Accept Boost
+                </a>
+              )}
               <Popover.Root>
                 <Popover.Trigger asChild>
                   <button className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9">
@@ -408,8 +435,10 @@ const BoostId = () => {
               </div>
             </div>
           </div>
-
           <div className="row-start-1 space-y-4 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:space-y-6">
+            {/* CONVERSATION */}
+            <Conversation booster_id={order.booster_id} />
+
             <Widget
               titleHeader="Boost Data"
               headers={headers}

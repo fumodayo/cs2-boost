@@ -1,5 +1,6 @@
 import { ORDER_STATUS } from "../constants/index.js";
 import Order from "../models/order.model.js";
+import Conversation from "../models/conversation.model.js";
 
 /*
  * GET ALL ORDER
@@ -27,6 +28,23 @@ export const getAllOrder = async (req, res, next) => {
   if (statusKey && statusKey.length > 0) {
     query.status = { $in: statusKey };
   }
+
+  try {
+    const orders = await Order.find(query).populate({
+      path: "user",
+      select: "-password",
+    });
+    res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPendingOrder = async (req, res, next) => {
+  const { id } = req.user;
+  const { searchKey, gameKey, statusKey } = req.query;
+
+  let query = { status: ORDER_STATUS.IN_ACTIVE };
 
   try {
     const orders = await Order.find(query).populate({
@@ -100,9 +118,50 @@ export const getOrder = async (req, res, next) => {
         path: "user",
         select: "-password",
       })
-      .populate("account");
+      .populate("account")
+      .populate("conversation");
 
     res.status(200).json(order[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * ACCEPT ORDER BY BOOST_ID
+ * 1. CREATE CONVERSATION
+ * 2. FILL BOOSTER_ID INTO ORDER
+ * 3. FILL CONVERSATION_ID INTO ORDER
+ */
+export const acceptOrder = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findOneAndUpdate(
+      {
+        boost_id: id,
+      },
+      {
+        $set: {
+          booster: req.user.id,
+          status: ORDER_STATUS.IN_PROGRESS,
+        },
+      },
+      { new: true }
+    );
+
+    const conversation = new Conversation({
+      participants: [order.user, order.booster],
+      messages: [],
+    });
+
+    const newConversation = await conversation.save();
+
+    await Order.findByIdAndUpdate(order._id, {
+      conversation: newConversation._id,
+    });
+
+    res.status(201).json("Accepted order");
   } catch (error) {
     next(error);
   }

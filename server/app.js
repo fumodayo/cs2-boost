@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 
@@ -8,27 +7,28 @@ import authRouter from "./routes/auth.route.js";
 import orderRouter from "./routes/order.route.js";
 import accountRouter from "./routes/account.route.js";
 import paymentRouter from "./routes/payment.route.js";
+import messageRouter from "./routes/message.route.js";
 import cookieParser from "cookie-parser";
 import Order from "./models/order.model.js";
 import Invoice from "./models/invoice.model.js";
 import { ORDER_STATUS } from "./constants/index.js";
 
 import Stripe from "stripe";
+
+import { app, server } from "./socket/socket.js";
+import connectToMongoDB from "./database/connectToMogoDB.js";
+
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 dotenv.config();
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => console.error(err));
-
-export const app = express();
-
 let endpointSecret = process.env.ENDPOINT_SECRET_KEY;
-
+/**
+ * IF CHECKOUT COMPLETED
+ * 1. FIND ORDER_ID INTO EVENT CHECKOUT
+ * 2. CHANGE STATUS ORDER: PROCESS -> IN_ACTIVE
+ * 3. CREATE NEW INVOICE
+ */
 app.post(
   "/webhook",
   bodyParser.raw({ type: "application/json" }),
@@ -105,15 +105,12 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.listen("3000", () => {
-  console.log(`listening on ${3000}`);
-});
-
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/payment", paymentRouter);
+app.use("/api/messages", messageRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -123,4 +120,9 @@ app.use((err, req, res, next) => {
     message,
     statusCode,
   });
+});
+
+server.listen("3000", () => {
+  connectToMongoDB();
+  console.log(`listening on ${3000}`);
 });
