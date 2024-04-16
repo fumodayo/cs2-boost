@@ -95,6 +95,8 @@ const Checkout = () => {
     return null;
   }
 
+  console.log(order.end_exp);
+
   return (
     <main>
       <div className="fixed left-0 top-0 hidden h-full w-1/2 bg-background lg:block" />
@@ -115,7 +117,7 @@ const Checkout = () => {
             <ul className="divide-y divide-border text-sm font-medium">
               <li className="flex items-center space-x-4 py-6">
                 <img
-                  src="https://cdn.gameboost.com/games/counter-strike-2/logo/card.svg"
+                  src={`/src/assets/counter-strike-2/logo/logo.png`}
                   alt="test"
                   className="h-12 w-12 flex-none rounded-md object-cover object-center"
                 />
@@ -123,14 +125,14 @@ const Checkout = () => {
                   <h3 className="capitalize text-foreground">
                     {order.title}
 
-                    {order.start_rating && order.end_rating && (
+                    {order.end_rating && (
                       <>
                         ({order.start_rating} → {order.end_rating})
                       </>
                     )}
-                    {order.start_exp && order.end_exp && (
+                    {order.end_exp && (
                       <>
-                        ({order.start_exp} → {order.end_exp})
+                        ({order.start_exp} exp → {order.end_exp} exp)
                       </>
                     )}
                     {order.start_rank && order.end_rank && (
@@ -236,7 +238,9 @@ const Checkout = () => {
                           checked
                             ? "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio-hover px-6 py-4 text-start shadow-sm focus:outline-none sm:max-w-none sm:flex-grow-0"
                             : "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio/50 px-6 py-4 text-start hover:bg-radio focus:outline-none sm:max-w-none sm:flex-grow-0"
-                        } ${item.available ? "" : "opacity-40 pointer-events-none"}`
+                        } ${
+                          item.available ? "" : "pointer-events-none opacity-40"
+                        }`
                       }
                     >
                       {({ checked }) => (

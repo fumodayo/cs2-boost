@@ -1,12 +1,16 @@
 import clsx from "clsx";
-
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BsJoystick } from "react-icons/bs";
 import { FaRightToBracket } from "react-icons/fa6";
 
+import { AppContext } from "../../context/AppContext";
+
 const Stepup = () => {
   const { t } = useTranslation();
+
+  const { onOpenSignUpModal } = useContext(AppContext);
 
   return (
     <div
@@ -49,6 +53,7 @@ const Stepup = () => {
           {t("Select Game")}
         </button>
         <button
+          onClick={() => onOpenSignUpModal()}
           type="button"
           className={clsx(
             "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",

@@ -21,6 +21,7 @@ interface InputProps {
   style?: string;
   label?: string;
   failure?: string | boolean;
+  autoFocused?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -35,6 +36,7 @@ const Input: React.FC<InputProps> = ({
   style,
   label,
   failure,
+  autoFocused
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -67,7 +69,7 @@ const Input: React.FC<InputProps> = ({
             errors[id] ? "focus:ring-red-500" : "focus:ring-field-ring-hover",
             errors[id] ? "hover:ring-red-500" : "hover:ring-field-ring-hover",
           )}
-          autoFocus
+          autoFocus={autoFocused}
         />
         {type === "password" && (
           <span className="text-md absolute right-4 top-0 z-10 origin-[0] translate-y-2 transform cursor-pointer text-neutral-600 duration-150 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75">

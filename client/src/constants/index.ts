@@ -4,6 +4,8 @@ import {
   FaEarthAfrica,
   FaEarthEurope,
   FaEarthAmericas,
+  FaWallet,
+  FaMoneyBillTrendUp,
 } from "react-icons/fa6";
 import { BsGlobeAsiaAustralia } from "react-icons/bs";
 import { BsRocketTakeoffFill } from "react-icons/bs";
@@ -259,13 +261,23 @@ export const listOfServices: ListOfService[] = [
     icon: MdOutlinePendingActions,
   },
   {
-    label: "My Accounts",
-    link: "accounts",
+    label: "Progress Boosts",
+    link: "progress-boosts",
     icon: GiSamuraiHelmet,
   },
   {
     label: "Settings",
     link: "settings",
     icon: HiCog6Tooth,
+  },
+  {
+    label: "Wallet",
+    link: "wallet",
+    icon: FaWallet,
+  },
+  {
+    label: "Income",
+    link: "income",
+    icon: FaMoneyBillTrendUp,
   },
 ];

@@ -2,7 +2,13 @@ import clsx from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import { FaDesktop, FaEye, FaTrashCan, FaXmark } from "react-icons/fa6";
+import {
+  FaDesktop,
+  FaEye,
+  FaEyeSlash,
+  FaTrashCan,
+  FaXmark,
+} from "react-icons/fa6";
 
 import Widget from "../Widget";
 import Input from "../Input";
@@ -10,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
+import { useState } from "react";
+import { formatJwt } from "../../utils/formatJwt";
 
 const headers = ["username", "user ID", "email address", "address"];
 
@@ -39,6 +47,28 @@ const General = () => {
         navigate("/");
         return;
       }
+    }
+  };
+
+  const [showIps, setShowIps] = useState(false);
+
+  const handleShowIPs = () => {
+    setShowIps(!showIps);
+  };
+
+  const handleLogoutAllDevices = async () => {
+    const { id } = formatJwt();
+    try {
+      await fetch("/api/auth/logout-all", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: id }),
+      });
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -192,51 +222,78 @@ const General = () => {
               Login Sessions
             </h3>
             <div className="ml-auto flex items-center gap-x-1.5">
-              <button className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
-                <FaEye className="mr-2" /> Show IPs
+              <button
+                onClick={handleShowIPs}
+                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              >
+                {showIps ? (
+                  <>
+                    <FaEyeSlash className="mr-2" />
+                    Hide IPs
+                  </>
+                ) : (
+                  <>
+                    <FaEye className="mr-2" />
+                    Show IPs
+                  </>
+                )}
               </button>
-              <button className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger-light px-2 py-1.5 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
+              <button
+                type="button"
+                onClick={handleLogoutAllDevices}
+                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger-light px-2 py-1.5 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              >
                 <FaXmark className="mr-2" /> Logout All Devices
               </button>
             </div>
           </div>
           <div className="px-0 pt-0 sm:px-6">
-            <ul className="divide-y divide-border rounded-md">
-              <li className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 leading-6 sm:px-0">
-                <div className="flex min-w-[150px] flex-1 items-center">
-                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border p-3 shadow-sm">
-                    <FaDesktop className="text-xl text-foreground/90" />
-                  </div>
-                  <div className="ml-4 flex min-w-0 flex-1 flex-col">
-                    <span className="font-display items-center truncate font-medium sm:flex">
-                      Windows
-                      <span className="px-0.5 text-muted-foreground sm:px-1.5">
-                        .
-                      </span>
-                      Chrome
-                      <span className="font-sans ml-1 inline-flex items-center rounded-md bg-primary-light px-2 py-1 text-xs font-medium text-primary-light-foreground ring-1 ring-inset ring-primary-ring sm:ml-2">
-                        <svg
-                          className="-ml-0.5 mr-1.5 h-2 w-2"
-                          fill="currentColor"
-                          viewBox="0 0 8 8"
-                        >
-                          <circle cx="4" cy="4" r="3"></circle>
-                        </svg>
-                        Current
-                      </span>
-                    </span>
-                    <span className="flex-shrink-0 items-center gap-x-1.5 truncate text-sm text-muted-foreground sm:flex">
-                      <span className="text-muted-foreground">·</span> 9 seconds
-                      ago
-                    </span>
-                  </div>
-                </div>
+            {currentUser &&
+              currentUser.ip_logger &&
+              currentUser.ip_logger.map((user) => (
+                <ul className="divide-y divide-border rounded-md">
+                  <li className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 leading-6 sm:px-0">
+                    <div className="flex min-w-[150px] flex-1 items-center">
+                      <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border p-3 shadow-sm">
+                        <FaDesktop className="text-xl text-foreground/90" />
+                      </div>
+                      <div className="ml-4 flex min-w-0 flex-1 flex-col">
+                        <span className="font-display items-center truncate font-medium sm:flex">
+                          {user.country}
+                          <span className="px-0.5 text-muted-foreground sm:px-1.5">
+                            .
+                          </span>
+                          {user.city}
+                          <span className="font-sans ml-1 inline-flex items-center rounded-md bg-primary-light px-2 py-1 text-xs font-medium capitalize text-primary-light-foreground ring-1 ring-inset ring-primary-ring sm:ml-2">
+                            <svg
+                              className="-ml-0.5 mr-1.5 h-2 w-2"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx="4" cy="4" r="3"></circle>
+                            </svg>
+                            {user.status}
+                          </span>
+                        </span>
+                        <span className="flex-shrink-0 items-center gap-x-1.5 truncate text-sm text-muted-foreground sm:flex">
+                          <span className="text-muted-foreground">·</span> 9
+                          seconds ago
+                        </span>
+                      </div>
+                    </div>
 
-                <div className="flex flex-shrink-0 items-center gap-x-3">
-                  <div className="block h-9 w-24 rounded-md bg-muted" />
-                </div>
-              </li>
-            </ul>
+                    <div className="flex flex-shrink-0 items-center gap-x-3">
+                      {showIps ? (
+                        <span className="inline-flex h-9 items-center rounded-md bg-secondary-light px-3 py-0.5 text-sm font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
+                          {user.ip}
+                        </span>
+                      ) : (
+                        <div className="block h-9 w-24 rounded-md bg-muted" />
+                      )}
+                    </div>
+                  </li>
+                </ul>
+              ))}
           </div>
         </div>
       </div>

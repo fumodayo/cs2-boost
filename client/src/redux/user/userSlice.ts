@@ -59,6 +59,7 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.loading = false;
       state.error = false;
+      localStorage.removeItem("access_token");
     },
   },
 });
@@ -70,9 +71,9 @@ export const {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
+  // deleteUserStart,
+  // deleteUserSuccess,
+  // deleteUserFailure,
   signOut,
 } = userSlice.actions;
 

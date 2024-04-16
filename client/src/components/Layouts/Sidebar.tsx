@@ -5,12 +5,13 @@ import { IoGrid } from "react-icons/io5";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { GiSamuraiHelmet } from "react-icons/gi";
 import { BiSolidCog } from "react-icons/bi";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { FaMoneyBillTrendUp, FaWallet } from "react-icons/fa6";
 
 import Logo from "../Common/Logo";
 import Avatar from "../Common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { MdOutlinePendingActions } from "react-icons/md";
 
 const sidebarItems = [
   {
@@ -28,7 +29,7 @@ const sidebarItems = [
     title: "ORDERS",
     items: [
       {
-        label: "Boosts List",
+        label: "My Boosts List",
         value: "boosts",
         icon: HiMiniRocketLaunch,
         active: false,
@@ -40,9 +41,26 @@ const sidebarItems = [
         active: false,
       },
       {
-        label: "Accounts List",
-        value: "accounts",
+        label: "Progress Boosts List",
+        value: "progress-boosts",
         icon: GiSamuraiHelmet,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "BILLING",
+    items: [
+      {
+        label: "Wallet",
+        value: "wallet",
+        icon: FaWallet,
+        active: false,
+      },
+      {
+        label: "Income",
+        value: "income",
+        icon: FaMoneyBillTrendUp,
         active: false,
       },
     ],
@@ -67,6 +85,8 @@ const Sidebar = () => {
   const { pathname } = useLocation();
   const segments = pathname.split("/").filter(Boolean);
   const slug = segments.length > 1 ? segments.pop() : null;
+
+  const roleName = currentUser?.role?.find((role) => ["booster", "admin"].includes(role)) || "Client";
 
   return (
     <div
@@ -150,7 +170,7 @@ const Sidebar = () => {
                     {currentUser?.username}
                   </div>
                   <div className="truncate text-xs capitalize text-muted-foreground">
-                    {currentUser?.role} mode
+                    {roleName} mode
                   </div>
                 </div>
               </div>

@@ -1,8 +1,9 @@
+import { MdOutlinePendingActions } from "react-icons/md";
 import UserPage from "../../components/Layouts/UserPage";
-import { FaRocket } from "react-icons/fa6";
+import { useProgressOrder } from "../../hooks/useProgressOrder";
 import DataTable from "../../components/DataTable";
-import { useGetAllOrder } from "../../hooks/useGetAllOrder";
 import { useState } from "react";
+import { IoReceiptSharp } from "react-icons/io5";
 import PlusButton from "../../components/Buttons/PlusButton";
 import { listOfGame } from "../../constants";
 
@@ -42,13 +43,14 @@ const headers = [
     value: "updated_at",
     active: true,
   },
+  {
+    name: "actions",
+    value: "actions",
+    active: true,
+  },
 ];
 
 const statuses = [
-  {
-    label: "Pending",
-    value: "pending",
-  },
   {
     label: "In Progress",
     value: "in progress",
@@ -57,45 +59,97 @@ const statuses = [
     label: "Completed",
     value: "completed",
   },
-  {
-    label: "Inactive",
-    value: "inactive",
-  },
 ];
 
-const Boosts = () => {
+interface WidgetBoostProps {
+  title?: string;
+  value?: number;
+  status: string;
+  onStatusKey: (value: string[]) => void;
+}
+
+const WidgetBoost: React.FC<WidgetBoostProps> = ({
+  title,
+  value,
+  status,
+  onStatusKey,
+}) => {
+  return (
+    <div className="-mx-4 my-4 min-w-[200px] border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+      <div className="px-4 py-6 sm:px-6">
+        <dt className="text-sm font-medium leading-6 text-muted-foreground">
+          {title}
+        </dt>
+        <dd className="w-full flex-none">
+          <span className="text-3xl font-semibold leading-10 tracking-tight text-primary">
+            {value}
+          </span>
+          <span className="pl-1 text-sm font-medium text-muted-foreground">
+            ORDER
+          </span>
+        </dd>
+      </div>
+      <div className="flex items-center border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
+        <button
+          type="submit"
+          onClick={() => onStatusKey([status])}
+          className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+        >
+          <IoReceiptSharp className="mr-2" /> View More
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ProgressBoosts = () => {
   const [searchKey, onSearchKey] = useState<string>("");
   const [gameKey, onGameKey] = useState<string[]>([]);
   const [statusKey, onStatusKey] = useState<string[]>([]);
 
-  const orders = useGetAllOrder({ searchKey, gameKey, statusKey });
+  const progressBoosts = useProgressOrder({ searchKey, gameKey, statusKey });
+  const orders = progressBoosts ? progressBoosts.orders : [];
 
   return (
     <UserPage>
       <div className="container">
-        <div className="flex flex-wrap items-center justify-between gap-y-4">
+        <div className="flex flex-wrap gap-y-4">
           <div className="min-w-fit flex-1 flex-grow md:min-w-0">
             <div className="flex flex-wrap items-center gap-y-4">
               <div className="sm:truncate">
                 <h1 className="font-display text-3xl font-semibold text-foreground sm:truncate sm:tracking-tight">
-                  My Boosts List
+                  Progress Boosts List
                 </h1>
+                <div className="flex flex-wrap gap-x-5">
+                  <WidgetBoost
+                    title="Progress Boosts"
+                    value={progressBoosts?.in_progress}
+                    status="in progress"
+                    onStatusKey={onStatusKey}
+                  />
+                  <WidgetBoost
+                    title="Completed Boosts"
+                    value={progressBoosts?.completed}
+                    status="completed"
+                    onStatusKey={onStatusKey}
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end gap-2 sm:justify-normal md:ml-4 md:mt-0">
+          <div className="flex items-start justify-start gap-2 sm:justify-normal md:ml-4 md:mt-0">
             <a
               className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-              href="/"
+              href="/dashboard/pending-boosts"
             >
-              <FaRocket className="mr-2" />
-              Buy New Boost
+              <MdOutlinePendingActions className="mr-2 text-xl" />
+              Get More Boost
             </a>
           </div>
         </div>
 
         {/* INFORMATION */}
-        <DataTable headers={headers} items={orders}>
+        <DataTable name="progress" headers={headers} items={orders}>
           <div className="flex flex-1 flex-wrap items-center gap-2">
             {/* SEARCH */}
             <div className="w-fit">
@@ -128,4 +182,4 @@ const Boosts = () => {
   );
 };
 
-export default Boosts;
+export default ProgressBoosts;

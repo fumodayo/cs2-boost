@@ -9,7 +9,7 @@ const Copy = ({ text }: { text?: string }) => {
 
   const handleCopyToClipboard = (text?: string) => {
     if (!text) return;
-    
+
     navigator.clipboard.writeText(text);
     setCopy(true);
     setTimeout(() => {
@@ -20,7 +20,7 @@ const Copy = ({ text }: { text?: string }) => {
   return (
     <div>
       {isCopy ? (
-        <Tooltip content="id Copied">
+        <Tooltip content={`${text} Copied`}>
           <FaCheck className="cursor-pointer text-success" />
         </Tooltip>
       ) : (

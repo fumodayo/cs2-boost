@@ -1,73 +1,92 @@
 import { useCallback, useContext, useState } from "react";
-import clsx from "clsx";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { authSuccess } from "../../redux/user/userSlice";
-
+import { AppContext } from "../../context/AppContext";
+import { useGetIP } from "../../hooks/useGetIP";
+import clsx from "clsx";
+import {
+  authFailure,
+  authStart,
+  authSuccess,
+} from "../../redux/user/userSlice";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../utils/firebase";
 import { IconType } from "react-icons";
 import {
   FaDiscord,
+  FaFacebook,
   FaGoogle,
   FaSteam,
-  FaFacebook,
   FaTwitch,
 } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../../utils/firebase";
-import { useDispatch } from "react-redux";
-import { AppContext } from "../../context/AppContext";
-import { useGetIP } from "../../hooks/useGetIP";
 
-const socialMedia = [
+type SocialServiceProps = {
+  icon?: IconType;
+  title?: string;
+  subtitle?: string;
+  active?: boolean;
+  color?: string;
+};
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  content?: React.ReactNode;
+  title?: string;
+  subtitle?: React.ReactNode;
+  text?: string;
+}
+
+const socialMedia: SocialServiceProps[] = [
   {
     icon: FaDiscord,
     title: "Discord",
     subtitle: "Login with Discord",
+    active: false,
     color: "#5865f2",
   },
   {
     icon: FaGoogle,
     title: "Google",
     subtitle: "Login with Google",
+    active: true,
     color: "#ea4335",
   },
   {
     icon: FaSteam,
     title: "Steam",
     subtitle: "Login with Steam",
+    active: false,
     color: "#1348a3",
   },
   {
     icon: FaFacebook,
     title: "Facebook",
     subtitle: "Login with Facebook",
+    active: false,
     color: "#1877f2",
   },
   {
     icon: FaTwitch,
     title: "Twitch",
     subtitle: "Login with Twitch",
+    active: false,
     color: "#9146ff",
   },
 ];
-
-type SocialServiceProps = {
-  icon?: IconType;
-  title?: string;
-  subtitle?: string;
-  color?: string;
-};
 
 const SocialService: React.FC<SocialServiceProps> = ({
   icon: Icon,
   subtitle,
   color,
+  active,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const dynamicStyles = isHovered
     ? {
         backgroundColor: color,
-        color: color,
+        color: "#fff",
         ringColor: color,
       }
     : {};
@@ -77,7 +96,10 @@ const SocialService: React.FC<SocialServiceProps> = ({
   const location = useGetIP();
 
   const handleGoogleClick = async () => {
+    if (!active) return;
+
     try {
+      dispatch(authStart());
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
 
@@ -92,18 +114,25 @@ const SocialService: React.FC<SocialServiceProps> = ({
           name: result.user.displayName,
           email: result.user.email,
           photo: result.user.photoURL,
-          ip: location?.IPv4,
-          country: location?.country_name,
+          ip: location?.query,
+          country: location?.country,
           city: location?.city,
         }),
       });
       const data = await res.json();
 
-      dispatch(authSuccess(data));
+      if (data.success === false) {
+        dispatch(authFailure("Google Authentication Failed"));
+        return;
+      }
+
+      dispatch(authSuccess(data.user));
+      localStorage.setItem("access_token", data.access_token);
+
       onCloseLoginModal();
       onCloseSignUpModal();
     } catch (error) {
-      console.log(error);
+      dispatch(authFailure("Google Authentication Failed"));
     }
   };
 
@@ -113,28 +142,18 @@ const SocialService: React.FC<SocialServiceProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={clsx(
-        "relative inline-flex flex-1 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-        "hover:bg-secondary-hover hover:!text-neutral-100 focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-        "sm:py-2.5",
+        "relative inline-flex flex-1 cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+        !active && "opacity-50 pointer-events-none"
       )}
       style={{
         ...dynamicStyles,
       }}
     >
-      {Icon && <Icon className="text-lg" />}
+      {Icon && <Icon className="text-[18px]" />}
       <span className="sr-only">{subtitle}</span>
     </a>
   );
 };
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  content?: React.ReactNode;
-  title?: string;
-  subtitle?: React.ReactNode;
-  text?: string;
-}
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
@@ -156,14 +175,10 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   return (
-    <div
-      data-state={isOpen ? "open" : "closed"}
-      className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80"
-    >
+    <div className="fixed inset-0 z-40 bg-background/80">
       <div
-        data-state={isOpen ? "open" : "closed"}
         className={clsx(
-          "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
+          "scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
           "focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
         )}
       >
@@ -199,12 +214,13 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 >
                   {/* SOCIAL */}
-                  {socialMedia.map(({ icon, subtitle, color }) => (
+                  {socialMedia.map(({ icon, subtitle, color, active }) => (
                     <SocialService
                       key={subtitle}
                       icon={icon}
                       subtitle={subtitle}
                       color={color}
+                      active={active}
                     />
                   ))}
                 </div>

@@ -153,9 +153,9 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                       {/* TITLE */}
                       <div className="my-4 flex items-center gap-4">
                         <img
-                          src="https://cdn.gameboost.com/games/counter-strike-2/logo/card.svg"
+                          src={`/src/assets/counter-strike-2/logo/logo.png`}
                           alt="cs2"
-                          className="-ml-px h-16 w-16"
+                          className="-ml-px h-16 w-16 flex-none rounded-md object-cover object-center"
                         />
                         <div>
                           <h1 className="text-3xl font-bold text-foreground">

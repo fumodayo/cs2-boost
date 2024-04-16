@@ -1,40 +1,23 @@
-import UserPage from "../../components/Layouts/UserPage";
-import { FaRocket } from "react-icons/fa6";
-import DataTable from "../../components/DataTable";
-import { useGetAllOrder } from "../../hooks/useGetAllOrder";
-import { useState } from "react";
+import { MdAttachMoney } from "react-icons/md";
 import PlusButton from "../../components/Buttons/PlusButton";
-import { listOfGame } from "../../constants";
+import DataTable from "../../components/DataTable";
+import UserPage from "../../components/Layouts/UserPage";
+import { useState } from "react";
 
 const headers = [
   {
-    name: "title",
-    value: "title",
+    name: "transaction id",
+    value: "receipt_id",
     active: true,
   },
   {
-    name: "boost id",
-    value: "id",
+    name: "order id",
+    value: "order_id",
     active: true,
   },
   {
-    name: "client",
-    value: "client",
-    active: true,
-  },
-  {
-    name: "boosters",
-    value: "boosters",
-    active: true,
-  },
-  {
-    name: "status",
-    value: "status",
-    active: true,
-  },
-  {
-    name: "price",
-    value: "price",
+    name: "amount",
+    value: "amount",
     active: true,
   },
   {
@@ -44,31 +27,24 @@ const headers = [
   },
 ];
 
-const statuses = [
+const types = [
   {
-    label: "Pending",
-    value: "pending",
+    label: "Level Farming",
+    value: "level-farming",
   },
   {
-    label: "In Progress",
-    value: "in progress",
+    label: "Premier",
+    value: "premier",
   },
   {
-    label: "Completed",
-    value: "completed",
-  },
-  {
-    label: "Inactive",
-    value: "inactive",
+    label: "Wingman",
+    value: "wingman",
   },
 ];
 
-const Boosts = () => {
+const Wallet = () => {
   const [searchKey, onSearchKey] = useState<string>("");
-  const [gameKey, onGameKey] = useState<string[]>([]);
-  const [statusKey, onStatusKey] = useState<string[]>([]);
-
-  const orders = useGetAllOrder({ searchKey, gameKey, statusKey });
+  const [typeKey, onTypeKey] = useState<string[]>([]);
 
   return (
     <UserPage>
@@ -88,14 +64,14 @@ const Boosts = () => {
               className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
               href="/"
             >
-              <FaRocket className="mr-2" />
+              <MdAttachMoney className="mr-2" />
               Buy New Boost
             </a>
           </div>
         </div>
 
         {/* INFORMATION */}
-        <DataTable headers={headers} items={orders}>
+        <DataTable headers={headers} items={[]}>
           <div className="flex flex-1 flex-wrap items-center gap-2">
             {/* SEARCH */}
             <div className="w-fit">
@@ -107,19 +83,13 @@ const Boosts = () => {
                 type="text"
               />
             </div>
-            {/* GAME BUTTON */}
-            <PlusButton
-              selectedValues={gameKey}
-              onSelectedValuesChange={(value: string[]) => onGameKey(value)}
-              name="Game"
-              options={listOfGame}
-            />
+
             {/* STATUS BUTTON */}
             <PlusButton
-              selectedValues={statusKey}
-              onSelectedValuesChange={(value: string[]) => onStatusKey(value)}
-              name="Status"
-              options={statuses}
+              selectedValues={typeKey}
+              onSelectedValuesChange={onTypeKey}
+              name="Type"
+              options={types}
             />
           </div>
         </DataTable>
@@ -128,4 +98,4 @@ const Boosts = () => {
   );
 };
 
-export default Boosts;
+export default Wallet;

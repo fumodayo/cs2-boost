@@ -13,6 +13,7 @@ import Input from "../../components/Input";
 import { useGetUserById } from "../../hooks/useGetUserById";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import UploadImage from "../../components/UploadImage";
 
 const tabHeaders = [
   {
@@ -172,7 +173,7 @@ const Settings = () => {
                               <label className="mb-1 block text-sm font-medium leading-6 text-foreground/90">
                                 Avatar
                               </label>
-                              <div className="media-library media-library-single media-library-empty"></div>
+                              <UploadImage />
                             </div>
 
                             {/* PASSWORD */}

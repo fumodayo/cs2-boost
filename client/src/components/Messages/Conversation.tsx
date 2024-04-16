@@ -3,13 +3,13 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { IoClose, IoSend } from "react-icons/io5";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { AppContext } from "../../context/AppContext";
-import { useSocketContext } from "../../context/SocketContext";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import clsx from "clsx";
 import { ReceivedMessage } from "./ReceivedMessage";
 import Messages from "./Messages";
 import { useSendMessage } from "../../hooks/useSendMessage";
+import { Order } from "../../types";
 
 const introduce = [
   "Hey Sơn Thái! 😄 Thanks for choosing CS2Boost - you've made a great choice. 🚀 ",
@@ -17,20 +17,16 @@ const introduce = [
 ];
 
 interface ConversationProps {
-  booster_id?: string;
+  order: Order;
 }
 
-const Conversation: React.FC<ConversationProps> = ({ booster_id }) => {
+const Conversation: React.FC<ConversationProps> = ({ order }) => {
   const { theme } = useContext(AppContext);
-  const { currentUser } = useSelector((state: RootState) => state.user);
   const { loading, sendMessage } = useSendMessage();
 
   const { selectedConversation } = useSelector(
     (state: RootState) => state.conversation,
   );
-
-  const { onlineUsers } = useSocketContext();
-  const isOnline = onlineUsers.includes(booster_id);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [message, setMessage] = useState("");
@@ -58,7 +54,7 @@ const Conversation: React.FC<ConversationProps> = ({ booster_id }) => {
           <div className="relative">
             <div className="relative mr-2.5 block h-8 w-8 shrink-0 rounded-full text-xl sm:h-10 sm:w-10">
               <img
-                src="https://cdn.gameboost.com/games/world-of-warcraft/logo/card.svg"
+                src={order.image}
                 alt="logo"
                 className="h-full w-full rounded-full object-cover"
               />
@@ -66,14 +62,30 @@ const Conversation: React.FC<ConversationProps> = ({ booster_id }) => {
           </div>
 
           <div className="pt-1 sm:truncate">
-            <h1 className="font-display flex flex-wrap items-center text-sm text-foreground sm:truncate sm:tracking-tight">
-              Silver I (0-20LP) → Gold IV #88300
+            <h1 className="font-display flex flex-wrap items-center text-sm capitalize text-foreground sm:truncate sm:tracking-tight">
+              {order.title}
+              {order.end_rating && (
+                <>
+                  ({order.start_rating} → {order.end_rating})
+                </>
+              )}
+              {order.end_exp && (
+                <>
+                  ({order.start_exp} exp → {order.end_exp} exp)
+                </>
+              )}
+              {order.start_rank && order.end_rank && (
+                <>
+                  ({order.start_rank.replace("_", " ")} →{" "}
+                  {order.end_rank.replace("_", " ")})
+                </>
+              )}
             </h1>
             <div className="flex items-center space-x-1">
-              <p className="text-xs sm:truncate">Son Thai</p>
+              <p className="text-xs sm:truncate">{order?.user?.username}</p>
               <span
                 className={clsx(
-                  isOnline ? "bg-green-500" : "bg-gray-500",
+                  "bg-green-500",
                   "inline-block h-2.5 w-2.5 rounded-full",
                 )}
               />

@@ -31,6 +31,7 @@ const LoginModal = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -40,6 +41,8 @@ const LoginModal = () => {
   });
 
   const toggle = useCallback(() => {
+    reset();
+    dispatch(authFailure(""));
     onCloseLoginModal();
     onOpenSignUpModal();
   }, [onCloseLoginModal, onOpenSignUpModal]);
@@ -47,18 +50,17 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
-      const account = {
-        ...form,
-        ip: location?.IPv4,
-        country: location?.country_name,
-        city: location?.city,
-      };
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(account),
+        body: JSON.stringify({
+          ...form,
+          ip: location?.query,
+          country: location?.country,
+          city: location?.city,
+        }),
       });
       const data = await res.json();
 
@@ -67,10 +69,12 @@ const LoginModal = () => {
         return;
       }
 
-      dispatch(authSuccess(data));
+      dispatch(authSuccess(data.user));
+      localStorage.setItem("access_token", data.access_token);
+
       onCloseLoginModal();
     } catch (error) {
-      dispatch(authFailure("Sai mật khẩu hoặc tài khoản"));
+      dispatch(authFailure("Wrong password or email"));
     }
   };
 
@@ -85,6 +89,7 @@ const LoginModal = () => {
           register={register}
           errors={errors}
           failure={error}
+          autoFocused
         />
         <Input
           id="password"

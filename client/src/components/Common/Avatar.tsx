@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import clsx from "clsx";
 
 import { IconType } from "react-icons";
 import { BsGrid1X2Fill } from "react-icons/bs";
@@ -7,19 +8,18 @@ import { FaPalette, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
 
 import Separator from "../Separator";
 import { AppContext } from "../../context/AppContext";
-import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 import { RootState } from "../../redux/store";
 import { Theme } from "../../types";
 import { listOfServices } from "../../constants";
-import { useGetIP } from "../../hooks/useGetIP";
+import { formatJwt } from "../../utils/formatJwt";
 
-interface AvatarItemProps {
+type AvatarItemProps = {
   label?: string;
   link?: string;
   icon?: IconType;
-}
+};
 
 interface AvatarProps {
   children: React.ReactNode;
@@ -48,7 +48,6 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
 
 const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const dispatch = useDispatch();
-  const location = useGetIP();
 
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -58,13 +57,14 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   };
 
   const handleSignOut = async () => {
+    const { ip, id } = formatJwt();
     try {
       await fetch("/api/auth/signout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ip: location?.IPv4 }),
+        body: JSON.stringify({ ip: ip, id: id }),
       });
       dispatch(signOut());
     } catch (error) {
@@ -80,7 +80,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
           <div className="flex items-center gap-x-3 px-2 py-2 text-sm font-medium">
             <div className="relative block h-10 w-10 shrink-0 rounded-lg text-base">
               <img
-                src="https://cdn.gameboost.com/users/19918/avatar/conversions/AAcHTtdFRpMwux-WHt9RoMHs81i8OXPo9eQNI82d1caCUqQLRjU=s96-c-thumb.webp"
+                src={currentUser?.profile_picture}
                 alt="Profile Avatar"
                 className="h-full w-full rounded-lg object-cover"
               />

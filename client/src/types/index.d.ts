@@ -1,6 +1,14 @@
 export type Currency = "vnd" | "usd";
 export type Theme = "dark" | "light";
 
+interface IPLogger {
+  _id?: string;
+  country?: string;
+  city?: string;
+  ip?: string;
+  status?: string;
+}
+
 export interface User {
   _id?: string;
   username?: string;
@@ -8,7 +16,8 @@ export interface User {
   email?: string;
   profile_picture?: string;
   is_verified?: boolean;
-  role?: string;
+  role?: string[];
+  ip_logger?: IPLogger[];
 
   // VERIFICATION
   addresses?: string;
@@ -29,10 +38,11 @@ export interface Conversation {
   messages?: Message[];
 }
 export interface Order {
+  image?: string;
   options?: Array<string>;
   title?: title;
   boost_id?: string;
-  booster_id?: string;
+  booster?: string | User;
   conversation?: string | Conversation;
   status?: string;
   game?: string;
@@ -52,6 +62,8 @@ export interface Order {
   user?: string | User;
   createdAt?: Date;
   updatedAt?: Date;
+
+  account?: Account;
 }
 
 export interface Account {

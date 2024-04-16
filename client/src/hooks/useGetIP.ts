@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 interface IPLogger {
-  country_name?: string;
+  country?: string;
   city?: string;
-  IPv4?: string;
+  query?: string;
 }
 
 export const useGetIP = () => {
@@ -11,7 +11,7 @@ export const useGetIP = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://geolocation-db.com/json/`);
+      const res = await fetch(`http://ip-api.com/json/`);
       const data = await res.json();
       setData(data);
     };
