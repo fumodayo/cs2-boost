@@ -30,16 +30,28 @@ export const getAllOrder = async (req, res, next) => {
   }
 
   try {
-    const orders = await Order.find(query).populate({
-      path: "user",
-      select: "-password",
-    });
+    const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "booster",
+        select: "-password",
+      });
     res.status(200).json(orders);
   } catch (error) {
     next(error);
   }
 };
 
+/*
+ * GET ALL PENDING ORDER
+ * 1. GET ALL ORDER HAVE STATUS: IN_ACTIVE
+ * 2. FIND BY SEARCH KEY
+ * 3. FILTER BY GAME KEY AND STATUS KEY
+ */
 export const getPendingOrder = async (req, res, next) => {
   const { id } = req.user;
   const { searchKey, gameKey, statusKey } = req.query;
@@ -51,7 +63,48 @@ export const getPendingOrder = async (req, res, next) => {
       path: "user",
       select: "-password",
     });
+
     res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/*
+ * GET ALL PENDING ORDER
+ * 1. GET ALL ORDER HAVEN'T STATUS: IN_PENDING, IN_INACTIVE
+ * 2. FIND BY SEARCH KEY
+ * 3. FILTER BY GAME KEY AND STATUS KEY
+ */
+export const getProgressOrder = async (req, res, next) => {
+  const { id } = req.user;
+  const { searchKey, gameKey, statusKey } = req.query;
+
+  let query = {
+    status: { $nin: [ORDER_STATUS.PENDING, ORDER_STATUS.IN_ACTIVE] },
+    booster: { $ne: id },
+  };
+
+  try {
+    const completedOrdersCount = await Order.countDocuments({
+      status: ORDER_STATUS.COMPLETED,
+      booster: id,
+    });
+
+    const inProgressOrdersCount = await Order.countDocuments({
+      status: ORDER_STATUS.IN_PROGRESS,
+    });
+
+    const orders = await Order.find(query).populate({
+      path: "user",
+      select: "-password",
+    });
+
+    res.status(200).json({
+      orders: orders,
+      completed: completedOrdersCount,
+      in_progress: inProgressOrdersCount,
+    });
   } catch (error) {
     next(error);
   }

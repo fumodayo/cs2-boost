@@ -11,9 +11,15 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import { useGetUserById } from "../../hooks/useGetUserById";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import UploadImage from "../../components/UploadImage";
+import { toast } from "react-toastify";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../../redux/user/userSlice";
 
 const tabHeaders = [
   {
@@ -29,6 +35,7 @@ const tabHeaders = [
 ];
 
 const Settings = () => {
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
   const user = useGetUserById(currentUser?._id);
   const [loading, setLoading] = useState(true);
@@ -39,16 +46,20 @@ const Settings = () => {
     setActiveTab(value);
   };
 
+  const [avatarImage, setAvatarImage] = useState<string | null>(null);
+
+  const [error, setError] = useState<string>("");
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
       username: user?.username,
       email: user?.email,
-      password: "",
       old_password: "",
       new_password: "",
     },
@@ -62,8 +73,40 @@ const Settings = () => {
     }
   }, [user, setValue]);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser?._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+          profile_picture: avatarImage,
+        }),
+      });
+      const data = await res.json();
+
+      if (data.message === "Wrong old password") {
+        setError("Wrong old password");
+        return;
+      }
+
+      if (data.success === false) {
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+      toast.success("User updated successfully");
+      reset({
+        username: user?.username,
+        email: user?.email,
+      });
+    } catch (error) {
+      dispatch(updateUserFailure("Update user failed"));
+      toast.error("Update user failed");
+    }
   };
 
   if (loading) {
@@ -128,6 +171,7 @@ const Settings = () => {
                             </Dialog.Title>
                             <Dialog.Close className="ml-3 flex h-7 items-center">
                               <button
+                                onClick={() => reset()}
                                 type="button"
                                 className="relative inline-flex h-8 w-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
                               >
@@ -173,7 +217,7 @@ const Settings = () => {
                               <label className="mb-1 block text-sm font-medium leading-6 text-foreground/90">
                                 Avatar
                               </label>
-                              <UploadImage />
+                              <UploadImage onChangeImage={setAvatarImage} />
                             </div>
 
                             {/* PASSWORD */}
@@ -190,9 +234,14 @@ const Settings = () => {
                                 id="old_password"
                                 type="password"
                                 placeholder="Enter your old password"
+                                failure={error}
                               />
                               <Input
                                 label="New Password"
+                                rules={{
+                                  pattern:
+                                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                                }}
                                 register={register}
                                 errors={errors}
                                 style="h-9"
@@ -216,6 +265,7 @@ const Settings = () => {
                           </button>
                           <Dialog.Close>
                             <button
+                              onClick={() => reset()}
                               type="button"
                               className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
                             >

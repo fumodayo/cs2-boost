@@ -23,7 +23,7 @@ const IDVerification = () => {
       {/* VERIFY */}
       {!currentUser?.is_verified && (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-1 lg:col-start-3 lg:row-end-1 lg:grid-cols-1">
-          <div className="rank-gradient grad-league-of-legends-silver -mx-4 border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+          <div className="rank-gradient grad-league-of-legends-silver -mx-4 border border-border/50 bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
             <div className="flex w-full items-center px-4 py-6 sm:px-6">
               <img
                 src="https://cdn.gameboost.com/static/features/verified-icon.webp"

@@ -6,10 +6,9 @@ export const ROLE = {
 
 export const ORDER_STATUS = {
   PENDING: "pending",
-  PROCESSING: "processing",
+  IN_ACTIVE: "in active",
   IN_PROGRESS: "in progress",
   COMPLETED: "completed",
-  IN_ACTIVE: "in active",
 };
 
 export const IP_STATUS = {

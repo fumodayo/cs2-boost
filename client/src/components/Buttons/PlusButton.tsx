@@ -9,7 +9,6 @@ import { FaPlus, FaCheck } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { ListOfGame } from "../../constants";
 
-
 interface PlusButtonProps {
   name: string;
   options: ListOfGame[];
@@ -76,7 +75,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({
         </button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content className="z-50 w-[200px] rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-none">
+        <Popover.Content className="z-50 w-[200px] rounded-md border border-border/50 bg-popover p-0 text-popover-foreground shadow-md outline-none">
           <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground">
             {/* SEARCH */}
             <div className="flex items-center border-b px-3">

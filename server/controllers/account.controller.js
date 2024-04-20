@@ -35,3 +35,28 @@ export const createAccount = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * EDIT ACCOUNT
+ */
+export const editAccount = async (req, res, next) => {
+  try {
+    const { account_id, username, password, backup_code } = req.body;
+
+    await Account.findByIdAndUpdate(
+      account_id,
+      {
+        $set: {
+          username: username,
+          password: password,
+          backup_code: backup_code,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json("Account updated successfully");
+  } catch (error) {
+    next(error);
+  }
+};

@@ -32,13 +32,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       default:
-        "https://lh3.googleusercontent.com/ogw/AF2bZyieFPjFR8czkbCUMbZMA7xvXviWzpPKBimyXYUnKQ=s32-c-mo",
+        "https://cdn.discordapp.com/attachments/851097191477149706/1229335965797978144/unnamed.jpg?ex=662f4f56&is=661cda56&hm=e1640a6016897c7528b4cef920a284d3791b800ad45a549ac2a1aca31531950e&",
     },
     user_id: { type: String, required: true, unique: true },
     role: {
-      type: String,
+      type: [String],
       enum: ROLE,
-      default: ROLE.CLIENT,
+      default: [ROLE.CLIENT],
     },
     is_verified: {
       type: Boolean,

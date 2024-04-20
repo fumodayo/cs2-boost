@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 
+import uploadRouter from "./routes/upload.route.js";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import orderRouter from "./routes/order.route.js";
@@ -22,6 +23,8 @@ const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 dotenv.config();
 
+connectToMongoDB();
+
 let endpointSecret = process.env.ENDPOINT_SECRET_KEY;
 /**
  * IF CHECKOUT COMPLETED
@@ -33,6 +36,7 @@ app.post(
   "/webhook",
   bodyParser.raw({ type: "application/json" }),
   async (request, response) => {
+    console.log("Received webhook request");
     const sig = request.headers["stripe-signature"];
 
     let data;
@@ -64,6 +68,7 @@ app.post(
         .retrieve(data.customer)
         .then(async (customer) => {
           const orderId = customer.metadata.order_id;
+          console.log("id", orderId);
           const newOrder = await Order.findByIdAndUpdate(
             orderId,
             {
@@ -105,6 +110,7 @@ app.use(express.json());
 
 app.use(cookieParser());
 
+app.use("/api/upload", uploadRouter);
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/order", orderRouter);
@@ -123,6 +129,5 @@ app.use((err, req, res, next) => {
 });
 
 server.listen("3000", () => {
-  connectToMongoDB();
   console.log(`listening on ${3000}`);
 });

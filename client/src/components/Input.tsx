@@ -68,6 +68,9 @@ const Input: React.FC<InputProps> = ({
             errors[id] ? "ring-red-500" : "ring-field-ring",
             errors[id] ? "focus:ring-red-500" : "focus:ring-field-ring-hover",
             errors[id] ? "hover:ring-red-500" : "hover:ring-field-ring-hover",
+            failure ? "ring-red-500" : "ring-field-ring",
+            failure ? "focus:ring-red-500" : "focus:ring-field-ring-hover",
+            failure ? "hover:ring-red-500" : "hover:ring-field-ring-hover",
           )}
           autoFocus={autoFocused}
         />

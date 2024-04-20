@@ -24,26 +24,54 @@ export const getUser = async (req, res, next) => {
 
 // UPDATE USER
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id) {
-    return next(errorHandler(401, "You can update only your account"));
-  }
   try {
-    if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    const { id } = req.user;
+    const { username, profile_picture, old_password, new_password } = req.body;
+
+    if (id !== req.params.id) {
+      return next(errorHandler(401, "You can update only your account"));
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          profilePicture: req.body.profilePicture,
-        },
-      },
-      { new: true }
-    );
+    let updatedUser;
+
+    if (old_password || new_password) {
+      const validUser = await User.findById(id);
+      if (!validUser) {
+        return next(errorHandler(404, "User not found"));
+      }
+
+      const validPassword = await bcryptjs.compare(
+        old_password,
+        validUser.password
+      );
+      if (!validPassword) {
+        return next(errorHandler(401, "Wrong old password"));
+      }
+
+      if (new_password) {
+        const hashedPassword = await bcryptjs.hash(new_password, 10);
+        updatedUser = await User.findByIdAndUpdate(
+          id,
+          { $set: { password: hashedPassword } },
+          { new: true }
+        );
+      }
+    } else {
+      const updateFields = {};
+      if (username) updateFields.username = username;
+      if (profile_picture) updateFields.profile_picture = profile_picture;
+
+      updatedUser = await User.findByIdAndUpdate(
+        id,
+        { $set: updateFields },
+        { new: true }
+      );
+    }
+
+    if (!updatedUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
@@ -80,7 +108,7 @@ export const deleteUser = async (req, res, next) => {
  * VERIFICATION USER
  * 1. CHECK EXISTS USER IN DATABASE
  * 2. PUSH CCCD INFORMATION INTO USER
- * 3. CHANGE USER ROLE: CLIENT -> BOOSTER
+ * 3. CHANGE USER ROLE: ['CLIENT'] -> ['CLIENT','BOOSTER']
  */
 export const verificationUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
@@ -101,8 +129,10 @@ export const verificationUser = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
-        $set: {
+        $addToSet: {
           role: ROLE.BOOSTER,
+        },
+        $set: {
           is_verified: true,
           addresses: addresses,
           cccd_number: cccd_number,

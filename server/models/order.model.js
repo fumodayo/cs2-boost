@@ -3,6 +3,12 @@ import { ORDER_STATUS } from "../constants/index.js";
 
 const orderSchema = new mongoose.Schema(
   {
+    image: {
+      type: String,
+      required: true,
+      default:
+        "https://cdn.discordapp.com/attachments/884628037558206494/1229371962464141353/logo.png?ex=662f70dc&is=661cfbdc&hm=f7d0682286303f7bbfdffe0ab97c4a14691322e66f97ecbd7e61fa42a0857769&",
+    },
     boost_id: { type: String, required: true, unique: true },
     title: { type: String, required: true },
     game: { type: String, required: true },

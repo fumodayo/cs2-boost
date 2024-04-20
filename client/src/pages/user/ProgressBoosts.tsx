@@ -75,7 +75,7 @@ const WidgetBoost: React.FC<WidgetBoostProps> = ({
   onStatusKey,
 }) => {
   return (
-    <div className="-mx-4 my-4 min-w-[200px] border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+    <div className="-mx-4 my-4 min-w-[200px] border border-border/50 bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
       <div className="px-4 py-6 sm:px-6">
         <dt className="text-sm font-medium leading-6 text-muted-foreground">
           {title}

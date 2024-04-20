@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { IP_STATUS } from "../constants/index.js";
 
+const expiryTime = 60 * 60 * 1000; // 1 hour
+
 /*
  * SIGNUP
  * 1. CHECK EXISTS USER IN DATABASE
@@ -36,15 +38,22 @@ export const signup = async (req, res, next) => {
 
     const validUser = await newUser.save();
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: validUser._id, ip: ip, role: validUser.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
     const { password: userPassword, ...rest } = validUser._doc;
 
-    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+    const expiryDate = new Date(Date.now() + expiryTime);
 
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(201)
-      .json(rest);
+      .json({ user: rest, access_token: token });
   } catch (error) {
     next(error);
   }
@@ -88,15 +97,21 @@ export const signin = async (req, res, next) => {
 
     await validUser.save(); // Save the updated user
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    const { password: hashedPassword, ...rest } = validUser._doc;
+    const token = jwt.sign(
+      { id: validUser._id, ip: ip, role: validUser.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
-    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+    const expiryDate = new Date(Date.now() + expiryTime);
+    const { password: hashedPassword, ...rest } = validUser._doc;
 
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
-      .json(rest);
+      .json({ user: rest, access_token: token });
   } catch (error) {
     next(error);
   }
@@ -142,10 +157,16 @@ export const google = async (req, res, next) => {
 
       await user.save();
 
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: user._id, ip: ip, role: user.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
 
       const { password: hashedPassword, ...rest } = user._doc;
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+      const expiryDate = new Date(Date.now() + expiryTime);
 
       res
         .cookie("access_token", token, {
@@ -153,7 +174,7 @@ export const google = async (req, res, next) => {
           expires: expiryDate,
         })
         .status(200)
-        .json(rest);
+        .json({ user: rest, access_token: token });
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -180,9 +201,16 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: newUser._id, ip: ip, role: newUser.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      const expiryDate = new Date(Date.now() + expiryTime); // 1 hour
       const { password: hashedPassword2, ...rest } = newUser._doc;
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
 
       res
         .cookie("access_token", token, {
@@ -190,7 +218,7 @@ export const google = async (req, res, next) => {
           expires: expiryDate,
         })
         .status(200)
-        .json(rest);
+        .json({ user: rest, access_token: token });
     }
   } catch (error) {
     next(errorHandler(500, "Server Error"));
@@ -203,10 +231,9 @@ export const google = async (req, res, next) => {
  * 2. FIND IP AND UPDATE IP STATUS: ONLINE -> OFFLINE
  * 3. CLEAR COOKIE
  */
-export const signout = async (req, res) => {
+export const signout = async (req, res, next) => {
   try {
-    const { ip } = req.body;
-    const { id } = req.user;
+    const { ip, id } = req.body;
 
     const validUser = await User.findById(id);
     if (!validUser) return next(errorHandler(404, "User not found"));
@@ -219,6 +246,32 @@ export const signout = async (req, res) => {
 
     await validUser.save();
     res.clearCookie("access_token").status(200).json("Signout success");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutAll = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+
+    const validUser = await User.findById(id);
+    if (!validUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    validUser.ip_logger.forEach((ip) => {
+      ip.status = IP_STATUS.OFFLINE;
+    });
+
+    await validUser.save();
+
+    console.log(validUser);
+
+    return res
+      .clearCookie("access_token")
+      .status(200)
+      .json("Logout all devices success");
   } catch (error) {
     next(error);
   }

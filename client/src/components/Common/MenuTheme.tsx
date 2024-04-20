@@ -34,7 +34,7 @@ const MenuTheme = () => {
       <Popover.Content
         side="bottom"
         align="start"
-        className="backdrop-brightness-5 absolute z-50 min-w-[180px] translate-y-3 overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
+        className="backdrop-brightness-5 absolute z-50 min-w-[180px] translate-y-3 overflow-hidden rounded-md border border-border/50 bg-popover p-2 text-popover-foreground shadow-md ring-1 ring-white/10 backdrop-blur-lg"
       >
         <div className="min-w-[150px] flex-1 space-y-1">
           <div className="px-2 py-1.5 text-sm font-medium">

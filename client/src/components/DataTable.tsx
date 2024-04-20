@@ -201,7 +201,7 @@ const DataTable: React.FC<DataTableProps> = ({
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="backdrop-brightness-5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-[150px] min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
+            <DropdownMenu.Content className="z-50 w-[150px] min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
               <div className="px-2 py-1.5 text-sm font-medium">
                 Toggle columns
               </div>
@@ -224,7 +224,7 @@ const DataTable: React.FC<DataTableProps> = ({
         </DropdownMenu.Root>
       </div>
       {/* DATATABLE */}
-      <div className="-mx-4 border sm:-mx-6 lg:-mx-0 lg:rounded-md">
+      <div className="-mx-4 border border-border/50 sm:-mx-6 lg:-mx-0 lg:rounded-md">
         <div className="w-full overflow-auto">
           <table className="w-full caption-bottom text-sm">
             <thead className="overflow-clip [&_tr]:border-b">
@@ -456,7 +456,7 @@ const DataTable: React.FC<DataTableProps> = ({
                 </button>
               </Select.Trigger>
               <Select.Portal>
-                <Select.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md">
+                <Select.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover text-popover-foreground shadow-md">
                   <Select.Viewport>
                     <Select.Group>
                       {selectRowsPerPage.map((value) => (

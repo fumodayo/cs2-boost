@@ -1,5 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Home from "./pages/Home";
 import PrivateRoute from "./layouts/PrivateRoute";
 import LoginModal from "./components/Modals/LoginModal";
@@ -22,6 +25,7 @@ function App() {
   return (
     <BrowserRouter>
       <React.Suspense fallback={<div>Loading...</div>}>
+        <ToastContainer />
         <LoginModal />
         <SignUpModal />
         <Routes>

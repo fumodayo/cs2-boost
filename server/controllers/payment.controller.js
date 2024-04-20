@@ -22,7 +22,7 @@ export const paymentOrder = async (req, res, next) => {
           name: game,
           description: type,
         },
-        unit_amount: price,
+        unit_amount: currency === "usd" ? price * 100 : price,
       },
       quantity: 1,
     };

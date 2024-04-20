@@ -216,7 +216,7 @@ const General = () => {
         </div>
 
         {/* LOGIN SESSIONS */}
-        <div className="-mx-4 border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+        <div className="-mx-4 border border-border/50 bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
           <div className="flex flex-row items-center space-y-1.5 border-b border-border bg-muted/50 px-4 py-4 sm:rounded-t-xl sm:px-6">
             <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
               Login Sessions
