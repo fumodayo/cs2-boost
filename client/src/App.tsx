@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,8 +37,11 @@ function App() {
             <Route path="level-farming" element={<FarmExp />} />
           </Route>
           <Route element={<PrivateRoute />}>
-            <Route path="dashboard">
-              <Route index element={<Boosts />} />
+            <Route path="/dashboard">
+              <Route
+                index
+                element={<Navigate to="/dashboard/boosts" replace />}
+              />
               <Route path="boosts" element={<Boosts />} />
               <Route path="boosts/:id" element={<BoostId />} />
               <Route path="progress-boosts" element={<ProgressBoosts />} />

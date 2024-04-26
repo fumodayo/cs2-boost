@@ -2,21 +2,13 @@ import { IconType } from "react-icons";
 import {
   FaArrowDownWideShort,
   FaArrowUpWideShort,
-  FaChevronDown,
   FaCheck,
   FaRegEyeSlash,
   FaCircleCheck,
 } from "react-icons/fa6";
-import {
-  HiChevronLeft,
-  HiChevronRight,
-  HiOutlineChevronDoubleLeft,
-  HiOutlineChevronDoubleRight,
-} from "react-icons/hi";
 import { PiArrowsDownUp, PiSlidersHorizontal } from "react-icons/pi";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import * as Select from "@radix-ui/react-select";
 import { formatDistance } from "date-fns";
 import { enUS, vi } from "date-fns/locale";
 import { useState } from "react";
@@ -42,21 +34,13 @@ type ToggleColumnProps = {
 type HeaderProps = {
   title: string;
   value: string;
+  onSortKey: (value: string) => void;
   onHideColumn: (value: string) => void;
-};
-
-type NavigationButtonProps = {
-  icon: IconType;
-  value: string | number;
-};
-
-type NumberButtonProps = {
-  value: number;
-  active?: boolean;
 };
 
 interface DataTableProps {
   headers: { name: string; value: string; active: boolean }[];
+  onSortKey: (value: string) => void;
   items: Order[];
   children: React.ReactNode;
   name?: string;
@@ -78,7 +62,12 @@ const ServiceButton: React.FC<ServiceButtonProps> = ({
   );
 };
 
-const Header: React.FC<HeaderProps> = ({ title, value, onHideColumn }) => {
+const Header: React.FC<HeaderProps> = ({
+  title,
+  value,
+  onHideColumn,
+  onSortKey,
+}) => {
   return (
     <th
       className={`h-10 bg-card-surface px-2.5 text-left align-middle font-medium text-muted-foreground first:rounded-tl-md first:pl-4 last:rounded-tr-md [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]`}
@@ -95,12 +84,12 @@ const Header: React.FC<HeaderProps> = ({ title, value, onHideColumn }) => {
             <DropdownMenu.Content className="backdrop-brightness-5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
               <ServiceButton
                 value="asc"
-                onClick={() => {}}
+                onClick={() => onSortKey(value)}
                 icon={FaArrowUpWideShort}
               />
               <ServiceButton
                 value="desc"
-                onClick={() => {}}
+                onClick={() => onSortKey(`-${value}`)}
                 icon={FaArrowDownWideShort}
               />
               <Separator />
@@ -117,61 +106,14 @@ const Header: React.FC<HeaderProps> = ({ title, value, onHideColumn }) => {
   );
 };
 
-const navigationLeft: NavigationButtonProps[] = [
-  {
-    icon: HiOutlineChevronDoubleLeft,
-    value: "first",
-  },
-  {
-    icon: HiChevronLeft,
-    value: "back",
-  },
-];
-
-const navigationRight: NavigationButtonProps[] = [
-  {
-    icon: HiChevronRight,
-    value: "next",
-  },
-  {
-    icon: HiOutlineChevronDoubleRight,
-    value: "end",
-  },
-];
-
-const ArrowButton: React.FC<NavigationButtonProps> = ({
-  icon: Icon,
-  value,
-}) => {
-  return (
-    <button className="inline-flex h-10 w-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 sm:flex-grow-0">
-      {Icon && <Icon />}
-    </button>
-  );
-};
-
-const NumberButton: React.FC<NumberButtonProps> = ({ value, active }) => {
-  return (
-    <button
-      className={
-        active
-          ? "inline-flex h-10 flex-grow items-center justify-center rounded-md bg-primary p-0 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 sm:w-10 sm:flex-grow-0"
-          : "inline-flex h-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0  text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50  sm:w-10  sm:flex-grow-0"
-      }
-    >
-      {value}
-    </button>
-  );
-};
-
 const DataTable: React.FC<DataTableProps> = ({
   headers,
   items,
   children,
   name,
+  onSortKey,
 }) => {
   const { i18n } = useTranslation();
-  const selectRowsPerPage = ["15", "20", "30", "40", "50"];
 
   const [columnVisibility, setColumnVisibility] =
     useState<ToggleColumnProps[]>(headers);
@@ -188,7 +130,7 @@ const DataTable: React.FC<DataTableProps> = ({
   );
 
   return (
-    <div className="mt-8 space-y-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         {/* SELECT */}
         {children}
@@ -234,6 +176,7 @@ const DataTable: React.FC<DataTableProps> = ({
                     title={name}
                     value={value}
                     onHideColumn={handleToggleColumn}
+                    onSortKey={onSortKey}
                   />
                 ))}
               </tr>
@@ -261,6 +204,7 @@ const DataTable: React.FC<DataTableProps> = ({
                     price,
                     currency,
                     booster,
+                    image,
                   }) => (
                     <tr className="border-b text-muted-foreground transition-colors hover:bg-muted/50">
                       {/* TITLE */}
@@ -272,9 +216,7 @@ const DataTable: React.FC<DataTableProps> = ({
                             <div className="flex items-center">
                               <div className="relative block h-8 w-8 shrink-0 rounded-lg text-sm">
                                 <img
-                                  src={
-                                    "https://cdn.gameboost.com/games/world-of-warcraft/logo/card.svg"
-                                  }
+                                  src={image}
                                   alt={title}
                                   className="h-full w-full rounded-lg object-cover"
                                 />
@@ -438,62 +380,6 @@ const DataTable: React.FC<DataTableProps> = ({
               )}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* NAVIGATION */}
-      <div className="flex items-center justify-center px-2 sm:justify-end">
-        <div className="flex flex-1 items-center justify-between gap-x-6 sm:flex-auto lg:gap-x-8">
-          <div className="hidden items-center space-x-2 sm:flex">
-            <p className="text-sm font-medium">Rows per page</p>
-            <Select.Root>
-              <Select.Trigger>
-                <button className="flex h-8 w-[70px] items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-                  <Select.Value placeholder="15" />
-                  <Select.Icon>
-                    <FaChevronDown className="h-4 w-4 opacity-50" />
-                  </Select.Icon>
-                </button>
-              </Select.Trigger>
-              <Select.Portal>
-                <Select.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover text-popover-foreground shadow-md">
-                  <Select.Viewport>
-                    <Select.Group>
-                      {selectRowsPerPage.map((value) => (
-                        <Select.Item
-                          className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground"
-                          value={value}
-                        >
-                          <Select.ItemIndicator className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-                            <FaCheck />
-                          </Select.ItemIndicator>
-                          <Select.ItemText className="w-1/3">
-                            {value}
-                          </Select.ItemText>
-                        </Select.Item>
-                      ))}
-                    </Select.Group>
-                  </Select.Viewport>
-                </Select.Content>
-              </Select.Portal>
-            </Select.Root>
-          </div>
-          <div className="hidden items-center justify-center text-sm font-medium sm:flex">
-            9 rows – Page 1 to 1
-          </div>
-          <nav className="w-full sm:w-auto">
-            <div className="flex w-full items-center gap-1">
-              {navigationLeft.map(({ icon, value }) => (
-                <ArrowButton icon={icon} value={value} />
-              ))}
-              <NumberButton value={1} />
-              <NumberButton value={2} active />
-              <NumberButton value={3} />
-              {navigationRight.map(({ icon, value }) => (
-                <ArrowButton icon={icon} value={value} />
-              ))}
-            </div>
-          </nav>
         </div>
       </div>
     </div>

@@ -53,22 +53,28 @@ const PlusButton: React.FC<PlusButtonProps> = ({
             <>
               <div className="mx-2 h-4 w-px shrink-0 bg-secondary" />
               <div className={clsx("hidden space-x-1", "lg:flex")}>
-                {selectedValues.map((selectedValue) => {
-                  const matchingOption = options.find(
-                    (option) => option.value === selectedValue,
-                  );
-                  return (
-                    <div
-                      key={selectedValue}
-                      className={clsx(
-                        "inline-flex items-center rounded-sm border border-transparent bg-secondary px-1 py-0.5 text-xs font-normal text-secondary-foreground transition-colors",
-                        "hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                      )}
-                    >
-                      {matchingOption ? matchingOption.label : selectedValue}
-                    </div>
-                  );
-                })}
+                {selectedValues.length >= 3 ? (
+                  <div className="inline-flex items-center rounded-sm border border-transparent bg-secondary px-1 py-0.5 text-xs font-normal text-secondary-foreground transition-colors">
+                    {selectedValues.length} selected
+                  </div>
+                ) : (
+                  selectedValues.map((selectedValue) => {
+                    const matchingOption = options.find(
+                      (option) => option.value === selectedValue,
+                    );
+                    return (
+                      <div
+                        key={selectedValue}
+                        className={clsx(
+                          "inline-flex items-center rounded-sm border border-transparent bg-secondary px-1 py-0.5 text-xs font-normal text-secondary-foreground transition-colors",
+                          "hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                        )}
+                      >
+                        {matchingOption ? matchingOption.label : selectedValue}
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </>
           )}

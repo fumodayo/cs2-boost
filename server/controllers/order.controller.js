@@ -10,8 +10,7 @@ import Conversation from "../models/conversation.model.js";
  */
 export const getAllOrder = async (req, res, next) => {
   const { id } = req.user;
-  const { searchKey, gameKey, statusKey } = req.query;
-
+  const { searchKey, gameKey, statusKey, sortKey } = req.query;
   let query = { user: id };
 
   if (searchKey) {
@@ -22,16 +21,37 @@ export const getAllOrder = async (req, res, next) => {
   }
 
   if (gameKey && gameKey.length > 0) {
-    query.game = { $in: gameKey };
+    const gameKeys = gameKey.split(",");
+    query.game = { $in: gameKeys };
   }
 
   if (statusKey && statusKey.length > 0) {
-    query.status = { $in: statusKey };
+    const statusKeys = statusKey.split(",");
+    query.status = { $in: statusKeys };
   }
 
   try {
+    let sortOption = { createdAt: -1 };
+    if (sortKey) {
+      if (sortKey.startsWith("-")) {
+        const field = sortKey.substring(1);
+        sortOption = { [field]: -1 };
+      } else {
+        sortOption = { [sortKey]: 1 };
+      }
+    }
+
+    console.log(req.query.page)
+
+    const pageSize = parseInt(req.query.pageSize) || 2;
+    const page = parseInt(req.query.page) || 1;
+
+    const countingPage = await Order.countDocuments(query);
+
     const orders = await Order.find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
+      .skip(pageSize * (page - 1))
+      .limit(pageSize)
       .populate({
         path: "user",
         select: "-password",
@@ -40,7 +60,10 @@ export const getAllOrder = async (req, res, next) => {
         path: "booster",
         select: "-password",
       });
-    res.status(200).json(orders);
+
+    const pages = Math.ceil(countingPage / pageSize);
+
+    res.status(200).json({ orders: orders, countingPage, page, pages });
   } catch (error) {
     next(error);
   }
