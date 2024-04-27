@@ -70,7 +70,7 @@ const Navigation: React.FC<NavigationProps> = ({
   onCurrentPage,
   onPerPage,
 }) => {
-  const selectRowsPerPage = ["15", "20", "30", "40", "50"];
+  const selectRowsPerPage = ["5", "10", "15", "20", "30"];
 
   if (!page || !pages) {
     return null;
@@ -81,15 +81,14 @@ const Navigation: React.FC<NavigationProps> = ({
   const endPage = Math.min(pages, startPage + numButtonsToShow - 1);
 
   const handlePageChange = (value: number) => {
-    if (value > 0) {
+    if (value > 0 && value <= pages) {
       onCurrentPage(Number(value));
     }
   };
 
   const handlePageSizeChange = (value: string) => {
-    if (Number(value) < pages) {
-      onPerPage(Number(value));
-    }
+    onPerPage(Number(value));
+    onCurrentPage(1);
   };
 
   return (

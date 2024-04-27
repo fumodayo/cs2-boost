@@ -41,11 +41,9 @@ export const getAllOrder = async (req, res, next) => {
       }
     }
 
-    console.log(req.query.page)
-
     const pageSize = parseInt(req.query.pageSize) || 2;
     const page = parseInt(req.query.page) || 1;
-
+    
     const countingPage = await Order.countDocuments(query);
 
     const orders = await Order.find(query)
