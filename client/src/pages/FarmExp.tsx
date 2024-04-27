@@ -1,15 +1,16 @@
 import { useContext, useMemo, useState } from "react";
-import Checkout from "../components/Checkout";
-import DefaultPage from "../components/Layouts/DefaultPage";
+import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
-import Info from "../components/Info";
-import { totalExp } from "../utils/totalExp";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";
 import Tooltip from "rc-tooltip";
+
+import { totalExp } from "../utils/totalExp";
+import Checkout from "../components/Checkout";
+import DefaultPage from "../components/Layouts/DefaultPage";
+import Info from "../components/Info";
 import { AppContext } from "../context/AppContext";
 import Board from "../components/Common/Board";
-import { useTranslation } from "react-i18next";
 
 type ExtraOption = {
   name: string;

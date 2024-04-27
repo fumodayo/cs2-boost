@@ -1,9 +1,11 @@
+import clsx from "clsx";
 import { useRef, useState } from "react";
 import QrScanner from "qr-scanner";
+import { useDispatch, useSelector } from "react-redux";
+
 import Persona from "./Icons/Persona";
 import VerificationCard from "./Icons/VerificationCard";
 import { User } from "../types";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import {
   updateUserFailure,
@@ -39,14 +41,20 @@ const QRComponent: React.FC<QRComponentProps> = ({
           <button
             type="button"
             onClick={handleConfirm}
-            className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            className={clsx(
+              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            )}
           >
             Use this photo
           </button>
         )}
         <button
           type="button"
-          className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-bold text-primary shadow-sm outline-none ring-2 ring-primary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+          className={clsx(
+            "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-bold text-primary shadow-sm outline-none ring-2 ring-primary-ring transition-colors",
+            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+          )}
           onClick={handleBack}
         >
           Retake photo
@@ -166,8 +174,11 @@ const ReadQR = () => {
         >
           <Persona />
           <button
-            className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
             type="button"
+            className={clsx(
+              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            )}
             onClick={handleBegin}
           >
             Begin verifying
@@ -184,7 +195,10 @@ const ReadQR = () => {
           </div>
           <button
             type="button"
-            className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            className={clsx(
+              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+            )}
             onClick={handleClick}
           >
             Upload a photo

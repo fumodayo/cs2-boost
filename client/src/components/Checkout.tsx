@@ -1,20 +1,23 @@
+import clsx from "clsx";
 import { useContext, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+
 import { GoClockFill } from "react-icons/go";
 import { RxGlobe } from "react-icons/rx";
 import { GiDiamondHard, GiBroadsword } from "react-icons/gi";
 import { LuSwords } from "react-icons/lu";
-import { useTranslation } from "react-i18next";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Input from "./Input";
-import { AppContext } from "../context/AppContext";
-import { useExchangeMoney } from "../hooks/useExchangeMoney";
-import { useDispatch, useSelector } from "react-redux";
-import { addCartStart, addCartSuccess } from "../redux/cart/cartSlice";
-import { useNavigate } from "react-router-dom";
-import { formatMoney } from "../utils/formatMoney";
+
 import { RootState } from "../redux/store";
+import { formatMoney } from "../utils/formatMoney";
 import { Order } from "../types";
 import { listOfCountries, rankOptions } from "../constants";
+import { AppContext } from "../context/AppContext";
+import { useExchangeMoney } from "../hooks/useExchangeMoney";
+import { addCartStart, addCartSuccess } from "../redux/cart/cartSlice";
+import Input from "./Input";
 
 type ExtraOption = {
   name: string;
@@ -179,7 +182,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   };
 
   return (
-    <div className="gap-5 lg:col-span-2 xl:col-span-2">
+    <div className={clsx("gap-5", "lg:col-span-2 xl:col-span-2")}>
       <div className="w-full max-w-[540px] rounded-lg bg-card p-6 shadow">
         <p className="text-center text-lg font-semibold text-foreground">
           {t("Checkout")}
@@ -340,7 +343,11 @@ const Checkout: React.FC<CheckoutProps> = ({
             <button
               type="submit"
               onClick={handleSubmit(onSubmit)}
-              className="relative ml-1 inline-flex h-9 items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-8"
+              className={clsx(
+                "relative ml-1 inline-flex h-9 items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                "sm:h-8",
+              )}
             >
               {t("Apply")}
             </button>
@@ -360,7 +367,10 @@ const Checkout: React.FC<CheckoutProps> = ({
         {server ? (
           <button
             onClick={handleCreateOrder}
-            className="text-md mt-4 w-full rounded-md bg-blue-600 py-2 font-semibold text-foreground hover:bg-blue-700"
+            className={clsx(
+              "text-md mt-4 w-full rounded-md bg-blue-600 py-2 font-semibold text-foreground",
+              "hover:bg-blue-700",
+            )}
           >
             {t("Buy Now")} →
           </button>

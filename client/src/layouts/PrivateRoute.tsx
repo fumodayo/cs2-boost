@@ -7,6 +7,8 @@ import { parseJwt } from "../utils/formatJwt";
 export default function PrivateRoute() {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
+  const isClient = currentUser?.role?.includes("client") || undefined;
+
   const dispatch = useDispatch();
   const token = localStorage.getItem("access_token");
 
@@ -19,5 +21,5 @@ export default function PrivateRoute() {
     }
   }
 
-  return currentUser ? <Outlet /> : <Navigate to="/" />;
+  return isClient ? <Outlet /> : <Navigate to="/" />;
 }

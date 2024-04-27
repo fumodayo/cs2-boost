@@ -41,7 +41,7 @@ export const getAllOrder = async (req, res, next) => {
       }
     }
 
-    const pageSize = parseInt(req.query.pageSize) || 2;
+    const pageSize = parseInt(req.query.pageSize) || 5;
     const page = parseInt(req.query.page) || 1;
     
     const countingPage = await Order.countDocuments(query);

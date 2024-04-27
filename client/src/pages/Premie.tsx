@@ -1,17 +1,18 @@
+import { useTranslation } from "react-i18next";
 import { useContext, useMemo, useState } from "react";
 import Slider from "rc-slider";
+import Tooltip from "rc-tooltip";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";
-import DefaultPage from "../components/Layouts/DefaultPage";
-import Checkout from "../components/Checkout";
+
 import { totalTimeOfPremie } from "../utils/totalTimeOfPremie";
 import { totalCostOfPremie } from "../utils/totalCostOfPremie";
+import { AppContext } from "../context/AppContext";
+import DefaultPage from "../components/Layouts/DefaultPage";
+import Checkout from "../components/Checkout";
 import ChooseServer from "../components/ChooseServer";
 import Info from "../components/Info";
 import Board from "../components/Common/Board";
-import { AppContext } from "../context/AppContext";
-import Tooltip from "rc-tooltip";
-import { useTranslation } from "react-i18next";
 
 const markOfRanks = {
   1000: (

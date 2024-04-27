@@ -13,6 +13,13 @@ import { GiSamuraiHelmet } from "react-icons/gi";
 import { HiCog6Tooth } from "react-icons/hi2";
 import { BsGrid1X2Fill } from "react-icons/bs";
 import { MdOutlinePendingActions } from "react-icons/md";
+import {
+  FaDiscord,
+  FaFacebook,
+  FaGoogle,
+  FaSteam,
+  FaTwitch,
+} from "react-icons/fa";
 
 interface RankOption {
   name: string;
@@ -244,7 +251,30 @@ export interface ListOfService {
   icon: IconType;
 }
 
-export const listOfServices: ListOfService[] = [
+export const listOfServicesForUser: ListOfService[] = [
+  {
+    label: "Dashboard",
+    link: "",
+    icon: BsGrid1X2Fill,
+  },
+  {
+    label: "My Boosts",
+    link: "boosts",
+    icon: BsRocketTakeoffFill,
+  },
+  {
+    label: "Wallet",
+    link: "wallet",
+    icon: FaWallet,
+  },
+  {
+    label: "Settings",
+    link: "settings",
+    icon: HiCog6Tooth,
+  },
+];
+
+export const listOfServicesForBooster: ListOfService[] = [
   {
     label: "Dashboard",
     link: "",
@@ -279,5 +309,51 @@ export const listOfServices: ListOfService[] = [
     label: "Income",
     link: "income",
     icon: FaMoneyBillTrendUp,
+  },
+];
+
+export interface SocialMediaProps {
+  icon?: IconType;
+  title?: string;
+  subtitle?: string;
+  active?: boolean;
+  color?: string;
+}
+
+export const socailMedia: SocialMediaProps[] = [
+  {
+    icon: FaDiscord,
+    title: "Discord",
+    subtitle: "Login with Discord",
+    active: false,
+    color: "#5865f2",
+  },
+  {
+    icon: FaGoogle,
+    title: "Google",
+    subtitle: "Login with Google",
+    active: true,
+    color: "#ea4335",
+  },
+  {
+    icon: FaSteam,
+    title: "Steam",
+    subtitle: "Login with Steam",
+    active: false,
+    color: "#1348a3",
+  },
+  {
+    icon: FaFacebook,
+    title: "Facebook",
+    subtitle: "Login with Facebook",
+    active: false,
+    color: "#1877f2",
+  },
+  {
+    icon: FaTwitch,
+    title: "Twitch",
+    subtitle: "Login with Twitch",
+    active: false,
+    color: "#9146ff",
   },
 ];

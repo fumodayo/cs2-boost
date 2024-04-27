@@ -67,6 +67,7 @@ export interface Order {
 }
 
 export interface Account {
+  _id?: string;
   user_id?: string;
   username?: string;
   password?: string;

@@ -20,6 +20,8 @@ import NotFound from "./pages/NotFound";
 import PendingBoosts from "./pages/user/PendingBoosts";
 import Wallet from "./pages/user/Wallet";
 import Income from "./pages/user/Income";
+import BoosterRoute from "./layouts/BoosterRoute";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
         <SignUpModal />
         <Routes>
           <Route index element={<Home />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="counter-strike-2/*">
             <Route index element={<Game />} />
             <Route path="premier" element={<Premie />} />
@@ -44,11 +47,13 @@ function App() {
               />
               <Route path="boosts" element={<Boosts />} />
               <Route path="boosts/:id" element={<BoostId />} />
-              <Route path="progress-boosts" element={<ProgressBoosts />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="pending-boosts" element={<PendingBoosts />} />
+              <Route element={<BoosterRoute />}>
+                <Route path="progress-boosts" element={<ProgressBoosts />} />
+                <Route path="pending-boosts" element={<PendingBoosts />} />
+                <Route path="income" element={<Income />} />
+              </Route>
               <Route path="wallet" element={<Wallet />} />
-              <Route path="income" element={<Income />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="checkout/:id" element={<Checkout />} />
           </Route>

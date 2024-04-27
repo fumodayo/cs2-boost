@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 import { RootState } from "../../redux/store";
 import { Theme } from "../../types";
-import { listOfServices } from "../../constants";
+import {
+  listOfServicesForBooster,
+  listOfServicesForUser,
+} from "../../constants";
 import { formatJwt } from "../../utils/formatJwt";
 
 type AvatarItemProps = {
@@ -51,6 +54,10 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
 
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
+
+  const listOfservices = currentUser?.role?.includes("booster")
+    ? listOfServicesForBooster
+    : listOfServicesForUser;
 
   const handleThemeChange = (selected: Theme) => {
     setTheme(selected);
@@ -95,7 +102,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
           <Separator />
           <AvatarItem label="Dashboard" link="" icon={BsGrid1X2Fill} />
           <Separator />
-          {listOfServices
+          {listOfservices
             .filter((service) => service.label !== "Dashboard")
             .map(({ label, link, icon }) => (
               <AvatarItem key={label} label={label} link={link} icon={icon} />

@@ -13,7 +13,54 @@ import Avatar from "../Common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const sidebarItems = [
+const sidebarItemsForClient = [
+  {
+    title: "MAIN",
+    items: [
+      {
+        label: "Dashboard",
+        value: "dashboard",
+        icon: IoGrid,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ORDERS",
+    items: [
+      {
+        label: "My Boosts List",
+        value: "boosts",
+        icon: HiMiniRocketLaunch,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "BILLING",
+    items: [
+      {
+        label: "Wallet",
+        value: "wallet",
+        icon: FaWallet,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ACCOUNT",
+    items: [
+      {
+        label: "Settings",
+        value: "settings",
+        icon: BiSolidCog,
+        active: false,
+      },
+    ],
+  },
+];
+
+const sidebarItemsForBooster = [
   {
     title: "MAIN",
     items: [
@@ -82,11 +129,17 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
+  const listOfServices = currentUser?.role?.includes("booster")
+    ? sidebarItemsForBooster
+    : sidebarItemsForClient;
+
   const { pathname } = useLocation();
   const segments = pathname.split("/").filter(Boolean);
   const slug = segments.length > 1 ? segments.pop() : null;
 
-  const roleName = currentUser?.role?.find((role) => ["booster", "admin"].includes(role)) || "Client";
+  const roleName =
+    currentUser?.role?.find((role) => ["booster", "admin"].includes(role)) ||
+    "Client";
 
   return (
     <div
@@ -104,7 +157,7 @@ const Sidebar = () => {
       <div className="flex grow flex-col gap-y-5 overflow-y-auto px-4 py-4">
         <nav className="flex flex-1 flex-col">
           <ul className="flex flex-1 flex-col gap-y-7">
-            {sidebarItems.map(({ title, items }) => (
+            {listOfServices.map(({ title, items }) => (
               <li key={title}>
                 <h3 className="mb-2 px-2 text-xs font-medium uppercase tracking-wide text-card-alt-foreground">
                   {title}

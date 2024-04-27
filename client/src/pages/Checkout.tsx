@@ -1,15 +1,16 @@
 import { RadioGroup } from "@headlessui/react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import clsx from "clsx";
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
+
+import { useGetOrderById } from "../hooks/useGetOrderById";
+import { formatMoney } from "../utils/formatMoney";
 import RadioButton from "../components/Buttons/RadioButton";
 import Avatar from "../components/Common/Avatar";
 import Logo from "../components/Common/Logo";
 import Input from "../components/Input";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { formatMoney } from "../utils/formatMoney";
-import { useNavigate, useParams } from "react-router-dom";
-import { useGetOrderById } from "../hooks/useGetOrderById";
 
 const modeOfPayment = [
   {
@@ -94,8 +95,6 @@ const Checkout = () => {
   if (!order) {
     return null;
   }
-
-  console.log(order.end_exp);
 
   return (
     <main>

@@ -1,4 +1,5 @@
 import * as Select from "@radix-ui/react-select";
+import clsx from "clsx";
 import { IconType } from "react-icons";
 import { FaChevronDown } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
@@ -37,7 +38,11 @@ const ArrowButton: React.FC<NavigationButtonProps> = ({
   return (
     <button
       onClick={() => onClick(value)}
-      className="inline-flex h-10 w-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 sm:flex-grow-0"
+      className={clsx(
+        "inline-flex h-10 w-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0 text-sm font-medium shadow-sm transition-colors",
+        "hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        "sm:flex-grow-0",
+      )}
     >
       {Icon && <Icon />}
     </button>
@@ -92,8 +97,18 @@ const Navigation: React.FC<NavigationProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center px-2 sm:justify-end">
-      <div className="flex flex-1 items-center justify-between gap-x-6 sm:flex-auto lg:gap-x-8">
+    <div
+      className={clsx(
+        "flex items-center justify-center px-2",
+        "sm:justify-end",
+      )}
+    >
+      <div
+        className={clsx(
+          "flex flex-1 items-center justify-between gap-x-6",
+          "sm:flex-auto lg:gap-x-8",
+        )}
+      >
         <div className="hidden items-center space-x-2 sm:flex">
           <p className="text-sm font-medium">Rows per page</p>
           <Select.Root onValueChange={(value) => handlePageSizeChange(value)}>

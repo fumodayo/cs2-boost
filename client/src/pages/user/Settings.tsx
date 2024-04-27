@@ -1,31 +1,39 @@
-import { FaSave, FaUserEdit } from "react-icons/fa";
-import UserPage from "../../components/Layouts/UserPage";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import * as Tabs from "@radix-ui/react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { HiMiniRectangleStack } from "react-icons/hi2";
-import { FaPassport, FaXmark } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import General from "../../components/Settings/General";
-import IDVerification from "../../components/Settings/IDVerification";
 import * as Dialog from "@radix-ui/react-dialog";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Input from "../../components/Input";
-import { useGetUserById } from "../../hooks/useGetUserById";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import UploadImage from "../../components/UploadImage";
-import { toast } from "react-toastify";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
+import { HiMiniRectangleStack } from "react-icons/hi2";
+import { FaLink, FaPassport, FaXmark } from "react-icons/fa6";
+import { FaSave, FaUserEdit } from "react-icons/fa";
+
 import {
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
 } from "../../redux/user/userSlice";
+import { RootState } from "../../redux/store";
+import { useGetUserById } from "../../hooks/useGetUserById";
+import UserPage from "../../components/Layouts/UserPage";
+import General from "../../components/Settings/General";
+import IDVerification from "../../components/Settings/IDVerification";
+import UploadImage from "../../components/UploadImage";
+import Input from "../../components/Input";
+import ConnectedAccounts from "../../components/Settings/ConnectedAccounts";
 
 const tabHeaders = [
   {
     label: "General",
     value: "general",
     icon: HiMiniRectangleStack,
+  },
+  {
+    label: "Connected Accounts",
+    value: "connected-accounts",
+    icon: FaLink,
   },
   {
     label: "ID Verification",
@@ -301,6 +309,9 @@ const Settings = () => {
               </Tabs.List>
               <Tabs.Content value="general">
                 <General />
+              </Tabs.Content>
+              <Tabs.Content value="connected-accounts">
+                <ConnectedAccounts />
               </Tabs.Content>
               <Tabs.Content value="id-verification">
                 <IDVerification />

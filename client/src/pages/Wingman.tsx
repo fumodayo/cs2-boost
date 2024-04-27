@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { totalTimeOfWingman } from "../utils/totalTimeOfWingman";
+import { totalCostOfWingman } from "../utils/totalCostOfWingman";
 import ChooseServer from "../components/ChooseServer";
 import DefaultPage from "../components/Layouts/DefaultPage";
 import Checkout from "../components/Checkout";
 import ChooseRank from "../components/WingMan/ChooseRank";
 import Info from "../components/Info";
-import { totalTimeOfWingman } from "../utils/totalTimeOfWingman";
-import { totalCostOfWingman } from "../utils/totalCostOfWingman";
 import Board from "../components/Common/Board";
-import { useTranslation } from "react-i18next";
 
 type ExtraOption = {
   name: string;

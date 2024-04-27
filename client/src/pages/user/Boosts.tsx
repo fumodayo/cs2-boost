@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import queryString from "query-string";
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -102,18 +103,31 @@ const Boosts = () => {
     <UserPage>
       <div className="container">
         <div className="flex flex-wrap items-center justify-between gap-y-4">
-          <div className="min-w-fit flex-1 flex-grow md:min-w-0">
+          <div className={clsx("min-w-fit flex-1 flex-grow", "md:min-w-0")}>
             <div className="flex flex-wrap items-center gap-y-4">
               <div className="sm:truncate">
-                <h1 className="font-display text-3xl font-semibold text-foreground sm:truncate sm:tracking-tight">
+                <h1
+                  className={clsx(
+                    "font-display text-3xl font-semibold text-foreground",
+                    "sm:truncate sm:tracking-tight",
+                  )}
+                >
                   My Boosts List
                 </h1>
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-end gap-2 sm:justify-normal md:ml-4 md:mt-0">
+          <div
+            className={clsx(
+              "flex items-center justify-end gap-2",
+              "sm:justify-normal md:ml-4 md:mt-0",
+            )}
+          >
             <a
-              className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              className={clsx(
+                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+                "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+              )}
               href="/"
             >
               <FaRocket className="mr-2" />
@@ -135,7 +149,11 @@ const Boosts = () => {
                 <input
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
-                  className="flex h-8 w-[150px] rounded-md border border-input bg-card-alt px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 lg:w-[250px]"
+                  className={clsx(
+                    "flex h-8 w-[150px] rounded-md border border-input bg-card-alt px-3 py-1 text-sm shadow-sm transition-colors",
+                    "file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                    "lg:w-[250px]",
+                  )}
                   placeholder="Search..."
                   type="text"
                 />
@@ -163,7 +181,11 @@ const Boosts = () => {
                 <button
                   onClick={resetFilters}
                   type="button"
-                  className="relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 lg:px-3"
+                  className={clsx(
+                    "relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
+                    "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                    "lg:px-3",
+                  )}
                 >
                   Reset
                   <IoMdClose className="ml-2" />

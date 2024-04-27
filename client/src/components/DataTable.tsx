@@ -75,13 +75,13 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center justify-start space-x-2">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button className="data-[state=open]:group-state-open data-[state=open]:group-state-open group group -ml-3 inline-flex h-8 flex-shrink-0 items-center justify-center gap-x-2 rounded-md px-3 text-xs font-medium uppercase tracking-wide transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50  data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
+            <button className="-ml-3 inline-flex h-8 flex-shrink-0 items-center justify-center gap-x-2 rounded-md px-3 text-xs font-medium uppercase tracking-wide transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
               <span>{title}</span>
               <PiArrowsDownUp className="fa-regular text-base opacity-0 group-hover:opacity-100" />
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="backdrop-brightness-5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
+            <DropdownMenu.Content className="z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
               <ServiceButton
                 value="asc"
                 onClick={() => onSortKey(value)}
@@ -137,7 +137,7 @@ const DataTable: React.FC<DataTableProps> = ({
         {/* TOGGLE */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button className="ml-auto  hidden  h-8 items-center justify-center rounded-md border border-input bg-transparent px-3 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 lg:flex">
+            <button className="ml-auto hidden  h-8 items-center justify-center rounded-md border border-input bg-transparent px-3 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 lg:flex">
               <PiSlidersHorizontal className="mr-2" />
               View
             </button>

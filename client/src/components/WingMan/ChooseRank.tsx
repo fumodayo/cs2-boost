@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import { RadioGroup } from "@headlessui/react";
-import Tooltip from "../Tooltip";
 import { useTranslation } from "react-i18next";
+
+import Tooltip from "../Tooltip";
 import { rankOptions } from "../../constants";
 
 interface ChooseRankProps {
@@ -20,10 +22,26 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
   const selectedRank = rankOptions.find((item) => item.value === rank);
 
   return (
-    <div className="-mx-4 border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl sm:shadow-md">
-      <div className="bg-rank-gradient grad-league-of-legends-master flex flex-col space-y-1.5 border-b border-border px-4 py-6 sm:rounded-t-xl sm:px-6">
+    <div
+      className={clsx(
+        "-mx-4 border bg-card text-card-foreground shadow-sm",
+        "sm:mx-0 sm:rounded-xl sm:shadow-md",
+      )}
+    >
+      <div
+        className={clsx(
+          "bg-rank-gradient grad-league-of-legends-master flex flex-col space-y-1.5 border-b border-border px-4 py-6",
+          "sm:rounded-t-xl sm:px-6",
+        )}
+      >
         <div className="flex items-center gap-x-4">
-          <div className="dark:bg-night-input-bg flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border p-3 text-white shadow-sm sm:h-20 sm:w-20">
+          <div
+            className={clsx(
+              "dark:bg-night-input-bg",
+              "flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border p-3 text-white shadow-sm",
+              "sm:h-20 sm:w-20",
+            )}
+          >
             {selectedRank && (
               <img
                 src={`/src/assets/counter-strike-2/wingman/${selectedRank.image}.png`}
@@ -53,7 +71,10 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
           {rankOptions.map((item) => (
             <Tooltip key={item.name} content={item.name}>
               <RadioGroup.Option
-                className="max-w-[80px] flex-grow sm:max-w-none sm:flex-grow-0"
+                className={clsx(
+                  "max-w-[80px] flex-grow",
+                  "sm:max-w-none sm:flex-grow-0",
+                )}
                 value={item.value}
               >
                 {({ checked }) => (

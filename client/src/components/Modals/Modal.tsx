@@ -11,23 +11,8 @@ import {
 } from "../../redux/user/userSlice";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
-import { IconType } from "react-icons";
-import {
-  FaDiscord,
-  FaFacebook,
-  FaGoogle,
-  FaSteam,
-  FaTwitch,
-} from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-
-type SocialServiceProps = {
-  icon?: IconType;
-  title?: string;
-  subtitle?: string;
-  active?: boolean;
-  color?: string;
-};
+import { SocialMediaProps, socailMedia } from "../../constants";
 
 interface ModalProps {
   isOpen: boolean;
@@ -38,45 +23,7 @@ interface ModalProps {
   text?: string;
 }
 
-const socialMedia: SocialServiceProps[] = [
-  {
-    icon: FaDiscord,
-    title: "Discord",
-    subtitle: "Login with Discord",
-    active: false,
-    color: "#5865f2",
-  },
-  {
-    icon: FaGoogle,
-    title: "Google",
-    subtitle: "Login with Google",
-    active: true,
-    color: "#ea4335",
-  },
-  {
-    icon: FaSteam,
-    title: "Steam",
-    subtitle: "Login with Steam",
-    active: false,
-    color: "#1348a3",
-  },
-  {
-    icon: FaFacebook,
-    title: "Facebook",
-    subtitle: "Login with Facebook",
-    active: false,
-    color: "#1877f2",
-  },
-  {
-    icon: FaTwitch,
-    title: "Twitch",
-    subtitle: "Login with Twitch",
-    active: false,
-    color: "#9146ff",
-  },
-];
-
-const SocialService: React.FC<SocialServiceProps> = ({
+const SocialService: React.FC<SocialMediaProps> = ({
   icon: Icon,
   subtitle,
   color,
@@ -143,7 +90,7 @@ const SocialService: React.FC<SocialServiceProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       className={clsx(
         "relative inline-flex flex-1 cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-        !active && "opacity-50 pointer-events-none"
+        !active && "pointer-events-none opacity-50",
       )}
       style={{
         ...dynamicStyles,
@@ -179,7 +126,8 @@ const Modal: React.FC<ModalProps> = ({
       <div
         className={clsx(
           "scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
-          "focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
+          "focus:outline-none",
+          "sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
         )}
       >
         <div className="flex w-full overflow-hidden rounded-lg bg-card">
@@ -214,7 +162,7 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 >
                   {/* SOCIAL */}
-                  {socialMedia.map(({ icon, subtitle, color, active }) => (
+                  {socailMedia.map(({ icon, subtitle, color, active }) => (
                     <SocialService
                       key={subtitle}
                       icon={icon}

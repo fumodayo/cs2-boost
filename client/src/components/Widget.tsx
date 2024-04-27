@@ -1,8 +1,9 @@
+import clsx from "clsx";
 import { FaCheck } from "react-icons/fa6";
-import Copy from "./Common/Copy";
 import { Order, User } from "../types";
 import { formatMoney } from "../utils/formatMoney";
 import { rankOptions } from "../constants";
+import Copy from "./Common/Copy";
 
 interface WidgetProps {
   titleHeader: string;
@@ -55,25 +56,43 @@ const Widget: React.FC<WidgetProps> = ({
   const selectedEndRank = rankOptions.find((item) => item.value === end_rank);
 
   return (
-    <div className="-mx-4 border border-border/50 bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+    <div
+      className={clsx(
+        "-mx-4 border border-border/50 bg-card text-card-foreground shadow-sm",
+        "sm:mx-0 sm:rounded-xl",
+      )}
+    >
       {/* HEADER */}
-      <div className="flex flex-col space-y-1.5 border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
+      <div
+        className={clsx(
+          "flex flex-col space-y-1.5 border-b border-border bg-muted/50 px-4 py-6",
+          "sm:rounded-t-xl sm:px-6",
+        )}
+      >
         <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
           {titleHeader}
         </h3>
       </div>
       {/* CONTENT */}
       <div className="px-0 pt-0 sm:px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-3">
+        <div className={clsx("grid grid-cols-2", "lg:grid-cols-3")}>
           {headers?.map((header, idx) => (
             <div
               key={idx}
-              className="border-t border-border/50 px-4 py-6 sm:col-span-1 sm:px-0"
+              className={clsx(
+                "border-t border-border/50 px-4 py-6",
+                "sm:col-span-1 sm:px-0",
+              )}
             >
               <dt className="text-sm font-medium capitalize text-foreground">
                 {header}
               </dt>
-              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+              <dd
+                className={clsx(
+                  "mt-1 text-sm leading-6 text-muted-foreground",
+                  "sm:col-span-2 sm:mt-0",
+                )}
+              >
                 <div className="flex items-center gap-x-2">
                   {header === "server" && <span>{server}</span>}
                   {header === "start rating" && <span>{start_rating}</span>}
@@ -156,14 +175,27 @@ const Widget: React.FC<WidgetProps> = ({
           {boostOptions?.map((option, idx) => (
             <div
               key={idx}
-              className="col-span-3 border-t border-border/50 px-4 py-6 sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0"
+              className={clsx(
+                "col-span-3 border-t border-border/50 px-4 py-6",
+                "sm:col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0",
+              )}
             >
               <dt className="text-sm font-medium capitalize text-foreground">
                 {option}
               </dt>
-              <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+              <dd
+                className={clsx(
+                  "mt-1 text-sm leading-6 text-muted-foreground",
+                  "sm:col-span-2 sm:mt-0",
+                )}
+              >
                 <span className="flex items-center">
-                  <FaCheck className="mr-1 text-green-600 dark:text-green-500" />
+                  <FaCheck
+                    className={clsx(
+                      "mr-1 text-green-600",
+                      "dark:text-green-500",
+                    )}
+                  />
                   Yes
                 </span>
               </dd>

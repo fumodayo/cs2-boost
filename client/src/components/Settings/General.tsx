@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
 import {
   FaDesktop,
   FaEye,
@@ -9,15 +8,16 @@ import {
   FaTrashCan,
   FaXmark,
 } from "react-icons/fa6";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
+import { RootState } from "../../redux/store";
+import { signOut } from "../../redux/user/userSlice";
+import { formatJwt } from "../../utils/formatJwt";
+import Circle from "../Icons/Circle";
 import Widget from "../Widget";
 import Input from "../Input";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "../../redux/user/userSlice";
-import { useState } from "react";
-import { formatJwt } from "../../utils/formatJwt";
 
 const headers = ["username", "user ID", "email address", "address"];
 
@@ -171,7 +171,7 @@ const General = () => {
                       Enter your username to confirm the deletion of your
                       account.
                     </div>
-                    <span className="font-mono mb-4 inline-flex w-full items-center rounded-md bg-secondary-light px-4 py-3 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
+                    <span className="mb-4 inline-flex w-full items-center rounded-md bg-secondary-light px-4 py-3 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
                       {currentUser?.username}
                     </span>
                     <Input
@@ -203,7 +203,10 @@ const General = () => {
                     <Dialog.Close asChild>
                       <button
                         type="button"
-                        className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                        className={clsx(
+                          "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                          "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                        )}
                       >
                         Cancel
                       </button>
@@ -216,15 +219,28 @@ const General = () => {
         </div>
 
         {/* LOGIN SESSIONS */}
-        <div className="-mx-4 border border-border/50 bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
-          <div className="flex flex-row items-center space-y-1.5 border-b border-border bg-muted/50 px-4 py-4 sm:rounded-t-xl sm:px-6">
+        <div
+          className={clsx(
+            "-mx-4 border border-border/50 bg-card text-card-foreground shadow-sm",
+            "sm:mx-0 sm:rounded-xl",
+          )}
+        >
+          <div
+            className={clsx(
+              "flex flex-row items-center space-y-1.5 border-b border-border bg-muted/50 px-4 py-4",
+              "sm:rounded-t-xl sm:px-6",
+            )}
+          >
             <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
               Login Sessions
             </h3>
             <div className="ml-auto flex items-center gap-x-1.5">
               <button
                 onClick={handleShowIPs}
-                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                className={clsx(
+                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
+                  "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                )}
               >
                 {showIps ? (
                   <>
@@ -241,7 +257,10 @@ const General = () => {
               <button
                 type="button"
                 onClick={handleLogoutAllDevices}
-                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger-light px-2 py-1.5 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                className={clsx(
+                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger-light px-2 py-1.5 text-xs font-medium text-danger-light-foreground outline-none transition-colors",
+                  "hover:bg-danger-light-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                )}
               >
                 <FaXmark className="mr-2" /> Logout All Devices
               </button>
@@ -252,30 +271,44 @@ const General = () => {
               currentUser.ip_logger &&
               currentUser.ip_logger.map((user) => (
                 <ul className="divide-y divide-border rounded-md">
-                  <li className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 leading-6 sm:px-0">
+                  <li
+                    className={clsx(
+                      "flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 leading-6",
+                      "sm:px-0",
+                    )}
+                  >
                     <div className="flex min-w-[150px] flex-1 items-center">
                       <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border p-3 shadow-sm">
                         <FaDesktop className="text-xl text-foreground/90" />
                       </div>
                       <div className="ml-4 flex min-w-0 flex-1 flex-col">
-                        <span className="font-display items-center truncate font-medium sm:flex">
+                        <span
+                          className={clsx(
+                            "font-display items-center truncate font-medium",
+                            "sm:flex",
+                          )}
+                        >
                           {user.country}
                           <span className="px-0.5 text-muted-foreground sm:px-1.5">
                             .
                           </span>
                           {user.city}
-                          <span className="font-sans ml-1 inline-flex items-center rounded-md bg-primary-light px-2 py-1 text-xs font-medium capitalize text-primary-light-foreground ring-1 ring-inset ring-primary-ring sm:ml-2">
-                            <svg
-                              className="-ml-0.5 mr-1.5 h-2 w-2"
-                              fill="currentColor"
-                              viewBox="0 0 8 8"
-                            >
-                              <circle cx="4" cy="4" r="3"></circle>
-                            </svg>
+                          <span
+                            className={clsx(
+                              "ml-1 inline-flex items-center rounded-md bg-primary-light px-2 py-1 text-xs font-medium capitalize text-primary-light-foreground ring-1 ring-inset ring-primary-ring",
+                              "sm:ml-2",
+                            )}
+                          >
+                            <Circle />
                             {user.status}
                           </span>
                         </span>
-                        <span className="flex-shrink-0 items-center gap-x-1.5 truncate text-sm text-muted-foreground sm:flex">
+                        <span
+                          className={clsx(
+                            "flex-shrink-0 items-center gap-x-1.5 truncate text-sm text-muted-foreground",
+                            "sm:flex",
+                          )}
+                        >
                           <span className="text-muted-foreground">·</span> 9
                           seconds ago
                         </span>
