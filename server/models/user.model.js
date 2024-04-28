@@ -12,6 +12,13 @@ const IPLoggerSchema = new mongoose.Schema({
   },
 });
 
+const SocialMediaSchema = new mongoose.Schema({
+  type: { type: String, required: true },
+  username: String,
+  code: String,
+  link: String,
+});
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -69,6 +76,7 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     ip_logger: [IPLoggerSchema],
+    social_media: [SocialMediaSchema],
   },
   { timestamps: true }
 );

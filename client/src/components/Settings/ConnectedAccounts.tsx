@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { SocialMediaProps, socailMedia } from "../../constants";
 import { FaArrowUpRightFromSquare, FaCheck, FaXmark } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
@@ -7,24 +7,85 @@ import clsx from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import Input from "../Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { toast } from "react-toastify";
+import { updateUserSuccess } from "../../redux/user/userSlice";
+import { ListSocialMedia } from "../../types";
+
+const hasConnectedSocialMedia = (
+  listSocialMedia?: ListSocialMedia[],
+  title?: string,
+) => {
+  if (listSocialMedia && title) {
+    return listSocialMedia.find((social) => social.type === title);
+  }
+  return false;
+};
 
 const SocailWidget: React.FC<SocialMediaProps> = ({
   icon: Icon,
   title,
-  subtitle,
   color,
 }) => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  console.log("user", currentUser);
+  const [openModal, setOpenModal] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
-    defaultValues: {},
+    defaultValues: {
+      link: "",
+      username: null,
+      password: "",
+      code: null,
+    },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
-    console.log("form", form);
+    const res = await fetch(
+      `/api/user/connect-social-media/${currentUser?._id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: title,
+          ...form,
+        }),
+      },
+    );
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("That bai");
+      return;
+    }
+    dispatch(updateUserSuccess(data));
+    toast.success("Tao thanh cong");
+    setOpenModal(false);
+    reset();
   };
+
+  const regexInputLink = useMemo(() => {
+    switch (title) {
+      case "Google":
+        return /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/;
+      case "Steam":
+        return /(?:https?:\/\/)?steamcommunity\.com\/(?:profiles|id)\/[a-zA-Z0-9]+/;
+      case "Facebook":
+        return /(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w-]*)?/;
+      case "Twitch":
+        return /(?:https?:\/\/)?twitch\.tv\/[a-zA-Z0-9]+/;
+      default:
+        return /[a-zA-Z0-9]/;
+    }
+  }, [title]);
 
   return (
     <div className="flex w-full items-center justify-between border-t border-border/50 px-4 py-6 sm:col-span-1 sm:px-0">
@@ -40,21 +101,35 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
             {title}
           </div>
           <div className="truncate text-xs text-muted-foreground">
-            {/* Connect your {title} account  */}
-            Connected
+            {hasConnectedSocialMedia(currentUser?.social_media, title)
+              ? "Connected"
+              : `Connect your ${title} account Connected`}
           </div>
         </div>
       </div>
       <div className="flex items-center gap-x-2">
-        <Dialog.Root>
+        <Dialog.Root
+          open={openModal}
+          onOpenChange={(value) => setOpenModal(value)}
+        >
           <Dialog.Trigger>
-            <button
-              type="button"
-              className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-            >
-              <RiLinksFill />
-              Connect
-            </button>
+            {hasConnectedSocialMedia(currentUser?.social_media, title) ? (
+              <button
+                type="button"
+                className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              >
+                <IoMdSettings />
+                Edit
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              >
+                <RiLinksFill />
+                Connect
+              </button>
+            )}
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-40 bg-background/80" />
@@ -75,7 +150,7 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                 <div className="flex items-center gap-3">
                   <div>
                     <div
-                      className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-sm text-white ring-2 ring-red-500/30"
+                      className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-sm text-white ring-2"
                       style={{ backgroundColor: color }}
                     >
                       {Icon && <Icon className="text-[18px] text-white" />}
@@ -113,8 +188,8 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                     register={register}
                     errors={errors}
                     style="h-9"
-                    id="link"
-                    placeholder="# 1120"
+                    id="code"
+                    placeholder="code"
                     required
                   />
                 </div>
@@ -128,7 +203,7 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                     id="link"
                     placeholder={`${title} link`}
                     rules={{
-                      pattern: /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/,
+                      pattern: regexInputLink,
                     }}
                     required
                   />
@@ -167,13 +242,6 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog.Root>
-        {/* <button
-          type="button"
-          className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-        >
-          <IoMdSettings />
-          Edit
-        </button> */}
       </div>
     </div>
   );
@@ -194,7 +262,6 @@ const ConnectedAccounts = () => {
               key={subtitle}
               icon={icon}
               title={title}
-              subtitle={subtitle}
               color={color}
             />
           ))}

@@ -9,6 +9,13 @@ interface IPLogger {
   status?: string;
 }
 
+export interface ListSocialMedia {
+  type: string;
+  username?: string;
+  code?: string;
+  link?: string;
+}
+
 export interface User {
   _id?: string;
   username?: string;
@@ -18,6 +25,7 @@ export interface User {
   is_verified?: boolean;
   role?: string[];
   ip_logger?: IPLogger[];
+  social_media?: ListSocialMedia[];
 
   // VERIFICATION
   addresses?: string;

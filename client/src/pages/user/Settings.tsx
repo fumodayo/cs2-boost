@@ -134,7 +134,7 @@ const Settings = () => {
                     <div className="relative">
                       <div className="relative block h-12 w-12 shrink-0 rounded-full text-xl sm:h-16 sm:w-16">
                         <img
-                          src="https://cdn.gameboost.com/users/19918/avatar/AAcHTtdFRpMwux-WHt9RoMHs81i8OXPo9eQNI82d1caCUqQLRjU=s96-c.jpeg"
+                          src={currentUser?.profile_picture}
                           className="h-full w-full rounded-full object-cover"
                         />
                         <span className="absolute bottom-0 right-0 block h-3.5 w-3.5 rounded-full bg-green-400 ring-2 ring-card" />

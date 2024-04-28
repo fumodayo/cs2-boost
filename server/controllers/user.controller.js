@@ -151,3 +151,47 @@ export const verificationUser = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * CONNECT SOCAIL MEDIA
+ */
+export const connectSocialMediaUser = async (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(401, "You can verify only your account"));
+  }
+
+  try {
+    const { type, link, username, code } = req.body;
+    console.log(type, link, username, code);
+
+    const validUser = await User.findById(req.params.id);
+
+    if (!validUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const existingSocial = validUser.social_media.find(
+      (social) => social.type === type
+    );
+
+    if (existingSocial) {
+      existingSocial.link = link;
+      existingSocial.username = username;
+      existingSocial.code = code;
+    } else {
+      validUser.social_media.push({
+        type: type,
+        link: link,
+        username: username,
+        code: code,
+      });
+    }
+
+    const updatedUser = await validUser.save();
+    const { password, ...rest } = updatedUser._doc;
+
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
