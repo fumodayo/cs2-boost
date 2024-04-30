@@ -129,12 +129,10 @@ const General = () => {
                 </button>
               </Dialog.Trigger>
               <Dialog.Portal>
-                <Dialog.Overlay className="fixed inset-0 z-40 bg-background/80" />
+                <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
                 <Dialog.Content
                   className={clsx(
-                    "min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all",
-                    "focus:outline-none ",
-                    "sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
+                    "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
                   )}
                 >
                   {/* HEADER */}

@@ -225,7 +225,7 @@ const Checkout = () => {
                 <RadioGroup
                   value={mode}
                   onChange={(value) => setMode(value)}
-                  className="mt-2 flex flex-wrap gap-2"
+                  className="mt-2 flex flex-col gap-2 xl:flex-wrap"
                 >
                   {modeOfPayment.map((item) => (
                     <RadioGroup.Option
@@ -233,10 +233,10 @@ const Checkout = () => {
                       value={item.value}
                       disabled={!item.available}
                       className={({ checked }) =>
-                        `${
+                        `relative flex w-full min-w-[80px] flex-grow cursor-pointer justify-between rounded-lg focus:outline-none sm:max-w-none sm:flex-grow-0 ${
                           checked
-                            ? "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio-hover px-6 py-4 text-start shadow-sm focus:outline-none sm:max-w-none sm:flex-grow-0"
-                            : "relative flex w-full max-w-[80px] flex-grow cursor-pointer justify-between rounded-lg bg-radio/50 px-6 py-4 text-start hover:bg-radio focus:outline-none sm:max-w-none sm:flex-grow-0"
+                            ? "bg-radio-hover px-6 py-4 text-start shadow-sm"
+                            : "bg-radio/50 px-6 py-4 text-start hover:bg-radio"
                         } ${
                           item.available ? "" : "pointer-events-none opacity-40"
                         }`

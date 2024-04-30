@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { SocialMediaProps, socailMedia } from "../../constants";
+import React, { useEffect, useMemo, useState } from "react";
+import { SocialMediaProps, socialMedia } from "../../constants";
 import { FaArrowUpRightFromSquare, FaCheck, FaXmark } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { IoMdSettings } from "react-icons/io";
@@ -30,22 +30,33 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
 }) => {
   const { currentUser } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  console.log("user", currentUser);
   const [openModal, setOpenModal] = useState(false);
+
+  const socialMediaType = currentUser?.social_media?.find(
+    (social) => social.type === title,
+  );
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<FieldValues>({
     defaultValues: {
-      link: "",
-      username: null,
-      password: "",
-      code: null,
+      link: socialMediaType?.link,
+      username: socialMediaType?.username,
+      code: socialMediaType?.code,
     },
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue("link", socialMediaType?.link || "");
+      setValue("username", socialMediaType?.username || "");
+      setValue("code", socialMediaType?.code || "");
+    }
+  }, [currentUser, setValue, socialMediaType]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     const res = await fetch(
@@ -180,6 +191,9 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                     errors={errors}
                     style="h-9"
                     id="username"
+                    rules={{
+                      maxLength: 24,
+                    }}
                     placeholder="username"
                     required
                   />
@@ -189,6 +203,7 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                     errors={errors}
                     style="h-9"
                     id="code"
+                    rules={{ pattern: /^[0-9]+$/, maxLength: 24 }}
                     placeholder="code"
                     required
                   />
@@ -257,7 +272,7 @@ const ConnectedAccounts = () => {
       </div>
       <div className="px-0 pt-0 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-1">
-          {socailMedia.map(({ icon, title, subtitle, color }) => (
+          {socialMedia.map(({ icon, title, subtitle, color }) => (
             <SocailWidget
               key={subtitle}
               icon={icon}

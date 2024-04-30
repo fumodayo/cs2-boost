@@ -1,20 +1,41 @@
 import UserPage from "../components/Layouts/UserPage";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { IconType } from "react-icons";
 import clsx from "clsx";
 import Widget from "../components/Widget";
-import { RiLinksFill } from "react-icons/ri";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
-import { SocialMediaProps, socailMedia } from "../constants";
+import { socialMedia } from "../constants";
+import { useParams } from "react-router-dom";
+import { useGetBoosterById } from "../hooks/useGetBoosterById";
 
-const headers = ["username", "user ID", "email address", "address"];
+const headers = ["username", "gender"];
 
-const SocailWidget: React.FC<SocialMediaProps> = ({
+interface SocialWidgetProps {
+  icon: IconType;
+  title: string;
+  color: string;
+  link: string;
+  type: string;
+  username: string;
+  code: string;
+}
+
+const SocialWidget: React.FC<SocialWidgetProps> = ({
   icon: Icon,
   title,
-  subtitle,
   color,
+  link,
+  type,
+  username,
+  code,
 }) => {
+  const handleClick = () => {
+    if (title === "Google") {
+      window.location.href = `mailto:${link}`;
+    } else {
+      window.location.href = link || "";
+    }
+  };
+
   return (
     <div className="flex w-full items-center justify-between border-t border-border/50 px-4 py-6 sm:col-span-1 sm:px-0">
       <div className="flex items-center">
@@ -26,26 +47,59 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
         </div>
         <div className="ml-2.5 truncate">
           <div className="truncate text-sm font-medium text-foreground">
-            {title}
+            {type}
           </div>
-          <div className="truncate text-xs text-muted-foreground">
-            Connect your {title} account
-          </div>
+          {title === "Discord" ? (
+            <div className="truncate text-xs text-muted-foreground">
+              {username} #{code}
+            </div>
+          ) : (
+            <div className="truncate text-xs text-muted-foreground">{link}</div>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-x-2">
-        <a className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
-          {/* <RiLinksFill /> */}
-          <FaArrowUpRightFromSquare />
-          View
-        </a>
+        {title === "Discord" ? null : (
+          <button
+            className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            onClick={handleClick}
+          >
+            <FaArrowUpRightFromSquare />
+            View
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
 const Profile = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { id } = useParams();
+  //662eff1b72e3d218cecabf46
+  const currentBooster = useGetBoosterById("662eff1b72e3d218cecabf46");
+
+  if (!currentBooster) {
+    return null;
+  }
+
+  const socialMediaTypes = socialMedia
+    .map((social) => {
+      const transformedSocial = currentBooster?.social_media?.find(
+        (media) => media.type === social.title,
+      );
+      if (transformedSocial) {
+        return {
+          icon: social.icon,
+          title: social.title,
+          color: social.color,
+          link: transformedSocial.link,
+          username: transformedSocial.username,
+          code: transformedSocial.code,
+        };
+      }
+      return null;
+    })
+    .filter((item) => item !== null);
 
   return (
     <UserPage>
@@ -59,7 +113,7 @@ const Profile = () => {
                   <div className="relative">
                     <div className="relative block h-12 w-12 shrink-0 rounded-full text-xl sm:h-16 sm:w-16">
                       <img
-                        src="https://cdn.gameboost.com/users/19918/avatar/AAcHTtdFRpMwux-WHt9RoMHs81i8OXPo9eQNI82d1caCUqQLRjU=s96-c.jpeg"
+                        src={currentBooster.profile_picture}
                         className="h-full w-full rounded-full object-cover"
                       />
                       <span className="absolute bottom-0 right-0 block h-3.5 w-3.5 rounded-full bg-green-400 ring-2 ring-card" />
@@ -68,11 +122,13 @@ const Profile = () => {
                 </div>
                 <div className="pt-1.5 sm:truncate">
                   <h1 className="font-display flex flex-wrap items-center text-3xl font-semibold text-foreground sm:truncate sm:tracking-tight">
-                    {currentUser?.username}
+                    {currentBooster?.username}
                   </h1>
                   <p className="text-sm font-medium text-muted-foreground sm:truncate">
                     <div className="inline-flex flex-wrap items-center gap-1">
-                      <div className="lowercase">@{currentUser?.username}</div>
+                      <div className="lowercase">
+                        @{currentBooster?.username}
+                      </div>
                       <span> ⸱ </span>
                       <div>9 boosts</div>
                       <span> ⸱ </span>
@@ -94,7 +150,7 @@ const Profile = () => {
             <Widget
               titleHeader="User Information"
               headers={headers}
-              boostItem={currentUser}
+              boostItem={currentBooster}
             />
           </div>
 
@@ -106,15 +162,20 @@ const Profile = () => {
             </div>
             <div className="px-0 pt-0 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-1">
-                {socailMedia.map(({ icon, title, subtitle, color }) => (
-                  <SocailWidget
-                    key={subtitle}
-                    icon={icon}
-                    title={title}
-                    subtitle={subtitle}
-                    color={color}
-                  />
-                ))}
+                {socialMediaTypes.map(
+                  ({ icon, title, color, link, username, code }) => (
+                    <SocialWidget
+                      key={title}
+                      icon={icon}
+                      title={title}
+                      color={color}
+                      link={link}
+                      type={title}
+                      username={username}
+                      code={code}
+                    />
+                  ),
+                )}
               </div>
             </div>
           </div>

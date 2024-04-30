@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import MiniSidebar from "./MiniSidebar";
 import Services from "../Home/Services";
+import { FaChevronLeft } from "react-icons/fa6";
 
 const serviceItems = [
   {
@@ -32,6 +33,8 @@ interface DefaultPageProps {
 }
 
 const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
@@ -85,6 +88,16 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                 <div className="lg:col-start-2 lg:col-end-4">
                   <div className="mx-auto max-w-[1400px]">
                     <div className="max-w-screen-lg">
+                      {/* BACK BUTTON */}
+                      <nav className="sm:hidden">
+                        <button
+                          type="button"
+                          onClick={() => navigate(-1)}
+                          className="flex items-baseline text-sm font-medium text-muted-foreground hover:text-foreground"
+                        >
+                          <FaChevronLeft className="mr-1 text-xs" /> Back
+                        </button>
+                      </nav>
                       {/* NAVIGATION */}
                       <nav className="hidden sm:flex">
                         <ol className="flex items-center gap-x-2">

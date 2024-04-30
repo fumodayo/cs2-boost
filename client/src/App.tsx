@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,17 +22,20 @@ import Wallet from "./pages/user/Wallet";
 import Income from "./pages/user/Income";
 import BoosterRoute from "./layouts/BoosterRoute";
 import Profile from "./pages/Profile";
+import Loading from "./pages/Loading";
+import { AppContext } from "./context/AppContext";
 
 function App() {
+  const { theme } = useContext(AppContext);
+
   return (
     <BrowserRouter>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <ToastContainer />
+      <React.Suspense fallback={<Loading />}>
+        <ToastContainer theme={theme} />
         <LoginModal />
         <SignUpModal />
         <Routes>
           <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
           <Route path="counter-strike-2/*">
             <Route index element={<Game />} />
             <Route path="premier" element={<Premie />} />
@@ -40,6 +43,7 @@ function App() {
             <Route path="level-farming" element={<FarmExp />} />
           </Route>
           <Route element={<PrivateRoute />}>
+            <Route path="profile/:id" element={<Profile />} />
             <Route path="/dashboard">
               <Route
                 index

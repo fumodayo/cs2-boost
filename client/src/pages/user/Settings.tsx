@@ -23,6 +23,7 @@ import IDVerification from "../../components/Settings/IDVerification";
 import UploadImage from "../../components/UploadImage";
 import Input from "../../components/Input";
 import ConnectedAccounts from "../../components/Settings/ConnectedAccounts";
+import Loading from "../Loading";
 
 const tabHeaders = [
   {
@@ -118,7 +119,7 @@ const Settings = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

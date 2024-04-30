@@ -320,7 +320,7 @@ export interface SocialMediaProps {
   color?: string;
 }
 
-export const socailMedia: SocialMediaProps[] = [
+export const socialMedia: SocialMediaProps[] = [
   {
     icon: FaDiscord,
     title: "Discord",

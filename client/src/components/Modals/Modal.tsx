@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { AppContext } from "../../context/AppContext";
@@ -12,7 +12,7 @@ import {
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";
-import { SocialMediaProps, socailMedia } from "../../constants";
+import { SocialMediaProps, socialMedia } from "../../constants";
 
 interface ModalProps {
   isOpen: boolean;
@@ -117,6 +117,23 @@ const Modal: React.FC<ModalProps> = ({
     }, 300);
   }, [onClose]);
 
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const modal = document.getElementById("modal");
+      if (modal && !modal.contains(e.target as Node)) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen, handleClose]);
+
   if (!isOpen) {
     return null;
   }
@@ -124,6 +141,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 z-40 bg-background/80">
       <div
+        id="modal"
         className={clsx(
           "scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
           "focus:outline-none",
@@ -162,7 +180,7 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 >
                   {/* SOCIAL */}
-                  {socailMedia.map(({ icon, subtitle, color, active }) => (
+                  {socialMedia.map(({ icon, subtitle, color, active }) => (
                     <SocialService
                       key={subtitle}
                       icon={icon}

@@ -80,10 +80,15 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="backdrop-brightness-5 z-50 w-72 min-w-[8rem] overflow-visible rounded-md border border-border/50 bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 backdrop-blur-lg">
+        <DropdownMenu.Content
+          side="bottom"
+          align="end"
+          sideOffset={10}
+          className="backdrop-brightness-5 z-50 w-72 min-w-[8rem] overflow-visible rounded-md border border-border bg-popover/30 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+        >
           <div className="flex items-center gap-x-3 px-2 py-2 text-sm font-medium">
             <div className="relative block h-10 w-10 shrink-0 rounded-lg text-base">
               <img
@@ -120,7 +125,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
               <FaChevronRight className="ml-auto text-muted-foreground" />
             </DropdownMenu.SubTrigger>
             <DropdownMenu.Portal>
-              <DropdownMenu.SubContent className="z-50 w-48 min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover p-1 text-popover-foreground shadow-lg">
+              <DropdownMenu.SubContent className="z-50 w-48 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
                 <DropdownMenu.Item
                   className={`relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground ${
                     theme === "dark" && "bg-accent"

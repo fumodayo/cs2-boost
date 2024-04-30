@@ -121,7 +121,13 @@ const Navigation: React.FC<NavigationProps> = ({
               </button>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover text-popover-foreground shadow-md">
+              <Select.Content
+                side="top"
+                align="end"
+                sideOffset={10}
+                alignOffset={10}
+                className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-border/50 bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+              >
                 <Select.Viewport>
                   <Select.Group>
                     {selectRowsPerPage.map((value) => (

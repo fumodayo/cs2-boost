@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = ({
   style,
   label,
   failure,
-  autoFocused
+  autoFocused,
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -92,12 +92,12 @@ const Input: React.FC<InputProps> = ({
             {placeholder} không được để trống
           </p>
         )}
-        {id === "password" && error?.type === "minLength" && (
+        {id === "password" || error?.type === "minLength" && (
           <p className="mt-1 text-sm text-red-400">
             {placeholder} chứa ít nhất 8 ký tự
           </p>
         )}
-        {id === "password" && error?.type === "maxLength" && (
+        {id === "password" || error?.type === "maxLength" && (
           <p className="mt-1 text-sm text-red-400">
             {placeholder} không được dài hơn 24 ký tự
           </p>
