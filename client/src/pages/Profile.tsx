@@ -6,6 +6,7 @@ import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { socialMedia } from "../constants";
 import { useParams } from "react-router-dom";
 import { useGetBoosterById } from "../hooks/useGetBoosterById";
+import Loading from "./Loading";
 
 const headers = ["username", "gender"];
 
@@ -75,11 +76,10 @@ const SocialWidget: React.FC<SocialWidgetProps> = ({
 
 const Profile = () => {
   const { id } = useParams();
-  //662eff1b72e3d218cecabf46
-  const currentBooster = useGetBoosterById("662eff1b72e3d218cecabf46");
+  const currentBooster = useGetBoosterById(id);
 
   if (!currentBooster) {
-    return null;
+    return <Loading />;
   }
 
   const socialMediaTypes = socialMedia

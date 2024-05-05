@@ -22,6 +22,7 @@ export const useSendMessage = () => {
       const backup = [...messages, data];
 
       dispatch(pushMessages(backup));
+      console.log(data);
     } catch (error) {
       console.error(error);
     } finally {

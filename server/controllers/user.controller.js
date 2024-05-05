@@ -27,7 +27,9 @@ export const getUser = async (req, res, next) => {
  */
 export const getBooster = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findOne({ user_id: req.params.id }).select(
+      "-password"
+    );
     res.status(200).json(user);
   } catch (error) {
     next(error);

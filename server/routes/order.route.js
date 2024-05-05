@@ -1,6 +1,8 @@
 import express from "express";
 import {
   acceptOrder,
+  cancelOrder,
+  completedOrder,
   createOrder,
   getAllOrder,
   getOrder,
@@ -17,5 +19,7 @@ router.get("/progress-order", verifyToken, getProgressOrder);
 router.get("/:id", verifyToken, getOrder);
 router.post("/create-order", verifyToken, createOrder);
 router.post("/accept-order/:id", verifyToken, acceptOrder);
+router.post("/complete-order/:id", verifyToken, completedOrder);
+router.post("/cancel-order/:id", verifyToken, cancelOrder);
 
 export default router;

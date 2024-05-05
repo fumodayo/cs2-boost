@@ -12,6 +12,7 @@ export const useGetMessages = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+
     const getMessages = async () => {
       setLoading(true);
       try {

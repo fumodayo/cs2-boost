@@ -13,6 +13,7 @@ import { GiSamuraiHelmet } from "react-icons/gi";
 import { BiSolidCog } from "react-icons/bi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaMoneyBillTrendUp, FaWallet } from "react-icons/fa6";
+import Notifications from "../Common/Notifications";
 
 const sidebarItemsForClient = [
   {
@@ -151,8 +152,8 @@ const MiniNavbar = () => {
           </button>
         </Dialog.Trigger>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm">
-            <Dialog.Content className="fixed left-0 top-0 z-30 mx-auto h-[100dvh] w-full overflow-auto rounded-none bg-card-alt text-left shadow-xl outline-none transition-all focus:outline-none sm:max-w-sm sm:rounded-l-xl md:left-3 md:top-3 md:h-[calc(100svh-1.5rem)] md:rounded-xl">
+          <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80 backdrop-blur-sm">
+            <Dialog.Content className="data-[state=closed]:animate-slideover-close-left data-[state=open]:animate-slideover-show-left fixed left-0 top-0 z-40 mx-auto h-[100dvh] w-full overflow-auto rounded-none bg-card-alt text-left shadow-xl outline-none transition-all focus:outline-none sm:max-w-sm sm:rounded-l-xl md:left-3 md:top-3 md:h-[calc(100svh-1.5rem)] md:rounded-xl">
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between border-b border-border bg-card-surface px-4 py-4">
                   <Logo />
@@ -162,7 +163,7 @@ const MiniNavbar = () => {
                       className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
                     >
                       <span className="sr-only">Close</span>
-                      <FaXmark />
+                      <FaXmark className="text-3xl" />
                     </button>
                   </Dialog.Close>
                 </div>
@@ -219,6 +220,7 @@ const MiniNavbar = () => {
         </Dialog.Portal>
       </Dialog.Root>
       <Logo />
+      <Notifications />
       <Avatar>
         <button className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary">
           <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">

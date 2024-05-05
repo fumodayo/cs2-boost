@@ -359,6 +359,30 @@ $small: 640px;
   backdrop-filter: blur(16px);
 }
 
+.rc-slider-dot {
+  visibility: hidden !important;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem;
+
+  @media screen and (min-width: $small) {
+    padding: 1.5rem;
+  }
+
+  @media screen and (min-width: $medium) {
+    padding: 2rem;
+  }
+}
+
+@layer components {
+  .active-tab {
+    @apply bg-card text-foreground shadow-sm ring-border;
+  }
+}
+
 .scroll-custom {
   /* width */
   ::-webkit-scrollbar {
@@ -383,26 +407,3 @@ $small: 640px;
   }
 }
 
-.rc-slider-dot {
-  visibility: hidden !important;
-}
-
-.container {
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1rem;
-
-  @media screen and (min-width: $small) {
-    padding: 1.5rem;
-  }
-
-  @media screen and (min-width: $medium) {
-    padding: 2rem;
-  }
-}
-
-@layer components {
-  .active-tab {
-    @apply bg-card text-foreground shadow-sm ring-border;
-  }
-}

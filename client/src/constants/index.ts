@@ -312,6 +312,14 @@ export const listOfServicesForBooster: ListOfService[] = [
   },
 ];
 
+export const listOfServicesForAdmin: ListOfService[] = [
+  {
+    label: "Dashboard",
+    link: "",
+    icon: BsGrid1X2Fill,
+  },
+];
+
 export interface SocialMediaProps {
   icon?: IconType;
   title?: string;

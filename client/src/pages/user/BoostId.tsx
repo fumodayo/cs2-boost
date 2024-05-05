@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import * as Popover from "@radix-ui/react-popover";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { format } from "date-fns";
 
@@ -22,7 +22,12 @@ import { FaEdit } from "react-icons/fa";
 import { FaUsers, FaFingerprint, FaPlus } from "react-icons/fa6";
 
 import { formatMoney } from "../../utils/formatMoney";
-import { Account, Conversation as ConversationType, User } from "../../types";
+import {
+  Account,
+  Conversation as ConversationType,
+  Order,
+  User,
+} from "../../types";
 import { useGetOrderById } from "../../hooks/useGetOrderById";
 import { RootState } from "../../redux/store";
 import { selectedConversation } from "../../redux/conversation/conversationSlice";
@@ -31,9 +36,35 @@ import Conversation from "../../components/Messages/Conversation";
 import Copy from "../../components/Common/Copy";
 import Widget from "../../components/Widget";
 import Input from "../../components/Input";
+import { toast } from "react-toastify";
+import { HiCursorClick } from "react-icons/hi";
 
-const AccountWidget = ({ account }: { account: Account }) => {
-  const { username, password, backup_code, _id } = account;
+const AccountField = ({ label, value }: { label?: string; value?: string }) => {
+  return (
+    <div
+      className={clsx(
+        "border-t border-border/50 px-4 py-6",
+        "sm:col-span-3 sm:grid sm:grid-cols-3 sm:px-0",
+      )}
+    >
+      <dt className="text-sm font-medium capitalize text-foreground">
+        {label}
+      </dt>
+
+      <dd
+        className={clsx(
+          "mt-1 flex items-center gap-x-2 text-sm leading-6 text-muted-foreground",
+          "sm:col-span-2 sm:mt-0",
+        )}
+      >
+        {label === "password" ? "******" : value} <Copy text={value} />
+      </dd>
+    </div>
+  );
+};
+
+const AccountWidget = ({ order }: { order: Order }) => {
+  const { username, password, backup_code, _id } = order.account as Account;
 
   const {
     register,
@@ -64,36 +95,6 @@ const AccountWidget = ({ account }: { account: Account }) => {
     });
 
     location.reload();
-  };
-
-  const AccountField = ({
-    label,
-    value,
-  }: {
-    label?: string;
-    value?: string;
-  }) => {
-    return (
-      <div
-        className={clsx(
-          "border-t border-border/50 px-4 py-6",
-          "sm:col-span-3 sm:grid sm:grid-cols-3 sm:px-0",
-        )}
-      >
-        <dt className="text-sm font-medium capitalize text-foreground">
-          {label}
-        </dt>
-
-        <dd
-          className={clsx(
-            "mt-1 flex items-center gap-x-2 text-sm leading-6 text-muted-foreground",
-            "sm:col-span-2 sm:mt-0",
-          )}
-        >
-          {label === "password" ? "******" : value} <Copy text={value} />
-        </dd>
-      </div>
-    );
   };
 
   return (
@@ -185,17 +186,33 @@ const AccountWidget = ({ account }: { account: Account }) => {
                         )}
                       >
                         <img
-                          src="https://cdn.gameboost.com/games/world-of-warcraft/logo/icon.svg"
-                          alt="Arena 2v2, 0->1400, US"
+                          src={order.image}
+                          alt={order.title}
                           className="h-8 w-8"
                         />
                       </div>
                       <div className="ml-2.5 truncate">
                         <div className="text-sm font-medium text-foreground">
-                          Arena 2v2, 0-1400, US
+                          {order.title}
+                          {order.end_rating && (
+                            <>
+                              ({order.start_rating} → {order.end_rating})
+                            </>
+                          )}
+                          {order.end_exp && (
+                            <>
+                              ({order.start_exp} exp → {order.end_exp} exp)
+                            </>
+                          )}
+                          {order.start_rank && order.end_rank && (
+                            <>
+                              ({order.start_rank.replace("_", " ")} →{" "}
+                              {order.end_rank.replace("_", " ")})
+                            </>
+                          )}
                         </div>
                         <div className="truncate text-xs text-muted-foreground">
-                          Arena 2v2
+                          {order.type}
                         </div>
                       </div>
                     </div>
@@ -308,7 +325,7 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
                 )}
               >
                 <img
-                  src="https://cdn.gameboost.com/users/19918/avatar/AAcHTtdFRpMwux-WHt9RoMHs81i8OXPo9eQNI82d1caCUqQLRjU=s96-c.jpeg"
+                  src={booster.profile_picture}
                   className="h-full w-full rounded-full object-cover"
                 />
                 <span
@@ -321,7 +338,10 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
             </div>
           </div>
           <div
-            className={clsx("flex flex-col items-center pt-1.5", "sm:truncate")}
+            className={clsx(
+              "flex flex-col items-center gap-y-2 pt-1.5",
+              "sm:truncate",
+            )}
           >
             <h1
               className={clsx(
@@ -329,7 +349,7 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
                 "sm:truncate sm:tracking-tight",
               )}
             >
-              test
+              {booster.username}
             </h1>
             <p
               className={clsx(
@@ -338,13 +358,22 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
               )}
             >
               <div className="inline-flex flex-wrap items-center gap-1">
-                <div className="lowercase">@test</div>
+                <div className="lowercase">#{booster.user_id}</div>
                 <span> ⸱ </span>
                 <div>9 boosts</div>
                 <span> ⸱ </span>
                 <div>0 accounts</div>
               </div>
             </p>
+            <a
+              href={`/profile/${booster.user_id}`}
+              className={clsx(
+                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors",
+                "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+              )}
+            >
+              <HiCursorClick className="mr-2" /> View Profile
+            </a>
           </div>
         </div>
       </div>
@@ -355,6 +384,7 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
 const BoostId = () => {
   const { id } = useParams();
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const order = useGetOrderById(id);
@@ -416,8 +446,8 @@ const BoostId = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const { username, password, backup_code } = data;
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    const { username, password, backup_code } = form;
     const account = {
       order_id: id,
       username: username,
@@ -433,7 +463,14 @@ const BoostId = () => {
       body: JSON.stringify(account),
     });
 
-    const back = await res.json();
+    const data = await res.json();
+
+    if (data.success === false) {
+      toast.error("Create account failed");
+      return;
+    }
+
+    toast.success("Create account successfully");
     location.reload();
   };
 
@@ -443,6 +480,13 @@ const BoostId = () => {
     });
 
     const data = await res.json();
+    if (data.success === false) {
+      toast.error("Accept Boost failed");
+      return;
+    }
+
+    toast.success("Accept Boost");
+    navigate("/dashboard/progress-boosts");
   };
 
   return (
@@ -529,7 +573,7 @@ const BoostId = () => {
                 </a>
               )}
               {currentUser?.role?.includes("booster") &&
-                order.status === "pending" && (
+                order.status === "in active" && (
                   <button
                     type="button"
                     onClick={handleAcceptBoost}
@@ -543,7 +587,7 @@ const BoostId = () => {
                   </button>
                 )}
               {currentUser?.role?.includes("booster") &&
-                order.status === "in active" && (
+                order.status === "in progress" && (
                   <div className="flex gap-x-2">
                     <button
                       type="button"
@@ -715,7 +759,7 @@ const BoostId = () => {
 
             {/* LOGIN INFORMATION */}
             {order.account ? (
-              <AccountWidget account={order.account} />
+              <AccountWidget order={order} />
             ) : (
               <div
                 className={clsx(
@@ -797,7 +841,7 @@ const BoostId = () => {
                                   )}
                                 >
                                   <img
-                                    src="https://cdn.gameboost.com/games/world-of-warcraft/logo/icon.svg"
+                                    src="/src/assets/counter-strike-2/logo/logo.png"
                                     alt="Arena 2v2, 0->1400, US"
                                     className="h-8 w-8"
                                   />

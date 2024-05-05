@@ -13,6 +13,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";
 import { SocialMediaProps, socialMedia } from "../../constants";
+import Loading from "../../pages/Loading";
 
 interface ModalProps {
   isOpen: boolean;

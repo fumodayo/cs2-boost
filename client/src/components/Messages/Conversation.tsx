@@ -11,10 +11,17 @@ import { useSendMessage } from "../../hooks/useSendMessage";
 import { RootState } from "../../redux/store";
 import { ReceivedMessage } from "./ReceivedMessage";
 import Messages from "./Messages";
+import useListenMessages from "../../hooks/useListeningMessages";
 
 const introduce = [
-  "Hey Sơn Thái! 😄 Thanks for choosing CS2Boost - you've made a great choice. 🚀 ",
-  "Once your payment is completed, you'll be able to chat with your booster in here. ",
+  {
+    message:
+      "Hey Sơn Thái! 😄 Thanks for choosing CS2Boost - you've made a great choice. 🚀 ",
+  },
+  {
+    message:
+      "Once your payment is completed, you'll be able to chat with your booster in here. ",
+  },
 ];
 
 interface ConversationProps {
@@ -24,6 +31,8 @@ interface ConversationProps {
 const Conversation: React.FC<ConversationProps> = ({ order }) => {
   const { theme } = useContext(AppContext);
   const { loading, sendMessage } = useSendMessage();
+
+  useListenMessages();
 
   const { selectedConversation } = useSelector(
     (state: RootState) => state.conversation,
@@ -120,7 +129,7 @@ const Conversation: React.FC<ConversationProps> = ({ order }) => {
         <div className="px-0 pt-0 text-sm sm:px-6">
           {/* Content messages */}
           {introduce.map((item) => (
-            <ReceivedMessage content={item} />
+            <ReceivedMessage message={item} />
           ))}
           <Messages />
         </div>

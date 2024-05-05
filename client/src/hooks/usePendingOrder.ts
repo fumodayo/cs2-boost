@@ -1,46 +1,39 @@
 import { useState, useEffect } from "react";
+import { Order } from "../types";
+import { useLocation } from "react-router-dom";
 
-interface SearchOrders {
-  searchKey: string;
-  gameKey: string[];
-  statusKey: string[];
+interface Orders {
+  orders: Order[] | [];
+  countingPage: number;
+  page: number;
+  pages: number;
 }
 
-export const usePendingOrder = ({
-  searchKey,
-  gameKey,
-  statusKey,
-}: SearchOrders) => {
-  const [orders, setOrders] = useState([]);
+export const usePendingOrder = () => {
+  const location = useLocation();
+
+  const [data, setData] = useState<Orders>();
 
   useEffect(() => {
-    let searchTimeout: NodeJS.Timeout | null = null;
-
     const fetchData = async () => {
+      const searchParams = new URLSearchParams(location.search);
       try {
-        const res = await fetch(`/api/order/pending-order`, {
+        const res = await fetch(`/api/order/pending-order?${searchParams}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         });
-        const data = await res.json();
-        setOrders(data);
+        const response = await res.json();
+        console.log(response);
+        setData(response);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
-    }
+    fetchData();
+  }, [location]);
 
-    searchTimeout = setTimeout(() => {
-      fetchData();
-    }, 1500);
-
-    return () => clearTimeout(searchTimeout as NodeJS.Timeout);
-  }, [searchKey, gameKey, statusKey]);
-
-  return orders;
+  return data;
 };

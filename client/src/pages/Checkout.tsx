@@ -11,6 +11,9 @@ import RadioButton from "../components/Buttons/RadioButton";
 import Avatar from "../components/Common/Avatar";
 import Logo from "../components/Common/Logo";
 import Input from "../components/Input";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import Loading from "./Loading";
 
 const modeOfPayment = [
   {
@@ -59,7 +62,7 @@ const Checkout = () => {
   const [mode, setMode] = useState("debit_cards");
   const { id } = useParams();
   const order = useGetOrderById(id);
-  const navigate = useNavigate();
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   const {
     register,
@@ -84,8 +87,6 @@ const Checkout = () => {
     if (data.url) {
       window.location.href = data.url;
     }
-
-    // navigate("/dashboard");
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -93,7 +94,7 @@ const Checkout = () => {
   };
 
   if (!order) {
-    return null;
+    return <Loading />;
   }
 
   return (
@@ -164,7 +165,7 @@ const Checkout = () => {
                 <button
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
-                  className="relative ml-1.5 inline-flex items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9"
+                  className="relative ml-1.5 inline-flex items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9"
                 >
                   Apply
                 </button>
@@ -207,7 +208,7 @@ const Checkout = () => {
                   <button className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary">
                     <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">
                       <img
-                        src="/src/assets/avatar.png"
+                        src={currentUser?.profile_picture}
                         alt="user"
                         className="h-full w-full rounded-full object-cover"
                       />

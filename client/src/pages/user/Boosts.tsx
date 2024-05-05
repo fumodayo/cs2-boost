@@ -26,7 +26,7 @@ const statuses = [
   { label: "Pending", value: "pending" },
   { label: "In Progress", value: "in progress" },
   { label: "Completed", value: "completed" },
-  { label: "Inactive", value: "inactive" },
+  { label: "Inactive", value: "in active" },
 ];
 
 const Boosts = () => {

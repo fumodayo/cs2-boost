@@ -43,7 +43,7 @@ export const getAllOrder = async (req, res, next) => {
 
     const pageSize = parseInt(req.query.pageSize) || 5;
     const page = parseInt(req.query.page) || 1;
-    
+
     const countingPage = await Order.countDocuments(query);
 
     const orders = await Order.find(query)
@@ -74,18 +74,54 @@ export const getAllOrder = async (req, res, next) => {
  * 3. FILTER BY GAME KEY AND STATUS KEY
  */
 export const getPendingOrder = async (req, res, next) => {
-  const { id } = req.user;
-  const { searchKey, gameKey, statusKey } = req.query;
+  const { searchKey, gameKey, sortKey } = req.query;
 
   let query = { status: ORDER_STATUS.IN_ACTIVE };
 
-  try {
-    const orders = await Order.find(query).populate({
-      path: "user",
-      select: "-password",
-    });
+  if (searchKey) {
+    query.$or = [
+      { title: { $regex: searchKey, $options: "i" } },
+      { boost_id: { $regex: searchKey, $options: "i" } },
+    ];
+  }
 
-    res.status(200).json(orders);
+  if (gameKey && gameKey.length > 0) {
+    const gameKeys = gameKey.split(",");
+    query.game = { $in: gameKeys };
+  }
+
+  try {
+    let sortOption = { createdAt: -1 };
+    if (sortKey) {
+      if (sortKey.startsWith("-")) {
+        const field = sortKey.substring(1);
+        sortOption = { [field]: -1 };
+      } else {
+        sortOption = { [sortKey]: 1 };
+      }
+    }
+
+    const pageSize = parseInt(req.query.pageSize) || 5;
+    const page = parseInt(req.query.page) || 1;
+
+    const countingPage = await Order.countDocuments(query);
+
+    const orders = await Order.find(query)
+      .sort(sortOption)
+      .skip(pageSize * (page - 1))
+      .limit(pageSize)
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "booster",
+        select: "-password",
+      });
+
+    const pages = Math.ceil(countingPage / pageSize);
+
+    res.status(200).json({ orders: orders, countingPage, page, pages });
   } catch (error) {
     next(error);
   }
@@ -99,12 +135,29 @@ export const getPendingOrder = async (req, res, next) => {
  */
 export const getProgressOrder = async (req, res, next) => {
   const { id } = req.user;
-  const { searchKey, gameKey, statusKey } = req.query;
+  const { searchKey, gameKey, statusKey, sortKey } = req.query;
 
   let query = {
-    status: { $nin: [ORDER_STATUS.PENDING, ORDER_STATUS.IN_ACTIVE] },
-    booster: { $ne: id },
+    status: { $in: [ORDER_STATUS.COMPLETED, ORDER_STATUS.IN_PROGRESS] },
+    booster: id,
   };
+
+  if (searchKey) {
+    query.$or = [
+      { title: { $regex: searchKey, $options: "i" } },
+      { boost_id: { $regex: searchKey, $options: "i" } },
+    ];
+  }
+
+  if (gameKey && gameKey.length > 0) {
+    const gameKeys = gameKey.split(",");
+    query.game = { $in: gameKeys };
+  }
+
+  if (statusKey && statusKey.length > 0) {
+    const statusKeys = statusKey.split(",");
+    query.status = { $in: statusKeys };
+  }
 
   try {
     const completedOrdersCount = await Order.countDocuments({
@@ -114,17 +167,46 @@ export const getProgressOrder = async (req, res, next) => {
 
     const inProgressOrdersCount = await Order.countDocuments({
       status: ORDER_STATUS.IN_PROGRESS,
+      booster: id,
     });
 
-    const orders = await Order.find(query).populate({
-      path: "user",
-      select: "-password",
-    });
+    let sortOption = { createdAt: -1 };
+    if (sortKey) {
+      if (sortKey.startsWith("-")) {
+        const field = sortKey.substring(1);
+        sortOption = { [field]: -1 };
+      } else {
+        sortOption = { [sortKey]: 1 };
+      }
+    }
+
+    const pageSize = parseInt(req.query.pageSize) || 5;
+    const page = parseInt(req.query.page) || 1;
+
+    const countingPage = await Order.countDocuments(query);
+
+    const orders = await Order.find(query)
+      .sort(sortOption)
+      .skip(pageSize * (page - 1))
+      .limit(pageSize)
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "booster",
+        select: "-password",
+      });
+
+    const pages = Math.ceil(countingPage / pageSize);
 
     res.status(200).json({
       orders: orders,
       completed: completedOrdersCount,
       in_progress: inProgressOrdersCount,
+      countingPage,
+      page,
+      pages,
     });
   } catch (error) {
     next(error);
@@ -192,6 +274,10 @@ export const getOrder = async (req, res, next) => {
         path: "user",
         select: "-password",
       })
+      .populate({
+        path: "booster",
+        select: "-password",
+      })
       .populate("account")
       .populate("conversation");
 
@@ -236,6 +322,58 @@ export const acceptOrder = async (req, res, next) => {
     });
 
     res.status(201).json("Accepted order");
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * COMPLETED ORDER BY BOOST_ID
+ */
+export const completedOrder = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await Order.findOneAndUpdate(
+      {
+        boost_id: id,
+      },
+      {
+        $set: {
+          status: ORDER_STATUS.COMPLETED,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json("Completed order");
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * CANCEL ORDER BY BOOST_ID
+ * REDUCED 1% ORDER
+ * SET ORDER STATUS: IN_PROGRESS -> IN_ACTIVE
+ */
+export const cancelOrder = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await Order.findOneAndUpdate(
+      {
+        boost_id: id,
+      },
+      {
+        $set: {
+          status: ORDER_STATUS.IN_ACTIVE,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json("Cancel order");
   } catch (error) {
     next(error);
   }

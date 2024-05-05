@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { IoGrid } from "react-icons/io5";
+import { IoGrid, IoNotifications } from "react-icons/io5";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { GiSamuraiHelmet } from "react-icons/gi";
 import { BiSolidCog } from "react-icons/bi";
@@ -12,6 +12,7 @@ import Logo from "../Common/Logo";
 import Avatar from "../Common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import Notifications from "../Common/Notifications";
 
 const sidebarItemsForClient = [
   {
@@ -229,6 +230,9 @@ const Sidebar = () => {
               </div>
             </button>
           </Avatar>
+
+          {/* NOTIFICATIONS */}
+          <Notifications />
         </div>
       </div>
     </div>

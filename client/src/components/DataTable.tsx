@@ -5,6 +5,8 @@ import {
   FaCheck,
   FaRegEyeSlash,
   FaCircleCheck,
+  FaTrashCan,
+  FaXmark,
 } from "react-icons/fa6";
 import { PiArrowsDownUp, PiSlidersHorizontal } from "react-icons/pi";
 
@@ -18,6 +20,10 @@ import { formatMoney } from "../utils/formatMoney";
 import { Order } from "../types";
 import Separator from "./Separator";
 import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import * as Dialog from "@radix-ui/react-dialog";
+import clsx from "clsx";
 
 type ServiceButtonProps = {
   value: string;
@@ -114,6 +120,7 @@ const DataTable: React.FC<DataTableProps> = ({
   onSortKey,
 }) => {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const [columnVisibility, setColumnVisibility] =
     useState<ToggleColumnProps[]>(headers);
@@ -128,6 +135,51 @@ const DataTable: React.FC<DataTableProps> = ({
   const visibleHeaders = headers.filter(({ value }) =>
     columnVisibility.find((column) => column.value === value && column.active),
   );
+
+  const handleAccept = async (boost_id: string) => {
+    const res = await fetch(`/api/order/accept-order/${boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Accept Boost failed");
+      return;
+    }
+
+    toast.success("Accept Boost");
+    navigate("/dashboard/progress-boosts");
+  };
+
+  const handleComplete = async (boost_id: string) => {
+    const res = await fetch(`/api/order/complete-order/${boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Completed Boost failed");
+      return;
+    }
+
+    toast.success("Completed Boost");
+    navigate("/dashboard/progress-boosts");
+  };
+
+  const handleCancel = async (boost_id: string) => {
+    const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Cancel Boost failed");
+      return;
+    }
+
+    toast.success("Cancel Boost failed");
+    navigate("/dashboard/progress-boosts");
+  };
 
   return (
     <div className="space-y-4">
@@ -199,6 +251,7 @@ const DataTable: React.FC<DataTableProps> = ({
               ) : (
                 items.map(
                   ({
+                    _id,
                     boost_id,
                     title,
                     type,
@@ -234,6 +287,27 @@ const DataTable: React.FC<DataTableProps> = ({
                                 </div>
                               </div>
                             </div>
+                          </a>
+                        </td>
+                      )}
+
+                      {/* TRANSITION ID */}
+                      {columnVisibility.find(
+                        (column) =>
+                          column.name === "transaction id" && column.active,
+                      ) && (
+                        <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                          <a href={`/dashboard/boosts/${boost_id}`}>{_id}</a>
+                        </td>
+                      )}
+
+                      {/* ORDER ID */}
+                      {columnVisibility.find(
+                        (column) => column.name === "order id" && column.active,
+                      ) && (
+                        <td className="px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
+                          <a href={`/dashboard/boosts/${boost_id}`}>
+                            #{boost_id}
                           </a>
                         </td>
                       )}
@@ -346,34 +420,122 @@ const DataTable: React.FC<DataTableProps> = ({
                         (column) => column.value === "actions" && column.active,
                       ) && (
                         <td className="flex gap-x-2 px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                          {name === "pending" && (
+                          {status === "pending" && (
                             <button
                               type="button"
                               className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-                              // onClick={() => handleEditAction(rowData)}
+                              onClick={() => handleAccept(boost_id as string)}
                             >
                               <FaCheck className="mr-1" />
                               Accept
                             </button>
                           )}
-                          {name === "progress" && (
+                          {status === "in progress" && (
                             <>
                               <button
                                 type="button"
                                 className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-                                // onClick={() => handleEditAction(rowData)}
+                                onClick={() =>
+                                  handleComplete(boost_id as string)
+                                }
                               >
                                 <FaCircleCheck className="mr-1" />
                                 Completed
                               </button>
-                              <button
-                                type="button"
-                                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm outline-none ring-1 ring-danger-ring transition-colors hover:bg-danger-hover hover:text-primary-foreground focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2"
-                                // onClick={() => handleEditAction(rowData)}
-                              >
-                                <IoClose className="mr-1 text-xl" />
-                                Cancel
-                              </button>
+                              <Dialog.Root>
+                                <Dialog.Trigger>
+                                  <button
+                                    type="button"
+                                    className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm outline-none ring-1 ring-danger-ring transition-colors hover:bg-danger-hover hover:text-primary-foreground focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2"
+                                  >
+                                    <IoClose className="mr-1 text-xl" />
+                                    Cancel
+                                  </button>
+                                </Dialog.Trigger>
+                                <Dialog.Portal>
+                                  <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
+                                  <Dialog.Content
+                                    className={clsx(
+                                      "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
+                                    )}
+                                  >
+                                    {/* HEADER */}
+                                    <div
+                                      className={clsx(
+                                        "flex items-center justify-between px-6 pb-0 pt-6",
+                                        "sm:pt-5",
+                                      )}
+                                    >
+                                      <div className="flex items-center gap-3">
+                                        <div>
+                                          <div className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-red-400 text-sm text-white ring-2 ring-red-500/30">
+                                            <FaTrashCan />
+                                          </div>
+                                        </div>
+                                        <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
+                                          Cancel Boost
+                                        </Dialog.Title>
+                                      </div>
+                                      <Dialog.Close>
+                                        <button
+                                          type="button"
+                                          className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
+                                        >
+                                          <span className="sr-only">Close</span>
+                                          <FaXmark className="flex h-5 w-5 items-center justify-center" />
+                                        </button>
+                                      </Dialog.Close>
+                                    </div>
+
+                                    {/* CONTENT */}
+                                    <div className="p-6">
+                                      Nếu xóa boost bạn sẽ bị trừ 1% giá trị
+                                      boost tương đương
+                                      <p>
+                                        (
+                                        {price &&
+                                          formatMoney(
+                                            currency,
+                                            (price * 1) / 100,
+                                          )}
+                                        )
+                                      </p>
+                                    </div>
+
+                                    {/* FOOTER */}
+                                    <div
+                                      className={clsx(
+                                        "flex flex-row-reverse items-center gap-2 border-t border-border bg-muted/50 px-6 py-6",
+                                        "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
+                                      )}
+                                    >
+                                      <button
+                                        type="submit"
+                                        onClick={() =>
+                                          handleCancel(boost_id as string)
+                                        }
+                                        className={clsx(
+                                          "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
+                                          "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                                        )}
+                                      >
+                                        Cancel Boost
+                                      </button>
+                                      <Dialog.Close asChild>
+                                        <button
+                                          type="button"
+                                          className={clsx(
+                                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                                            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                                          )}
+                                        >
+                                          Cancel
+                                        </button>
+                                      </Dialog.Close>
+                                    </div>
+                                  </Dialog.Content>
+                                </Dialog.Portal>
+                              </Dialog.Root>
                             </>
                           )}
                         </td>

@@ -24,6 +24,8 @@ import BoosterRoute from "./layouts/BoosterRoute";
 import Profile from "./pages/Profile";
 import Loading from "./pages/Loading";
 import { AppContext } from "./context/AppContext";
+import AdminRoute from "./layouts/AdminRoute";
+import AdminPage from "./pages/admin/AdminPage";
 
 function App() {
   const { theme } = useContext(AppContext);
@@ -41,6 +43,10 @@ function App() {
             <Route path="premier" element={<Premie />} />
             <Route path="wingman" element={<Wingman />} />
             <Route path="level-farming" element={<FarmExp />} />
+          </Route>
+          <Route element={<AdminRoute />}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="admin" element={<AdminPage />} />
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="profile/:id" element={<Profile />} />

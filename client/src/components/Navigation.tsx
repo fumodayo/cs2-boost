@@ -9,6 +9,7 @@ import {
   HiOutlineChevronDoubleLeft,
   HiOutlineChevronDoubleRight,
 } from "react-icons/hi";
+import Loading from "../pages/Loading";
 
 type NavigationButtonProps = {
   icon: IconType;
@@ -114,7 +115,7 @@ const Navigation: React.FC<NavigationProps> = ({
           <Select.Root onValueChange={(value) => handlePageSizeChange(value)}>
             <Select.Trigger>
               <button className="flex h-8 w-[70px] items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-                <Select.Value placeholder="15" />
+                <Select.Value placeholder="5" />
                 <Select.Icon>
                   <FaChevronDown className="h-4 w-4 opacity-50" />
                 </Select.Icon>

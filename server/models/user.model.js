@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       default:
-        "https://cdn.discordapp.com/attachments/851097191477149706/1229335965797978144/unnamed.jpg?ex=662f4f56&is=661cda56&hm=e1640a6016897c7528b4cef920a284d3791b800ad45a549ac2a1aca31531950e&",
+        "https://res.cloudinary.com/du93troxt/image/upload/v1714744499/avatar_qyersf.jpg",
     },
     user_id: { type: String, required: true, unique: true },
     role: {

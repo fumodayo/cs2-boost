@@ -3,15 +3,13 @@ import { useLocation } from "react-router-dom";
 import { Order } from "../types";
 
 interface Orders {
-  orders: Order[] | [];
+  invoices: Order[] | [];
   countingPage: number;
   page: number;
   pages: number;
-  in_progress: number;
-  completed: number;
 }
 
-export const useProgressOrder = () => {
+export const useGetAllWallet = () => {
   const location = useLocation();
 
   const [data, setData] = useState<Orders>();
@@ -20,7 +18,7 @@ export const useProgressOrder = () => {
     const fetchData = async () => {
       const searchParams = new URLSearchParams(location.search);
       try {
-        const res = await fetch(`/api/order/progress-order?${searchParams}`, {
+        const res = await fetch(`/api/wallet?${searchParams}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -30,7 +28,7 @@ export const useProgressOrder = () => {
         console.log(response);
         setData(response);
       } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error("Error fetching wallet:", error);
       }
     };
 

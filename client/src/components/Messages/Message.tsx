@@ -11,9 +11,9 @@ const Message = ({ message }: { message?: MessageType }) => {
   return (
     <>
       {fromMe ? (
-        <SentMessage content={message?.message} />
+        <SentMessage message={message} />
       ) : (
-        <ReceivedMessage content={message?.message} />
+        <ReceivedMessage message={message} />
       )}
     </>
   );

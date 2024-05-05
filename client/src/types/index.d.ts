@@ -46,6 +46,7 @@ export interface Conversation {
   messages?: Message[];
 }
 export interface Order {
+  _id?: string;
   image?: string;
   options?: Array<string>;
   title?: title;
@@ -87,4 +88,5 @@ export interface Message {
   sender_id?: string;
   receiver_id?: string;
   message?: string;
+  createdAt?: Date;
 }

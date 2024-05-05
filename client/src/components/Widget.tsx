@@ -4,6 +4,7 @@ import { Order, User } from "../types";
 import { formatMoney } from "../utils/formatMoney";
 import { rankOptions } from "../constants";
 import Copy from "./Common/Copy";
+import Loading from "../pages/Loading";
 
 interface WidgetProps {
   titleHeader: string;
