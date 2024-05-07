@@ -90,3 +90,14 @@ export interface Message {
   message?: string;
   createdAt?: Date;
 }
+
+export interface Notify {
+  _id?: string;
+  sender?: User | null;
+  receiver?: User | null;
+  boost_id?: string;
+  content?: string;
+  isRead?: boolean;
+  type?: string;
+  createdAt?: string;
+}

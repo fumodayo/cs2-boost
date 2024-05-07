@@ -10,6 +10,7 @@ import accountRouter from "./routes/account.route.js";
 import paymentRouter from "./routes/payment.route.js";
 import messageRouter from "./routes/message.route.js";
 import walletRouter from "./routes/wallet.route.js";
+import notificationRouter from "./routes/notification.route.js";
 import cookieParser from "cookie-parser";
 import Order from "./models/order.model.js";
 import Invoice from "./models/invoice.model.js";
@@ -37,7 +38,6 @@ app.post(
   "/webhook",
   bodyParser.raw({ type: "application/json" }),
   async (request, response) => {
-    console.log("Received webhook request");
     const sig = request.headers["stripe-signature"];
 
     let data;
@@ -69,7 +69,6 @@ app.post(
         .retrieve(data.customer)
         .then(async (customer) => {
           const orderId = customer.metadata.order_id;
-          console.log("id", orderId);
           const newOrder = await Order.findByIdAndUpdate(
             orderId,
             {
@@ -119,6 +118,7 @@ app.use("/api/wallet", walletRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/notifications", notificationRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

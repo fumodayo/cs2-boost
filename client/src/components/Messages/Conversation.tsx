@@ -49,10 +49,9 @@ const Conversation: React.FC<ConversationProps> = ({ order }) => {
     e.preventDefault();
     if (!message) return;
     if (selectedConversation) {
-      await sendMessage(selectedConversation._id, message);
+      await sendMessage(selectedConversation._id, message, order.boost_id);
     }
 
-    console.log("Sending message:", message);
     setMessage("");
   };
 

@@ -15,3 +15,8 @@ export const IP_STATUS = {
   ONLINE: "online",
   OFFLINE: "offline",
 };
+
+export const NOTIFICATION_TYPE = {
+  BOOST: "boost",
+  MESSAGE: "message",
+};

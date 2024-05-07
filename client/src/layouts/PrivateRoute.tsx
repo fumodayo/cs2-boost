@@ -19,6 +19,8 @@ export default function PrivateRoute() {
       console.log("logout");
       dispatch(signOut());
     }
+  } else {
+    dispatch(signOut());
   }
 
   return isClient ? <Outlet /> : <Navigate to="/" />;

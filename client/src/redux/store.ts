@@ -4,11 +4,13 @@ import storage from "redux-persist/lib/storage";
 import userSlice from "./user/userSlice";
 import cartSlice from "./cart/cartSlice";
 import conversationSlice from "./conversation/conversationSlice";
+import notificationSlice from "./notification/notificationSlice";
 
 const rootReducer = combineReducers({
   user: userSlice,
   cart: cartSlice,
   conversation: conversationSlice,
+  notification: notificationSlice,
 });
 
 const persistsConfig = {

@@ -8,7 +8,11 @@ export const useSendMessage = () => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state: RootState) => state.conversation);
 
-  const sendMessage = async (conversation_id?: string, message?: string) => {
+  const sendMessage = async (
+    conversation_id?: string,
+    message?: string,
+    boost_id?: string,
+  ) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/messages/send/${conversation_id}`, {
@@ -16,7 +20,7 @@ export const useSendMessage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message, boost_id }),
       });
       const data = await res.json();
       const backup = [...messages, data];

@@ -1,6 +1,8 @@
-import { ORDER_STATUS } from "../constants/index.js";
+import { NOTIFICATION_TYPE, ORDER_STATUS } from "../constants/index.js";
 import Order from "../models/order.model.js";
 import Conversation from "../models/conversation.model.js";
+import { io } from "../socket/socket.js";
+import Notification from "../models/notification.model.js";
 
 /*
  * GET ALL ORDER
@@ -256,6 +258,23 @@ export const createOrder = async (req, res, next) => {
     });
 
     await newOrder.save();
+
+    let existingNotification = await Notification.findOne({
+      type: NOTIFICATION_TYPE.BOOST,
+    });
+
+    if (existingNotification) {
+      await existingNotification.deleteOne();
+    }
+
+    const newNotification = new Notification({
+      boost_id: newOrder.boost_id,
+      content: "New Boost Created!",
+      type: NOTIFICATION_TYPE.BOOST,
+    });
+
+    await newNotification.save();
+    io.in("boosters").emit("newNotification");
 
     res.status(201).json(newOrder.boost_id);
   } catch (error) {

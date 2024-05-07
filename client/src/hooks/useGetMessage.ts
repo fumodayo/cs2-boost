@@ -12,12 +12,14 @@ export const useGetMessages = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
     const getMessages = async () => {
       setLoading(true);
       try {
         const res = await fetch(`/api/messages/${selectedConversation?._id}`, {
           method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         const data = await res.json();
 
