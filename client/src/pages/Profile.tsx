@@ -62,7 +62,7 @@ const SocialWidget: React.FC<SocialWidgetProps> = ({
       <div className="flex items-center gap-x-2">
         {title === "Discord" ? null : (
           <button
-            className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md border border-border bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
             onClick={handleClick}
           >
             <FaArrowUpRightFromSquare />

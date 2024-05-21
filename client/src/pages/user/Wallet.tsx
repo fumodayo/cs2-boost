@@ -59,9 +59,6 @@ const Wallet = () => {
         searchKey: parsedParams.searchKey
           ? parsedParams.searchKey.toString()
           : "",
-        gameKey: parsedParams.gameKey
-          ? parsedParams.gameKey.toString().split(",")
-          : [],
         statusKey: parsedParams.statusKey
           ? parsedParams.statusKey.toString().split(",")
           : [],
@@ -96,7 +93,6 @@ const Wallet = () => {
   useEffect(() => {
     const parsedState = parseParamsToState(location.search);
     setSearchKey(parsedState.searchKey);
-    setTypeKey(parsedState.gameKey);
   }, [location.search, parseParamsToState]);
 
   const { invoices, countingPage, page, pages } = useGetAllWallet() ?? {

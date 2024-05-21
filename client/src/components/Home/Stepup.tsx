@@ -6,11 +6,14 @@ import { BsJoystick } from "react-icons/bs";
 import { FaRightToBracket } from "react-icons/fa6";
 
 import { AppContext } from "../../context/AppContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const Stepup = () => {
   const { t } = useTranslation();
 
   const { onOpenSignUpModal } = useContext(AppContext);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   return (
     <div
@@ -52,18 +55,20 @@ const Stepup = () => {
           <BsJoystick className="mr-2.5" />
           {t("Select Game")}
         </button>
-        <button
-          onClick={() => onOpenSignUpModal()}
-          type="button"
-          className={clsx(
-            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-            "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            "sm:py-2.5",
-          )}
-        >
-          <FaRightToBracket className="mr-2" />
-          {t("Sign Up Today")}
-        </button>
+        {!currentUser && (
+          <button
+            onClick={() => onOpenSignUpModal()}
+            type="button"
+            className={clsx(
+              "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
+              "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+              "sm:py-2.5",
+            )}
+          >
+            <FaRightToBracket className="mr-2" />
+            {t("Sign Up Today")}
+          </button>
+        )}
       </div>
     </div>
   );

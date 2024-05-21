@@ -20,3 +20,9 @@ export const NOTIFICATION_TYPE = {
   BOOST: "boost",
   MESSAGE: "message",
 };
+
+export const INCOME_STATUS = {
+  WITHDRAW: "withdraw",
+  DEPOSIT: "deposit",
+  FINE: "fine",
+};

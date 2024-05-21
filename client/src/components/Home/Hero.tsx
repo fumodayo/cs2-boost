@@ -37,13 +37,13 @@ const Hero = () => {
           )}
           <div
             className={clsx(
-              "absolute inset-0 -m-5 bg-gradient-to-t from-background/95 from-50%",
+              "absolute inset-0 -m-5 bg-gradient-to-t from-background/80 from-50%",
               "dark:hidden",
             )}
           />
           <div
             className={clsx(
-              "absolute inset-0 -m-5 hidden bg-gradient-to-t from-background via-background/95 to-background/95 backdrop-blur-sm",
+              "absolute inset-0 -m-5 hidden bg-gradient-to-t from-background via-background/80 to-background/80 backdrop-blur-sm",
               "dark:block",
             )}
           />

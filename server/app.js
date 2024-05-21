@@ -14,6 +14,7 @@ import notificationRouter from "./routes/notification.route.js";
 import cookieParser from "cookie-parser";
 import Order from "./models/order.model.js";
 import Invoice from "./models/invoice.model.js";
+import revenueRouter from "./routes/revenue.route.js";
 import { ORDER_STATUS } from "./constants/index.js";
 
 import Stripe from "stripe";
@@ -119,6 +120,7 @@ app.use("/api/account", accountRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/revenue", revenueRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

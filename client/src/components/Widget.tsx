@@ -4,7 +4,6 @@ import { Order, User } from "../types";
 import { formatMoney } from "../utils/formatMoney";
 import { rankOptions } from "../constants";
 import Copy from "./Common/Copy";
-import Loading from "../pages/Loading";
 
 interface WidgetProps {
   titleHeader: string;
@@ -48,6 +47,8 @@ const Widget: React.FC<WidgetProps> = ({
     cccd_number,
     cccd_issue_date,
     real_name,
+    start_exp,
+    end_exp,
   } = boostItem || {};
 
   const selectedStartRank = rankOptions.find(
@@ -98,6 +99,8 @@ const Widget: React.FC<WidgetProps> = ({
                   {header === "server" && <span>{server}</span>}
                   {header === "start rating" && <span>{start_rating}</span>}
                   {header === "end rating" && <span>{end_rating}</span>}
+                  {header === "start exp" && <span>{start_exp}</span>}
+                  {header === "end exp" && <span>{end_exp}</span>}
                   {header === "title" && <span>{title}</span>}
                   {header === "username" && <span>{username}</span>}
                   {header === "handle" && <span>{handle}</span>}

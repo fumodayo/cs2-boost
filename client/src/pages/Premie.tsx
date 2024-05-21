@@ -15,16 +15,6 @@ import Info from "../components/Info";
 import Board from "../components/Common/Board";
 
 const markOfRanks = {
-  1000: (
-    <div className="py-2">
-      <span className="text-base text-foreground">1000</span>
-      <img
-        src="/src/assets/counter-strike-2/premier/blue.png"
-        alt="rank"
-        className="mt-2 h-full w-20"
-      />
-    </div>
-  ),
   5000: (
     <div className="py-2">
       <span className="text-base text-foreground">5000</span>
@@ -70,16 +60,6 @@ const markOfRanks = {
       <span className="text-base text-foreground">25000</span>
       <img
         src="/src/assets/counter-strike-2/premier/red.png"
-        alt="rank"
-        className="mt-2 h-full w-20"
-      />
-    </div>
-  ),
-  30000: (
-    <div className="py-2">
-      <span className="text-base text-foreground">30000</span>
-      <img
-        src="/src/assets/counter-strike-2/premier/gold.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />
@@ -353,6 +333,7 @@ const Premie = () => {
                                 fontWeight: "bold",
                                 color: theme === "light" ? "#000" : "#fff",
                               }}
+                              zIndex={10}
                               overlay={handleProps.value}
                               placement="top"
                             >
@@ -393,7 +374,7 @@ const Premie = () => {
                         max={30000}
                         step={100}
                         allowCross={false}
-                        defaultValue={[1000, 10000]}
+                        defaultValue={[10000, 20000]}
                         onChange={(value) =>
                           onChangeSliderValue(value as number[])
                         }

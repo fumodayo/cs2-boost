@@ -24,7 +24,7 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
   return (
     <div
       className={clsx(
-        "-mx-4 border bg-card text-card-foreground shadow-sm",
+        "-mx-4 border border-border bg-card text-card-foreground shadow-sm",
         "sm:mx-0 sm:rounded-xl sm:shadow-md",
       )}
     >

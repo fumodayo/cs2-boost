@@ -1,16 +1,19 @@
 import mongoose from "mongoose";
 import { IP_STATUS, ROLE } from "../constants/index.js";
 
-const IPLoggerSchema = new mongoose.Schema({
-  country: String,
-  city: String,
-  ip: String,
-  status: {
-    type: String,
-    enum: IP_STATUS,
-    default: IP_STATUS.ONLINE,
+const IPLoggerSchema = new mongoose.Schema(
+  {
+    country: String,
+    city: String,
+    ip: String,
+    status: {
+      type: String,
+      enum: IP_STATUS,
+      default: IP_STATUS.ONLINE,
+    },
   },
-});
+  { timestamps: true }
+);
 
 const SocialMediaSchema = new mongoose.Schema({
   type: { type: String, required: true },

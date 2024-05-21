@@ -215,15 +215,11 @@ const Footer = () => {
         >
           <div className="flex flex-col">
             <p className="mb-0.5 text-sm font-medium text-muted-foreground">
-              NoCopyright © {new Date().getFullYear()} For educational purposes
-              only
+              NoCopyright © {new Date().getFullYear()} CS2Boost
             </p>
             <div className="text-xs font-medium text-muted-foreground">
               <div>
                 <b>Clone website by:</b> fumodayo
-              </div>
-              <div>
-                <b>Original website:</b> https://gameboost.com
               </div>
             </div>
           </div>

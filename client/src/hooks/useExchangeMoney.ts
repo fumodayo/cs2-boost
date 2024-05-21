@@ -28,12 +28,12 @@ const useExchangeRate = (fromCurrency: string, toCurrency: string) => {
   return exchangeRate;
 };
 
-export const useExchangeMoney = (point: number) => {
+export const useExchangeMoney = (point?: number) => {
   const { currency } = useContext(AppContext);
   const exchangeRate = useExchangeRate("usd", "vnd");
 
   // Vì tất cả giá tiền đều cho sẵn là VND nên hệ số đối với VND là 1/1
-  let money = point;
+  let money = point || -1;
 
   if (point && exchangeRate && currency === "usd") {
     money = point / exchangeRate;

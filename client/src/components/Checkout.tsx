@@ -137,7 +137,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     return options;
   }, [extraOptions, selectedOptions]);
 
-  const exchangeMoney = useExchangeMoney(totalCost);
+  const exchangeMoney = useExchangeMoney(Math.ceil(totalCost / 1000) * 1000);
 
   const handleCreateOrder = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -148,8 +148,8 @@ const Checkout: React.FC<CheckoutProps> = ({
       title: title,
       game: "counter strike 2",
       type: title,
-      price: Math.round(exchangeMoney * 100) / 100,
-      currency: currency,
+      price: Math.ceil(totalCost / 1000) * 1000,
+      currency: "vnd",
       // Farm Exp
       start_exp: currentExp,
       end_exp: desiredExp,
@@ -195,6 +195,7 @@ const Checkout: React.FC<CheckoutProps> = ({
               <span className="mx-4 font-bold text-foreground">
                 {beginText && t(beginText)}
               </span>
+              {currentExp && <p className="w-4">{currentExp}</p>}
               {currentRating && <p className="w-4">{currentRating}</p>}
               {selectedCurrentRank && (
                 <img
@@ -203,7 +204,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                   className="h-full w-14"
                 />
               )}
-              <span className="mx-4">{"->"}</span>
+              <span className="ml-8">{"->"}</span>
               <span className="mx-4 font-bold text-foreground">
                 {lastText && t(lastText)}
               </span>
@@ -214,6 +215,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                   className="h-full w-14"
                 />
               )}
+              {desiredExp && <p className="w-4">{desiredExp}</p>}
               {desiredRating && <p className="w-4">{desiredRating}</p>}
             </span>
           </div>

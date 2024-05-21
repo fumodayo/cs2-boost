@@ -18,6 +18,7 @@ import { formatJwt } from "../../utils/formatJwt";
 import Circle from "../Icons/Circle";
 import Widget from "../Widget";
 import Input from "../Input";
+import { formatDistance } from "date-fns";
 
 const headers = ["username", "user ID", "email address", "address"];
 
@@ -307,8 +308,7 @@ const General = () => {
                             "sm:flex",
                           )}
                         >
-                          <span className="text-muted-foreground">·</span> 9
-                          seconds ago
+                          {user.createdAt && formatDistance(user.createdAt, new Date())}
                         </span>
                       </div>
                     </div>

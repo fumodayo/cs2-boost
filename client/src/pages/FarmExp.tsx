@@ -173,6 +173,8 @@ const FarmExp = () => {
     return total;
   }, [startPoint, endPoint]);
 
+  console.log(startPoint);
+
   return (
     <DefaultPage>
       <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
@@ -218,6 +220,7 @@ const FarmExp = () => {
                               fontWeight: "bold",
                               color: theme === "light" ? "#000" : "#fff",
                             }}
+                            zIndex={10}
                             overlay={handleProps.value}
                             placement="top"
                           >
@@ -304,7 +307,7 @@ const FarmExp = () => {
         <Checkout
           beginText="My Exp"
           lastText="Desired Exp"
-          server={"1"}
+          server={"All"}
           mode="level-farming"
           title="level farming"
           currentExp={startPoint}

@@ -1,8 +1,14 @@
-import { NOTIFICATION_TYPE, ORDER_STATUS } from "../constants/index.js";
+import {
+  INCOME_STATUS,
+  NOTIFICATION_TYPE,
+  ORDER_STATUS,
+} from "../constants/index.js";
 import Order from "../models/order.model.js";
 import Conversation from "../models/conversation.model.js";
 import { io } from "../socket/socket.js";
 import Notification from "../models/notification.model.js";
+import Revenue from "../models/revenue.model.js";
+import { errorHandler } from "../utils/error.js";
 
 /*
  * GET ALL ORDER
@@ -313,12 +319,10 @@ export const getOrder = async (req, res, next) => {
  * 3. FILL CONVERSATION_ID INTO ORDER
  */
 export const acceptOrder = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
-    const order = await Order.findOneAndUpdate(
+    const updatedOrder = await Order.findOneAndUpdate(
       {
-        boost_id: id,
+        boost_id: req.params.id,
       },
       {
         $set: {
@@ -330,15 +334,52 @@ export const acceptOrder = async (req, res, next) => {
     );
 
     const conversation = new Conversation({
-      participants: [order.user, order.booster],
+      participants: [updatedOrder.user, updatedOrder.booster],
       messages: [],
     });
 
     const newConversation = await conversation.save();
 
-    await Order.findByIdAndUpdate(order._id, {
+    await Order.findByIdAndUpdate(updatedOrder._id, {
       conversation: newConversation._id,
     });
+
+    let revenueExisting = await Revenue.findOne({ user: req.user.id });
+    const today = new Date();
+    const isNewDay = revenueExisting
+      ? new Date(revenueExisting.createdAt).getDate() !== today.getDate()
+      : true;
+
+    if (revenueExisting) {
+      if (isNewDay) {
+        revenueExisting.money_pending.push({ amount: updatedOrder.price });
+        revenueExisting.total_order_pending.push({ amount: 1 });
+      } else {
+        const lastAmount =
+          revenueExisting.money_pending.slice(-1)[0]?.amount || 0;
+        const newAmount = lastAmount + updatedOrder.price;
+        revenueExisting.money_pending.push({ amount: newAmount });
+
+        const lastOrderCount =
+          revenueExisting.total_order_pending.slice(-1)[0]?.amount || 0;
+        revenueExisting.total_order_pending.push({
+          amount: lastOrderCount + 1,
+        });
+      }
+
+      revenueExisting.total_money_pending += updatedOrder.price;
+      revenueExisting.orders_pending.push({ order: updatedOrder._id });
+    } else {
+      revenueExisting = new Revenue({
+        user: req.user.id,
+        money_pending: [{ amount: updatedOrder.price }],
+        orders_pending: [{ order: updatedOrder._id }],
+        total_order_pending: [{ amount: 1 }],
+        total_money_pending: updatedOrder.price,
+      });
+    }
+
+    await revenueExisting.save();
 
     res.status(201).json("Accepted order");
   } catch (error) {
@@ -353,7 +394,7 @@ export const completedOrder = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await Order.findOneAndUpdate(
+    const updateOrder = await Order.findOneAndUpdate(
       {
         boost_id: id,
       },
@@ -364,6 +405,42 @@ export const completedOrder = async (req, res, next) => {
       },
       { new: true }
     );
+
+    // Tìm đối tượng Revenue của người dùng
+    let revenueExisting = await Revenue.findOne({ user: req.user.id });
+    if (!revenueExisting) {
+      return next(errorHandler(400, "Revenue not found"));
+    }
+
+    const today = new Date();
+    const isNewDay = revenueExisting
+      ? new Date(revenueExisting.createdAt).getDate() !== today.getDate()
+      : true;
+
+    if (isNewDay) {
+      revenueExisting.money_profit.push({ amount: updateOrder.price });
+      revenueExisting.total_order_completed.push({ amount: 1 });
+    } else {
+      const lastAmount = revenueExisting.money_profit.slice(-1)[0]?.amount || 0;
+      const newAmount = lastAmount + updateOrder.price;
+      revenueExisting.money_profit.push({ amount: newAmount });
+
+      const lastOrderCount =
+        revenueExisting.total_order_completed.slice(-1)[0]?.amount || 0;
+      revenueExisting.total_order_completed.push({
+        amount: lastOrderCount + 1,
+      });
+    }
+
+    revenueExisting.total_money_pending -= updateOrder.price;
+    revenueExisting.total_money_profit += updateOrder.price;
+    revenueExisting.orders_pending.pull({ order: updateOrder._id });
+    revenueExisting.orders_completed.push({ order: updateOrder._id });
+
+    revenueExisting.income.push({ amount: updateOrder.price });
+
+    // Lưu các thay đổi vào đối tượng Revenue
+    await revenueExisting.save();
 
     res.status(201).json("Completed order");
   } catch (error) {
@@ -380,7 +457,7 @@ export const cancelOrder = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await Order.findOneAndUpdate(
+    const updateOrder = await Order.findOneAndUpdate(
       {
         boost_id: id,
       },
@@ -391,6 +468,47 @@ export const cancelOrder = async (req, res, next) => {
       },
       { new: true }
     );
+
+    // Tìm đối tượng Revenue của người dùng
+    let revenueExisting = await Revenue.findOne({ user: req.user.id });
+    if (!revenueExisting) {
+      return next(errorHandler(400, "Revenue not found"));
+    }
+
+    const today = new Date();
+    const isNewDay = revenueExisting
+      ? new Date(revenueExisting.createdAt).getDate() !== today.getDate()
+      : true;
+
+    const finePrice = updateOrder.price * 0.1;
+
+    if (isNewDay) {
+      revenueExisting.money_fine.push({ amount: finePrice });
+      revenueExisting.total_order_cancel.push({ amount: 1 });
+    } else {
+      const lastAmount = revenueExisting.money_fine.slice(-1)[0]?.amount || 0;
+      const newAmount = lastAmount + finePrice;
+      revenueExisting.money_fine.push({ amount: newAmount });
+
+      const lastOrderCount =
+        revenueExisting.total_order_cancel.slice(-1)[0]?.amount || 0;
+      revenueExisting.total_order_cancel.push({
+        amount: lastOrderCount + 1,
+      });
+    }
+
+    revenueExisting.total_money_pending -= updateOrder.price;
+    revenueExisting.total_money_fine += finePrice;
+    revenueExisting.orders_pending.pull({ order: updateOrder._id });
+    revenueExisting.orders_completed.push({ order: updateOrder._id });
+
+    revenueExisting.income.push({
+      amount: -finePrice,
+      status: INCOME_STATUS.FINE,
+    });
+
+    // Lưu các thay đổi vào đối tượng Revenue
+    await revenueExisting.save();
 
     res.status(201).json("Cancel order");
   } catch (error) {

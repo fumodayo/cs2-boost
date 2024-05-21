@@ -11,6 +11,7 @@ import { HiMiniRocketLaunch } from "react-icons/hi2";
 import {
   FaArrowRight,
   FaCalendarDay,
+  FaCircleCheck,
   FaCreditCard,
   FaEllipsisVertical,
   FaSquareCheck,
@@ -38,6 +39,7 @@ import Widget from "../../components/Widget";
 import Input from "../../components/Input";
 import { toast } from "react-toastify";
 import { HiCursorClick } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
 
 const AccountField = ({ label, value }: { label?: string; value?: string }) => {
   return (
@@ -100,7 +102,7 @@ const AccountWidget = ({ order }: { order: Order }) => {
   return (
     <div
       className={clsx(
-        "-mx-4 border bg-card text-card-foreground shadow-sm",
+        "-mx-4 border border-border bg-card text-card-foreground shadow-sm",
         "sm:mx-0 sm:rounded-xl",
       )}
     >
@@ -300,7 +302,7 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
   return (
     <div
       className={clsx(
-        "-mx-4 border bg-card text-card-foreground shadow-sm",
+        "-mx-4 border border-border bg-card text-card-foreground shadow-sm",
         "sm:mx-0 sm:rounded-xl",
       )}
     >
@@ -391,13 +393,8 @@ const BoostId = () => {
 
   dispatch(selectedConversation(order.conversation as ConversationType));
 
-  let headers = [
-    "server",
-    "start rating",
-    "end rating",
-    "start rank",
-    "end rank",
-  ];
+  let headers = [];
+
   if (order.type === "premier") {
     headers = ["server", "server", "start rating", "end rating"];
   } else if (order.type === "wingman") {
@@ -433,6 +430,8 @@ const BoostId = () => {
       icon: FaCalendarDay,
     },
   ];
+
+  console.log(order);
 
   const {
     register,
@@ -486,6 +485,36 @@ const BoostId = () => {
     }
 
     toast.success("Accept Boost");
+    navigate("/dashboard/progress-boosts");
+  };
+
+  const handleComplete = async (boost_id: string) => {
+    const res = await fetch(`/api/order/complete-order/${boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Completed Boost failed");
+      return;
+    }
+
+    toast.success("Completed Boost");
+    navigate("/dashboard/progress-boosts");
+  };
+
+  const handleCancel = async (boost_id: string) => {
+    const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Cancel Boost failed");
+      return;
+    }
+
+    toast.success("Cancel Boost failed");
     navigate("/dashboard/progress-boosts");
   };
 
@@ -590,23 +619,25 @@ const BoostId = () => {
                 order.status === "in progress" && (
                   <div className="flex gap-x-2">
                     <button
+                      onClick={() => handleComplete(order.boost_id as string)}
                       type="button"
                       className={clsx(
                         "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
                         "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                       )}
                     >
-                      <FaSquareCheck className="mr-2" />
+                      <FaCircleCheck className="mr-1" />
                       Completed Boost
                     </button>
                     <button
+                      onClick={() => handleCancel(order.boost_id as string)}
                       className={clsx(
                         "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm outline-none ring-1 ring-danger-ring transition-colors ",
                         "hover:bg-danger-hover hover:text-primary-foreground focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2",
                       )}
                     >
-                      <FaSquareCheck className="mr-2" />
-                      Cancel
+                      <IoClose className="mr-1 text-xl" />
+                      Cancel Boost
                     </button>
                   </div>
                 )}
@@ -629,7 +660,7 @@ const BoostId = () => {
                       side="bottom"
                       align="end"
                       sideOffset={10}
-                      className="backdrop-brightness-5 z-50 w-48 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+                      className="backdrop-brightness-5 z-50 w-48 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
                     >
                       <div className="px-2 py-1.5 text-sm font-medium">
                         Boost Actions

@@ -13,7 +13,7 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";
 import { SocialMediaProps, socialMedia } from "../../constants";
-import Loading from "../../pages/Loading";
+import { RemoveScroll } from "react-remove-scroll";
 
 interface ModalProps {
   isOpen: boolean;
@@ -70,7 +70,6 @@ const SocialService: React.FC<SocialMediaProps> = ({
       const data = await res.json();
 
       if (data.success === false) {
-        dispatch(authFailure("Google Authentication Failed"));
         return;
       }
 
@@ -80,7 +79,7 @@ const SocialService: React.FC<SocialMediaProps> = ({
       onCloseLoginModal();
       onCloseSignUpModal();
     } catch (error) {
-      dispatch(authFailure("Google Authentication Failed"));
+      return error;
     }
   };
 
@@ -140,87 +139,95 @@ const Modal: React.FC<ModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-40 bg-background/80">
-      <div
-        id="modal"
-        className={clsx(
-          "scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
-          "focus:outline-none",
-          "sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
-        )}
-      >
-        <div className="flex w-full overflow-hidden rounded-lg bg-card">
-          <div
-            className={clsx(
-              "order-1 hidden rounded-r-lg bg-cover bg-center",
-              "md:block md:w-1/2",
-            )}
-          >
-            <img
-              className="h-full w-full object-cover"
-              src="/src/assets/illustrations/login-bg.png"
-              alt="logo"
-            />
-          </div>
-          <div
-            className={clsx(
-              "order-0 mx-auto w-full p-8 py-12",
-              "sm:max-w-lg sm:p-14 md:w-1/2",
-            )}
-          >
-            <h2 className="font-display mb-2 text-3xl font-semibold text-foreground">
-              {title && t(title)}
-            </h2>
-            {subtitle}
-            <div className="mt-8">
-              <div className="space-y-8">
-                <div
-                  className={clsx(
-                    "flex items-center justify-between gap-2",
-                    "sm:gap-2",
-                  )}
-                >
-                  {/* SOCIAL */}
-                  {socialMedia.map(({ icon, subtitle, color, active }) => (
-                    <SocialService
-                      key={subtitle}
-                      icon={icon}
-                      subtitle={subtitle}
-                      color={color}
-                      active={active}
-                    />
-                  ))}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span
-                    className={clsx("w-1/5 border-b border-border", "lg:w-1/4")}
-                  />
-                  <div className="text-center text-xs capitalize text-muted-foreground">
-                    {t("Or")} {text && t(text)} {t("with email")}
+    <RemoveScroll>
+      <div className="fixed inset-0 z-40 bg-background/80">
+        <div
+          id="modal"
+          className={clsx(
+            "scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none transition-all",
+            "focus:outline-none",
+            "sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2",
+          )}
+        >
+          <div className="flex w-full overflow-hidden rounded-lg bg-card">
+            <div
+              className={clsx(
+                "order-1 hidden rounded-r-lg bg-cover bg-center",
+                "md:block md:w-1/2",
+              )}
+            >
+              <img
+                className="h-full w-full object-cover"
+                src="/src/assets/illustrations/login-bg.png"
+                alt="logo"
+              />
+            </div>
+            <div
+              className={clsx(
+                "order-0 mx-auto w-full p-8 py-12",
+                "sm:max-w-lg sm:p-14 md:w-1/2",
+              )}
+            >
+              <h2 className="font-display mb-2 text-3xl font-semibold text-foreground">
+                {title && t(title)}
+              </h2>
+              {subtitle}
+              <div className="mt-8">
+                <div className="space-y-8">
+                  <div
+                    className={clsx(
+                      "flex items-center justify-between gap-2",
+                      "sm:gap-2",
+                    )}
+                  >
+                    {/* SOCIAL */}
+                    {socialMedia.map(({ icon, subtitle, color, active }) => (
+                      <SocialService
+                        key={subtitle}
+                        icon={icon}
+                        subtitle={subtitle}
+                        color={color}
+                        active={active}
+                      />
+                    ))}
                   </div>
-                  <span
-                    className={clsx("w-1/5 border-b border-border", "lg:w-1/4")}
-                  />
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={clsx(
+                        "w-1/5 border-b border-border",
+                        "lg:w-1/4",
+                      )}
+                    />
+                    <div className="text-center text-xs capitalize text-muted-foreground">
+                      {t("Or")} {text && t(text)} {t("with email")}
+                    </div>
+                    <span
+                      className={clsx(
+                        "w-1/5 border-b border-border",
+                        "lg:w-1/4",
+                      )}
+                    />
+                  </div>
+                  {content}
                 </div>
-                {content}
               </div>
             </div>
           </div>
+          <button
+            onClick={handleClose}
+            type="button"
+            className={clsx(
+              "absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-secondary-light p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors ",
+              "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+              "sm:h-7 sm:w-7 md:text-white/80",
+            )}
+          >
+            <span className="sr-only">Close</span>
+            <FaXmark />
+          </button>
         </div>
-        <button
-          onClick={handleClose}
-          type="button"
-          className={clsx(
-            "absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-secondary-light p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors ",
-            "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            "sm:h-7 sm:w-7 md:text-white/80",
-          )}
-        >
-          <span className="sr-only">Close</span>
-          <FaXmark />
-        </button>
       </div>
-    </div>
+    </RemoveScroll>
   );
 };
 

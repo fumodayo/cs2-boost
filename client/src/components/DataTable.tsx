@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
+            <DropdownMenu.Content className="z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg">
               <ServiceButton
                 value="asc"
                 onClick={() => onSortKey(value)}
@@ -198,7 +198,7 @@ const DataTable: React.FC<DataTableProps> = ({
             <DropdownMenu.Content
               side="bottom"
               align="end"
-              className="backdrop-brightness-5 z-50 w-[150px] min-w-[8rem] overflow-hidden rounded-md border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+              className="backdrop-brightness-5 z-50 w-[150px] min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
             >
               <div className="px-2 py-1.5 text-sm font-medium">
                 Toggle columns
@@ -226,7 +226,7 @@ const DataTable: React.FC<DataTableProps> = ({
         <div className="w-full overflow-auto">
           <table className="w-full caption-bottom text-sm">
             <thead className="overflow-clip [&_tr]:border-b">
-              <tr className="border-b text-muted-foreground transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+              <tr className="border-b border-border text-muted-foreground transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 {visibleHeaders.map(({ name, value }) => (
                   <Header
                     title={name}
@@ -239,7 +239,7 @@ const DataTable: React.FC<DataTableProps> = ({
             </thead>
             <tbody className="bg-card-alt [&_tr:last-child]:border-0">
               {items.length === 0 ? (
-                <tr className="border-b text-muted-foreground transition-colors hover:bg-muted/50">
+                <tr className="border-b border-border text-muted-foreground transition-colors hover:bg-muted/50">
                   <td
                     colSpan={12}
                     className="align-center h-24 px-2.5 py-2.5 text-center"
@@ -263,7 +263,7 @@ const DataTable: React.FC<DataTableProps> = ({
                     booster,
                     image,
                   }) => (
-                    <tr className="border-b text-muted-foreground transition-colors hover:bg-muted/50">
+                    <tr className="border-b border-border text-muted-foreground transition-colors hover:bg-muted/50">
                       {/* TITLE */}
                       {columnVisibility.find(
                         (column) => column.value === "title" && column.active,
@@ -420,7 +420,7 @@ const DataTable: React.FC<DataTableProps> = ({
                         (column) => column.value === "actions" && column.active,
                       ) && (
                         <td className="flex gap-x-2 px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
-                          {status === "pending" && (
+                          {status === "in active" && (
                             <button
                               type="button"
                               className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
@@ -509,18 +509,20 @@ const DataTable: React.FC<DataTableProps> = ({
                                         "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
                                       )}
                                     >
-                                      <button
-                                        type="submit"
-                                        onClick={() =>
-                                          handleCancel(boost_id as string)
-                                        }
-                                        className={clsx(
-                                          "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
-                                          "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                        )}
-                                      >
-                                        Cancel Boost
-                                      </button>
+                                      <Dialog.Close asChild>
+                                        <button
+                                          type="submit"
+                                          onClick={() =>
+                                            handleCancel(boost_id as string)
+                                          }
+                                          className={clsx(
+                                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
+                                            "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                                          )}
+                                        >
+                                          Cancel Boost
+                                        </button>
+                                      </Dialog.Close>
                                       <Dialog.Close asChild>
                                         <button
                                           type="button"

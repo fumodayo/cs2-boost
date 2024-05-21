@@ -387,6 +387,7 @@ $small: 640px;
   /* width */
   ::-webkit-scrollbar {
     width: 5px;
+    height: 10px;
   }
 
   /* Track */
@@ -405,5 +406,28 @@ $small: 640px;
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary-hover));
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg-primary));
+  border-radius: 0.375rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 0.375rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-hover));
 }
 

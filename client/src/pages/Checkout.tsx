@@ -1,7 +1,7 @@
 import { RadioGroup } from "@headlessui/react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import clsx from "clsx";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
 
@@ -14,6 +14,8 @@ import Input from "../components/Input";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Loading from "./Loading";
+import { AppContext } from "../context/AppContext";
+import { useExchangeMoney } from "../hooks/useExchangeMoney";
 
 const modeOfPayment = [
   {
@@ -63,6 +65,7 @@ const Checkout = () => {
   const { id } = useParams();
   const order = useGetOrderById(id);
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currency } = useContext(AppContext);
 
   const {
     register,
@@ -89,6 +92,8 @@ const Checkout = () => {
     }
   };
 
+  const exchangeMoney = useExchangeMoney(order.price);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     // console.log(data);
   };
@@ -111,7 +116,7 @@ const Checkout = () => {
             <dl>
               <dt className="text-sm font-medium">Amount due</dt>
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-foreground">
-                {formatMoney(order.currency, order.price)}
+                {formatMoney(currency, exchangeMoney)}
               </dd>
             </dl>
             <ul className="divide-y divide-border text-sm font-medium">
@@ -145,7 +150,7 @@ const Checkout = () => {
                   <p>{order.type}</p>
                 </div>
                 <p className="flex-none text-base font-medium text-foreground">
-                  {formatMoney(order.currency, order.price)}
+                {formatMoney(currency, exchangeMoney)}
                 </p>
               </li>
             </ul>
@@ -172,14 +177,14 @@ const Checkout = () => {
               </div>
               <div className="flex items-center justify-between">
                 <dt>Subtotal</dt>
-                <dd>{formatMoney(order.currency, order.price)}</dd>
+                <dd>{formatMoney(currency, exchangeMoney)}</dd>
               </div>
 
               <div className="border-t border-border pt-6">
                 <div className="flex items-center justify-between text-foreground">
                   <dt className="text-base">Total</dt>
                   <dd className="text-base">
-                    {formatMoney(order.currency, order.price)}
+                    {formatMoney(currency, exchangeMoney)}
                   </dd>
                 </div>
               </div>

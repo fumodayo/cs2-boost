@@ -7,6 +7,8 @@ interface IPLogger {
   city?: string;
   ip?: string;
   status?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ListSocialMedia {
@@ -100,4 +102,36 @@ export interface Notify {
   isRead?: boolean;
   type?: string;
   createdAt?: string;
+}
+type Income = {
+  amount: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Amount = {
+  amount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface Revenue {
+  _id?: string;
+  user?: User | null;
+  income: Array<Income>;
+  money_pending: Array<Amount>;
+  money_profit: Array<Amount>;
+  money_fine: Array<Amount>;
+  orders_pending: Array<Order>;
+  orders_completed: Array<Order>;
+  orders_cancel: Array<Order>;
+  total_order_pending: Array<Amount>;
+  total_order_completed: Array<Amount>;
+  total_order_cancel: Array<Amount>;
+  total_money_pending: number;
+  total_money_profit: number;
+  total_money_fine: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

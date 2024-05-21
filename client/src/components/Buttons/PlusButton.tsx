@@ -85,11 +85,11 @@ const PlusButton: React.FC<PlusButtonProps> = ({
           side="bottom"
           align="start"
           sideOffset={10}
-          className="z-50 w-[200px] rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+          className="z-50 w-[200px] rounded-md border  border-border bg-popover p-0 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
         >
           <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground">
             {/* SEARCH */}
-            <div className="flex items-center border-b px-3">
+            <div className="flex items-center border-b border-border px-3">
               <IoSearch className="mr-0.5 shrink-0 text-muted-foreground" />
               <input
                 className={clsx(
@@ -102,8 +102,8 @@ const PlusButton: React.FC<PlusButtonProps> = ({
                 onChange={(e) => setSearchValue(e.target.value)}
               />
             </div>
-            <div className="scroll-sm max-h-[300px] overflow-y-auto overflow-x-hidden">
-              <div className="scroll-sm max-h-[250px] overflow-hidden overflow-y-scroll p-1 text-foreground">
+            <div className="scroll-custom max-h-[300px] overflow-y-auto overflow-x-hidden">
+              <div className="max-h-[250px] overflow-hidden overflow-y-scroll p-1 text-foreground">
                 {matches.map(({ label, value: languageValue, image }) => (
                   <Checkbox.Root
                     className={clsx(

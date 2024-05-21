@@ -10,6 +10,7 @@ export const formatJwt = () => {
   const token = localStorage.getItem("access_token");
   if (token) {
     const decodeJwt = parseJwt(token);
+    console.log(decodeJwt);
     return decodeJwt;
   }
   return null;
