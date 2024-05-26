@@ -93,7 +93,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+    // console.log(data);
   };
 
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
