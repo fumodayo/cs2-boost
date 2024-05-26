@@ -37,6 +37,7 @@ export interface User {
   gender?: string;
   phone_number?: string;
   real_name?: string;
+  handle?: string;
 
   createdAt?: string;
   updatedAt?: string;
@@ -53,7 +54,7 @@ export interface Order {
   options?: Array<string>;
   title?: title;
   boost_id?: string;
-  booster?: string | User;
+  booster?: User;
   conversation?: string | Conversation;
   status?: string;
   game?: string;
@@ -70,7 +71,7 @@ export interface Order {
   // Wingman
   start_rank?: string;
   end_rank?: string;
-  user?: string | User;
+  user?: User;
   createdAt?: Date;
   updatedAt?: Date;
 

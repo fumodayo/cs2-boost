@@ -116,7 +116,6 @@ const DataTable: React.FC<DataTableProps> = ({
   headers,
   items,
   children,
-  name,
   onSortKey,
 }) => {
   const { i18n } = useTranslation();

@@ -12,6 +12,14 @@ interface WidgetProps {
   boostOptions?: string[];
 }
 
+const isOrder = (item: Order | User): item is Order => {
+  return (item as Order).boost_id !== undefined;
+};
+
+const formatDate = (date?: Date): string => {
+  return date ? date.toLocaleDateString() : "";
+};
+
 const Widget: React.FC<WidgetProps> = ({
   titleHeader,
   headers,
@@ -22,40 +30,13 @@ const Widget: React.FC<WidgetProps> = ({
     return null;
   }
 
-  const {
-    boost_id,
-    server,
-    start_rating,
-    end_rating,
-    title,
-    status,
-    game,
-    type,
-    price,
-    start_rank,
-    end_rank,
-    username,
-    handle,
-    email,
-    games,
-    user_id,
-    addresses,
-    phone_number,
-    gender,
-    date_of_birth,
-    currency,
-    cccd_number,
-    cccd_issue_date,
-    real_name,
-    start_exp,
-    end_exp,
-  } = boostItem || {};
+  const selectedStartRank = isOrder(boostItem)
+    ? rankOptions.find((item) => item.value === boostItem.start_rank)
+    : undefined;
 
-  const selectedStartRank = rankOptions.find(
-    (item) => item.value === start_rank,
-  );
-
-  const selectedEndRank = rankOptions.find((item) => item.value === end_rank);
+  const selectedEndRank = isOrder(boostItem)
+    ? rankOptions.find((item) => item.value === boostItem.end_rank)
+    : undefined;
 
   return (
     <div
@@ -96,80 +77,116 @@ const Widget: React.FC<WidgetProps> = ({
                 )}
               >
                 <div className="flex items-center gap-x-2">
-                  {header === "server" && <span>{server}</span>}
-                  {header === "start rating" && <span>{start_rating}</span>}
-                  {header === "end rating" && <span>{end_rating}</span>}
-                  {header === "start exp" && <span>{start_exp}</span>}
-                  {header === "end exp" && <span>{end_exp}</span>}
-                  {header === "title" && <span>{title}</span>}
-                  {header === "username" && <span>{username}</span>}
-                  {header === "handle" && <span>{handle}</span>}
-                  {header === "user ID" && <span>{user_id}</span>}
-                  {header === "email address" && <span>{email}</span>}
-                  {header === "games" && <span>{games}</span>}
-                  {header === "full name" && <span>{real_name}</span>}
-                  {header === "address" && <span>{addresses}</span>}
-                  {header === "phone" && <span>{phone_number}</span>}
-                  {header === "gender" && <span>{gender}</span>}
-                  {header === "CCCD number" && <span>{cccd_number}</span>}
-                  {header === "CCCD issue date" && (
-                    <span>{cccd_issue_date}</span>
+                  {header === "server" && isOrder(boostItem) && (
+                    <span>{boostItem.server}</span>
                   )}
-                  {header === "birth date" && <span>{date_of_birth}</span>}
-                  {header === "boost id" && (
+                  {header === "start rating" && isOrder(boostItem) && (
+                    <span>{boostItem.start_rating}</span>
+                  )}
+                  {header === "end rating" && isOrder(boostItem) && (
+                    <span>{boostItem.end_rating}</span>
+                  )}
+                  {header === "start exp" && isOrder(boostItem) && (
+                    <span>{boostItem.start_exp}</span>
+                  )}
+                  {header === "end exp" && isOrder(boostItem) && (
+                    <span>{boostItem.end_exp}</span>
+                  )}
+                  {header === "title" && isOrder(boostItem) && (
+                    <span>{boostItem.title}</span>
+                  )}
+                  {header === "username" && !isOrder(boostItem) && (
+                    <span>{boostItem.username}</span>
+                  )}
+                  {header === "handle" && !isOrder(boostItem) && (
+                    <span>{boostItem.handle}</span>
+                  )}
+                  {header === "user ID" && !isOrder(boostItem) && (
+                    <span>{boostItem.user_id}</span>
+                  )}
+                  {header === "email address" && !isOrder(boostItem) && (
+                    <span>{boostItem.email}</span>
+                  )}
+                  {header === "games" && isOrder(boostItem) && (
+                    <span>{boostItem.game}</span>
+                  )}
+                  {header === "full name" && !isOrder(boostItem) && (
+                    <span>{boostItem.real_name}</span>
+                  )}
+                  {header === "address" && !isOrder(boostItem) && (
+                    <span>{boostItem.addresses}</span>
+                  )}
+                  {header === "phone" && !isOrder(boostItem) && (
+                    <span>{boostItem.phone_number}</span>
+                  )}
+                  {header === "gender" && !isOrder(boostItem) && (
+                    <span>{boostItem.gender}</span>
+                  )}
+                  {header === "CCCD number" && !isOrder(boostItem) && (
+                    <span>{boostItem.cccd_number}</span>
+                  )}
+                  {header === "CCCD issue date" && !isOrder(boostItem) && (
+                    <span>{formatDate(boostItem.cccd_issue_date)}</span>
+                  )}
+                  {header === "birth date" && !isOrder(boostItem) && (
+                    <span>{formatDate(boostItem.date_of_birth)}</span>
+                  )}
+                  {header === "boost id" && isOrder(boostItem) && (
                     <span className="flex items-center gap-1">
-                      #{boost_id}
-                      {boost_id && <Copy text={boost_id} />}
+                      #{boostItem.boost_id}
+                      {boostItem.boost_id && <Copy text={boostItem.boost_id} />}
                     </span>
                   )}
-                  {header === "status" && (
+                  {header === "status" && isOrder(boostItem) && (
                     <span className="inline-flex items-center rounded-md bg-secondary-light px-2 py-1 text-xs font-medium capitalize text-muted-foreground ring-1 ring-inset ring-secondary-ring">
-                      {status}
+                      {boostItem.status}
                     </span>
                   )}
-                  {header === "game" && <span>{game}</span>}
-                  {header === "type" && <span>{type}</span>}
-                  {header === "price" && (
-                    <span>{formatMoney(currency, price)}</span>
+                  {header === "game" && isOrder(boostItem) && (
+                    <span>{boostItem.game}</span>
                   )}
-                  {header === "start rank" && (
+                  {header === "type" && isOrder(boostItem) && (
+                    <span>{boostItem.type}</span>
+                  )}
+                  {header === "price" && isOrder(boostItem) && (
+                    <span>
+                      {formatMoney(boostItem.currency, boostItem.price)}
+                    </span>
+                  )}
+                  {header === "start rank" && selectedStartRank && (
                     <div className="flex items-center gap-x-2">
-                      {selectedStartRank && (
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            <img
-                              src={`/src/assets/counter-strike-2/wingman/${selectedStartRank.image}.png`}
-                              alt={selectedStartRank.name}
-                              className="w-12"
-                            />
-                          </div>
-                          <div className="ml-2.5 truncate">
-                            <div className="text-sm font-medium text-foreground">
-                              {selectedStartRank.name}
-                            </div>
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={`/src/assets/counter-strike-2/wingman/${selectedStartRank.image}.png`}
+                            alt={selectedStartRank.name}
+                            className="w-12"
+                          />
+                        </div>
+                        <div className="ml-2.5 truncate">
+                          <div className="text-sm font-medium text-foreground">
+                            {selectedStartRank.name}
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   )}
-                  {header === "end rank" && (
+                  {header === "end rank" && selectedEndRank && (
                     <div className="flex items-center gap-x-2">
-                      {selectedEndRank && (
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0">
-                            <img
-                              src={`/src/assets/counter-strike-2/wingman/${selectedEndRank.image}.png`}
-                              alt={selectedEndRank.name}
-                              className="w-12"
-                            />
-                          </div>
-                          <div className="ml-2.5 truncate">
-                            <div className="text-sm font-medium text-foreground">
-                              {selectedEndRank.name}
-                            </div>
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={`/src/assets/counter-strike-2/wingman/${selectedEndRank.image}.png`}
+                            alt={selectedEndRank.name}
+                            className="w-12"
+                          />
+                        </div>
+                        <div className="ml-2.5 truncate">
+                          <div className="text-sm font-medium text-foreground">
+                            {selectedEndRank.name}
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   )}
                 </div>
