@@ -19,13 +19,13 @@ const MessageNotify: React.FC<Notify> = ({
   const handleReadNotification = async (id?: string) => {
     const res = await fetch(`/api/notifications/read/${id}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
     });
     const data = await res.json();
     if (data.success === false) {
-      console.log("something for notification went wrong");
       return;
     }
   };
@@ -65,13 +65,13 @@ const NewBoostNotify: React.FC<Notify> = ({
   const handleReadNotification = async (id?: string) => {
     const res = await fetch(`/api/notifications/read/${id}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
     });
     const data = await res.json();
     if (data.success === false) {
-      console.log("something for notification went wrong");
       return;
     }
   };
@@ -118,7 +118,7 @@ const Notifications = () => {
           <div className="relative block shrink-0 rounded-full text-sm">
             <IoNotifications />
             {notification && notificationDontRead.length > 0 && (
-              <span className="absolute right-0 top-0 block h-1 w-1 rounded-full bg-danger ring-2 ring-card" />
+              <span className="absolute right-0 top-0 block h-1 w-1 rounded-full bg-danger" />
             )}
           </div>
         </button>

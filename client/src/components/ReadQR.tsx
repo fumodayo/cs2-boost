@@ -145,6 +145,7 @@ const ReadQR = () => {
       const info = parseUserString(result);
       const res = await fetch(`/api/user/verification/${currentUser?._id}`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

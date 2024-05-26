@@ -85,6 +85,7 @@ const AccountWidget = ({ order }: { order: Order }) => {
 
     await fetch("/api/account/edit-account", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -431,8 +432,6 @@ const BoostId = () => {
     },
   ];
 
-  console.log(order);
-
   const {
     register,
     handleSubmit,
@@ -456,6 +455,7 @@ const BoostId = () => {
 
     const res = await fetch("/api/account/create-account", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -476,6 +476,7 @@ const BoostId = () => {
   const handleAcceptBoost = async () => {
     const res = await fetch(`/api/order/accept-order/${order.boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -493,6 +494,7 @@ const BoostId = () => {
   const handleComplete = async (boost_id: string) => {
     const res = await fetch(`/api/order/complete-order/${boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -508,6 +510,7 @@ const BoostId = () => {
   const handleCancel = async (boost_id: string) => {
     const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();

@@ -16,7 +16,7 @@ export default function BoosterRoute() {
     const decodeJwt = parseJwt(token);
 
     if (decodeJwt.exp * 1000 <= Date.now()) {
-      console.log("logout");
+      dispatch(signOut());
     }
   } else {
     dispatch(signOut());

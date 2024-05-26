@@ -147,6 +147,7 @@ const Income: React.FC = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     const res = await fetch(`/api/revenue/withdraw`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -203,9 +204,12 @@ const Income: React.FC = () => {
             <div className="border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
               <h3 className="font-display font-semibold">Recent Income</h3>
             </div>
-            {revenue.income.slice(-5).reverse().map((item, index) => (
-              <RecordItem key={index} {...item} index={index} />
-            ))}
+            {revenue.income
+              .slice(-5)
+              .reverse()
+              .map((item, index) => (
+                <RecordItem key={index} {...item} index={index} />
+              ))}
             <div className="border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
               <Dialog.Root>
                 <Dialog.Trigger>

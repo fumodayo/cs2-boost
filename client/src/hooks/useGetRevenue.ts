@@ -8,6 +8,7 @@ export const useGetRevenue = (periodMoney: string, periodOrder: string) => {
     const fetchData = async () => {
       const res = await fetch(`/api/revenue`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

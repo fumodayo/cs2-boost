@@ -20,12 +20,12 @@ export const useGetAllOrder = () => {
       try {
         const res = await fetch(`/api/order?${searchParams}`, {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
         });
         const response = await res.json();
-        console.log(response);
         setData(response);
       } catch (error) {
         console.error("Error fetching orders:", error);

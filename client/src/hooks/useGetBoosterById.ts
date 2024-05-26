@@ -8,6 +8,7 @@ export const useGetBoosterById = (id?: string) => {
     const fetchData = async () => {
       const res = await fetch(`/api/user/booster/${id}`, {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

@@ -176,7 +176,6 @@ export const connectSocialMediaUser = async (req, res, next) => {
 
   try {
     const { type, link, username, code } = req.body;
-    console.log(type, link, username, code);
 
     const validUser = await User.findById(req.params.id);
 

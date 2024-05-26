@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { SocialMediaProps, socialMedia } from "../../constants";
-import { FaArrowUpRightFromSquare, FaCheck, FaXmark } from "react-icons/fa6";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 import { RiLinksFill } from "react-icons/ri";
 import { IoMdSettings } from "react-icons/io";
 import clsx from "clsx";
@@ -63,6 +63,7 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
       `/api/user/connect-social-media/${currentUser?._id}`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

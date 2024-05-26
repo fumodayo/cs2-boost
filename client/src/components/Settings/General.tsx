@@ -40,6 +40,7 @@ const General = () => {
     if (currentUser?.username === form.confirm) {
       const res = await fetch(`/api/user/delete/${currentUser?._id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -62,6 +63,7 @@ const General = () => {
     try {
       await fetch("/api/auth/logout-all", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -69,7 +71,7 @@ const General = () => {
       });
       dispatch(signOut());
     } catch (error) {
-      console.log(error);
+      return;
     }
   };
 
@@ -308,7 +310,8 @@ const General = () => {
                             "sm:flex",
                           )}
                         >
-                          {user.createdAt && formatDistance(user.createdAt, new Date())}
+                          {user.createdAt &&
+                            formatDistance(user.createdAt, new Date())}
                         </span>
                       </div>
                     </div>

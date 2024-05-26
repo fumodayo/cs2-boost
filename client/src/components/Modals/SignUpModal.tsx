@@ -51,6 +51,7 @@ const SignUpModal = () => {
       dispatch(authStart());
       const res = await fetch("/api/auth/signup", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

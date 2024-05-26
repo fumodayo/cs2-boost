@@ -8,6 +8,7 @@ export const useGetUserById = (id?: string) => {
     const fetchData = async () => {
       const res = await fetch(`/api/user/get/${id}`, {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

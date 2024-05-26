@@ -266,8 +266,6 @@ export const logoutAll = async (req, res, next) => {
 
     await validUser.save();
 
-    console.log(validUser);
-
     return res
       .clearCookie("access_token")
       .status(200)

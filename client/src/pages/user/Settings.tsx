@@ -58,6 +58,7 @@ const Settings = () => {
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
 
   const [error, setError] = useState<string>("");
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     register,
@@ -77,8 +78,8 @@ const Settings = () => {
   useEffect(() => {
     if (user) {
       setLoading(false);
-      setValue("username", user?.username || "");
-      setValue("email", user?.email || "");
+      setValue("username", user.username || "");
+      setValue("email", user.email || "");
     }
   }, [user, setValue]);
 
@@ -87,6 +88,7 @@ const Settings = () => {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser?._id}`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -109,9 +111,10 @@ const Settings = () => {
       dispatch(updateUserSuccess(data));
       toast.success("User updated successfully");
       reset({
-        username: user?.username,
-        email: user?.email,
+        username: data.username,
+        email: data.email,
       });
+      setOpenModal(false);
     } catch (error) {
       dispatch(updateUserFailure("Update user failed"));
       toast.error("Update user failed");
@@ -161,7 +164,10 @@ const Settings = () => {
                 </div>
               </div>
               <div className="flex items-center justify-end gap-2 sm:justify-normal md:ml-4 md:mt-0">
-                <Dialog.Root>
+                <Dialog.Root
+                  open={openModal}
+                  onOpenChange={(value) => setOpenModal(value)}
+                >
                   <Dialog.Trigger>
                     <button className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
                       <FaUserEdit className="mr-2" />

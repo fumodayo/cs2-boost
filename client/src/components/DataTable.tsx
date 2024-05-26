@@ -139,6 +139,7 @@ const DataTable: React.FC<DataTableProps> = ({
   const handleAccept = async (boost_id: string) => {
     const res = await fetch(`/api/order/accept-order/${boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -156,10 +157,10 @@ const DataTable: React.FC<DataTableProps> = ({
   const handleComplete = async (boost_id: string) => {
     const res = await fetch(`/api/order/complete-order/${boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();
-    console.log(data);
     if (data.success === false) {
       toast.error("Completed Boost failed");
       return;
@@ -172,6 +173,7 @@ const DataTable: React.FC<DataTableProps> = ({
   const handleCancel = async (boost_id: string) => {
     const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
       method: "POST",
+      credentials: "include",
     });
 
     const data = await res.json();

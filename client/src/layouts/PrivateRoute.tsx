@@ -16,7 +16,6 @@ export default function PrivateRoute() {
     const decodeJwt = parseJwt(token);
 
     if (decodeJwt.exp * 1000 <= Date.now()) {
-      console.log("logout");
       dispatch(signOut());
     }
   } else {

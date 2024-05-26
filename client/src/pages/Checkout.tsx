@@ -1,8 +1,7 @@
 import { RadioGroup } from "@headlessui/react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import clsx from "clsx";
 import { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
 
 import { useGetOrderById } from "../hooks/useGetOrderById";
@@ -80,6 +79,7 @@ const Checkout = () => {
   const handleCheckout = async () => {
     const res = await fetch(`/api/payment/create-payment`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -150,7 +150,7 @@ const Checkout = () => {
                   <p>{order.type}</p>
                 </div>
                 <p className="flex-none text-base font-medium text-foreground">
-                {formatMoney(currency, exchangeMoney)}
+                  {formatMoney(currency, exchangeMoney)}
                 </p>
               </li>
             </ul>

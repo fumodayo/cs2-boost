@@ -18,6 +18,7 @@ export const useGetNotifications = () => {
     try {
       const res = await fetch(`/api/notifications/${currentUser?._id}`, {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

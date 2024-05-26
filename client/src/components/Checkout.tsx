@@ -169,6 +169,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
     const res = await fetch("/api/order/create-order", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

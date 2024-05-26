@@ -17,6 +17,7 @@ export const useGetMessages = () => {
       try {
         const res = await fetch(`/api/messages/${selectedConversation?._id}`, {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

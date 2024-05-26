@@ -76,6 +76,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
     try {
       await fetch("/api/auth/signout", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -113,7 +114,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
             </div>
           </div>
           <Separator />
-          
+
           <AvatarItem label="Dashboard" link="" icon={BsGrid1X2Fill} />
           <Separator />
           {listOfServices

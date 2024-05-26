@@ -8,6 +8,7 @@ export const useGetOrderById = (id?: string) => {
     const fetchData = async () => {
       const res = await fetch(`/api/order/${id}`, {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

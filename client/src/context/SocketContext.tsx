@@ -22,9 +22,13 @@ export const SocketContextProvider = ({ children }: ContextProviderProps) => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { currentUser } = useSelector((state: RootState) => state.user);
 
+  const VITE_SERVER_URL = `${
+    import.meta.env.VITE_SERVER_URL ?? "http://localhost:3000"
+  }`;
+
   useEffect(() => {
     if (currentUser) {
-      const newSocket = io("http://localhost:3000", {
+      const newSocket = io(VITE_SERVER_URL, {
         query: {
           userId: currentUser._id,
         },

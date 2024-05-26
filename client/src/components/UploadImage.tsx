@@ -44,6 +44,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChangeImage }) => {
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
 
@@ -53,7 +54,6 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChangeImage }) => {
       const { url } = await res.json();
       setAvatarUrl(url);
     } catch (err) {
-      console.log(err);
       setError("Failed to upload image");
     } finally {
       setIsLoading(false);

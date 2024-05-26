@@ -117,7 +117,6 @@ app.post(
 
           await newNotification.save();
           io.in("boosters").emit("newNotification");
-
         })
         .catch((error) => console.log(error.message));
     }
@@ -126,7 +125,7 @@ app.post(
   }
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 app.use(cookieParser());
 
@@ -151,6 +150,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-server.listen("3000", () => {
-  console.log(`listening on ${3000}`);
+server.listen(process.env.PORT, () => {
+  console.log(`listening on ${process.env.PORT}`);
 });

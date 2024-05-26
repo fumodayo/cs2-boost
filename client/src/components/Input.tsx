@@ -48,7 +48,6 @@ const Input: React.FC<InputProps> = ({
   const togglePassword = () => setShowPassword((show) => !show);
 
   const error = errors[id];
-  console.log(error);
 
   return (
     <div className="w-full">

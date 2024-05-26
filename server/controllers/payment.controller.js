@@ -5,6 +5,8 @@ dotenv.config();
 
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
+const HOST = process.env.LOCAL_HOST_CLIENT || "http://localhost:5173";
+
 /*
  * CHECKOUT ORDER
  * 1. CREATE BILL PAYMENT BY STRIPE
@@ -37,13 +39,12 @@ export const paymentOrder = async (req, res, next) => {
       customer: customer.id,
       line_items: [orderItem],
       mode: "payment",
-      success_url: "http://localhost:5173/dashboard",
-      cancel_url: "http://localhost:5173/",
+      success_url: `${HOST}/dashboard`,
+      cancel_url: `${HOST}/dashboard`,
     });
 
     res.status(201).json({ url: session.url });
   } catch (error) {
     next(error);
-    console.log(error);
   }
 };
