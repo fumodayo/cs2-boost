@@ -8,6 +8,7 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { formatMoney } from "../utils/formatMoney";
 
 interface InputProps {
   id: string;
@@ -22,6 +23,8 @@ interface InputProps {
   label?: string;
   failure?: string | boolean;
   autoFocused?: boolean;
+  min?: number;
+  max?: number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -37,12 +40,15 @@ const Input: React.FC<InputProps> = ({
   label,
   failure,
   autoFocused,
+  min,
+  max,
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword((show) => !show);
 
   const error = errors[id];
+  console.log(error);
 
   return (
     <div className="w-full">
@@ -92,16 +98,28 @@ const Input: React.FC<InputProps> = ({
             {placeholder} không được để trống
           </p>
         )}
-        {id === "password" || error?.type === "minLength" && (
+        {error?.type === "min" && (
           <p className="mt-1 text-sm text-red-400">
-            {placeholder} chứa ít nhất 8 ký tự
+            Không được rút thấp hơn {formatMoney("vnd", min)}
           </p>
         )}
-        {id === "password" || error?.type === "maxLength" && (
+        {error?.type === "max" && (
           <p className="mt-1 text-sm text-red-400">
-            {placeholder} không được dài hơn 24 ký tự
+            Không được rút quá {formatMoney("vnd", max)}
           </p>
         )}
+        {id === "password" ||
+          (error?.type === "minLength" && (
+            <p className="mt-1 text-sm text-red-400">
+              {placeholder} chứa ít nhất 8 ký tự
+            </p>
+          ))}
+        {id === "password" ||
+          (error?.type === "maxLength" && (
+            <p className="mt-1 text-sm text-red-400">
+              {placeholder} không được dài hơn 24 ký tự
+            </p>
+          ))}
         {id !== "password" && error?.type === "pattern" && (
           <p className="mt-1 text-sm text-danger-light-foreground">
             {placeholder} sai định dạng

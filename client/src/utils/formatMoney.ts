@@ -7,5 +7,5 @@ export const formatMoney = (currency?: string, money?: number) => {
       maximumFractionDigits: 2,
     })}`;
   }
-  return -1;
+  return 0;
 };

@@ -15,12 +15,13 @@ import cookieParser from "cookie-parser";
 import Order from "./models/order.model.js";
 import Invoice from "./models/invoice.model.js";
 import revenueRouter from "./routes/revenue.route.js";
-import { ORDER_STATUS } from "./constants/index.js";
+import { NOTIFICATION_TYPE, ORDER_STATUS } from "./constants/index.js";
 
 import Stripe from "stripe";
 
-import { app, server } from "./socket/socket.js";
+import { app, io, server } from "./socket/socket.js";
 import connectToMongoDB from "./database/connectToMogoDB.js";
+import Notification from "./models/notification.model.js";
 
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
@@ -99,6 +100,24 @@ app.post(
             account: newOrder.account,
             status: newOrder.status,
           });
+
+          let existingNotification = await Notification.findOne({
+            type: NOTIFICATION_TYPE.BOOST,
+          });
+
+          if (existingNotification) {
+            await existingNotification.deleteOne();
+          }
+
+          const newNotification = new Notification({
+            boost_id: newOrder.boost_id,
+            content: "New Boost Created!",
+            type: NOTIFICATION_TYPE.BOOST,
+          });
+
+          await newNotification.save();
+          io.in("boosters").emit("newNotification");
+
         })
         .catch((error) => console.log(error.message));
     }

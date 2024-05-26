@@ -132,6 +132,7 @@ export interface Revenue {
   total_money_pending: number;
   total_money_profit: number;
   total_money_fine: number;
+  total_money: number;
   createdAt?: string;
   updatedAt?: string;
 }

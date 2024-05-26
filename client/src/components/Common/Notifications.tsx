@@ -103,9 +103,10 @@ const Notifications = () => {
     (state: RootState) => state.notification,
   );
 
-  const notificationDontRead = notification.filter(
-    (item: Notify) => item.isRead === false,
-  );
+  const notificationDontRead =
+    notification.length > 0
+      ? notification.filter((item: Notify) => item.isRead === false)
+      : [];
 
   return (
     <DropdownMenu.Root>
@@ -116,7 +117,7 @@ const Notifications = () => {
         >
           <div className="relative block shrink-0 rounded-full text-sm">
             <IoNotifications />
-            {notificationDontRead.length > 0 && (
+            {notification && notificationDontRead.length > 0 && (
               <span className="absolute right-0 top-0 block h-1 w-1 rounded-full bg-danger ring-2 ring-card" />
             )}
           </div>

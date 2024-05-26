@@ -361,10 +361,10 @@ const BoosterWidget = ({ booster }: { booster: User }) => {
             >
               <div className="inline-flex flex-wrap items-center gap-1">
                 <div className="lowercase">#{booster.user_id}</div>
-                <span> ⸱ </span>
+                {/* <span> ⸱ </span>
                 <div>9 boosts</div>
                 <span> ⸱ </span>
-                <div>0 accounts</div>
+                <div>0 accounts</div> */}
               </div>
             </p>
             <a
@@ -479,8 +479,10 @@ const BoostId = () => {
     });
 
     const data = await res.json();
+
     if (data.success === false) {
       toast.error("Accept Boost failed");
+      navigate("/dashboard/pending-boosts");
       return;
     }
 

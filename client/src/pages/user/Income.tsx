@@ -11,11 +11,16 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import UserPage from "../../components/Layouts/UserPage";
-import { FaCartShopping, FaMoneyBill1 } from "react-icons/fa6";
+import { FaCartShopping, FaMoneyBill1, FaXmark } from "react-icons/fa6";
 import { MdAttachMoney } from "react-icons/md";
 import { useGetRevenue } from "../../hooks/useGetRevenue";
 import { useState } from "react";
 import { formatMoney } from "../../utils/formatMoney";
+import * as Dialog from "@radix-ui/react-dialog";
+import clsx from "clsx";
+import Input from "../../components/Input";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 ChartJS.register(
   LinearScale,
@@ -46,9 +51,9 @@ const RecordItem: React.FC<RecordItemProps> = ({
           <div
             className={`flex max-w-max items-center justify-center rounded-xl px-4 py-1 font-bold ${
               status === "withdraw"
-                ? "bg-success text-primary-foreground"
-                : status === "deposit"
-                  ? "bg-primary text-primary-foreground "
+                ? "bg-primary text-primary-foreground"
+                : status === "earn"
+                  ? "bg-success text-primary-foreground "
                   : status === "fine"
                     ? "bg-danger text-primary-foreground"
                     : ""
@@ -70,6 +75,16 @@ const Income: React.FC = () => {
   const [periodMoney, setPeriodMoney] = useState<string>("week");
   const [periodOrder, setPeriodOrder] = useState<string>("week");
   const revenue = useGetRevenue(periodMoney, periodOrder);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FieldValues>({
+    defaultValues: {
+      money: 0,
+    },
+  });
 
   if (!revenue) return null;
 
@@ -129,7 +144,26 @@ const Income: React.FC = () => {
     revenue.total_order_cancel,
   );
 
-  const totalIncome = revenue.income.reduce((sum, acc) => sum + acc.amount, 0);
+  const onSubmit: SubmitHandler<FieldValues> = async (form) => {
+    const res = await fetch(`/api/revenue/withdraw`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...form,
+      }),
+    });
+    const data = await res.json();
+    if (data.success === false) {
+      toast.error("Rút tiền thất bại");
+      return;
+    }
+    toast.success("Rút thành công");
+    location.reload();
+
+    reset();
+  };
 
   return (
     <UserPage>
@@ -141,7 +175,7 @@ const Income: React.FC = () => {
             <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
               <h3 className="font-display flex items-center justify-center font-semibold">
                 <MdAttachMoney className="text-success" />
-                Income ({formatMoney("vnd", totalIncome)})
+                Income ({formatMoney("vnd", revenue.total_money)})
               </h3>
               <div className="flex gap-x-1">
                 {["week", "month"].map((period) => (
@@ -169,17 +203,113 @@ const Income: React.FC = () => {
             <div className="border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
               <h3 className="font-display font-semibold">Recent Income</h3>
             </div>
-            {revenue.income.slice(-5).map((item, index) => (
+            {revenue.income.slice(-5).reverse().map((item, index) => (
               <RecordItem key={index} {...item} index={index} />
             ))}
             <div className="border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
-              <button
-                onClick={() => console.log("free money")}
-                type="button"
-                className="relative inline-flex items-center justify-center rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/20 hover:text-primary-foreground"
-              >
-                <FaMoneyBill1 className="mr-2 text-xl text-success" /> Cashout
-              </button>
+              <Dialog.Root>
+                <Dialog.Trigger>
+                  <button
+                    type="button"
+                    className="relative inline-flex items-center justify-center rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/10"
+                  >
+                    <FaMoneyBill1 className="mr-2 text-xl text-success" />{" "}
+                    Cashout
+                  </button>
+                </Dialog.Trigger>
+                <Dialog.Portal>
+                  <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
+                  <Dialog.Content
+                    className={clsx(
+                      "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
+                    )}
+                  >
+                    {/* HEADER */}
+                    <div
+                      className={clsx(
+                        "flex items-center justify-between px-6 pb-0 pt-6",
+                        "sm:pt-5",
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <div
+                            onClick={handleSubmit(onSubmit)}
+                            className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-green-400 text-sm text-white ring-2 ring-green-500/30"
+                          >
+                            <MdAttachMoney />
+                          </div>
+                        </div>
+                        <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
+                          Widthdraw
+                        </Dialog.Title>
+                      </div>
+                      <Dialog.Close>
+                        <button
+                          type="button"
+                          className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
+                        >
+                          <span className="sr-only">Close</span>
+                          <FaXmark className="flex h-5 w-5 items-center justify-center" />
+                        </button>
+                      </Dialog.Close>
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="flex flex-col space-y-2 p-6">
+                      <p>Hãy nhập số tiền bạn muốn rút</p>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        style="h-9"
+                        id="money"
+                        rules={{
+                          pattern:
+                            /^(?!0\d)(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?$/,
+                          max: revenue.total_money,
+                          min: 20000,
+                        }}
+                        min={20000}
+                        max={revenue.total_money}
+                        placeholder="money"
+                        required
+                      />
+                    </div>
+
+                    {/* FOOTER */}
+                    <div
+                      className={clsx(
+                        "flex flex-row-reverse items-center gap-2 border-t border-border bg-muted/50 px-6 py-6",
+                        "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
+                      )}
+                    >
+                      <Dialog.Close asChild>
+                        <button
+                          type="submit"
+                          onClick={handleSubmit(onSubmit)}
+                          className={clsx(
+                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-4 py-2 text-sm font-medium text-success-foreground shadow-sm outline-none transition-colors",
+                            "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                          )}
+                        >
+                          Withdraw
+                        </button>
+                      </Dialog.Close>
+                      <Dialog.Close asChild>
+                        <button
+                          type="button"
+                          className={clsx(
+                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                          )}
+                        >
+                          Cancel
+                        </button>
+                      </Dialog.Close>
+                    </div>
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
             </div>
           </div>
         </div>
@@ -191,7 +321,7 @@ const Income: React.FC = () => {
             <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
               <h3 className="font-display flex items-center justify-center font-semibold">
                 <FaCartShopping className="mr-2 text-success" />
-                Order ({revenue.total_money_profit - revenue.total_money_fine})
+                Order Pending ({revenue.orders_pending.length})
               </h3>
               <div className="flex gap-x-1">
                 {["week", "month"].map((period) => (

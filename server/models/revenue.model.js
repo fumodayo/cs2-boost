@@ -7,7 +7,7 @@ const incomeSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: INCOME_STATUS,
-      default: INCOME_STATUS.DEPOSIT,
+      default: INCOME_STATUS.EARN,
     },
   },
   {
@@ -42,6 +42,7 @@ const revenueSchema = new mongoose.Schema(
     total_order_pending: [amountSchema],
     total_order_completed: [amountSchema],
     total_order_cancel: [amountSchema],
+    total_money: { type: Number, default: 0 },
     total_money_pending: { type: Number, default: 0 },
     total_money_profit: { type: Number, default: 0 },
     total_money_fine: { type: Number, default: 0 },

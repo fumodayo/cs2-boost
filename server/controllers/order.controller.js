@@ -265,23 +265,6 @@ export const createOrder = async (req, res, next) => {
 
     await newOrder.save();
 
-    let existingNotification = await Notification.findOne({
-      type: NOTIFICATION_TYPE.BOOST,
-    });
-
-    if (existingNotification) {
-      await existingNotification.deleteOne();
-    }
-
-    const newNotification = new Notification({
-      boost_id: newOrder.boost_id,
-      content: "New Boost Created!",
-      type: NOTIFICATION_TYPE.BOOST,
-    });
-
-    await newNotification.save();
-    io.in("boosters").emit("newNotification");
-
     res.status(201).json(newOrder.boost_id);
   } catch (error) {
     next(error);
@@ -320,6 +303,12 @@ export const getOrder = async (req, res, next) => {
  */
 export const acceptOrder = async (req, res, next) => {
   try {
+    const existingOrder = await Order.findOne({ boost_id: req.params.id });
+
+    if (existingOrder.booster) {
+      return next(errorHandler(400, "Order already has a booster assigned"));
+    }
+
     const updatedOrder = await Order.findOneAndUpdate(
       {
         boost_id: req.params.id,
@@ -345,6 +334,7 @@ export const acceptOrder = async (req, res, next) => {
     });
 
     let revenueExisting = await Revenue.findOne({ user: req.user.id });
+
     const today = new Date();
     const isNewDay = revenueExisting
       ? new Date(revenueExisting.createdAt).getDate() !== today.getDate()
@@ -352,24 +342,25 @@ export const acceptOrder = async (req, res, next) => {
 
     if (revenueExisting) {
       if (isNewDay) {
+        // Nếu là ngày mới, tạo mục mới
         revenueExisting.money_pending.push({ amount: updatedOrder.price });
         revenueExisting.total_order_pending.push({ amount: 1 });
       } else {
-        const lastAmount =
-          revenueExisting.money_pending.slice(-1)[0]?.amount || 0;
-        const newAmount = lastAmount + updatedOrder.price;
-        revenueExisting.money_pending.push({ amount: newAmount });
+        // Nếu không phải ngày mới, cập nhật mục hiện tại
+        const lastIndex = revenueExisting.money_pending.length - 1;
 
-        const lastOrderCount =
-          revenueExisting.total_order_pending.slice(-1)[0]?.amount || 0;
-        revenueExisting.total_order_pending.push({
-          amount: lastOrderCount + 1,
-        });
+        // Cập nhật giá trị cuối cùng của money_pending
+        revenueExisting.money_pending[lastIndex].amount += updatedOrder.price;
+
+        // Cập nhật giá trị cuối cùng của total_order_pending
+        revenueExisting.total_order_pending[lastIndex].amount += 1;
       }
 
+      // Cập nhật tổng số tiền và đơn hàng đang chờ
       revenueExisting.total_money_pending += updatedOrder.price;
       revenueExisting.orders_pending.push({ order: updatedOrder._id });
     } else {
+      // Nếu không có revenueExisting, tạo đối tượng mới
       revenueExisting = new Revenue({
         user: req.user.id,
         money_pending: [{ amount: updatedOrder.price }],
@@ -418,25 +409,44 @@ export const completedOrder = async (req, res, next) => {
       : true;
 
     if (isNewDay) {
+      // Nếu là ngày mới, tạo mục mới
       revenueExisting.money_profit.push({ amount: updateOrder.price });
       revenueExisting.total_order_completed.push({ amount: 1 });
     } else {
-      const lastAmount = revenueExisting.money_profit.slice(-1)[0]?.amount || 0;
-      const newAmount = lastAmount + updateOrder.price;
-      revenueExisting.money_profit.push({ amount: newAmount });
+      // Nếu không phải ngày mới, cập nhật mục hiện tại
+      if (revenueExisting.money_profit.length > 0) {
+        // Cập nhật giá trị cuối cùng của money_profit
+        revenueExisting.money_profit[
+          revenueExisting.money_profit.length - 1
+        ].amount += updateOrder.price;
+      } else {
+        // Nếu mảng trống, thêm phần tử mới
+        revenueExisting.money_profit.push({ amount: updateOrder.price });
+      }
 
-      const lastOrderCount =
-        revenueExisting.total_order_completed.slice(-1)[0]?.amount || 0;
-      revenueExisting.total_order_completed.push({
-        amount: lastOrderCount + 1,
-      });
+      if (revenueExisting.total_order_completed.length > 0) {
+        // Cập nhật giá trị cuối cùng của total_order_completed
+        revenueExisting.total_order_completed[
+          revenueExisting.total_order_completed.length - 1
+        ].amount += 1;
+      } else {
+        // Nếu mảng trống, thêm phần tử mới
+        revenueExisting.total_order_completed.push({ amount: 1 });
+      }
     }
 
+    // Cập nhật tổng số tiền đang chờ và tổng số tiền thu được
     revenueExisting.total_money_pending -= updateOrder.price;
     revenueExisting.total_money_profit += updateOrder.price;
+    revenueExisting.total_money += updateOrder.price;
+
+    // Loại bỏ đơn hàng đã hoàn thành khỏi danh sách orders_pending
     revenueExisting.orders_pending.pull({ order: updateOrder._id });
+
+    // Thêm đơn hàng đã hoàn thành vào danh sách orders_completed
     revenueExisting.orders_completed.push({ order: updateOrder._id });
 
+    // Thêm giá trị thu nhập mới vào income
     revenueExisting.income.push({ amount: updateOrder.price });
 
     // Lưu các thay đổi vào đối tượng Revenue
@@ -464,6 +474,7 @@ export const cancelOrder = async (req, res, next) => {
       {
         $set: {
           status: ORDER_STATUS.IN_ACTIVE,
+          booster: null,
         },
       },
       { new: true }
@@ -483,25 +494,44 @@ export const cancelOrder = async (req, res, next) => {
     const finePrice = updateOrder.price * 0.1;
 
     if (isNewDay) {
+      // Nếu là ngày mới, tạo mục mới
       revenueExisting.money_fine.push({ amount: finePrice });
       revenueExisting.total_order_cancel.push({ amount: 1 });
     } else {
-      const lastAmount = revenueExisting.money_fine.slice(-1)[0]?.amount || 0;
-      const newAmount = lastAmount + finePrice;
-      revenueExisting.money_fine.push({ amount: newAmount });
+      // Nếu không phải ngày mới, cập nhật mục hiện tại
+      if (revenueExisting.money_fine.length > 0) {
+        // Cập nhật giá trị cuối cùng của money_fine
+        revenueExisting.money_fine[
+          revenueExisting.money_fine.length - 1
+        ].amount += finePrice;
+      } else {
+        // Nếu mảng trống, thêm phần tử mới
+        revenueExisting.money_fine.push({ amount: finePrice });
+      }
 
-      const lastOrderCount =
-        revenueExisting.total_order_cancel.slice(-1)[0]?.amount || 0;
-      revenueExisting.total_order_cancel.push({
-        amount: lastOrderCount + 1,
-      });
+      if (revenueExisting.total_order_cancel.length > 0) {
+        // Cập nhật giá trị cuối cùng của total_order_cancel
+        revenueExisting.total_order_cancel[
+          revenueExisting.total_order_cancel.length - 1
+        ].amount += 1;
+      } else {
+        // Nếu mảng trống, thêm phần tử mới
+        revenueExisting.total_order_cancel.push({ amount: 1 });
+      }
     }
 
+    // Cập nhật tổng số tiền đang chờ và tổng số tiền phạt
     revenueExisting.total_money_pending -= updateOrder.price;
     revenueExisting.total_money_fine += finePrice;
-    revenueExisting.orders_pending.pull({ order: updateOrder._id });
-    revenueExisting.orders_completed.push({ order: updateOrder._id });
+    revenueExisting.total_money -= finePrice;
 
+    // Loại bỏ đơn hàng đã hủy khỏi danh sách orders_pending
+    revenueExisting.orders_pending.pull({ order: updateOrder._id });
+
+    // Thêm đơn hàng đã hủy vào danh sách orders_cancel (giả định rằng danh sách này tồn tại)
+    revenueExisting.orders_cancel.push({ order: updateOrder._id });
+
+    // Thêm giá trị thu nhập bị phạt vào income
     revenueExisting.income.push({
       amount: -finePrice,
       status: INCOME_STATUS.FINE,

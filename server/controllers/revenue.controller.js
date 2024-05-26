@@ -1,3 +1,4 @@
+import { INCOME_STATUS } from "../constants/index.js";
 import Revenue from "../models/revenue.model.js";
 import { errorHandler } from "../utils/error.js";
 import moment from "moment";
@@ -15,7 +16,21 @@ export const getAllRevenue = async (req, res, next) => {
     const revenue = await Revenue.findOne({ user: id });
 
     if (!revenue) {
-      return res.status(400).json([]);
+      return res.status(400).json({
+        income: [],
+        money_pending: [],
+        money_profit: [],
+        money_fine: [],
+        orders_pending: 0,
+        orders_completed: 0,
+        orders_cancel: 0,
+        total_order_pending: [],
+        total_order_completed: [],
+        total_order_cancel: [],
+        total_money_pending: 0,
+        total_money_profit: 0,
+        total_money_fine: 0,
+      });
     }
 
     // const revenue = {
@@ -606,15 +621,33 @@ export const getAllRevenue = async (req, res, next) => {
       total_money_pending: revenue.total_money_pending,
       total_money_profit: revenue.total_money_profit,
       total_money_fine: revenue.total_money_fine,
+      total_money: revenue.total_money,
     });
+  } catch (error) {
+    next(error);
+  }
+};
 
-    // res.status(200).json({
-    //   income: 0,
-    //   money_pending: [],
-    //   money_profit: [],
-    //   money_fine: [],
-    //   record_money_profit: [],
-    // });
+export const withdrawRevenue = async (req, res, next) => {
+  const { id } = req.user;
+
+  try {
+    const revenue = await Revenue.findOne({ user: id });
+
+    if (!revenue) {
+      return errorHandler(400, "Revenue not found");
+    }
+
+    const { money } = req.body;
+
+    revenue.income.push({
+      amount: -money,
+      status: INCOME_STATUS.WITHDRAW,
+    });
+    revenue.total_money -= money;
+    await revenue.save();
+
+    res.status(201).json("Withdraw completed");
   } catch (error) {
     next(error);
   }

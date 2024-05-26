@@ -23,6 +23,6 @@ export const NOTIFICATION_TYPE = {
 
 export const INCOME_STATUS = {
   WITHDRAW: "withdraw",
-  DEPOSIT: "deposit",
+  EARN: "earn",
   FINE: "fine",
 };

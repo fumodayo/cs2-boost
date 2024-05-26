@@ -40,7 +40,7 @@ const social = [
 
 const services = [
   {
-    name: "GameBoost",
+    name: "CS2Boost",
     tasks: [
       { name: "Work with us", link: "" },
       { name: "Blog & News", link: "" },

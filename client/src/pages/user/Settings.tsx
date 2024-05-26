@@ -151,10 +151,10 @@ const Settings = () => {
                         <div className="lowercase">
                           @{currentUser?.username}
                         </div>
-                        <span> ⸱ </span>
+                        {/* <span> ⸱ </span>
                         <div>9 boosts</div>
                         <span> ⸱ </span>
-                        <div>0 accounts</div>
+                        <div>0 accounts</div> */}
                       </div>
                     </p>
                   </div>

@@ -142,8 +142,10 @@ const DataTable: React.FC<DataTableProps> = ({
     });
 
     const data = await res.json();
+
     if (data.success === false) {
       toast.error("Accept Boost failed");
+      window.location.reload();
       return;
     }
 
@@ -157,6 +159,7 @@ const DataTable: React.FC<DataTableProps> = ({
     });
 
     const data = await res.json();
+    console.log(data);
     if (data.success === false) {
       toast.error("Completed Boost failed");
       return;
