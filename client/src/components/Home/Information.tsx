@@ -57,7 +57,7 @@ const Information = () => {
       </p>
       <img
         loading="lazy"
-        src="/src/assets/backgrounds/services-bg.png"
+        src="/public/assets/backgrounds/services-bg.png"
         alt="blue gradient"
         className={clsx("absolute -top-36 hidden", "dark:block")}
       />
@@ -92,7 +92,7 @@ const Information = () => {
               </div>
             </div>
             <img
-              src={`/src/assets/services/${service.title}${
+              src={`/public/assets/services/${service.title}${
                 theme === "light" ? "_w" : ""
               }.png`}
               alt={service.title}

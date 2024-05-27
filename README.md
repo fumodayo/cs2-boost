@@ -1,6 +1,6 @@
 # CS2Boost
 
-![design](https://github.com/fumodayo/cs2-boost/blob/main/client/src/assets/brand/icon-text-dark.png)
+![design](https://github.com/fumodayo/cs2-boost/blob/main/client/public/assets/brand/icon-text-dark.png)
 
 ## Web Technical Information
 

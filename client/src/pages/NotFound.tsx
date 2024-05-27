@@ -114,14 +114,14 @@ const NotFound = () => {
           )}
         >
           <img
-            src="/src/assets/overwatch-2/banner.png"
+            src="/public/assets/overwatch-2/banner.png"
             className={clsx(
               "absolute inset-0 hidden h-full w-full object-cover",
               "dark:block",
             )}
           />
           <img
-            src="/src/assets/overwatch-2/banner.png"
+            src="/public/assets/overwatch-2/banner.png"
             className={clsx(
               "absolute inset-0 h-full w-full object-cover saturate-0",
               "dark:hidden",

@@ -877,7 +877,7 @@ const BoostId = () => {
                                   )}
                                 >
                                   <img
-                                    src="/src/assets/counter-strike-2/logo/logo.png"
+                                    src="/public/assets/counter-strike-2/logo/logo.png"
                                     alt="Arena 2v2, 0->1400, US"
                                     className="h-8 w-8"
                                   />

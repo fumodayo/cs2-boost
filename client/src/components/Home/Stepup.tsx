@@ -23,7 +23,7 @@ const Stepup = () => {
       )}
     >
       <img
-        src="/src/assets/backgrounds/game-cta.png"
+        src="/public/assets/backgrounds/game-cta.png"
         className={clsx(
           "absolute left-0 top-0 z-0 hidden h-full w-full select-none object-cover",
           "lg:h-auto",

@@ -5,12 +5,12 @@ const Logo = () => {
     <a className="relative flex-1" href="/">
       <img
         className={clsx("block h-8 w-[100px]", "dark:hidden")}
-        src="/src/assets/brand/icon-text-dark.png"
+        src="/public/assets/brand/icon-text-dark.png"
         alt="CS2 Boost Logo"
       />
       <img
         className={clsx("hidden h-8 w-[100px]", "dark:block")}
-        src="/src/assets/brand/icon-text.png"
+        src="/public/assets/brand/icon-text.png"
         alt="CS2 Boost Logo"
       />
     </a>

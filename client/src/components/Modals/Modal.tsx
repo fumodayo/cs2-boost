@@ -155,7 +155,7 @@ const Modal: React.FC<ModalProps> = ({
             >
               <img
                 className="h-full w-full object-cover"
-                src="/src/assets/illustrations/login-bg.png"
+                src="/public/assets/illustrations/login-bg.png"
                 alt="logo"
               />
             </div>

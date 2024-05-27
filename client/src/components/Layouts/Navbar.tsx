@@ -101,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                                     <div className="flex items-center gap-2">
                                       <img
                                         className="h-6 w-6"
-                                        src={`/src/assets/${image}/logo.svg`}
+                                        src={`/public/assets/${image}/logo.svg`}
                                         alt={label}
                                       />
                                       {label}
@@ -117,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                                     <div className="flex items-center gap-2">
                                       <img
                                         className="h-6 w-6"
-                                        src={`/src/assets/${image}/logo.svg`}
+                                        src={`/public/assets/${image}/logo.svg`}
                                         alt={label}
                                       />
                                       {label}

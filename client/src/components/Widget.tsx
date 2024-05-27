@@ -158,7 +158,7 @@ const Widget: React.FC<WidgetProps> = ({
                       <div className="flex items-center">
                         <div className="flex-shrink-0">
                           <img
-                            src={`/src/assets/counter-strike-2/wingman/${selectedStartRank.image}.png`}
+                            src={`/public/assets/counter-strike-2/wingman/${selectedStartRank.image}.png`}
                             alt={selectedStartRank.name}
                             className="w-12"
                           />
@@ -176,7 +176,7 @@ const Widget: React.FC<WidgetProps> = ({
                       <div className="flex items-center">
                         <div className="flex-shrink-0">
                           <img
-                            src={`/src/assets/counter-strike-2/wingman/${selectedEndRank.image}.png`}
+                            src={`/public/assets/counter-strike-2/wingman/${selectedEndRank.image}.png`}
                             alt={selectedEndRank.name}
                             className="w-12"
                           />

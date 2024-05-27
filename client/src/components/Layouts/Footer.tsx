@@ -134,7 +134,7 @@ const Footer = () => {
         )}
       >
         <img
-          src="/src/assets/backgrounds/footer_sep.png"
+          src="/public/assets/backgrounds/footer_sep.png"
           className="-z-0 brightness-50 filter"
           alt="separator"
         />

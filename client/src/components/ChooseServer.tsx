@@ -31,13 +31,13 @@ const ChooseServer: React.FC<ChooseServerProps> = ({
               <div className="flex flex-col items-center gap-2">
                 {server === country.value ? (
                   <img
-                    src={`/src/assets/counter-strike-2/server/${country.value}-selected.png`}
+                    src={`/public/assets/counter-strike-2/server/${country.value}-selected.png`}
                     alt={country.value}
                     className="h-24 w-full object-contain"
                   />
                 ) : (
                   <img
-                    src={`/src/assets/counter-strike-2/server/${country.value}.png`}
+                    src={`/public/assets/counter-strike-2/server/${country.value}.png`}
                     alt={country.value}
                     className="h-24 w-full object-contain"
                   />

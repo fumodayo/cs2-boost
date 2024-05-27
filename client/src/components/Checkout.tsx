@@ -199,7 +199,7 @@ const Checkout: React.FC<CheckoutProps> = ({
               {currentRating && <p className="w-4">{currentRating}</p>}
               {selectedCurrentRank && (
                 <img
-                  src={`/src/assets/counter-strike-2/wingman/${selectedCurrentRank.image}.png`}
+                  src={`/public/assets/counter-strike-2/wingman/${selectedCurrentRank.image}.png`}
                   alt={selectedCurrentRank.name}
                   className="h-full w-14"
                 />
@@ -210,7 +210,7 @@ const Checkout: React.FC<CheckoutProps> = ({
               </span>
               {selectedDesiredRank && (
                 <img
-                  src={`/src/assets/counter-strike-2/wingman/${selectedDesiredRank.image}.png`}
+                  src={`/public/assets/counter-strike-2/wingman/${selectedDesiredRank.image}.png`}
                   alt={selectedDesiredRank.name}
                   className="h-full w-14"
                 />

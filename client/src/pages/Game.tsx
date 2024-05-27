@@ -97,7 +97,7 @@ const GameMode = ({
     >
       <div className="overflow-hidden rounded-2xl">
         <img
-          src={`/src/assets/counter-strike-2/services/${image}.png`}
+          src={`/public/assets/counter-strike-2/services/${image}.png`}
           alt={title}
           className={clsx(
             "h-80 w-full transform object-cover transition-transform duration-300 ",
@@ -171,7 +171,7 @@ const Game = () => {
               )}
             >
               <img
-                src={`/src/assets/counter-strike-2/services/How-to-buy.png`}
+                src={`/public/assets/counter-strike-2/services/How-to-buy.png`}
                 alt="How to buy Premier or Wingman Boost"
                 className="w-full max-w-[600px] rounded-2xl object-cover"
               />
