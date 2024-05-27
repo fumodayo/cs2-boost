@@ -43,11 +43,11 @@ const Introduction = () => {
   /* Khi scroll đến div introduction thì mới chạy thanh progress */
   const [progress, setProgress] = useState(0);
   const [currentIntroIndex, setCurrentIntroIndex] = useState(0);
-  const progressRef = useRef(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Xác định hàm kiểm tra xem element có trong viewport
-  const isElementInViewport = (el) => {
+  const isElementInViewport = (el: HTMLElement | null): boolean => {
     if (!el) return false;
     const rect = el.getBoundingClientRect();
     return (
@@ -102,17 +102,6 @@ const Introduction = () => {
   }, [currentIntroIndex]);
 
   // useEffect để kiểm tra khi progress đạt 100 và thay đổi currentIntroIndex
-  useEffect(() => {
-    if (progress >= 100) {
-      if (currentIntroIndex < introduction.length - 1) {
-        setCurrentIntroIndex(currentIntroIndex + 1);
-      } else {
-        setCurrentIntroIndex(0);
-      }
-      setProgress(0);
-    }
-  }, [progress, currentIntroIndex]);
-
   useEffect(() => {
     if (progress >= 100) {
       if (currentIntroIndex < introduction.length - 1) {
