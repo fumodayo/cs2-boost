@@ -11,21 +11,21 @@ import { AppContext } from "../../context/AppContext";
 const services = [
   {
     icon: IoRocketSharp,
-    title: "Boosting",
+    title: "boosting",
     subtitle:
       "Ranking up and progressing has never been easier and more stress-free",
     label: "Rank Up Now",
   },
   {
     icon: GiSamuraiHelmet,
-    title: "Accounts",
+    title: "accounts",
     subtitle:
       "Step up your game with our vast catalog of affordable, top-quality accounts",
     label: "Browse Accounts",
   },
   {
     icon: FaGraduationCap,
-    title: "Coaching",
+    title: "coaching",
     subtitle: "Expert coaching by former C9 analysts, LCS players, and more",
     label: "Get Coaching",
   },
