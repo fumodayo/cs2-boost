@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { IoGrid, IoNotifications } from "react-icons/io5";
+import { IoGrid } from "react-icons/io5";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { GiSamuraiHelmet } from "react-icons/gi";
 import { BiSolidCog } from "react-icons/bi";

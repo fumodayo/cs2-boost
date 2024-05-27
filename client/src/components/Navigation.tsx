@@ -9,7 +9,6 @@ import {
   HiOutlineChevronDoubleLeft,
   HiOutlineChevronDoubleRight,
 } from "react-icons/hi";
-import Loading from "../pages/Loading";
 
 type NavigationButtonProps = {
   icon: IconType;

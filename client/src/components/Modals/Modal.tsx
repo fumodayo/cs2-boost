@@ -4,11 +4,7 @@ import { useTranslation } from "react-i18next";
 import { AppContext } from "../../context/AppContext";
 import { useGetIP } from "../../hooks/useGetIP";
 import clsx from "clsx";
-import {
-  authFailure,
-  authStart,
-  authSuccess,
-} from "../../redux/user/userSlice";
+import { authStart, authSuccess } from "../../redux/user/userSlice";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";

@@ -11,13 +11,13 @@ import Loading from "./Loading";
 const headers = ["username", "gender"];
 
 interface SocialWidgetProps {
-  icon: IconType;
-  title: string;
-  color: string;
-  link: string;
-  type: string;
-  username: string;
-  code: string;
+  icon?: IconType;
+  title?: string;
+  color?: string;
+  link?: string;
+  type?: string;
+  username?: string;
+  code?: string;
 }
 
 const SocialWidget: React.FC<SocialWidgetProps> = ({
@@ -162,20 +162,9 @@ const Profile = () => {
             </div>
             <div className="px-0 pt-0 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-1">
-                {socialMediaTypes.map(
-                  ({ icon, title, color, link, username, code }) => (
-                    <SocialWidget
-                      key={title}
-                      icon={icon}
-                      title={title}
-                      color={color}
-                      link={link}
-                      type={title}
-                      username={username}
-                      code={code}
-                    />
-                  ),
-                )}
+                {socialMediaTypes.map((item) => (
+                  <SocialWidget {...item} />
+                ))}
               </div>
             </div>
           </div>

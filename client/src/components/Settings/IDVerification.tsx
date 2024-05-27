@@ -112,11 +112,13 @@ const IDVerification = () => {
           "lg:col-span-2 lg:row-span-2 lg:row-end-2 lg:space-y-6",
         )}
       >
-        <Widget
-          titleHeader="Personal Info"
-          headers={headers}
-          boostItem={currentUser}
-        />
+        {currentUser && (
+          <Widget
+            titleHeader="Personal Info"
+            headers={headers}
+            boostItem={currentUser}
+          />
+        )}
       </div>
     </div>
   );

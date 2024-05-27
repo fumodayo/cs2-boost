@@ -92,7 +92,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = () => {
     // console.log(data);
   };
 
@@ -139,8 +139,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
   const exchangeMoney = useExchangeMoney(Math.ceil(totalCost / 1000) * 1000);
 
-  const handleCreateOrder = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  const handleCreateOrder = async () => {
     dispatch(addCartStart());
 
     const order: Order = {

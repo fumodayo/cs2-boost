@@ -30,7 +30,7 @@ interface ConversationProps {
 
 const Conversation: React.FC<ConversationProps> = ({ order }) => {
   const { theme } = useContext(AppContext);
-  const { loading, sendMessage } = useSendMessage();
+  const { sendMessage } = useSendMessage();
 
   useListenMessages();
 

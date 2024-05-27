@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
 import { AppContext } from "../../context/AppContext";
-import Loading from "../../pages/Loading";
 
 interface CardServiceProps {
   image_number: string;

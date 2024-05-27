@@ -394,7 +394,7 @@ const BoostId = () => {
 
   dispatch(selectedConversation(order.conversation as ConversationType));
 
-  let headers = [];
+  let headers: string[] = [];
 
   if (order.type === "premier") {
     headers = ["server", "server", "start rating", "end rating"];

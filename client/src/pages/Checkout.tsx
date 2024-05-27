@@ -94,7 +94,7 @@ const Checkout = () => {
 
   const exchangeMoney = useExchangeMoney(order.price);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = () => {
     // console.log(data);
   };
 
