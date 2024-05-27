@@ -121,7 +121,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({
                     </Checkbox.Indicator>
                     {image && (
                       <img
-                        src={`/public/assets/${image}/logo.svg`}
+                        src={`/assets/${image}/logo.svg`}
                         className="ml-1 h-4 w-4 flex-shrink-0"
                       />
                     )}

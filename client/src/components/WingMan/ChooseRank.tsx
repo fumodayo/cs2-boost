@@ -44,7 +44,7 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
           >
             {selectedRank && (
               <img
-                src={`/public/assets/counter-strike-2/wingman/${selectedRank.image}.png`}
+                src={`/assets/counter-strike-2/wingman/${selectedRank.image}.png`}
                 alt={selectedRank.name}
                 className="w-20"
               />
@@ -87,7 +87,7 @@ const ChooseRank: React.FC<ChooseRankProps> = ({
                     }
                   >
                     <img
-                      src={`/public/assets/counter-strike-2/wingman/${item.image}.png`}
+                      src={`/assets/counter-strike-2/wingman/${item.image}.png`}
                       alt={item.value}
                       className="w-16"
                     />

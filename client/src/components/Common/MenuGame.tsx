@@ -43,7 +43,7 @@ const MenuGame = () => {
           >
             <img
               className="mr-2 h-6 w-6"
-              src={`/public/assets/${image}/logo.svg`}
+              src={`/assets/${image}/logo.svg`}
             />
             {label}
           </a>

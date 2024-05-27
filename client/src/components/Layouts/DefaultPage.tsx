@@ -55,7 +55,7 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
           <div className="absolute -z-10 w-full">
             <div className="relative h-[60vh] overflow-hidden">
               <img
-                src="/public/assets/counter-strike-2/banner.png"
+                src="/assets/counter-strike-2/banner.png"
                 className={clsx(
                   "h-full w-full object-cover saturate-0",
                   "dark:hidden",
@@ -64,7 +64,7 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                 alt="Counter Strike 2"
               />
               <img
-                src="/public/assets/counter-strike-2/banner.png"
+                src="/assets/counter-strike-2/banner.png"
                 className={clsx(
                   "hidden h-full w-full object-cover saturate-0",
                   "dark:block",
@@ -166,7 +166,7 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
                       {/* TITLE */}
                       <div className="my-4 flex items-center gap-4">
                         <img
-                          src={`/public/assets/counter-strike-2/logo/logo.png`}
+                          src={`/assets/counter-strike-2/logo/logo.png`}
                           alt="cs2"
                           className="-ml-px h-16 w-16 flex-none rounded-md object-cover object-center"
                         />

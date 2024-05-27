@@ -107,7 +107,7 @@ const MiniSidebar = () => {
         >
           <div className="absolute inset-0 h-36 overflow-hidden rounded-t-lg">
             <img
-              src="/public/assets/counter-strike-2/banner.png"
+              src="/assets/counter-strike-2/banner.png"
               className="h-full w-full object-cover"
               style={{ objectPosition: "0px 40%" }}
               alt="Banner"
@@ -121,7 +121,7 @@ const MiniSidebar = () => {
           </div>
           <div className="pointer-events-none relative flex items-center">
             <img
-              src="/public/assets/counter-strike-2/card/text.png"
+              src="/assets/counter-strike-2/card/text.png"
               className="h-[66px] w-44"
               alt="Game Title"
             />

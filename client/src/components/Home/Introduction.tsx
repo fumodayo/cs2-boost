@@ -205,7 +205,7 @@ const Introduction = () => {
           )}
         >
           <img
-            src={`/public/assets/services/howitworks${currentIntroIndex + 1}${
+            src={`/assets/services/howitworks${currentIntroIndex + 1}${
               theme === "light" ? "_w" : ""
             }.png`}
             className={clsx(

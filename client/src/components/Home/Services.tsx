@@ -28,7 +28,7 @@ const CardService: React.FC<CardServiceProps> = ({
     >
       {image_number && (
         <img
-          src={`/public/assets/illustrations/s${image_number}${
+          src={`/assets/illustrations/s${image_number}${
             theme === "light" ? "_w" : ""
           }.png`}
           alt="feature1"

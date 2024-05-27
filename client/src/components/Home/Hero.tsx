@@ -18,7 +18,7 @@ const Hero = () => {
           {hoverItem && (
             <div className="image">
               <img
-                src={`/public/assets/${hoverItem}/banner.png`}
+                src={`/assets/${hoverItem}/banner.png`}
                 className={clsx(
                   "h-full w-full bg-center bg-no-repeat object-cover opacity-20 saturate-0",
                   "dark:hidden",
@@ -26,7 +26,7 @@ const Hero = () => {
                 alt="banner-light"
               />
               <img
-                src={`/public/assets/${hoverItem}/banner.png`}
+                src={`/assets/${hoverItem}/banner.png`}
                 className={clsx(
                   "hidden h-full w-full bg-center bg-no-repeat object-cover opacity-20",
                   "dark:block",
@@ -119,14 +119,14 @@ const Hero = () => {
                     }`}
                   >
                     <img
-                      src={`/public/assets/${href}/card/bg.png`}
+                      src={`/assets/${href}/card/bg.png`}
                       className={clsx(
                         "game-card-image",
                         "group-hover:rounded-md",
                       )}
                     />
                     <img
-                      src={`/public/assets/${href}/card/text.png`}
+                      src={`/assets/${href}/card/text.png`}
                       className={clsx(
                         "game-card-text-image",
                         "group-hover:translate3d-custom group-hover:scale-110",

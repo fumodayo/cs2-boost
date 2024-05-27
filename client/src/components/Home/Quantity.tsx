@@ -92,7 +92,7 @@ export const QuantityItem: React.FC<QuantityItemProps> = ({
           </p>
 
           <img
-            src={`/public/assets/backgrounds/active_numbers.svg`}
+            src={`/assets/backgrounds/active_numbers.svg`}
             loading="lazy"
             className="absolute bottom-0 right-0 h-auto w-full overflow-hidden rounded-xl"
             alt={title}
@@ -128,7 +128,7 @@ export const QuantityItem: React.FC<QuantityItemProps> = ({
             {label && t(label)}
           </p>
           <img
-            src={`/public/assets/backgrounds/inactive_numbers${
+            src={`/assets/backgrounds/inactive_numbers${
               theme === "light" ? "_w" : ""
             }.svg`}
             loading="lazy"

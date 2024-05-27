@@ -19,7 +19,7 @@ const markOfRanks = {
     <div className="py-2">
       <span className="text-base text-foreground">5000</span>
       <img
-        src="/public/assets/counter-strike-2/premier/cyan.png"
+        src="/assets/counter-strike-2/premier/cyan.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />
@@ -29,7 +29,7 @@ const markOfRanks = {
     <div className="py-2">
       <span className="text-base text-foreground">10000</span>
       <img
-        src="/public/assets/counter-strike-2/premier/blue.png"
+        src="/assets/counter-strike-2/premier/blue.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />
@@ -39,7 +39,7 @@ const markOfRanks = {
     <div className="py-2">
       <span className="text-base text-foreground">15000</span>
       <img
-        src="/public/assets/counter-strike-2/premier/purple.png"
+        src="/assets/counter-strike-2/premier/purple.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />
@@ -49,7 +49,7 @@ const markOfRanks = {
     <div className="py-2">
       <span className="text-base text-foreground">20000</span>
       <img
-        src="/public/assets/counter-strike-2/premier/pink.png"
+        src="/assets/counter-strike-2/premier/pink.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />
@@ -59,7 +59,7 @@ const markOfRanks = {
     <div className="py-2">
       <span className="text-base text-foreground">25000</span>
       <img
-        src="/public/assets/counter-strike-2/premier/red.png"
+        src="/assets/counter-strike-2/premier/red.png"
         alt="rank"
         className="mt-2 h-full w-20"
       />

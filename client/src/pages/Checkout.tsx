@@ -122,7 +122,7 @@ const Checkout = () => {
             <ul className="divide-y divide-border text-sm font-medium">
               <li className="flex items-center space-x-4 py-6">
                 <img
-                  src={`/public/assets/counter-strike-2/logo/logo.png`}
+                  src={`/assets/counter-strike-2/logo/logo.png`}
                   alt="test"
                   className="h-12 w-12 flex-none rounded-md object-cover object-center"
                 />
@@ -253,7 +253,7 @@ const Checkout = () => {
                           <span className="flex items-center">
                             <span className="mr-2 shrink-0 flex-grow-0 sm:mr-4">
                               <img
-                                src={`/public/assets/payment-methods/${item.image}.png`}
+                                src={`/assets/payment-methods/${item.image}.png`}
                                 alt={item.value}
                                 className="h-10 w-10 shrink-0 object-contain"
                               />
