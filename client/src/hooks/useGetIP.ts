@@ -11,7 +11,9 @@ export const useGetIP = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`http://ip-api.com/json/`);
+      const res = await fetch(`http://ip-api.com/json/`, {
+        referrerPolicy: "unsafe-url",
+      });
       const data = await res.json();
       setData(data);
     };
