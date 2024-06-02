@@ -50,7 +50,7 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("http://localhost:3000/api/auth/signin", {
         method: "POST",
         credentials: "include",
         headers: {
