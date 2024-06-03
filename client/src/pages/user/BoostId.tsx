@@ -83,7 +83,7 @@ const AccountWidget = ({ order }: { order: Order }) => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const { username, password, backup_code } = data;
 
-    await fetch("/api/account/edit-account", {
+    await fetch("${import.meta.env.VITE_SERVER_URL}/api/account/edit-account", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -453,14 +453,17 @@ const BoostId = () => {
       backup_code: backup_code,
     };
 
-    const res = await fetch("/api/account/create-account", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      "${import.meta.env.VITE_SERVER_URL}/api/account/create-account",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(account),
       },
-      body: JSON.stringify(account),
-    });
+    );
 
     const data = await res.json();
 
@@ -474,10 +477,15 @@ const BoostId = () => {
   };
 
   const handleAcceptBoost = async () => {
-    const res = await fetch(`/api/order/accept-order/${order.boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/accept-order/${
+        order.boost_id
+      }`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
 
@@ -492,10 +500,13 @@ const BoostId = () => {
   };
 
   const handleComplete = async (boost_id: string) => {
-    const res = await fetch(`/api/order/complete-order/${boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/complete-order/${boost_id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
     if (data.success === false) {
@@ -508,10 +519,13 @@ const BoostId = () => {
   };
 
   const handleCancel = async (boost_id: string) => {
-    const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/cancel-order/${boost_id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
     if (data.success === false) {

@@ -6,13 +6,16 @@ export const useGetUserById = (id?: string) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/user/get/${id}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/user/get/${id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       const data = await res.json();
       setUser(data);
     };

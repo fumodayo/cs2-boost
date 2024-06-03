@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
 interface IPLogger {
-  country?: string;
-  city?: string;
-  query?: string;
+  ipAddress?: string;
+  countryName?: string;
 }
 
 export const useGetIP = () => {
@@ -11,9 +10,7 @@ export const useGetIP = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`http://ip-api.com/json/`, {
-        referrerPolicy: "unsafe-url",
-      });
+      const res = await fetch(`https://freeipapi.com/api/json`);
       const data = await res.json();
       setData(data);
     };

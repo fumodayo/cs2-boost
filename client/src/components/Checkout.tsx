@@ -166,14 +166,17 @@ const Checkout: React.FC<CheckoutProps> = ({
       return;
     }
 
-    const res = await fetch("/api/order/create-order", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/create-order`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
       },
-      body: JSON.stringify(order),
-    });
+    );
 
     const id = await res.json();
 

@@ -49,21 +49,23 @@ const SocialService: React.FC<SocialMediaProps> = ({
 
       const result = await signInWithPopup(auth, provider);
 
-      const res = await fetch("/api/auth/google", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/google`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: result.user.displayName,
+            email: result.user.email,
+            photo: result.user.photoURL,
+            ip: location?.ipAddress,
+            country: location?.countryName,
+          }),
         },
-        body: JSON.stringify({
-          name: result.user.displayName,
-          email: result.user.email,
-          photo: result.user.photoURL,
-          ip: location?.query,
-          country: location?.country,
-          city: location?.city,
-        }),
-      });
+      );
       const data = await res.json();
 
       if (data.success === false) {

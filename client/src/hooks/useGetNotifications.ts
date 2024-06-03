@@ -16,13 +16,18 @@ export const useGetNotifications = () => {
   const fetchData = async () => {
     dispatch(updateNotifyStart());
     try {
-      const res = await fetch(`/api/notifications/${currentUser?._id}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/notifications/${currentUser?._id}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       const data = await res.json();
       dispatch(updateNotifySuccess(data));
     } catch (error) {

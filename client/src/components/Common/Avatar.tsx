@@ -74,7 +74,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const handleSignOut = async () => {
     const { ip, id } = formatJwt();
     try {
-      await fetch("/api/auth/signout", {
+      await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/signout`, {
         method: "POST",
         credentials: "include",
         headers: {

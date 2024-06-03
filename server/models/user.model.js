@@ -4,7 +4,6 @@ import { IP_STATUS, ROLE } from "../constants/index.js";
 const IPLoggerSchema = new mongoose.Schema(
   {
     country: String,
-    city: String,
     ip: String,
     status: {
       type: String,

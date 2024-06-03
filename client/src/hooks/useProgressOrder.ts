@@ -20,13 +20,18 @@ export const useProgressOrder = () => {
     const fetchData = async () => {
       const searchParams = new URLSearchParams(location.search);
       try {
-        const res = await fetch(`/api/order/progress-order?${searchParams}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
+        const res = await fetch(
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/api/order/progress-order?${searchParams}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
         const response = await res.json();
         setData(response);
       } catch (error) {

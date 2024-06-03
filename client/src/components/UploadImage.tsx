@@ -42,7 +42,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ onChangeImage }) => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/upload", {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/upload`, {
         method: "POST",
         credentials: "include",
         body: formData,

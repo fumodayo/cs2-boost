@@ -77,14 +77,17 @@ const Checkout = () => {
   });
 
   const handleCheckout = async () => {
-    const res = await fetch(`/api/payment/create-payment`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/payment/create-payment`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
       },
-      body: JSON.stringify(order),
-    });
+    );
 
     const data = await res.json();
     if (data.url) {

@@ -136,10 +136,13 @@ const DataTable: React.FC<DataTableProps> = ({
   );
 
   const handleAccept = async (boost_id: string) => {
-    const res = await fetch(`/api/order/accept-order/${boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/accept-order/${boost_id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
 
@@ -154,10 +157,13 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleComplete = async (boost_id: string) => {
-    const res = await fetch(`/api/order/complete-order/${boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/complete-order/${boost_id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
     if (data.success === false) {
@@ -170,10 +176,13 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleCancel = async (boost_id: string) => {
-    const res = await fetch(`/api/order/cancel-order/${boost_id}`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/order/cancel-order/${boost_id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
 
     const data = await res.json();
     if (data.success === false) {

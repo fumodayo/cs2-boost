@@ -86,17 +86,22 @@ const Settings = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser?._id}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/user/update/${currentUser?._id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...form,
+            profile_picture: avatarImage,
+          }),
         },
-        body: JSON.stringify({
-          ...form,
-          profile_picture: avatarImage,
-        }),
-      });
+      );
       const data = await res.json();
 
       if (data.message === "Wrong old password") {

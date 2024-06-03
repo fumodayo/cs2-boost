@@ -15,13 +15,18 @@ export const useGetMessages = () => {
     const getMessages = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/messages/${selectedConversation?._id}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
+        const res = await fetch(
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/api/messages/${selectedConversation?._id}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
         const data = await res.json();
 
         dispatch(pushMessages(data));

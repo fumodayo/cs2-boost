@@ -14,7 +14,7 @@ const expiryTime = 60 * 60 * 1000; // 1 hour
  * 3. PUSH NEW IP INTO USER
  */
 export const signup = async (req, res, next) => {
-  const { email, password, ip, country, city } = req.body;
+  const { email, password, ip, country } = req.body;
   try {
     const existingUser = await User.findOne({ email });
 
@@ -34,7 +34,7 @@ export const signup = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    newUser.ip_logger.push({ ip, country, city });
+    newUser.ip_logger.push({ ip, country });
 
     const validUser = await newUser.save();
 
@@ -67,10 +67,8 @@ export const signup = async (req, res, next) => {
  * - IF IP NEW, PUSH INTO USER
  */
 export const signin = async (req, res, next) => {
-  const { email, password, ip, country, city } = req.body;
-  console.log(req.body);
+  const { email, password, ip, country } = req.body;
   try {
-    console.log(req.body);
     const validUser = await User.findOne({ email });
     if (!validUser) return next(errorHandler(404, "User not found"));
 
@@ -92,7 +90,6 @@ export const signin = async (req, res, next) => {
       validUser.ip_logger.push({
         ip: ip,
         country: country,
-        city: city,
         status: IP_STATUS.ONLINE,
       });
     }
@@ -134,7 +131,7 @@ export const signin = async (req, res, next) => {
  * - PUSH NEW IP INTO USER
  */
 export const google = async (req, res, next) => {
-  const { name, email, photo, ip, country, city } = req.body;
+  const { name, email, photo, ip, country } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -152,7 +149,6 @@ export const google = async (req, res, next) => {
         user.ip_logger.push({
           ip: ip,
           country: country,
-          city: city,
           status: IP_STATUS.ONLINE,
         });
       }
@@ -197,7 +193,6 @@ export const google = async (req, res, next) => {
       newUser.ip_logger.push({
         ip: ip,
         country: country,
-        city: city,
         status: IP_STATUS.ONLINE,
       });
 

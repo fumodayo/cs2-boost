@@ -49,19 +49,21 @@ const SignUpModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...form,
+            ip: location?.ipAddress,
+            country: location?.countryName,
+          }),
         },
-        body: JSON.stringify({
-          ...form,
-          ip: location?.query,
-          country: location?.country,
-          city: location?.city,
-        }),
-      });
+      );
       const data = await res.json();
 
       if (data.success === false) {

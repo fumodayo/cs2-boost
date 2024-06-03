@@ -143,14 +143,19 @@ const ReadQR = () => {
       setData(result);
       dispatch(updateUserStart());
       const info = parseUserString(result);
-      const res = await fetch(`/api/user/verification/${currentUser?._id}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/user/verification/${currentUser?._id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(info),
         },
-        body: JSON.stringify(info),
-      });
+      );
       const user = await res.json();
       dispatch(updateUserSuccess(user));
 

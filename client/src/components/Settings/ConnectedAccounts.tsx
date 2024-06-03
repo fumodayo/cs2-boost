@@ -60,7 +60,9 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     const res = await fetch(
-      `/api/user/connect-social-media/${currentUser?._id}`,
+      `${
+        import.meta.env.VITE_SERVER_URL
+      }/api/user/connect-social-media/${currentUser?._id}`,
       {
         method: "POST",
         credentials: "include",

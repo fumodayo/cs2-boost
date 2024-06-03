@@ -145,16 +145,19 @@ const Income: React.FC = () => {
   );
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
-    const res = await fetch(`/api/revenue/withdraw`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/revenue/withdraw`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+        }),
       },
-      body: JSON.stringify({
-        ...form,
-      }),
-    });
+    );
     const data = await res.json();
     if (data.success === false) {
       toast.error("Rút tiền thất bại");

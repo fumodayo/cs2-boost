@@ -4,7 +4,6 @@ export type Theme = "dark" | "light";
 interface IPLogger {
   _id?: string;
   country?: string;
-  city?: string;
   ip?: string;
   status?: string;
   createdAt?: string;

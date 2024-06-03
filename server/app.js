@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 
@@ -28,6 +29,18 @@ const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 dotenv.config();
 
 connectToMongoDB();
+
+const corsOptions = {
+  origin: [process.env.LOCAL_HOST_CLIENT, "http://localhost:5173"],
+  methods: ["GET", "POST"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+app.use(express.json({ limit: "50mb" }));
+
+app.use(cookieParser());
 
 let endpointSecret = process.env.ENDPOINT_SECRET_KEY;
 /**
@@ -124,10 +137,6 @@ app.post(
     response.send().end();
   }
 );
-
-app.use(express.json({ limit: "50mb" }));
-
-app.use(cookieParser());
 
 app.use("/api/upload", uploadRouter);
 app.use("/api/user", userRouter);

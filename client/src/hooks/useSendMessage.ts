@@ -15,14 +15,19 @@ export const useSendMessage = () => {
   ) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/messages/send/${conversation_id}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/messages/send/${conversation_id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message, boost_id }),
         },
-        body: JSON.stringify({ message, boost_id }),
-      });
+      );
       const data = await res.json();
       const backup = [...messages, data];
 

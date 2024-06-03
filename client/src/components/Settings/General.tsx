@@ -38,10 +38,15 @@ const General = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     if (currentUser?.username === form.confirm) {
-      const res = await fetch(`/api/user/delete/${currentUser?._id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/api/user/delete/${currentUser?._id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
 
       const data = await res.json();
       if (data.success === true) {
@@ -61,7 +66,7 @@ const General = () => {
   const handleLogoutAllDevices = async () => {
     const { id } = formatJwt();
     try {
-      await fetch("/api/auth/logout-all", {
+      await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/logout-all`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -292,10 +297,6 @@ const General = () => {
                           )}
                         >
                           {user.country}
-                          <span className="px-0.5 text-muted-foreground sm:px-1.5">
-                            .
-                          </span>
-                          {user.city}
                           <span
                             className={clsx(
                               "ml-1 inline-flex items-center rounded-md bg-primary-light px-2 py-1 text-xs font-medium capitalize text-primary-light-foreground ring-1 ring-inset ring-primary-ring",

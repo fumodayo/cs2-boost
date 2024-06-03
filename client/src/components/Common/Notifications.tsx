@@ -17,13 +17,16 @@ const MessageNotify: React.FC<Notify> = ({
   boost_id,
 }) => {
   const handleReadNotification = async (id?: string) => {
-    const res = await fetch(`/api/notifications/read/${id}`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/notifications/read/${id}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
     const data = await res.json();
     if (data.success === false) {
       return;
@@ -63,13 +66,16 @@ const NewBoostNotify: React.FC<Notify> = ({
   isRead,
 }) => {
   const handleReadNotification = async (id?: string) => {
-    const res = await fetch(`/api/notifications/read/${id}`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/api/notifications/read/${id}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
     const data = await res.json();
     if (data.success === false) {
       return;
