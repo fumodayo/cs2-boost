@@ -3,11 +3,13 @@ import http from "http";
 import express from "express";
 import User from "../models/user.model.js";
 
+const allowedOrigins = [process.env.LOCAL_HOST_CLIENT, "http://localhost:5173"];
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [process.env.LOCAL_HOST_CLIENT, "http://localhost:5173"],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
