@@ -2,7 +2,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { AppContext } from "../../context/AppContext";
-import { useGetIP } from "../../hooks/useGetIP";
 import clsx from "clsx";
 import { authStart, authSuccess } from "../../redux/user/userSlice";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
@@ -10,6 +9,7 @@ import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";
 import { SocialMediaProps, socialMedia } from "../../constants";
 import { RemoveScroll } from "react-remove-scroll";
+import { axiosInstance } from "../../axiosAuth";
 
 interface ModalProps {
   isOpen: boolean;
@@ -37,7 +37,6 @@ const SocialService: React.FC<SocialMediaProps> = ({
 
   const dispatch = useDispatch();
   const { onCloseLoginModal, onCloseSignUpModal } = useContext(AppContext);
-  const location = useGetIP();
 
   const handleGoogleClick = async () => {
     if (!active) return;
@@ -49,31 +48,22 @@ const SocialService: React.FC<SocialMediaProps> = ({
 
       const result = await signInWithPopup(auth, provider);
 
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/google`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: result.user.displayName,
-            email: result.user.email,
-            photo: result.user.photoURL,
-            ip: location?.ipAddress,
-            country: location?.countryName,
-          }),
-        },
-      );
-      const data = await res.json();
+      const ip = localStorage.getItem("ip_address");
+      const country = localStorage.getItem("country_name");
+
+      const { data } = await axiosInstance.post(`/auth/google`, {
+        name: result.user.displayName,
+        email: result.user.email,
+        photo: result.user.photoURL,
+        ip: ip,
+        country: country,
+      });
 
       if (data.success === false) {
         return;
       }
 
       dispatch(authSuccess(data.user));
-      localStorage.setItem("access_token", data.access_token);
 
       onCloseLoginModal();
       onCloseSignUpModal();

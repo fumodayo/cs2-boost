@@ -24,6 +24,7 @@ import UploadImage from "../../components/UploadImage";
 import Input from "../../components/Input";
 import ConnectedAccounts from "../../components/Settings/ConnectedAccounts";
 import Loading from "../Loading";
+import { axiosAuth } from "../../axiosAuth";
 
 const tabHeaders = [
   {
@@ -86,23 +87,10 @@ const Settings = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(updateUserStart());
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/user/update/${currentUser?._id}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...form,
-            profile_picture: avatarImage,
-          }),
-        },
+      const { data } = await axiosAuth.post(
+        `/user/update/${currentUser?._id}`,
+        { ...form, profile_picture: avatarImage },
       );
-      const data = await res.json();
 
       if (data.message === "Wrong old password") {
         setError("Wrong old password");

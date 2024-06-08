@@ -16,8 +16,14 @@ const isOrder = (item: Order | User): item is Order => {
   return (item as Order).boost_id !== undefined;
 };
 
-const formatDate = (date?: Date): string => {
-  return date ? date.toLocaleDateString() : "";
+const formatDate = (dateString?: Date): string => {
+  return dateString
+    ? new Date(dateString).toLocaleDateString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+    : "";
 };
 
 const Widget: React.FC<WidgetProps> = ({

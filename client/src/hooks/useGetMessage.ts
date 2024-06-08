@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { pushMessages } from "../redux/conversation/conversationSlice";
+import { axiosInstance } from "../axiosAuth";
 
 export const useGetMessages = () => {
   const dispatch = useDispatch();
@@ -15,20 +16,9 @@ export const useGetMessages = () => {
     const getMessages = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_SERVER_URL
-          }/api/messages/${selectedConversation?._id}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
+        const { data } = await axiosInstance.get(
+          `/messages/${selectedConversation?._id}`,
         );
-        const data = await res.json();
-
         dispatch(pushMessages(data));
       } catch (error) {
         console.log(error);

@@ -18,6 +18,7 @@ import { AppContext } from "../context/AppContext";
 import { useExchangeMoney } from "../hooks/useExchangeMoney";
 import { addCartStart, addCartSuccess } from "../redux/cart/cartSlice";
 import Input from "./Input";
+import { axiosAuth } from "../axiosAuth";
 
 type ExtraOption = {
   name: string;
@@ -166,22 +167,10 @@ const Checkout: React.FC<CheckoutProps> = ({
       return;
     }
 
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/create-order`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      },
-    );
-
-    const id = await res.json();
+    const { data } = await axiosAuth.post(`/order/create-order`, order);
 
     dispatch(addCartSuccess(order));
-    navigate(`/checkout/${id}`);
+    navigate(`/checkout/${data}`);
   };
 
   return (

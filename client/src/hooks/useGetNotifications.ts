@@ -7,6 +7,7 @@ import {
   updateNotifySuccess,
 } from "../redux/notification/notificationSlice";
 import { useSocketContext } from "../context/SocketContext";
+import { axiosInstance } from "../axiosAuth";
 
 export const useGetNotifications = () => {
   const dispatch = useDispatch();
@@ -16,19 +17,9 @@ export const useGetNotifications = () => {
   const fetchData = async () => {
     dispatch(updateNotifyStart());
     try {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/notifications/${currentUser?._id}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
+      const { data } = await axiosInstance.get(
+        `/notifications/${currentUser?._id}`,
       );
-      const data = await res.json();
       dispatch(updateNotifySuccess(data));
     } catch (error) {
       dispatch(updateNotifyFailure("Error fetching notifications"));

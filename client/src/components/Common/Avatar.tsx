@@ -18,7 +18,7 @@ import {
   listOfServicesForBooster,
   listOfServicesForUser,
 } from "../../constants";
-import { formatJwt } from "../../utils/formatJwt";
+import { axiosAuth } from "../../axiosAuth";
 
 type AvatarItemProps = {
   label?: string;
@@ -53,6 +53,7 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
 
 const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const dispatch = useDispatch();
+  const ip = localStorage.getItem("ip_address");
 
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -72,15 +73,10 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   };
 
   const handleSignOut = async () => {
-    const { ip, id } = formatJwt();
     try {
-      await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/signout`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ip: ip, id: id }),
+      await axiosAuth.post(`/auth/signout`, {
+        id: currentUser?._id,
+        ip: ip,
       });
       dispatch(signOut());
     } catch (error) {

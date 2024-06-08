@@ -12,6 +12,7 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from "../redux/user/userSlice";
+import { axiosAuth } from "../axiosAuth";
 
 interface QRComponentProps {
   file?: File | null;
@@ -143,21 +144,11 @@ const ReadQR = () => {
       setData(result);
       dispatch(updateUserStart());
       const info = parseUserString(result);
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/user/verification/${currentUser?._id}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(info),
-        },
+      const { data } = await axiosAuth.post(
+        `/user/verification/${currentUser?._id}`,
+        info,
       );
-      const user = await res.json();
-      dispatch(updateUserSuccess(user));
+      dispatch(updateUserSuccess(data));
 
       setStep(3); // Chuyển đến bước 3 khi xác nhận thành công
       setError(null); // Reset lỗi nếu có

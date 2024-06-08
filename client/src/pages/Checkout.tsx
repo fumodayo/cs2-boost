@@ -15,6 +15,7 @@ import { RootState } from "../redux/store";
 import Loading from "./Loading";
 import { AppContext } from "../context/AppContext";
 import { useExchangeMoney } from "../hooks/useExchangeMoney";
+import { axiosAuth } from "../axiosAuth";
 
 const modeOfPayment = [
   {
@@ -77,19 +78,7 @@ const Checkout = () => {
   });
 
   const handleCheckout = async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/payment/create-payment`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/payment/create-payment`, order);
     if (data.url) {
       window.location.href = data.url;
     }

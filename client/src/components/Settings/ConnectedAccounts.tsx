@@ -12,6 +12,7 @@ import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
 import { updateUserSuccess } from "../../redux/user/userSlice";
 import { ListSocialMedia } from "../../types";
+import { axiosAuth } from "../../axiosAuth";
 
 const hasConnectedSocialMedia = (
   listSocialMedia?: ListSocialMedia[],
@@ -59,23 +60,14 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
   }, [currentUser, setValue, socialMediaType]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
-    const res = await fetch(
-      `${
-        import.meta.env.VITE_SERVER_URL
-      }/api/user/connect-social-media/${currentUser?._id}`,
+    const { data } = await axiosAuth.post(
+      `/user/connect-social-media/${currentUser?._id}`,
       {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: title,
-          ...form,
-        }),
+        type: title,
+        ...form,
       },
     );
-    const data = await res.json();
+
     if (data.success === false) {
       toast.error("That bai");
       return;

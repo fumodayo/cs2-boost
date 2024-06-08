@@ -84,7 +84,7 @@ export const getAllOrder = async (req, res, next) => {
 export const getPendingOrder = async (req, res, next) => {
   const { searchKey, gameKey, sortKey } = req.query;
 
-  let query = { status: ORDER_STATUS.IN_ACTIVE };
+  let query = { status: ORDER_STATUS.IN_ACTIVE, user: { $ne: req.user.id } };
 
   if (searchKey) {
     query.$or = [
@@ -194,7 +194,7 @@ export const getProgressOrder = async (req, res, next) => {
     const countingPage = await Order.countDocuments(query);
 
     const orders = await Order.find(query)
-      .sort(sortOption)
+      .sort({ createdAt: -1 })
       .skip(pageSize * (page - 1))
       .limit(pageSize)
       .populate({
@@ -374,6 +374,7 @@ export const acceptOrder = async (req, res, next) => {
 
     res.status(201).json("Accepted order");
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

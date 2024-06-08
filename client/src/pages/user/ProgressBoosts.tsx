@@ -171,6 +171,8 @@ const ProgressBoosts = () => {
       orders: [],
     };
 
+  console.log(orders);
+
   const resetFilters = () => {
     setSearchKey("");
     setGameKey([]);

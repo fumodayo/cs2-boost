@@ -21,6 +21,7 @@ import clsx from "clsx";
 import Input from "../../components/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { axiosAuth } from "../../axiosAuth";
 
 ChartJS.register(
   LinearScale,
@@ -145,20 +146,7 @@ const Income: React.FC = () => {
   );
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/revenue/withdraw`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...form,
-        }),
-      },
-    );
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/revenue/withdraw`, { ...form });
     if (data.success === false) {
       toast.error("Rút tiền thất bại");
       return;

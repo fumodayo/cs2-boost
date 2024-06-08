@@ -14,11 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 import { RootState } from "../../redux/store";
 import { signOut } from "../../redux/user/userSlice";
-import { formatJwt } from "../../utils/formatJwt";
 import Circle from "../Icons/Circle";
 import Widget from "../Widget";
 import Input from "../Input";
 import { formatDistance } from "date-fns";
+import { axiosAuth } from "../../axiosAuth";
 
 const headers = ["username", "user ID", "email address", "address"];
 
@@ -38,17 +38,7 @@ const General = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     if (currentUser?.username === form.confirm) {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_URL
-        }/api/user/delete/${currentUser?._id}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
-
-      const data = await res.json();
+      const { data } = await axiosAuth.delete(`/user/delete/${currentUser?._id}`);
       if (data.success === true) {
         dispatch(signOut());
         navigate("/");
@@ -64,7 +54,6 @@ const General = () => {
   };
 
   const handleLogoutAllDevices = async () => {
-    const { id } = formatJwt();
     try {
       await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/logout-all`, {
         method: "POST",
@@ -72,7 +61,7 @@ const General = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: id }),
+        // body: JSON.stringify(),
       });
       dispatch(signOut());
     } catch (error) {

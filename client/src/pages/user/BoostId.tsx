@@ -40,6 +40,7 @@ import Input from "../../components/Input";
 import { toast } from "react-toastify";
 import { HiCursorClick } from "react-icons/hi";
 import { IoClose } from "react-icons/io5";
+import { axiosAuth } from "../../axiosAuth";
 
 const AccountField = ({ label, value }: { label?: string; value?: string }) => {
   return (
@@ -82,19 +83,11 @@ const AccountWidget = ({ order }: { order: Order }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const { username, password, backup_code } = data;
-
-    await fetch("${import.meta.env.VITE_SERVER_URL}/api/account/edit-account", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        account_id: _id,
-        username: username,
-        password: password,
-        backup_code: backup_code,
-      }),
+    await axiosAuth.post(`/account/edit-account`, {
+      account_id: _id,
+      username: username,
+      password: password,
+      backup_code: backup_code,
     });
 
     location.reload();
@@ -453,19 +446,7 @@ const BoostId = () => {
       backup_code: backup_code,
     };
 
-    const res = await fetch(
-      "${import.meta.env.VITE_SERVER_URL}/api/account/create-account",
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(account),
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/account/create-account`, account);
 
     if (data.success === false) {
       toast.error("Create account failed");
@@ -477,17 +458,7 @@ const BoostId = () => {
   };
 
   const handleAcceptBoost = async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/accept-order/${
-        order.boost_id
-      }`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/order/accept-order/${order?.boost_id}`);
 
     if (data.success === false) {
       toast.error("Accept Boost failed");
@@ -500,15 +471,7 @@ const BoostId = () => {
   };
 
   const handleComplete = async (boost_id: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/complete-order/${boost_id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.get(`/order/complete-order/${boost_id}`);
     if (data.success === false) {
       toast.error("Completed Boost failed");
       return;
@@ -519,15 +482,7 @@ const BoostId = () => {
   };
 
   const handleCancel = async (boost_id: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/cancel-order/${boost_id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/order/cancel-order/${boost_id}`);
     if (data.success === false) {
       toast.error("Cancel Boost failed");
       return;

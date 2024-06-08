@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Order } from "../types";
+import { axiosAuth } from "../axiosAuth";
 
 interface Orders {
   orders: Order[] | [];
@@ -20,20 +21,8 @@ export const useProgressOrder = () => {
     const fetchData = async () => {
       const searchParams = new URLSearchParams(location.search);
       try {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_SERVER_URL
-          }/api/order/progress-order?${searchParams}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const response = await res.json();
-        setData(response);
+        const { data } = await axiosAuth.get(`/order/progress-order?${searchParams}`);
+        setData(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }

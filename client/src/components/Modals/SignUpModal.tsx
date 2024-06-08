@@ -16,6 +16,7 @@ import { AppContext } from "../../context/AppContext";
 import Modal from "./Modal";
 import Input from "../Input";
 import { useGetIP } from "../../hooks/useGetIP";
+import { axiosInstance } from "../../axiosAuth";
 
 const SignUpModal = () => {
   const { t } = useTranslation();
@@ -49,22 +50,11 @@ const SignUpModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/signup`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...form,
-            ip: location?.ipAddress,
-            country: location?.countryName,
-          }),
-        },
-      );
-      const data = await res.json();
+      const { data } = await axiosInstance.post(`/auth/signup`, {
+        ...form,
+        ip: location?.ipAddress,
+        country: location?.countryName,
+      });
 
       if (data.success === false) {
         dispatch(authFailure("This email is already taken"));
@@ -72,7 +62,6 @@ const SignUpModal = () => {
       }
 
       dispatch(authSuccess(data.user));
-      localStorage.setItem("access_token", data.access_token);
 
       onCloseSignUpModal();
     } catch (error) {

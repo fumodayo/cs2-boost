@@ -7,6 +7,7 @@ import { RootState } from "../../redux/store";
 import { useGetNotifications } from "../../hooks/useGetNotifications";
 import { formatDistance } from "date-fns";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import { axiosAuth } from "../../axiosAuth";
 
 const MessageNotify: React.FC<Notify> = ({
   _id,
@@ -17,17 +18,7 @@ const MessageNotify: React.FC<Notify> = ({
   boost_id,
 }) => {
   const handleReadNotification = async (id?: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/notifications/read/${id}`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/api/notifications/read/${id}`);
     if (data.success === false) {
       return;
     }
@@ -66,17 +57,7 @@ const NewBoostNotify: React.FC<Notify> = ({
   isRead,
 }) => {
   const handleReadNotification = async (id?: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/notifications/read/${id}`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/notifications/read/${id}`);
     if (data.success === false) {
       return;
     }

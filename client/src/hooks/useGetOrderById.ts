@@ -1,22 +1,13 @@
 import { useEffect, useState } from "react";
 import { Order } from "../types";
+import { axiosAuth } from "../axiosAuth";
 
 export const useGetOrderById = (id?: string) => {
   const [order, setOrder] = useState<Order>({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/order/${id}`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      const data = await res.json();
+      const { data } = await axiosAuth.get(`/order/${id}`);
       setOrder(data);
     };
     fetchData();

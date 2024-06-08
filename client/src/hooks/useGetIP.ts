@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface IPLogger {
@@ -10,8 +11,9 @@ export const useGetIP = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`https://freeipapi.com/api/json`);
-      const data = await res.json();
+      const { data } = await axios.get(`https://freeipapi.com/api/json`);
+      localStorage.setItem("ip_address", data.ipAddress);
+      localStorage.setItem("country_name", data.countryName);
       setData(data);
     };
     fetchData();

@@ -32,7 +32,7 @@ connectToMongoDB();
 
 const corsOptions = {
   origin: [process.env.LOCAL_HOST_CLIENT, "http://localhost:5173"],
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
 

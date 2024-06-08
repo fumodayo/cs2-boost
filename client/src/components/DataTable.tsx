@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
+import { axiosAuth } from "../axiosAuth";
 
 type ServiceButtonProps = {
   value: string;
@@ -136,15 +137,7 @@ const DataTable: React.FC<DataTableProps> = ({
   );
 
   const handleAccept = async (boost_id: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/accept-order/${boost_id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/order/accept-order/${boost_id}`);
 
     if (data.success === false) {
       toast.error("Accept Boost failed");
@@ -157,15 +150,8 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleComplete = async (boost_id: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/complete-order/${boost_id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
+    const { data } = await axiosAuth.post(`/order/complete-order/${boost_id}`);
 
-    const data = await res.json();
     if (data.success === false) {
       toast.error("Completed Boost failed");
       return;
@@ -176,15 +162,7 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleCancel = async (boost_id: string) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/api/order/cancel-order/${boost_id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-
-    const data = await res.json();
+    const { data } = await axiosAuth.post(`/order/cancel-order/${boost_id}`);
     if (data.success === false) {
       toast.error("Cancel Boost failed");
       return;

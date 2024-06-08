@@ -5,7 +5,54 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { IP_STATUS } from "../constants/index.js";
 
-const expiryTime = 60 * 60 * 1000; // 1 hour
+const expiredAccessToken = 15 * 60 * 1000; // 15 minutes
+const expiredRefreshToken = 7 * 24 * 24 * 60 * 1000; // 7 days
+
+export const refreshToken = async (req, res, next) => {
+  const { refresh_token } = req.cookies;
+  const { id, ip } = req.body;
+
+  if (!refresh_token) {
+    const validUser = await User.findById(id);
+    if (!validUser) return next(errorHandler(404, "User not found"));
+
+    validUser.ip_logger.forEach((log) => {
+      if (log.ip === ip) {
+        log.status = IP_STATUS.OFFLINE;
+      }
+    });
+
+    await validUser.save();
+
+    return next(errorHandler(401, "Unauthorized"));
+  }
+
+  try {
+    const payload = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET);
+    const validUser = await User.findById(payload.id);
+
+    if (!validUser) {
+      return next(errorHandler(401, "Unauthorized"));
+    }
+
+    // Create new access token
+    const newAccessToken = jwt.sign(
+      { id: validUser._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.cookie("access_token", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /*
  * SIGNUP
@@ -38,22 +85,31 @@ export const signup = async (req, res, next) => {
 
     const validUser = await newUser.save();
 
-    const token = jwt.sign(
-      { id: validUser._id, ip: ip, role: validUser.role },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+    const accessToken = jwt.sign(
+      { id: validUser._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+    const refreshToken = jwt.sign(
+      { id: validUser._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
     );
 
     const { password: userPassword, ...rest } = validUser._doc;
 
-    const expiryDate = new Date(Date.now() + expiryTime);
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: expiredAccessToken,
+    });
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: expiredRefreshToken,
+    });
 
-    res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
-      .status(201)
-      .json({ user: rest, access_token: token });
+    res.status(200).json({ user: rest });
   } catch (error) {
     next(error);
   }
@@ -94,23 +150,33 @@ export const signin = async (req, res, next) => {
       });
     }
 
-    await validUser.save(); // Save the updated user
+    await validUser.save();
 
-    const token = jwt.sign(
-      { id: validUser._id, ip: ip, role: validUser.role },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
+    const accessToken = jwt.sign(
+      { id: validUser._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+    const refreshToken = jwt.sign(
+      { id: validUser._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
     );
 
-    const expiryDate = new Date(Date.now() + expiryTime);
     const { password: hashedPassword, ...rest } = validUser._doc;
 
-    res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
-      .status(200)
-      .json({ user: rest, access_token: token });
+    res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: expiredAccessToken,
+    });
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: expiredRefreshToken,
+    });
+
+    res.status(200).json({ user: rest });
   } catch (error) {
     next(error);
   }
@@ -155,24 +221,31 @@ export const google = async (req, res, next) => {
 
       await user.save();
 
-      const token = jwt.sign(
-        { id: user._id, ip: ip, role: user.role },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1h",
-        }
+      const accessToken = jwt.sign(
+        { id: user._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "15m" }
+      );
+      const refreshToken = jwt.sign(
+        { id: user._id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" }
       );
 
-      const { password: hashedPassword, ...rest } = user._doc;
-      const expiryDate = new Date(Date.now() + expiryTime);
+      const { password: userPassword, ...rest } = user._doc;
 
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          expires: expiryDate,
-        })
-        .status(200)
-        .json({ user: rest, access_token: token });
+      res.cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: expiredAccessToken,
+      });
+      res.cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: expiredRefreshToken,
+      });
+
+      res.status(200).json({ user: rest });
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -198,24 +271,31 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
-      const token = jwt.sign(
-        { id: newUser._id, ip: ip, role: newUser.role },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1h",
-        }
+      const accessToken = jwt.sign(
+        { id: newUser._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "15m" }
+      );
+      const refreshToken = jwt.sign(
+        { id: newUser._id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" }
       );
 
-      const expiryDate = new Date(Date.now() + expiryTime); // 1 hour
-      const { password: hashedPassword2, ...rest } = newUser._doc;
+      const { password: userPassword2, ...rest } = newUser._doc;
 
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          expires: expiryDate,
-        })
-        .status(200)
-        .json({ user: rest, access_token: token });
+      res.cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: expiredAccessToken,
+      });
+      res.cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: expiredRefreshToken,
+      });
+
+      res.status(200).json({ user: rest });
     }
   } catch (error) {
     next(errorHandler(500, "Server Error"));
@@ -242,7 +322,11 @@ export const signout = async (req, res, next) => {
     });
 
     await validUser.save();
-    res.clearCookie("access_token").status(200).json("Signout success");
+    res
+      .clearCookie("access_token")
+      .clearCookie("refresh_token")
+      .status(200)
+      .json("Signout success");
   } catch (error) {
     next(error);
   }

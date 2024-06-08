@@ -16,6 +16,7 @@ import { RootState } from "../../redux/store";
 import Modal from "./Modal";
 import Input from "../Input";
 import { useGetIP } from "../../hooks/useGetIP";
+import { axiosInstance } from "../../axiosAuth";
 
 const LoginModal = () => {
   const dispatch = useDispatch();
@@ -50,22 +51,11 @@ const LoginModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
       dispatch(authStart());
-      const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/signin`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...form,
-            ip: location?.ipAddress,
-            country: location?.countryName,
-          }),
-        },
-      );
-      const data = await res.json();
+      const { data } = await axiosInstance.post(`/auth/signin`, {
+        ...form,
+        ip: location?.ipAddress,
+        country: location?.countryName,
+      });
 
       if (data.success === false) {
         dispatch(authFailure("Wrong password or email"));
@@ -73,7 +63,6 @@ const LoginModal = () => {
       }
 
       dispatch(authSuccess(data.user));
-      localStorage.setItem("access_token", data.access_token);
 
       onCloseLoginModal();
     } catch (error) {
