@@ -35,7 +35,7 @@ export const SocketContextProvider = ({ children }: ContextProviderProps) => {
           "Access-Control-Allow-Origin": "*",
         },
         query: {
-          userId: "your_user_id_here",
+          userId: currentUser._id,
         },
       });
 
