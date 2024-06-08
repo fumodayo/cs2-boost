@@ -3,7 +3,10 @@ import http from "http";
 import express from "express";
 import User from "../models/user.model.js";
 
-const allowedOrigins = [process.env.LOCAL_HOST_CLIENT, "http://localhost:5173"];
+const allowedOrigins = [
+  "https://cs2-boost.vercel.app",
+  "http://localhost:5173",
+];
 
 const app = express();
 const server = http.createServer(app);

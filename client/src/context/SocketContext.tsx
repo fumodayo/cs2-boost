@@ -29,8 +29,13 @@ export const SocketContextProvider = ({ children }: ContextProviderProps) => {
   useEffect(() => {
     if (currentUser) {
       const newSocket = io(VITE_SERVER_URL, {
+        transports: ["websocket", "polling"],
+        withCredentials: true,
+        extraHeaders: {
+          "Access-Control-Allow-Origin": "*",
+        },
         query: {
-          userId: currentUser._id,
+          userId: "your_user_id_here",
         },
       });
 
