@@ -24,9 +24,9 @@ import { app, io, server } from "./socket/socket.js";
 import connectToMongoDB from "./database/connectToMogoDB.js";
 import Notification from "./models/notification.model.js";
 
-const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
-
 dotenv.config();
+
+const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 connectToMongoDB();
 
@@ -37,10 +37,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.use(express.json({ limit: "50mb" }));
-
-app.use(cookieParser());
 
 let endpointSecret = process.env.ENDPOINT_SECRET_KEY;
 /**
@@ -67,15 +63,15 @@ app.post(
           endpointSecret
         );
       } catch (error) {
-        response.status(400).send(`Webhook Error: ${error}`);
+        response.status(400).send(`Webhook Error: ${error.message}`);
         return;
       }
 
       data = event.data.object;
       eventType = event.type;
     } else {
-      data = req.body.data.object;
-      eventType = req.body.type;
+      data = request.body.data.object;
+      eventType = request.body.type;
     }
 
     // Handle the event
@@ -83,6 +79,7 @@ app.post(
       stripe.customers
         .retrieve(data.customer)
         .then(async (customer) => {
+          console.log(`Retrieved orderId: ${customer}`);
           const orderId = customer.metadata.order_id;
           const newOrder = await Order.findByIdAndUpdate(
             orderId,
@@ -134,9 +131,13 @@ app.post(
         .catch((error) => console.log(error.message));
     }
 
-    response.send().end();
+    response.send("completed").end();
   }
 );
+
+app.use(express.json({ limit: "50mb" }));
+
+app.use(cookieParser());
 
 app.use("/api/upload", uploadRouter);
 app.use("/api/user", userRouter);

@@ -21,7 +21,6 @@ export const useGetAllOrder = () => {
       try {
         const { data } = await axiosAuth.get(`/order?${searchParams}`);
         setData(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
