@@ -74,6 +74,9 @@ app.post(
       eventType = request.body.type;
     }
 
+    console.log("data", data);
+    console.log("eventType", eventType);
+
     // Handle the event
     if (eventType === "checkout.session.completed") {
       stripe.customers
@@ -131,7 +134,7 @@ app.post(
         .catch((error) => console.log(error.message));
     }
 
-    response.send("completed").end();
+    response.send().end();
   }
 );
 
