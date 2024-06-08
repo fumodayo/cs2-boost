@@ -36,7 +36,7 @@ axiosAuth.interceptors.request.use(
         return Promise.reject("Refresh token failed");
       }
     } catch (error) {
-      return new Promise((resolve, reject) => {
+      return new Promise((_, reject) => {
         store.dispatch(signOut());
         reject(error);
       });
