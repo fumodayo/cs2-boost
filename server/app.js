@@ -74,16 +74,13 @@ app.post(
       eventType = request.body.type;
     }
 
-    console.log("data", data);
-    console.log("eventType", eventType);
-
     // Handle the event
     if (eventType === "checkout.session.completed") {
       stripe.customers
         .retrieve(data.customer)
         .then(async (customer) => {
-          console.log(`Retrieved orderId: ${customer}`);
           const orderId = customer.metadata.order_id;
+          console.log("order_id", orderId);
           const newOrder = await Order.findByIdAndUpdate(
             orderId,
             {

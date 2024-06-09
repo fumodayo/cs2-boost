@@ -8,6 +8,7 @@ import { useGetNotifications } from "../../hooks/useGetNotifications";
 import { formatDistance } from "date-fns";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { axiosAuth } from "../../axiosAuth";
+import { useNavigate } from "react-router-dom";
 
 const MessageNotify: React.FC<Notify> = ({
   _id,
@@ -17,18 +18,17 @@ const MessageNotify: React.FC<Notify> = ({
   isRead,
   boost_id,
 }) => {
+  const navigate = useNavigate();
   const handleReadNotification = async (id?: string) => {
-    const { data } = await axiosAuth.post(`/api/notifications/read/${id}`);
+    const { data } = await axiosAuth.post(`/notifications/read/${id}`);
     if (data.success === false) {
       return;
     }
+    navigate(`/dashboard/boosts/${boost_id}`);
   };
 
   return (
-    <a
-      href={`/dashboard/boosts/${boost_id}`}
-      onClick={() => handleReadNotification(_id)}
-    >
+    <a onClick={() => handleReadNotification(_id)}>
       <DropdownMenu.Item className="relative flex w-full gap-x-3 rounded px-2 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground">
         <div className="relative block h-8 w-8 shrink-0 rounded-full text-sm">
           <img
@@ -56,18 +56,17 @@ const NewBoostNotify: React.FC<Notify> = ({
   createdAt,
   isRead,
 }) => {
+  const navigate = useNavigate();
   const handleReadNotification = async (id?: string) => {
     const { data } = await axiosAuth.post(`/notifications/read/${id}`);
     if (data.success === false) {
       return;
     }
+    navigate(`/dashboard/pending-boosts`);
   };
 
   return (
-    <a
-      href="/dashboard/pending-boosts"
-      onClick={() => handleReadNotification(_id)}
-    >
+    <a onClick={() => handleReadNotification(_id)}>
       <DropdownMenu.Item className="relative flex w-full gap-x-3 rounded px-2 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground">
         <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm">
           <RxRocket className="text-xl" />

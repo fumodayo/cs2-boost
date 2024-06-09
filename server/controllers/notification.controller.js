@@ -44,6 +44,7 @@ export const getNotifications = async (req, res, next) => {
 export const readNotification = async (req, res, next) => {
   try {
     const { id } = req.user;
+    console.log("user", id);
 
     await Notification.findByIdAndUpdate(
       req.params.id,
