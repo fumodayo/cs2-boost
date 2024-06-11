@@ -17,14 +17,14 @@ export const getNotifications = async (req, res, next) => {
       notifications = await Notification.find({
         $or: [{ type: NOTIFICATION_TYPE.BOOST }, { receiver: userId }],
       })
-        .sort({ createdAt: -1 })
+        .sort({ updatedAt: -1 })
         .populate({
           path: "sender",
           select: "-password",
         });
     } else {
       notifications = await Notification.find({ receiver: userId })
-        .sort({ createdAt: -1 })
+        .sort({ updatedAt: -1 })
         .populate({
           path: "sender",
           select: "-password",

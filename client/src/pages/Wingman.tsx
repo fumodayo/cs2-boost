@@ -9,6 +9,7 @@ import Checkout from "../components/Checkout";
 import ChooseRank from "../components/WingMan/ChooseRank";
 import Info from "../components/Info";
 import Board from "../components/Common/Board";
+import SEO from "../components/SEO";
 
 type ExtraOption = {
   name: string;
@@ -294,69 +295,77 @@ const Wingman = () => {
   }, [currentRank, desiredRank, server]);
 
   return (
-    <DefaultPage>
-      <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
-        {/* BOOKING */}
-        <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
-          <div className="flex flex-col gap-y-4">
-            {/* CHOOSE SERVER */}
-            <ChooseServer server={server} onChooseServer={onChooseServer} />
-            {server && (
-              <>
-                {/* CURRENT RANK */}
-                <ChooseRank
-                  title="Current Rank"
-                  subtitle="Select your current tier and division"
-                  rank={currentRank}
-                  setRank={setCurrentRank}
-                />
+    <>
+      <SEO
+        title="CS2 Wingman Boost | High Quality CS2 Boost & Elo Boost"
+        description="Buy High Quality CS2 Boosting and CS2 Accounts at the lowest price. 100% Secure. 24/7 Customer Support."
+        href="/counter-strike-2/wingman"
+      />
 
-                {/* DESIRED RANK */}
-                <ChooseRank
-                  title="Desired Rank"
-                  subtitle="Select your desired tier and division"
-                  rank={desiredRank}
-                  setRank={setDesiredRank}
-                />
-              </>
-            )}
+      <DefaultPage>
+        <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
+          {/* BOOKING */}
+          <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
+            <div className="flex flex-col gap-y-4">
+              {/* CHOOSE SERVER */}
+              <ChooseServer server={server} onChooseServer={onChooseServer} />
+              {server && (
+                <>
+                  {/* CURRENT RANK */}
+                  <ChooseRank
+                    title="Current Rank"
+                    subtitle="Select your current tier and division"
+                    rank={currentRank}
+                    setRank={setCurrentRank}
+                  />
 
-            {/* INFO */}
-            <Info
-              title="All the important details about our Wingman Boost"
-              serviceInfo={serviceInfo}
-            />
+                  {/* DESIRED RANK */}
+                  <ChooseRank
+                    title="Desired Rank"
+                    subtitle="Select your desired tier and division"
+                    rank={desiredRank}
+                    setRank={setDesiredRank}
+                  />
+                </>
+              )}
+
+              {/* INFO */}
+              <Info
+                title="All the important details about our Wingman Boost"
+                serviceInfo={serviceInfo}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* CHECKOUT */}
-        <Checkout
-          beginText="My Rank"
-          lastText="Desired Rank"
-          server={server}
-          title="wingman"
-          mode="wingman"
-          currentRanking={currentRank}
-          desiredRanking={desiredRank}
-          totalTime={totalTimeOfBoostWingman}
-          cost={totalCostOfBoostWingman}
-          extraOptions={extraOptions}
-        />
-      </main>
-      <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
-        <div className="flex flex-col items-center">
-          <p className="text-lg font-bold">{t("Price list")}</p>
-          <p className="text-md mb-4 text-muted-foreground">
-            (
-            {t(
-              "The estimated amount does not take into account additional costs",
-            )}
-            )
-          </p>
+          {/* CHECKOUT */}
+          <Checkout
+            beginText="My Rank"
+            lastText="Desired Rank"
+            server={server}
+            title="wingman"
+            mode="wingman"
+            currentRanking={currentRank}
+            desiredRanking={desiredRank}
+            totalTime={totalTimeOfBoostWingman}
+            cost={totalCostOfBoostWingman}
+            extraOptions={extraOptions}
+          />
+        </main>
+        <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
+          <div className="flex flex-col items-center">
+            <p className="text-lg font-bold">{t("Price list")}</p>
+            <p className="text-md mb-4 text-muted-foreground">
+              (
+              {t(
+                "The estimated amount does not take into account additional costs",
+              )}
+              )
+            </p>
+          </div>
+          <Board services={coefficientRankEarn} />
         </div>
-        <Board services={coefficientRankEarn} />
-      </div>
-    </DefaultPage>
+      </DefaultPage>
+    </>
   );
 };
 

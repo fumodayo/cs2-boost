@@ -11,6 +11,7 @@ import {
 
 import DefaultPage from "../components/Layouts/DefaultPage";
 import Discovery from "../components/Discovery";
+import SEO from "../components/SEO";
 
 const stepToBuy = [
   {
@@ -137,91 +138,99 @@ const Game = () => {
   const { t } = useTranslation();
 
   return (
-    <DefaultPage>
-      <div>
-        <div
-          className={clsx(
-            "col-span-4 my-4 flex w-full gap-8",
-            "lg:col-span-4 xl:col-span-5",
-          )}
-        >
-          <div className="flex w-full justify-between gap-4">
-            {modeOfGame.map(({ title, subtitle, image, link }) => (
-              <GameMode
-                key={title}
-                title={title}
-                subtitle={subtitle}
-                image={image}
-                link={link}
-              />
-            ))}
-          </div>
-        </div>
-        <div
-          className={clsx(
-            "col-span-4 my-4 flex w-full gap-8",
-            "lg:col-span-4 xl:col-span-5",
-          )}
-        >
-          <div className="mt-14 flex w-full flex-col gap-20">
-            <div
-              className={clsx(
-                "mb-4 flex w-full flex-col items-stretch gap-10",
-                "md:flex-row",
-              )}
-            >
-              <img
-                src={`/assets/counter-strike-2/services/How-to-buy.png`}
-                alt="How to buy Premier or Wingman Boost"
-                className="w-full max-w-[600px] rounded-2xl object-cover"
-              />
-              <div className="border-night-700 w-full space-y-4 rounded-2xl border p-7">
-                <div className="pb-8">
-                  <h2 className="text-xl font-bold text-foreground">
-                    {t("How Does Premier and Wingman Carry Work?")}
-                  </h2>
-                  <p className="text-muted-foreground">
-                    {t(
-                      "The fastest & easiest way to get your desired gear, rating, titles & achievements",
-                    )}
-                  </p>
-                </div>
-                <ul className="flex flex-col gap-6 space-y-2 text-muted-foreground">
-                  {stepToBuy.map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <item.icon className="text-4xl" />
-                      <span>{t(item.label)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+    <>
+      <SEO
+        title="Counter Strike 2 Boosting, Coaching & Accounts"
+        description="Buy High Quality CS2 Boosting and CS2 Accounts at the lowest price. 100% Secure. 24/7 Customer Support."
+        href="/counter-strike-2"
+      />
+
+      <DefaultPage>
+        <div>
+          <div
+            className={clsx(
+              "col-span-4 my-4 flex w-full gap-8",
+              "lg:col-span-4 xl:col-span-5",
+            )}
+          >
+            <div className="flex w-full justify-between gap-4">
+              {modeOfGame.map(({ title, subtitle, image, link }) => (
+                <GameMode
+                  key={title}
+                  title={title}
+                  subtitle={subtitle}
+                  image={image}
+                  link={link}
+                />
+              ))}
             </div>
           </div>
-        </div>
-
-        <div
-          className={clsx("relative w-full overflow-hidden pt-8", "sm:pt-12")}
-        >
-          <div className="relative flex w-full flex-col">
-            <div className="flex flex-col">
-              <h2
+          <div
+            className={clsx(
+              "col-span-4 my-4 flex w-full gap-8",
+              "lg:col-span-4 xl:col-span-5",
+            )}
+          >
+            <div className="mt-14 flex w-full flex-col gap-20">
+              <div
                 className={clsx(
-                  "font-display text-xl font-bold tracking-tight text-foreground",
-                  "sm:text-2xl",
+                  "mb-4 flex w-full flex-col items-stretch gap-10",
+                  "md:flex-row",
                 )}
               >
-                <span>{t("FAQs About Counter Strike 2 Boosting")}</span>
-              </h2>
-              <div className="relative flex flex-col pt-5">
-                {boostingServices.map(({ title, subtitle }, idx) => (
-                  <Discovery key={idx} title={title} subtitle={subtitle} />
-                ))}
+                <img
+                  src={`/assets/counter-strike-2/services/How-to-buy.png`}
+                  alt="How to buy Premier or Wingman Boost"
+                  className="w-full max-w-[600px] rounded-2xl object-cover"
+                />
+                <div className="border-night-700 w-full space-y-4 rounded-2xl border p-7">
+                  <div className="pb-8">
+                    <h2 className="text-xl font-bold text-foreground">
+                      {t("How Does Premier and Wingman Carry Work?")}
+                    </h2>
+                    <p className="text-muted-foreground">
+                      {t(
+                        "The fastest & easiest way to get your desired gear, rating, titles & achievements",
+                      )}
+                    </p>
+                  </div>
+                  <ul className="flex flex-col gap-6 space-y-2 text-muted-foreground">
+                    {stepToBuy.map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <item.icon className="text-4xl" />
+                        <span>{t(item.label)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={clsx("relative w-full overflow-hidden pt-8", "sm:pt-12")}
+          >
+            <div className="relative flex w-full flex-col">
+              <div className="flex flex-col">
+                <h2
+                  className={clsx(
+                    "font-display text-xl font-bold tracking-tight text-foreground",
+                    "sm:text-2xl",
+                  )}
+                >
+                  <span>{t("FAQs About Counter Strike 2 Boosting")}</span>
+                </h2>
+                <div className="relative flex flex-col pt-5">
+                  {boostingServices.map(({ title, subtitle }, idx) => (
+                    <Discovery key={idx} title={title} subtitle={subtitle} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </DefaultPage>
+      </DefaultPage>
+    </>
   );
 };
 

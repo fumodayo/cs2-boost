@@ -50,21 +50,30 @@ const LoginModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
-      dispatch(authStart());
-      const { data } = await axiosInstance.post(`/auth/signin`, {
-        ...form,
-        ip: location?.ipAddress,
-        country: location?.countryName,
-      });
+      if (location) {
+        dispatch(authStart());
+        const { data } = await axiosInstance.post(`/auth/signin`, {
+          ...form,
+          ip: location?.ipAddress,
+          country: location?.countryName,
+        });
 
-      if (data.success === false) {
-        dispatch(authFailure("Wrong password or email"));
-        return;
+        if (location.ipAddress) {
+          localStorage.setItem("ip_address", location.ipAddress);
+        }
+        if (location.countryName) {
+          localStorage.setItem("country_name", location.countryName);
+        }
+
+        if (data.success === false) {
+          dispatch(authFailure("Wrong password or email"));
+          return;
+        }
+
+        dispatch(authSuccess(data.user));
+
+        onCloseLoginModal();
       }
-
-      dispatch(authSuccess(data.user));
-
-      onCloseLoginModal();
     } catch (error) {
       dispatch(authFailure("Wrong password or email"));
     }

@@ -12,19 +12,23 @@ export const getAllWallet = async (req, res, next) => {
     query.$or = [{ boost_id: { $regex: searchKey, $options: "i" } }];
   }
 
-  if (typeKey && typeKey.length > 0) {
-    const typeKeys = typeKey.split(",");
-    query.type = { $in: typeKeys };
+  if (typeKey) {
+    if (Array.isArray(typeKey)) {
+      query.type = { $in: typeKey };
+    } else if (typeof typeKey === "string") {
+      const typeKeys = typeKey.split(",");
+      query.type = { $in: typeKeys };
+    }
   }
 
   try {
-    let sortOption = { createdAt: -1 };
+    let sortOption = { updatedAt: -1 };
     if (sortKey) {
       if (sortKey.startsWith("-")) {
         const field = sortKey.substring(1);
-        sortOption = { [field]: -1 };
+        sortOption = { [field === "updated_at" ? "updatedAt" : field]: -1 };
       } else {
-        sortOption = { [sortKey]: 1 };
+        sortOption = { [sortKey === "updated_at" ? "updatedAt" : sortKey]: 1 };
       }
     }
 

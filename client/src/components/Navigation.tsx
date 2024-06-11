@@ -1,5 +1,7 @@
 import * as Select from "@radix-ui/react-select";
 import clsx from "clsx";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { FaChevronDown } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
@@ -9,6 +11,7 @@ import {
   HiOutlineChevronDoubleLeft,
   HiOutlineChevronDoubleRight,
 } from "react-icons/hi";
+import { useNavigate, useLocation } from "react-router-dom";
 
 type NavigationButtonProps = {
   icon: IconType;
@@ -26,8 +29,6 @@ interface NavigationProps {
   countingPage?: number;
   page?: number;
   pages?: number;
-  onPerPage: (value: number | null) => void;
-  onCurrentPage: (value: number | null) => void;
 }
 
 const ArrowButton: React.FC<NavigationButtonProps> = ({
@@ -72,10 +73,20 @@ const Navigation: React.FC<NavigationProps> = ({
   countingPage,
   page,
   pages,
-  onCurrentPage,
-  onPerPage,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentParams = queryString.parse(location.search);
   const selectRowsPerPage = ["5", "10", "15", "20", "30"];
+
+  const [pageSize, setPageSize] = useState<string>(() => {
+    return (currentParams.pageSize as string) || "5";
+  });
+
+  useEffect(() => {
+    const params = queryString.parse(location.search);
+    setPageSize((params.pageSize as string) || "5");
+  }, [location.search]);
 
   if (!page || !pages) {
     return null;
@@ -87,13 +98,26 @@ const Navigation: React.FC<NavigationProps> = ({
 
   const handlePageChange = (value: number) => {
     if (value > 0 && value <= pages) {
-      onCurrentPage(Number(value));
+      const queryParams = { ...currentParams, page: value };
+      navigate({
+        pathname: location.pathname,
+        search: queryString.stringify(queryParams),
+      });
     }
   };
 
   const handlePageSizeChange = (value: string) => {
-    onPerPage(Number(value));
-    onCurrentPage(1);
+    if (Number(value) > 0) {
+      const queryParams = {
+        ...currentParams,
+        pageSize: value,
+        page: 1, // reset to first page when pageSize changes
+      };
+      navigate({
+        pathname: location.pathname,
+        search: queryString.stringify(queryParams),
+      });
+    }
   };
 
   return (
@@ -111,7 +135,7 @@ const Navigation: React.FC<NavigationProps> = ({
       >
         <div className="hidden items-center space-x-2 sm:flex">
           <p className="text-sm font-medium">Rows per page</p>
-          <Select.Root onValueChange={(value) => handlePageSizeChange(value)}>
+          <Select.Root value={pageSize} onValueChange={handlePageSizeChange}>
             <Select.Trigger>
               <button className="flex h-8 w-[70px] items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
                 <Select.Value placeholder="5" />
@@ -132,6 +156,7 @@ const Navigation: React.FC<NavigationProps> = ({
                   <Select.Group>
                     {selectRowsPerPage.map((value) => (
                       <Select.Item
+                        key={value}
                         className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground"
                         value={value}
                       >

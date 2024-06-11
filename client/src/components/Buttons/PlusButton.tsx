@@ -8,6 +8,8 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { FaPlus, FaCheck } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { ListOfGame } from "../../constants";
+import { useLocation, useNavigate } from "react-router-dom";
+import queryString from "query-string";
 
 interface PlusButtonProps {
   name: string;
@@ -22,6 +24,9 @@ const PlusButton: React.FC<PlusButtonProps> = ({
   selectedValues,
   onSelectedValuesChange,
 }) => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const currentParams = queryString.parse(location.search);
   const [searchValue, setSearchValue] = useState<string>("");
 
   const matches = useMemo(() => {
@@ -36,6 +41,27 @@ const PlusButton: React.FC<PlusButtonProps> = ({
       ? selectedValues.filter((val) => val !== languageValue)
       : [...selectedValues, languageValue];
     onSelectedValuesChange(updatedValues);
+    if (name === "Game") {
+      const queryParams = { ...currentParams, gameKey: updatedValues };
+      navigate({
+        pathname: pathname,
+        search: queryString.stringify(queryParams),
+      });
+    }
+    if (name === "Status") {
+      const queryParams = { ...currentParams, statusKey: updatedValues };
+      navigate({
+        pathname: pathname,
+        search: queryString.stringify(queryParams),
+      });
+    }
+    if (name === "Types") {
+      const queryParams = { ...currentParams, typeKey: updatedValues };
+      navigate({
+        pathname: pathname,
+        search: queryString.stringify(queryParams),
+      });
+    }
   };
 
   return (

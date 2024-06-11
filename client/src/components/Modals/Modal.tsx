@@ -3,13 +3,14 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { AppContext } from "../../context/AppContext";
 import clsx from "clsx";
-import { authStart, authSuccess } from "../../redux/user/userSlice";
+import { authSuccess } from "../../redux/user/userSlice";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
 import { FaXmark } from "react-icons/fa6";
 import { SocialMediaProps, socialMedia } from "../../constants";
 import { RemoveScroll } from "react-remove-scroll";
 import { axiosInstance } from "../../axiosAuth";
+import { useGetIP } from "../../hooks/useGetIP";
 
 interface ModalProps {
   isOpen: boolean;
@@ -37,36 +38,42 @@ const SocialService: React.FC<SocialMediaProps> = ({
 
   const dispatch = useDispatch();
   const { onCloseLoginModal, onCloseSignUpModal } = useContext(AppContext);
+  const location = useGetIP();
 
   const handleGoogleClick = async () => {
     if (!active) return;
 
     try {
-      dispatch(authStart());
-      const provider = new GoogleAuthProvider();
-      const auth = getAuth(app);
+      if (location) {
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth(app);
 
-      const result = await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider);
 
-      const ip = localStorage.getItem("ip_address");
-      const country = localStorage.getItem("country_name");
+        const { data } = await axiosInstance.post(`/auth/google`, {
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+          ip: location.ipAddress,
+          country: location.countryName,
+        });
 
-      const { data } = await axiosInstance.post(`/auth/google`, {
-        name: result.user.displayName,
-        email: result.user.email,
-        photo: result.user.photoURL,
-        ip: ip,
-        country: country,
-      });
+        if (location.ipAddress) {
+          localStorage.setItem("ip_address", location.ipAddress);
+        }
+        if (location.countryName) {
+          localStorage.setItem("country_name", location.countryName);
+        }
 
-      if (data.success === false) {
-        return;
+        if (data.success === false) {
+          return;
+        }
+
+        dispatch(authSuccess(data.user));
+
+        onCloseLoginModal();
+        onCloseSignUpModal();
       }
-
-      dispatch(authSuccess(data.user));
-
-      onCloseLoginModal();
-      onCloseSignUpModal();
     } catch (error) {
       return error;
     }

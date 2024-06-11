@@ -12,8 +12,6 @@ export const useGetIP = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(`https://freeipapi.com/api/json`);
-      localStorage.setItem("ip_address", data.ipAddress);
-      localStorage.setItem("country_name", data.countryName);
       setData(data);
     };
     fetchData();

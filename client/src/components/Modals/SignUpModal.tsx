@@ -49,21 +49,30 @@ const SignUpModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
-      dispatch(authStart());
-      const { data } = await axiosInstance.post(`/auth/signup`, {
-        ...form,
-        ip: location?.ipAddress,
-        country: location?.countryName,
-      });
+      if (location) {
+        dispatch(authStart());
+        const { data } = await axiosInstance.post(`/auth/signup`, {
+          ...form,
+          ip: location?.ipAddress,
+          country: location?.countryName,
+        });
 
-      if (data.success === false) {
-        dispatch(authFailure("This email is already taken"));
-        return;
+        if (location.ipAddress) {
+          localStorage.setItem("ip_address", location.ipAddress);
+        }
+        if (location.countryName) {
+          localStorage.setItem("country_name", location.countryName);
+        }
+
+        if (data.success === false) {
+          dispatch(authFailure("This email is already taken"));
+          return;
+        }
+
+        dispatch(authSuccess(data.user));
+
+        onCloseSignUpModal();
       }
-
-      dispatch(authSuccess(data.user));
-
-      onCloseSignUpModal();
     } catch (error) {
       dispatch(authFailure("This email is already taken"));
     }

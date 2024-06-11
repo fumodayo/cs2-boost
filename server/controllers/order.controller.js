@@ -5,7 +5,7 @@ import {
 } from "../constants/index.js";
 import Order from "../models/order.model.js";
 import Conversation from "../models/conversation.model.js";
-import { io } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 import Notification from "../models/notification.model.js";
 import Revenue from "../models/revenue.model.js";
 import { errorHandler } from "../utils/error.js";
@@ -28,24 +28,32 @@ export const getAllOrder = async (req, res, next) => {
     ];
   }
 
-  if (gameKey && gameKey.length > 0) {
-    const gameKeys = gameKey.split(",");
-    query.game = { $in: gameKeys };
+  if (gameKey) {
+    if (Array.isArray(gameKey)) {
+      query.game = { $in: gameKey };
+    } else if (typeof gameKey === "string") {
+      const gameKeys = gameKey.split(",");
+      query.game = { $in: gameKeys };
+    }
   }
 
-  if (statusKey && statusKey.length > 0) {
-    const statusKeys = statusKey.split(",");
-    query.status = { $in: statusKeys };
+  if (statusKey) {
+    if (Array.isArray(statusKey)) {
+      query.status = { $in: statusKey };
+    } else if (typeof statusKey === "string") {
+      const statusKeys = statusKey.split(",");
+      query.status = { $in: statusKeys };
+    }
   }
 
   try {
-    let sortOption = { createdAt: -1 };
+    let sortOption = { updatedAt: -1 };
     if (sortKey) {
       if (sortKey.startsWith("-")) {
         const field = sortKey.substring(1);
-        sortOption = { [field]: -1 };
+        sortOption = { [field === "updated_at" ? "updatedAt" : field]: -1 };
       } else {
-        sortOption = { [sortKey]: 1 };
+        sortOption = { [sortKey === "updated_at" ? "updatedAt" : sortKey]: 1 };
       }
     }
 
@@ -93,19 +101,23 @@ export const getPendingOrder = async (req, res, next) => {
     ];
   }
 
-  if (gameKey && gameKey.length > 0) {
-    const gameKeys = gameKey.split(",");
-    query.game = { $in: gameKeys };
+  if (gameKey) {
+    if (Array.isArray(gameKey)) {
+      query.game = { $in: gameKey };
+    } else if (typeof gameKey === "string") {
+      const gameKeys = gameKey.split(",");
+      query.game = { $in: gameKeys };
+    }
   }
 
   try {
-    let sortOption = { createdAt: -1 };
+    let sortOption = { updatedAt: -1 };
     if (sortKey) {
       if (sortKey.startsWith("-")) {
         const field = sortKey.substring(1);
-        sortOption = { [field]: -1 };
+        sortOption = { [field === "updated_at" ? "updatedAt" : field]: -1 };
       } else {
-        sortOption = { [sortKey]: 1 };
+        sortOption = { [sortKey === "updated_at" ? "updatedAt" : sortKey]: 1 };
       }
     }
 
@@ -157,14 +169,22 @@ export const getProgressOrder = async (req, res, next) => {
     ];
   }
 
-  if (gameKey && gameKey.length > 0) {
-    const gameKeys = gameKey.split(",");
-    query.game = { $in: gameKeys };
+  if (gameKey) {
+    if (Array.isArray(gameKey)) {
+      query.game = { $in: gameKey };
+    } else if (typeof gameKey === "string") {
+      const gameKeys = gameKey.split(",");
+      query.game = { $in: gameKeys };
+    }
   }
 
-  if (statusKey && statusKey.length > 0) {
-    const statusKeys = statusKey.split(",");
-    query.status = { $in: statusKeys };
+  if (statusKey) {
+    if (Array.isArray(statusKey)) {
+      query.status = { $in: statusKey };
+    } else if (typeof statusKey === "string") {
+      const statusKeys = statusKey.split(",");
+      query.status = { $in: statusKeys };
+    }
   }
 
   try {
@@ -178,13 +198,13 @@ export const getProgressOrder = async (req, res, next) => {
       booster: id,
     });
 
-    let sortOption = { createdAt: -1 };
+    let sortOption = { updatedAt: -1 };
     if (sortKey) {
       if (sortKey.startsWith("-")) {
         const field = sortKey.substring(1);
-        sortOption = { [field]: -1 };
+        sortOption = { [field === "updated_at" ? "updatedAt" : field]: -1 };
       } else {
-        sortOption = { [sortKey]: 1 };
+        sortOption = { [sortKey === "updated_at" ? "updatedAt" : sortKey]: 1 };
       }
     }
 
@@ -194,7 +214,7 @@ export const getProgressOrder = async (req, res, next) => {
     const countingPage = await Order.countDocuments(query);
 
     const orders = await Order.find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
       .skip(pageSize * (page - 1))
       .limit(pageSize)
       .populate({
@@ -372,6 +392,27 @@ export const acceptOrder = async (req, res, next) => {
 
     await revenueExisting.save();
 
+    // SEND NOTIFICATION
+    const senderId = req.user.id;
+    const receiverId = updatedOrder.user;
+    const boost_id = updatedOrder.boost_id;
+    const message = `Has accepted order #${boost_id}.`;
+
+    const newNotification = new Notification({
+      sender: senderId,
+      receiver: receiverId,
+      boost_id: boost_id,
+      content: message,
+      type: NOTIFICATION_TYPE.MESSAGE,
+    });
+
+    await newNotification.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newNotification", newNotification);
+    }
+
     res.status(201).json("Accepted order");
   } catch (error) {
     console.log(error);
@@ -452,6 +493,27 @@ export const completedOrder = async (req, res, next) => {
 
     // Lưu các thay đổi vào đối tượng Revenue
     await revenueExisting.save();
+
+    // SEND NOTIFICATION
+    const senderId = req.user.id;
+    const receiverId = updateOrder.user;
+    const boost_id = updateOrder.boost_id;
+    const message = `Has completed order #${boost_id}.`;
+
+    const newNotification = new Notification({
+      sender: senderId,
+      receiver: receiverId,
+      boost_id: boost_id,
+      content: message,
+      type: NOTIFICATION_TYPE.MESSAGE,
+    });
+
+    await newNotification.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newNotification", newNotification);
+    }
 
     res.status(201).json("Completed order");
   } catch (error) {
@@ -540,6 +602,27 @@ export const cancelOrder = async (req, res, next) => {
 
     // Lưu các thay đổi vào đối tượng Revenue
     await revenueExisting.save();
+
+    // SEND NOTIFICATION
+    const senderId = req.user.id;
+    const receiverId = updateOrder.user;
+    const boost_id = updateOrder.boost_id;
+    const message = `Has cancelled order #${boost_id}.`;
+
+    const newNotification = new Notification({
+      sender: senderId,
+      receiver: receiverId,
+      boost_id: boost_id,
+      content: message,
+      type: NOTIFICATION_TYPE.MESSAGE,
+    });
+
+    await newNotification.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newNotification", newNotification);
+    }
 
     res.status(201).json("Cancel order");
   } catch (error) {

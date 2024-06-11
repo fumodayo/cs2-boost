@@ -11,15 +11,18 @@ import { persistor, store } from "./redux/store.ts";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { SocketContextProvider } from "./context/SocketContext.tsx";
+import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Provider store={store}>
-    <PersistGate persistor={persistor} loading={null}>
-      <AppContextProvider>
-        <SocketContextProvider>
-          <App />
-        </SocketContextProvider>
-      </AppContextProvider>
-    </PersistGate>
-  </Provider>,
+  <HelmetProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <AppContextProvider>
+          <SocketContextProvider>
+            <App />
+          </SocketContextProvider>
+        </AppContextProvider>
+      </PersistGate>
+    </Provider>
+  </HelmetProvider>,
 );

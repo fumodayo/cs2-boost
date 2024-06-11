@@ -11,6 +11,7 @@ import DefaultPage from "../components/Layouts/DefaultPage";
 import Info from "../components/Info";
 import { AppContext } from "../context/AppContext";
 import Board from "../components/Common/Board";
+import SEO from "../components/SEO";
 
 type ExtraOption = {
   name: string;
@@ -174,148 +175,157 @@ const FarmExp = () => {
   }, [startPoint, endPoint]);
 
   return (
-    <DefaultPage>
-      <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
-        {/* BOOKING */}
-        <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
-          {/* SLIDER RATING */}
-          <div className="relative mb-6 mt-5 w-full overflow-hidden rounded-lg bg-card px-12 py-8">
-            <div className="flex flex-col sm:flex-row">
-              <div className="z-10 flex-grow">
-                <h2 className="-ml-4 mb-2 text-start text-lg font-bold text-foreground">
-                  {t("Select your current Exp and desired Exp")}
-                </h2>
-                <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-muted-foreground">
-                  <span className="flex justify-between">
-                    <span className="font-bold">{t("My Exp")}:</span>
-                    <span className="w-14 rounded-md bg-accent px-2">
-                      {startPoint}
+    <>
+      <SEO
+        title="CS2 Level Farming | High Quality CS2 Boost"
+        description="Buy High Quality CS2 Boosting and CS2 Accounts at the lowest price. 100% Secure. 24/7 Customer Support."
+        href="/counter-strike-2/level-farming"
+      />
+
+      <DefaultPage>
+        <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
+          {/* BOOKING */}
+          <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
+            {/* SLIDER RATING */}
+            <div className="relative mb-6 mt-5 w-full overflow-hidden rounded-lg bg-card px-12 py-8">
+              <div className="flex flex-col sm:flex-row">
+                <div className="z-10 flex-grow">
+                  <h2 className="-ml-4 mb-2 text-start text-lg font-bold text-foreground">
+                    {t("Select your current Exp and desired Exp")}
+                  </h2>
+                  <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-muted-foreground">
+                    <span className="flex justify-between">
+                      <span className="font-bold">{t("My Exp")}:</span>
+                      <span className="w-14 rounded-md bg-accent px-2">
+                        {startPoint}
+                      </span>
                     </span>
-                  </span>
-                  <span className="flex justify-between">
-                    <span className="font-bold">{t("Desired Exp")}:</span>
-                    <span className="w-14 rounded-md bg-accent px-2">
-                      {endPoint}
+                    <span className="flex justify-between">
+                      <span className="font-bold">{t("Desired Exp")}:</span>
+                      <span className="w-14 rounded-md bg-accent px-2">
+                        {endPoint}
+                      </span>
                     </span>
-                  </span>
-                </div>
-                <div className="flex">
-                  <div className="mb-16 w-full pl-[14px] pr-5">
-                    <Slider
-                      className="mt-4"
-                      handleRender={(node, handleProps) => {
-                        return (
-                          <Tooltip
-                            visible={true}
-                            showArrow={false}
-                            overlayInnerStyle={{
-                              minHeight: "auto",
-                              borderRadius: "20px",
-                              border: "none",
-                              outline: "none",
-                              background: "none",
-                              fontSize: "14px",
-                              fontWeight: "bold",
-                              color: theme === "light" ? "#000" : "#fff",
-                            }}
-                            zIndex={10}
-                            overlay={handleProps.value}
-                            placement="top"
-                          >
-                            {node}
-                          </Tooltip>
-                        );
-                      }}
-                      range
-                      trackStyle={{
-                        backgroundColor: "#3071f0",
-                        height: 15,
-                      }}
-                      railStyle={{
-                        height: 15,
-                        borderRadius: "1rem",
-                        borderWidth: "1px",
-                        backgroundColor:
-                          theme === "light" ? "white" : "#13151b",
-                        borderColor: theme === "light" ? "#d8d8d8" : "#393939",
-                        boxShadow: "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
-                        right: "10px",
-                      }}
-                      handleStyle={{
-                        borderColor: "white",
-                        background: "#d8d8d8",
-                        opacity: 1,
-                        borderWidth: "8px",
-                        height: "30px",
-                        width: "30px",
-                        marginTop: "-9px",
-                        backgroundColor: "#d8d8d8",
-                        outline: "1px solid #f2f2f2",
-                        boxShadow:
-                          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
-                      }}
-                      min={0}
-                      max={12000}
-                      step={100}
-                      allowCross={false}
-                      defaultValue={[0, 5000]}
-                      marks={markOfExp}
-                      onChange={(value) =>
-                        onChangeSliderValue(value as number[])
-                      }
-                    />
+                  </div>
+                  <div className="flex">
+                    <div className="mb-16 w-full pl-[14px] pr-5">
+                      <Slider
+                        className="mt-4"
+                        handleRender={(node, handleProps) => {
+                          return (
+                            <Tooltip
+                              visible={true}
+                              showArrow={false}
+                              overlayInnerStyle={{
+                                minHeight: "auto",
+                                borderRadius: "20px",
+                                border: "none",
+                                outline: "none",
+                                background: "none",
+                                fontSize: "14px",
+                                fontWeight: "bold",
+                                color: theme === "light" ? "#000" : "#fff",
+                              }}
+                              zIndex={10}
+                              overlay={handleProps.value}
+                              placement="top"
+                            >
+                              {node}
+                            </Tooltip>
+                          );
+                        }}
+                        range
+                        trackStyle={{
+                          backgroundColor: "#3071f0",
+                          height: 15,
+                        }}
+                        railStyle={{
+                          height: 15,
+                          borderRadius: "1rem",
+                          borderWidth: "1px",
+                          backgroundColor:
+                            theme === "light" ? "white" : "#13151b",
+                          borderColor:
+                            theme === "light" ? "#d8d8d8" : "#393939",
+                          boxShadow: "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
+                          right: "10px",
+                        }}
+                        handleStyle={{
+                          borderColor: "white",
+                          background: "#d8d8d8",
+                          opacity: 1,
+                          borderWidth: "8px",
+                          height: "30px",
+                          width: "30px",
+                          marginTop: "-9px",
+                          backgroundColor: "#d8d8d8",
+                          outline: "1px solid #f2f2f2",
+                          boxShadow:
+                            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
+                        }}
+                        min={0}
+                        max={12000}
+                        step={100}
+                        allowCross={false}
+                        defaultValue={[0, 5000]}
+                        marks={markOfExp}
+                        onChange={(value) =>
+                          onChangeSliderValue(value as number[])
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* INFO */}
+            <Info
+              title="All the important details about our Level Farming"
+              serviceInfo={serviceInfo}
+            />
+
+            {/* PRICE */}
+            <div className="w-full rounded-lg bg-card pb-10 pl-8 pr-8 pt-6 shadow-md">
+              <div className="flex flex-col gap-4 pb-4">
+                <p className="text-lg font-bold">{t("Earned XP")}</p>
+                <p className="text-md mb-4 text-muted-foreground">
+                  {t(
+                    "All important details about experience points of each mode",
+                  )}
+                </p>
+                <Board services={xpEarn} />
+              </div>
+            </div>
+
+            {/* PRICE */}
+            <div className="w-full rounded-lg bg-card pb-10 pl-8 pr-8 pt-6 shadow-md">
+              <div className="flex flex-col gap-4 pb-4">
+                <p className="text-lg font-bold">{t("XP Penalty")}</p>
+                <p className="text-md mb-4 text-muted-foreground">
+                  {t("All important details about experience points")}
+                </p>
+                <Board services={xpPenalty} />
+              </div>
+            </div>
           </div>
 
-          {/* INFO */}
-          <Info
-            title="All the important details about our Level Farming"
-            serviceInfo={serviceInfo}
+          {/* CHECKOUT */}
+          <Checkout
+            beginText="My Exp"
+            lastText="Desired Exp"
+            server={"All"}
+            mode="level-farming"
+            title="level farming"
+            currentExp={startPoint}
+            desiredExp={endPoint}
+            totalTime={totalTimeOfFarmExp}
+            cost={totalCostOfFarmExp}
+            extraOptions={extraOptions}
           />
-
-          {/* PRICE */}
-          <div className="w-full rounded-lg bg-card pb-10 pl-8 pr-8 pt-6 shadow-md">
-            <div className="flex flex-col gap-4 pb-4">
-              <p className="text-lg font-bold">{t("Earned XP")}</p>
-              <p className="text-md mb-4 text-muted-foreground">
-                {t(
-                  "All important details about experience points of each mode",
-                )}
-              </p>
-              <Board services={xpEarn} />
-            </div>
-          </div>
-
-          {/* PRICE */}
-          <div className="w-full rounded-lg bg-card pb-10 pl-8 pr-8 pt-6 shadow-md">
-            <div className="flex flex-col gap-4 pb-4">
-              <p className="text-lg font-bold">{t("XP Penalty")}</p>
-              <p className="text-md mb-4 text-muted-foreground">
-                {t("All important details about experience points")}
-              </p>
-              <Board services={xpPenalty} />
-            </div>
-          </div>
-        </div>
-
-        {/* CHECKOUT */}
-        <Checkout
-          beginText="My Exp"
-          lastText="Desired Exp"
-          server={"All"}
-          mode="level-farming"
-          title="level farming"
-          currentExp={startPoint}
-          desiredExp={endPoint}
-          totalTime={totalTimeOfFarmExp}
-          cost={totalCostOfFarmExp}
-          extraOptions={extraOptions}
-        />
-      </main>
-    </DefaultPage>
+        </main>
+      </DefaultPage>
+    </>
   );
 };
 

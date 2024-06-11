@@ -1,7 +1,7 @@
 import PlusButton from "../../components/Buttons/PlusButton";
 import DataTable from "../../components/DataTable";
 import UserPage from "../../components/Layouts/UserPage";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import Navigation from "../../components/Navigation";
 import clsx from "clsx";
@@ -9,6 +9,7 @@ import { FaRocket } from "react-icons/fa";
 import queryString from "query-string";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGetAllWallet } from "../../hooks/useGetAllWallet";
+import SEO from "../../components/SEO";
 
 const headers = [
   {
@@ -51,153 +52,143 @@ const types = [
 const Wallet = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { pathname } = useLocation();
+  const currentParams = queryString.parse(location.search);
 
-  const parseParamsToState = useMemo(
-    () => (params: string) => {
-      const parsedParams = queryString.parse(params);
-      return {
-        searchKey: parsedParams.searchKey
-          ? parsedParams.searchKey.toString()
-          : "",
-        statusKey: parsedParams.statusKey
-          ? parsedParams.statusKey.toString().split(",")
-          : [],
-      };
-    },
-    [],
-  );
+  const parseArray = (status: string[]) => {
+    if (Array.isArray(status)) {
+      return status.filter((item) => typeof item === "string");
+    }
+    if (typeof status === "string") {
+      return [status];
+    }
+    return [];
+  };
 
-  const [searchKey, setSearchKey] = useState<string>("");
-  const [typeKey, setTypeKey] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<string>("");
+  const [searchKey, setSearchKey] = useState<string>(() => {
+    return currentParams.searchKey as string;
+  });
 
-  // số lượng items trong 1 page
-  const [perPage, setPerPage] = useState<number | null>(null);
-  // current page number
-  const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const [typeKey, setTypeKey] = useState<string[]>(() => {
+    return parseArray(currentParams.typeKey as string[]);
+  });
 
-  useEffect(() => {
-    const params = queryString.stringify({
-      searchKey: searchKey || undefined,
-      typeKey: typeKey.length > 0 ? typeKey.join(",") : undefined,
-      sortKey: sortKey.length > 0 ? sortKey : undefined,
-      page: currentPage || undefined,
-      pageSize: perPage || undefined,
+  const handleSearch = (value: string) => {
+    const queryParams = { ...currentParams, searchKey: value };
+    navigate({
+      pathname: pathname,
+      search: queryString.stringify(queryParams),
     });
-
-    const hasValues = typeKey.length > 0 || searchKey || currentPage || perPage;
-    const path = hasValues ? `?${params}` : "/dashboard/wallet";
-    navigate(path);
-  }, [searchKey, navigate, typeKey, currentPage, perPage, sortKey]);
+  };
 
   useEffect(() => {
-    const parsedState = parseParamsToState(location.search);
-    setSearchKey(parsedState.searchKey);
-  }, [location.search, parseParamsToState]);
+    const params = queryString.parse(location.search);
+    setTypeKey(parseArray(params.typeKey as string[]));
+    setSearchKey(params.searchKey as string);
+  }, [location.search]);
 
   const { invoices, countingPage, page, pages } = useGetAllWallet() ?? {
     invoices: [],
   };
 
   const resetFilters = () => {
+    navigate({ search: "" });
     setSearchKey("");
-    setTypeKey([]);
-    setSortKey("");
   };
 
   return (
-    <UserPage>
-      <div className="container">
-        <div className="flex flex-wrap items-center justify-between gap-y-4">
-          <div className={clsx("min-w-fit flex-1 flex-grow", "md:min-w-0")}>
-            <div className="flex flex-wrap items-center gap-y-4">
-              <div className="sm:truncate">
-                <h1
-                  className={clsx(
-                    "font-display text-3xl font-semibold text-foreground",
-                    "sm:truncate sm:tracking-tight",
-                  )}
-                >
-                  My Boosts List
-                </h1>
+    <>
+      <SEO
+        title="My Wallet"
+        description="Wallet List"
+        href="/dashboard/wallet"
+      />
+
+      <UserPage>
+        <div className="container">
+          <div className="flex flex-wrap items-center justify-between gap-y-4">
+            <div className={clsx("min-w-fit flex-1 flex-grow", "md:min-w-0")}>
+              <div className="flex flex-wrap items-center gap-y-4">
+                <div className="sm:truncate">
+                  <h1
+                    className={clsx(
+                      "font-display text-3xl font-semibold text-foreground",
+                      "sm:truncate sm:tracking-tight",
+                    )}
+                  >
+                    My Boosts List
+                  </h1>
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            className={clsx(
-              "flex items-center justify-end gap-2",
-              "sm:justify-normal md:ml-4 md:mt-0",
-            )}
-          >
-            <a
+            <div
               className={clsx(
-                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                "flex items-center justify-end gap-2",
+                "sm:justify-normal md:ml-4 md:mt-0",
               )}
-              href="/"
             >
-              <FaRocket className="mr-2" />
-              Buy New Boost
-            </a>
+              <a
+                className={clsx(
+                  "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
+                  "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                )}
+                href="/"
+              >
+                <FaRocket className="mr-2" />
+                Buy New Boost
+              </a>
+            </div>
+          </div>
+
+          {/* INFORMATION */}
+          <div className="mt-8 space-y-4">
+            <DataTable headers={headers} items={invoices ?? []}>
+              <div className="flex flex-1 flex-wrap items-center gap-2">
+                {/* SEARCH */}
+                <div className="w-fit">
+                  <input
+                    value={searchKey}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className={clsx(
+                      "flex h-8 w-[150px] rounded-md border border-input bg-card-alt px-3 py-1 text-sm shadow-sm transition-colors",
+                      "file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                      "lg:w-[250px]",
+                    )}
+                    placeholder="Search..."
+                    type="text"
+                  />
+                </div>
+
+                {/* TYPES BUTTON */}
+                <PlusButton
+                  selectedValues={typeKey}
+                  onSelectedValuesChange={(value: string[]) =>
+                    setTypeKey(value)
+                  }
+                  name="Types"
+                  options={types}
+                />
+                {location.search && (
+                  <button
+                    onClick={resetFilters}
+                    type="button"
+                    className={clsx(
+                      "relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
+                      "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "lg:px-3",
+                    )}
+                  >
+                    Reset
+                    <IoMdClose className="ml-2" />
+                  </button>
+                )}
+              </div>
+            </DataTable>
+            <Navigation countingPage={countingPage} page={page} pages={pages} />
           </div>
         </div>
-
-        {/* INFORMATION */}
-        <div className="mt-8 space-y-4">
-          <DataTable
-            headers={headers}
-            items={invoices ?? []}
-            onSortKey={setSortKey}
-          >
-            <div className="flex flex-1 flex-wrap items-center gap-2">
-              {/* SEARCH */}
-              <div className="w-fit">
-                <input
-                  value={searchKey}
-                  onChange={(e) => setSearchKey(e.target.value)}
-                  className={clsx(
-                    "flex h-8 w-[150px] rounded-md border border-input bg-card-alt px-3 py-1 text-sm shadow-sm transition-colors",
-                    "file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-                    "lg:w-[250px]",
-                  )}
-                  placeholder="Search..."
-                  type="text"
-                />
-              </div>
-
-              {/* TYPES BUTTON */}
-              <PlusButton
-                selectedValues={typeKey}
-                onSelectedValuesChange={(value: string[]) => setTypeKey(value)}
-                name="Status"
-                options={types}
-              />
-              {(searchKey || typeKey.length > 0 || sortKey.length > 0) && (
-                <button
-                  onClick={resetFilters}
-                  type="button"
-                  className={clsx(
-                    "relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
-                    "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                    "lg:px-3",
-                  )}
-                >
-                  Reset
-                  <IoMdClose className="ml-2" />
-                </button>
-              )}
-            </div>
-          </DataTable>
-          <Navigation
-            onPerPage={(value) => setPerPage(value)}
-            onCurrentPage={(value) => setCurrentPage(value)}
-            countingPage={countingPage}
-            page={page}
-            pages={pages}
-          />
-        </div>
-      </div>
-    </UserPage>
+      </UserPage>
+    </>
   );
 };
 

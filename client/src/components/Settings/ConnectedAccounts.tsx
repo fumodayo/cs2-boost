@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { updateUserSuccess } from "../../redux/user/userSlice";
 import { ListSocialMedia } from "../../types";
 import { axiosAuth } from "../../axiosAuth";
+import SEO from "../SEO";
 
 const hasConnectedSocialMedia = (
   listSocialMedia?: ListSocialMedia[],
@@ -259,25 +260,33 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
 
 const ConnectedAccounts = () => {
   return (
-    <div className="-mx-4 max-w-2xl border border-border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
-      <div className="flex flex-col space-y-1.5 border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
-        <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-          Connected Accounts
-        </h3>
-      </div>
-      <div className="px-0 pt-0 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-1">
-          {socialMedia.map(({ icon, title, subtitle, color }) => (
-            <SocailWidget
-              key={subtitle}
-              icon={icon}
-              title={title}
-              color={color}
-            />
-          ))}
+    <>
+      <SEO
+        title="Connected Accounts"
+        description="Connected Accounts"
+        href="/dashboard/settings"
+      />
+
+      <div className="-mx-4 max-w-2xl border border-border bg-card text-card-foreground shadow-sm sm:mx-0 sm:rounded-xl">
+        <div className="flex flex-col space-y-1.5 border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
+          <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
+            Connected Accounts
+          </h3>
+        </div>
+        <div className="px-0 pt-0 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-1">
+            {socialMedia.map(({ icon, title, subtitle, color }) => (
+              <SocailWidget
+                key={subtitle}
+                icon={icon}
+                title={title}
+                color={color}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

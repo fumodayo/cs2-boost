@@ -21,10 +21,11 @@ import { Order } from "../types";
 import Separator from "./Separator";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { axiosAuth } from "../axiosAuth";
+import queryString from "query-string";
 
 type ServiceButtonProps = {
   value: string;
@@ -41,13 +42,11 @@ type ToggleColumnProps = {
 type HeaderProps = {
   title: string;
   value: string;
-  onSortKey: (value: string) => void;
   onHideColumn: (value: string) => void;
 };
 
 interface DataTableProps {
   headers: { name: string; value: string; active: boolean }[];
-  onSortKey: (value: string) => void;
   items: Order[];
   children: React.ReactNode;
   name?: string;
@@ -69,12 +68,19 @@ const ServiceButton: React.FC<ServiceButtonProps> = ({
   );
 };
 
-const Header: React.FC<HeaderProps> = ({
-  title,
-  value,
-  onHideColumn,
-  onSortKey,
-}) => {
+const Header: React.FC<HeaderProps> = ({ title, value, onHideColumn }) => {
+  const navigate = useNavigate();
+  const { pathname } = useParams();
+
+  const onSortKey = (value: string) => {
+    const currentParams = queryString.parse(location.search);
+    const queryParams = { ...currentParams, sortKey: value };
+    navigate({
+      pathname: pathname,
+      search: queryString.stringify(queryParams),
+    });
+  };
+
   return (
     <th
       className={`h-10 bg-card-surface px-2.5 text-left align-middle font-medium text-muted-foreground first:rounded-tl-md first:pl-4 last:rounded-tr-md [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]`}
@@ -113,12 +119,7 @@ const Header: React.FC<HeaderProps> = ({
   );
 };
 
-const DataTable: React.FC<DataTableProps> = ({
-  headers,
-  items,
-  children,
-  onSortKey,
-}) => {
+const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -223,7 +224,6 @@ const DataTable: React.FC<DataTableProps> = ({
                     title={name}
                     value={value}
                     onHideColumn={handleToggleColumn}
-                    onSortKey={onSortKey}
                   />
                 ))}
               </tr>

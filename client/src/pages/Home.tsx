@@ -9,49 +9,61 @@ import Stepup from "../components/Home/Stepup";
 import Footer from "../components/Layouts/Footer";
 import Information from "../components/Home/Information";
 import Hero from "../components/Home/Hero";
+import SEO from "../components/SEO";
 
 const Home = () => {
   return (
-    <div className="h-screen bg-background">
-      {/* HEADER */}
-      <Navbar />
+    <>
+      <SEO
+        title="CS2Boost - The All-In-One Platform for Gamers"
+        description="CS2Boost - The All-In-One Platform for Gamers"
+        href="/"
+      />
 
-      <main
-        className={clsx(
-          "relative isolate overflow-hidden",
-          "dark:bg-[#0F111B]",
-        )}
-      >
-        {/* HERO */}
-        <Hero />
+      <div className="h-screen bg-background">
+        {/* HEADER */}
+        <Navbar />
 
-        {/* CONTENT */}
-        <div
-          className={clsx("space-y-20", "sm:space-y-40 lg:mt-20 lg:space-y-52")}
+        <main
+          className={clsx(
+            "relative isolate overflow-hidden",
+            "dark:bg-[#0F111B]",
+          )}
         >
-          {/* INFORMATION */}
-          <Information />
+          {/* HERO */}
+          <Hero />
 
-          {/* INTRODUCTION */}
-          <Introduction />
+          {/* CONTENT */}
+          <div
+            className={clsx(
+              "space-y-20",
+              "sm:space-y-40 lg:mt-20 lg:space-y-52",
+            )}
+          >
+            {/* INFORMATION */}
+            <Information />
 
-          {/* SERVICES */}
-          <Services />
+            {/* INTRODUCTION */}
+            <Introduction />
 
-          {/* QUANTITY */}
-          <Quantity />
+            {/* SERVICES */}
+            <Services />
 
-          {/* QUESTIONS */}
-          <Questions />
+            {/* QUANTITY */}
+            <Quantity />
 
-          {/* STEP UP */}
-          <Stepup />
-        </div>
-      </main>
+            {/* QUESTIONS */}
+            <Questions />
 
-      {/* FOOTER */}
-      <Footer />
-    </div>
+            {/* STEP UP */}
+            <Stepup />
+          </div>
+        </main>
+
+        {/* FOOTER */}
+        <Footer />
+      </div>
+    </>
   );
 };
 

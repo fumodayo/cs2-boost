@@ -59,6 +59,8 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.loading = false;
       state.error = false;
+      localStorage.removeItem("ip_address");
+      localStorage.removeItem("country_name");
     },
   },
 });

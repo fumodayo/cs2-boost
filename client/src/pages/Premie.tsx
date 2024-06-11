@@ -13,6 +13,7 @@ import Checkout from "../components/Checkout";
 import ChooseServer from "../components/ChooseServer";
 import Info from "../components/Info";
 import Board from "../components/Common/Board";
+import SEO from "../components/SEO";
 
 const markOfRanks = {
   5000: (
@@ -278,150 +279,161 @@ const Premie = () => {
   }, [currentRating, desiredRating, server]);
 
   return (
-    <DefaultPage>
-      <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
-        {/* BOOKING */}
-        <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
-          {/* CHOOSE SERVER */}
-          <ChooseServer server={server} onChooseServer={onChooseServer} />
+    <>
+      <SEO
+        title="CS2 Premier Boost | High Quality CS2 Boost & Elo Boost"
+        description="Buy High Quality CS2 Boosting and CS2 Accounts at the lowest price. 100% Secure. 24/7 Customer Support."
+        href="/counter-strike-2/premier"
+      />
 
-          {/* SLIDER RATING */}
-          {server && (
-            <div className="relative mb-6 mt-5 w-full overflow-hidden rounded-lg bg-card px-12 py-8">
-              <div className="flex flex-col sm:flex-row">
-                <div className="z-10 flex-grow">
-                  <h2 className="-ml-4 mb-2 text-start text-lg font-bold text-foreground">
-                    {t("Select your current Rating and desired Rating")}
-                  </h2>
-                  <p className="-ml-4 -mt-2 mb-4 text-sm text-muted-foreground">
-                    (
-                    {t(
-                      "note: ratings above 20000 are only available as piloted service",
-                    )}
-                    )
-                  </p>
-                  <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-muted-foreground">
-                    <span className="flex justify-between">
-                      <span className="font-bold">{t("My Rating")}:</span>
-                      <span className="w-14 rounded-md bg-accent px-2">
-                        {currentRating}
+      <DefaultPage>
+        <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
+          {/* BOOKING */}
+          <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
+            {/* CHOOSE SERVER */}
+            <ChooseServer server={server} onChooseServer={onChooseServer} />
+
+            {/* SLIDER RATING */}
+            {server && (
+              <div className="relative mb-6 mt-5 w-full overflow-hidden rounded-lg bg-card px-12 py-8">
+                <div className="flex flex-col sm:flex-row">
+                  <div className="z-10 flex-grow">
+                    <h2 className="-ml-4 mb-2 text-start text-lg font-bold text-foreground">
+                      {t("Select your current Rating and desired Rating")}
+                    </h2>
+                    <p className="-ml-4 -mt-2 mb-4 text-sm text-muted-foreground">
+                      (
+                      {t(
+                        "note: ratings above 20000 are only available as piloted service",
+                      )}
+                      )
+                    </p>
+                    <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-muted-foreground">
+                      <span className="flex justify-between">
+                        <span className="font-bold">{t("My Rating")}:</span>
+                        <span className="w-14 rounded-md bg-accent px-2">
+                          {currentRating}
+                        </span>
                       </span>
-                    </span>
-                    <span className="flex justify-between">
-                      <span className="font-bold">{t("Desired Rating")}:</span>
-                      <span className="w-14 rounded-md bg-accent px-2">
-                        {desiredRating}
+                      <span className="flex justify-between">
+                        <span className="font-bold">
+                          {t("Desired Rating")}:
+                        </span>
+                        <span className="w-14 rounded-md bg-accent px-2">
+                          {desiredRating}
+                        </span>
                       </span>
-                    </span>
-                  </div>
-                  <div className="flex">
-                    <div className="mb-16 w-full pl-[14px] pr-5">
-                      <Slider
-                        className="mt-4"
-                        handleRender={(node, handleProps) => {
-                          return (
-                            <Tooltip
-                              visible={true}
-                              showArrow={false}
-                              overlayInnerStyle={{
-                                minHeight: "auto",
-                                borderRadius: "20px",
-                                border: "none",
-                                outline: "none",
-                                background: "none",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                color: theme === "light" ? "#000" : "#fff",
-                              }}
-                              zIndex={10}
-                              overlay={handleProps.value}
-                              placement="top"
-                            >
-                              {node}
-                            </Tooltip>
-                          );
-                        }}
-                        range
-                        trackStyle={{
-                          backgroundColor: "#3071f0",
-                          height: 15,
-                        }}
-                        railStyle={{
-                          height: 15,
-                          borderRadius: "1rem",
-                          borderWidth: "1px",
-                          backgroundColor:
-                            theme === "light" ? "white" : "#13151b",
-                          borderColor:
-                            theme === "light" ? "#d8d8d8" : "#393939",
-                          boxShadow: "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
-                          right: "10px",
-                        }}
-                        handleStyle={{
-                          borderColor: "white",
-                          background: "#d8d8d8",
-                          opacity: 1,
-                          borderWidth: "8px",
-                          height: "30px",
-                          width: "30px",
-                          marginTop: "-9px",
-                          backgroundColor: "#d8d8d8",
-                          outline: "1px solid #f2f2f2",
-                          boxShadow:
-                            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
-                        }}
-                        min={1000}
-                        max={30000}
-                        step={100}
-                        allowCross={false}
-                        defaultValue={[10000, 20000]}
-                        onChange={(value) =>
-                          onChangeSliderValue(value as number[])
-                        }
-                        marks={markOfRanks}
-                      />
+                    </div>
+                    <div className="flex">
+                      <div className="mb-16 w-full pl-[14px] pr-5">
+                        <Slider
+                          className="mt-4"
+                          handleRender={(node, handleProps) => {
+                            return (
+                              <Tooltip
+                                visible={true}
+                                showArrow={false}
+                                overlayInnerStyle={{
+                                  minHeight: "auto",
+                                  borderRadius: "20px",
+                                  border: "none",
+                                  outline: "none",
+                                  background: "none",
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: theme === "light" ? "#000" : "#fff",
+                                }}
+                                zIndex={10}
+                                overlay={handleProps.value}
+                                placement="top"
+                              >
+                                {node}
+                              </Tooltip>
+                            );
+                          }}
+                          range
+                          trackStyle={{
+                            backgroundColor: "#3071f0",
+                            height: 15,
+                          }}
+                          railStyle={{
+                            height: 15,
+                            borderRadius: "1rem",
+                            borderWidth: "1px",
+                            backgroundColor:
+                              theme === "light" ? "white" : "#13151b",
+                            borderColor:
+                              theme === "light" ? "#d8d8d8" : "#393939",
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
+                            right: "10px",
+                          }}
+                          handleStyle={{
+                            borderColor: "white",
+                            background: "#d8d8d8",
+                            opacity: 1,
+                            borderWidth: "8px",
+                            height: "30px",
+                            width: "30px",
+                            marginTop: "-9px",
+                            backgroundColor: "#d8d8d8",
+                            outline: "1px solid #f2f2f2",
+                            boxShadow:
+                              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
+                          }}
+                          min={1000}
+                          max={30000}
+                          step={100}
+                          allowCross={false}
+                          defaultValue={[10000, 20000]}
+                          onChange={(value) =>
+                            onChangeSliderValue(value as number[])
+                          }
+                          marks={markOfRanks}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* INFO */}
-          <Info
-            title="All the important details about our Premier Boost"
-            serviceInfo={serviceInfo}
-          />
-        </div>
-
-        {/* CHECKOUT */}
-        <Checkout
-          beginText="My Rating"
-          lastText="Desired Rating"
-          server={server}
-          title="premier"
-          mode="premier"
-          currentRating={currentRating}
-          desiredRating={desiredRating}
-          totalTime={totalTimeOfBoostPremie}
-          cost={totalCostOfBoostPremie}
-          extraOptions={extraOptions}
-        />
-      </main>
-      <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
-        <div className="flex flex-col items-center">
-          <p className="text-lg font-bold">{t("Price list")}</p>
-          <p className="text-md mb-4 text-muted-foreground">
-            (
-            {t(
-              "The estimated amount does not take into account additional costs",
             )}
-            )
-          </p>
+
+            {/* INFO */}
+            <Info
+              title="All the important details about our Premier Boost"
+              serviceInfo={serviceInfo}
+            />
+          </div>
+
+          {/* CHECKOUT */}
+          <Checkout
+            beginText="My Rating"
+            lastText="Desired Rating"
+            server={server}
+            title="premier"
+            mode="premier"
+            currentRating={currentRating}
+            desiredRating={desiredRating}
+            totalTime={totalTimeOfBoostPremie}
+            cost={totalCostOfBoostPremie}
+            extraOptions={extraOptions}
+          />
+        </main>
+        <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
+          <div className="flex flex-col items-center">
+            <p className="text-lg font-bold">{t("Price list")}</p>
+            <p className="text-md mb-4 text-muted-foreground">
+              (
+              {t(
+                "The estimated amount does not take into account additional costs",
+              )}
+              )
+            </p>
+          </div>
+          <Board services={coefficientPremierEarn} />
         </div>
-        <Board services={coefficientPremierEarn} />
-      </div>
-    </DefaultPage>
+      </DefaultPage>
+    </>
   );
 };
 

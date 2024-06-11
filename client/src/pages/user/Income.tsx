@@ -22,6 +22,7 @@ import Input from "../../components/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosAuth } from "../../axiosAuth";
+import SEO from "../../components/SEO";
 
 ChartJS.register(
   LinearScale,
@@ -158,189 +159,199 @@ const Income: React.FC = () => {
   };
 
   return (
-    <UserPage>
-      <div className="container mx-auto grid grid-cols-1 gap-y-5 xl:grid-cols-2 xl:gap-x-5">
-        {/* INCOME */}
-        <div className="grid gap-y-5">
-          {/* TABLE INCOME */}
-          <div className="border border-border bg-card shadow-sm sm:rounded-xl">
-            <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
-              <h3 className="font-display flex items-center justify-center font-semibold">
-                <MdAttachMoney className="text-success" />
-                Income ({formatMoney("vnd", revenue.total_money)})
-              </h3>
-              <div className="flex gap-x-1">
-                {["week", "month"].map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => handleChangePeriod(setPeriodMoney)(period)}
-                    className={`relative inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ${
-                      periodMoney === period
-                        ? "bg-[#0B6CFB] text-white"
-                        : "bg-secondary-light text-secondary-light-foreground"
-                    }`}
-                  >
-                    {period}
-                  </button>
-                ))}
+    <>
+      <SEO title="My Income" description="My Income" href="/dashboard/income" />
+
+      <UserPage>
+        <div className="container mx-auto grid grid-cols-1 gap-y-5 xl:grid-cols-2 xl:gap-x-5">
+          {/* INCOME */}
+          <div className="grid gap-y-5">
+            {/* TABLE INCOME */}
+            <div className="border border-border bg-card shadow-sm sm:rounded-xl">
+              <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
+                <h3 className="font-display flex items-center justify-center font-semibold">
+                  <MdAttachMoney className="text-success" />
+                  Income ({formatMoney("vnd", revenue.total_money)})
+                </h3>
+                <div className="flex gap-x-1">
+                  {["week", "month"].map((period) => (
+                    <button
+                      key={period}
+                      onClick={() => handleChangePeriod(setPeriodMoney)(period)}
+                      className={`relative inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ${
+                        periodMoney === period
+                          ? "bg-[#0B6CFB] text-white"
+                          : "bg-secondary-light text-secondary-light-foreground"
+                      }`}
+                    >
+                      {period}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="px-0 pt-0 sm:px-6">
+                <Chart type="bar" options={optionsTable} data={incomeTable} />
               </div>
             </div>
-            <div className="px-0 pt-0 sm:px-6">
-              <Chart type="bar" options={optionsTable} data={incomeTable} />
-            </div>
-          </div>
 
-          {/* RECENT INCOME */}
-          <div className="border border-border bg-card shadow-sm sm:rounded-xl">
-            <div className="border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
-              <h3 className="font-display font-semibold">Recent Income</h3>
-            </div>
-            {revenue.income
-              .slice(-5)
-              .reverse()
-              .map((item, index) => (
-                <RecordItem key={index} {...item} index={index} />
-              ))}
-            <div className="border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
-              <Dialog.Root>
-                <Dialog.Trigger>
-                  <button
-                    type="button"
-                    className="relative inline-flex items-center justify-center rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/10"
-                  >
-                    <FaMoneyBill1 className="mr-2 text-xl text-success" />{" "}
-                    Cashout
-                  </button>
-                </Dialog.Trigger>
-                <Dialog.Portal>
-                  <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
-                  <Dialog.Content
-                    className={clsx(
-                      "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
-                    )}
-                  >
-                    {/* HEADER */}
-                    <div
-                      className={clsx(
-                        "flex items-center justify-between px-6 pb-0 pt-6",
-                        "sm:pt-5",
-                      )}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <div
-                            onClick={handleSubmit(onSubmit)}
-                            className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-green-400 text-sm text-white ring-2 ring-green-500/30"
-                          >
-                            <MdAttachMoney />
+            {/* RECENT INCOME */}
+            {revenue.income.length > 0 && (
+              <div className="border border-border bg-card shadow-sm sm:rounded-xl">
+                <div className="border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
+                  <h3 className="font-display font-semibold">Recent Income</h3>
+                </div>
+                {revenue.income
+                  .slice(-5)
+                  .reverse()
+                  .map((item, index) => (
+                    <RecordItem key={index} {...item} index={index} />
+                  ))}
+                <div className="border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
+                  <Dialog.Root>
+                    <Dialog.Trigger>
+                      <button
+                        type="button"
+                        className="relative inline-flex items-center justify-center rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/10"
+                      >
+                        <FaMoneyBill1 className="mr-2 text-xl text-success" />{" "}
+                        Cashout
+                      </button>
+                    </Dialog.Trigger>
+                    <Dialog.Portal>
+                      <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
+                      <Dialog.Content
+                        className={clsx(
+                          "data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all focus:outline-none sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
+                        )}
+                      >
+                        {/* HEADER */}
+                        <div
+                          className={clsx(
+                            "flex items-center justify-between px-6 pb-0 pt-6",
+                            "sm:pt-5",
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <div
+                                onClick={handleSubmit(onSubmit)}
+                                className="gradient-red flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md bg-green-400 text-sm text-white ring-2 ring-green-500/30"
+                              >
+                                <MdAttachMoney />
+                              </div>
+                            </div>
+                            <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
+                              Widthdraw
+                            </Dialog.Title>
                           </div>
+                          <Dialog.Close>
+                            <button
+                              type="button"
+                              className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
+                            >
+                              <span className="sr-only">Close</span>
+                              <FaXmark className="flex h-5 w-5 items-center justify-center" />
+                            </button>
+                          </Dialog.Close>
                         </div>
-                        <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
-                          Widthdraw
-                        </Dialog.Title>
-                      </div>
-                      <Dialog.Close>
-                        <button
-                          type="button"
-                          className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
-                        >
-                          <span className="sr-only">Close</span>
-                          <FaXmark className="flex h-5 w-5 items-center justify-center" />
-                        </button>
-                      </Dialog.Close>
-                    </div>
 
-                    {/* CONTENT */}
-                    <div className="flex flex-col space-y-2 p-6">
-                      <p>Hãy nhập số tiền bạn muốn rút</p>
-                      <Input
-                        register={register}
-                        errors={errors}
-                        style="h-9"
-                        id="money"
-                        rules={{
-                          pattern:
-                            /^(?!0\d)(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?$/,
-                          max: revenue.total_money,
-                          min: 20000,
-                        }}
-                        min={20000}
-                        max={revenue.total_money}
-                        placeholder="money"
-                        required
-                      />
-                    </div>
+                        {/* CONTENT */}
+                        <div className="flex flex-col space-y-2 p-6">
+                          <p>Hãy nhập số tiền bạn muốn rút</p>
+                          <Input
+                            register={register}
+                            errors={errors}
+                            style="h-9"
+                            id="money"
+                            rules={{
+                              pattern:
+                                /^(?!0\d)(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,2})?$/,
+                              max: revenue.total_money,
+                              min: 20000,
+                            }}
+                            min={20000}
+                            max={revenue.total_money}
+                            placeholder="money"
+                            required
+                          />
+                        </div>
 
-                    {/* FOOTER */}
-                    <div
-                      className={clsx(
-                        "flex flex-row-reverse items-center gap-2 border-t border-border bg-muted/50 px-6 py-6",
-                        "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
-                      )}
-                    >
-                      <Dialog.Close asChild>
-                        <button
-                          type="submit"
-                          onClick={handleSubmit(onSubmit)}
+                        {/* FOOTER */}
+                        <div
                           className={clsx(
-                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-4 py-2 text-sm font-medium text-success-foreground shadow-sm outline-none transition-colors",
-                            "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                            "flex flex-row-reverse items-center gap-2 border-t border-border bg-muted/50 px-6 py-6",
+                            "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
                           )}
                         >
-                          Withdraw
-                        </button>
-                      </Dialog.Close>
-                      <Dialog.Close asChild>
-                        <button
-                          type="button"
-                          className={clsx(
-                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                          )}
-                        >
-                          Cancel
-                        </button>
-                      </Dialog.Close>
-                    </div>
-                  </Dialog.Content>
-                </Dialog.Portal>
-              </Dialog.Root>
-            </div>
+                          <Dialog.Close asChild>
+                            <button
+                              type="submit"
+                              onClick={handleSubmit(onSubmit)}
+                              className={clsx(
+                                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-4 py-2 text-sm font-medium text-success-foreground shadow-sm outline-none transition-colors",
+                                "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                              )}
+                            >
+                              Withdraw
+                            </button>
+                          </Dialog.Close>
+                          <Dialog.Close asChild>
+                            <button
+                              type="button"
+                              className={clsx(
+                                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
+                                "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                              )}
+                            >
+                              Cancel
+                            </button>
+                          </Dialog.Close>
+                        </div>
+                      </Dialog.Content>
+                    </Dialog.Portal>
+                  </Dialog.Root>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* ORDER */}
-        <div>
-          {/* TABLE ORDER */}
-          <div className="border  border-border bg-card shadow-sm sm:rounded-xl">
-            <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
-              <h3 className="font-display flex items-center justify-center font-semibold">
-                <FaCartShopping className="mr-2 text-success" />
-                Order Pending ({revenue.orders_pending.length})
-              </h3>
-              <div className="flex gap-x-1">
-                {["week", "month"].map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => handleChangePeriod(setPeriodOrder)(period)}
-                    className={`relative inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ${
-                      periodOrder === period
-                        ? "bg-[#0B6CFB] text-white"
-                        : "bg-secondary-light text-secondary-light-foreground"
-                    }`}
-                  >
-                    {period}
-                  </button>
-                ))}
+          {/* ORDER */}
+          <div>
+            {/* TABLE ORDER */}
+            <div className="border  border-border bg-card shadow-sm sm:rounded-xl">
+              <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-6 sm:rounded-t-xl sm:px-6">
+                <h3 className="font-display flex items-center justify-center font-semibold">
+                  <FaCartShopping className="mr-2 text-success" />
+                  Order Pending (
+                  {revenue.orders_pending.length > 0
+                    ? revenue.orders_pending.length
+                    : 0}
+                  )
+                </h3>
+                <div className="flex gap-x-1">
+                  {["week", "month"].map((period) => (
+                    <button
+                      key={period}
+                      onClick={() => handleChangePeriod(setPeriodOrder)(period)}
+                      className={`relative inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium ${
+                        periodOrder === period
+                          ? "bg-[#0B6CFB] text-white"
+                          : "bg-secondary-light text-secondary-light-foreground"
+                      }`}
+                    >
+                      {period}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="px-0 pt-0 sm:px-6">
+                <Chart type="bar" options={optionsTable} data={orderTable} />
               </div>
             </div>
-            <div className="px-0 pt-0 sm:px-6">
-              <Chart type="bar" options={optionsTable} data={orderTable} />
-            </div>
           </div>
         </div>
-      </div>
-    </UserPage>
+      </UserPage>
+    </>
   );
 };
 
