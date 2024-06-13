@@ -27,7 +27,7 @@ const LoginModal = () => {
   const { isOpenLoginModal, onCloseLoginModal, onOpenSignUpModal } =
     useContext(AppContext);
 
-  const location = useGetIP();
+  useGetIP();
 
   const {
     register,
@@ -50,30 +50,24 @@ const LoginModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
-      if (location) {
-        dispatch(authStart());
-        const { data } = await axiosInstance.post(`/auth/signin`, {
-          ...form,
-          ip: location?.ipAddress,
-          country: location?.countryName,
-        });
+      dispatch(authStart());
+      const ip = localStorage.getItem("ip_address");
+      const country = localStorage.getItem("country_name");
+      
+      const { data } = await axiosInstance.post(`/auth/signin`, {
+        ...form,
+        ip: ip,
+        country: country,
+      });
 
-        if (location.ipAddress) {
-          localStorage.setItem("ip_address", location.ipAddress);
-        }
-        if (location.countryName) {
-          localStorage.setItem("country_name", location.countryName);
-        }
-
-        if (data.success === false) {
-          dispatch(authFailure("Wrong password or email"));
-          return;
-        }
-
-        dispatch(authSuccess(data.user));
-
-        onCloseLoginModal();
+      if (data.success === false) {
+        dispatch(authFailure("Wrong password or email"));
+        return;
       }
+
+      dispatch(authSuccess(data.user));
+
+      onCloseLoginModal();
     } catch (error) {
       dispatch(authFailure("Wrong password or email"));
     }

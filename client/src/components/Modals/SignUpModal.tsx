@@ -26,7 +26,7 @@ const SignUpModal = () => {
   const { isOpenSignUpModal, onCloseSignUpModal, onOpenLoginModal } =
     useContext(AppContext);
 
-  const location = useGetIP();
+  useGetIP();
 
   const {
     register,
@@ -49,30 +49,24 @@ const SignUpModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
-      if (location) {
-        dispatch(authStart());
-        const { data } = await axiosInstance.post(`/auth/signup`, {
-          ...form,
-          ip: location?.ipAddress,
-          country: location?.countryName,
-        });
+      dispatch(authStart());
+      const ip = localStorage.getItem("ip_address");
+      const country = localStorage.getItem("country_name");
+      
+      const { data } = await axiosInstance.post(`/auth/signup`, {
+        ...form,
+        ip: ip,
+        country: country,
+      });
 
-        if (location.ipAddress) {
-          localStorage.setItem("ip_address", location.ipAddress);
-        }
-        if (location.countryName) {
-          localStorage.setItem("country_name", location.countryName);
-        }
-
-        if (data.success === false) {
-          dispatch(authFailure("This email is already taken"));
-          return;
-        }
-
-        dispatch(authSuccess(data.user));
-
-        onCloseSignUpModal();
+      if (data.success === false) {
+        dispatch(authFailure("This email is already taken"));
+        return;
       }
+
+      dispatch(authSuccess(data.user));
+
+      onCloseSignUpModal();
     } catch (error) {
       dispatch(authFailure("This email is already taken"));
     }

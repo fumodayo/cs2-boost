@@ -53,7 +53,6 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
 
 const Avatar: React.FC<AvatarProps> = ({ children }) => {
   const dispatch = useDispatch();
-  const ip = localStorage.getItem("ip_address");
 
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -73,6 +72,7 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
   };
 
   const handleSignOut = async () => {
+    const ip = localStorage.getItem("ip_address");
     try {
       await axiosAuth.post(`/auth/signout`, {
         id: currentUser?._id,

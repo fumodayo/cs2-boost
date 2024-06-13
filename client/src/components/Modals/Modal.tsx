@@ -38,42 +38,36 @@ const SocialService: React.FC<SocialMediaProps> = ({
 
   const dispatch = useDispatch();
   const { onCloseLoginModal, onCloseSignUpModal } = useContext(AppContext);
-  const location = useGetIP();
+  useGetIP();
 
   const handleGoogleClick = async () => {
     if (!active) return;
 
     try {
-      if (location) {
-        const provider = new GoogleAuthProvider();
-        const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
 
-        const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
 
-        const { data } = await axiosInstance.post(`/auth/google`, {
-          name: result.user.displayName,
-          email: result.user.email,
-          photo: result.user.photoURL,
-          ip: location.ipAddress,
-          country: location.countryName,
-        });
+      const ip = localStorage.getItem("ip_address");
+      const country = localStorage.getItem("country_name");
+      
+      const { data } = await axiosInstance.post(`/auth/google`, {
+        name: result.user.displayName,
+        email: result.user.email,
+        photo: result.user.photoURL,
+        ip: ip,
+        country: country,
+      });
 
-        if (location.ipAddress) {
-          localStorage.setItem("ip_address", location.ipAddress);
-        }
-        if (location.countryName) {
-          localStorage.setItem("country_name", location.countryName);
-        }
-
-        if (data.success === false) {
-          return;
-        }
-
-        dispatch(authSuccess(data.user));
-
-        onCloseLoginModal();
-        onCloseSignUpModal();
+      if (data.success === false) {
+        return;
       }
+
+      dispatch(authSuccess(data.user));
+
+      onCloseLoginModal();
+      onCloseSignUpModal();
     } catch (error) {
       return error;
     }
