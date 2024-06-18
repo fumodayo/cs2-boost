@@ -101,7 +101,7 @@ const Income: React.FC = () => {
         : null,
     );
 
-  const optionsTable: ChartOptions<"bar"> = {
+  const optionsTable: ChartOptions = {
     responsive: true,
     plugins: {
       legend: { position: "top" },

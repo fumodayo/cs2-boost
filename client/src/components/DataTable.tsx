@@ -26,6 +26,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import clsx from "clsx";
 import { axiosAuth } from "../axiosAuth";
 import queryString from "query-string";
+import axios, { AxiosError } from "axios";
 
 type ServiceButtonProps = {
   value: string;
@@ -138,16 +139,30 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
   );
 
   const handleAccept = async (boost_id: string) => {
-    const { data } = await axiosAuth.post(`/order/accept-order/${boost_id}`);
+    try {
+      const { data } = await axiosAuth.post(`/order/accept-order/${boost_id}`);
 
-    if (data.success === false) {
-      toast.error("Accept Boost failed");
-      window.location.reload();
-      return;
+      if (data.success === false) {
+        toast.error("Accept Boost failed");
+        window.location.reload();
+        return;
+      }
+
+      toast.success("Accept Boost");
+      navigate("/dashboard/progress-boosts");
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (axios.isAxiosError(error)) {
+        const errorMessages = error?.response?.data.message;
+        if (errorMessages === "Order already has a booster assigned") {
+          toast.error("Order already has a booster assigned");
+          return;
+        }
+        toast.error("Accept order failed");
+      } else {
+        toast.error("Accept order failed");
+      }
     }
-
-    toast.success("Accept Boost");
-    navigate("/dashboard/progress-boosts");
   };
 
   const handleComplete = async (boost_id: string) => {

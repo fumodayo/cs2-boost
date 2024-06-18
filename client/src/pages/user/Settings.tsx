@@ -26,6 +26,7 @@ import ConnectedAccounts from "../../components/Settings/ConnectedAccounts";
 import Loading from "../Loading";
 import { axiosAuth } from "../../axiosAuth";
 import SEO from "../../components/SEO";
+import axios, { AxiosError } from "axios";
 
 const tabHeaders = [
   {
@@ -93,10 +94,7 @@ const Settings = () => {
         { ...form, profile_picture: avatarImage },
       );
 
-      if (data.message === "Wrong old password") {
-        setError("Wrong old password");
-        return;
-      }
+      // if (data.message ==== "")
 
       if (data.success === false) {
         return;
@@ -109,9 +107,30 @@ const Settings = () => {
         email: data.email,
       });
       setOpenModal(false);
-    } catch (error) {
-      dispatch(updateUserFailure("Update user failed"));
-      toast.error("Update user failed");
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (axios.isAxiosError(error)) {
+        const errorMessages = error?.response?.data.message;
+
+        if (errorMessages === "Wrong old password") {
+          dispatch(updateUserFailure("Update user failed"));
+          setError("Wrong old password");
+          toast.error("Wrong old password");
+          return;
+        }
+
+        if (errorMessages === "Username has been taken already") {
+          dispatch(updateUserFailure("Update user failed"));
+          toast.error("Username has already been taken");
+          return;
+        }
+
+        dispatch(updateUserFailure("Update user failed"));
+        toast.error("Update user failed");
+      } else {
+        dispatch(updateUserFailure("Update user failed"));
+        toast.error("Update user failed");
+      }
     }
   };
 

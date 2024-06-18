@@ -29,6 +29,7 @@ interface ConversationProps {
 }
 
 const Conversation: React.FC<ConversationProps> = ({ order }) => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const { theme } = useContext(AppContext);
   const { sendMessage } = useSendMessage();
 
@@ -127,9 +128,13 @@ const Conversation: React.FC<ConversationProps> = ({ order }) => {
         {/* CONTENT */}
         <div className="px-0 pt-0 text-sm sm:px-6">
           {/* Content messages */}
-          {introduce.map((item) => (
-            <ReceivedMessage message={item} />
-          ))}
+          {currentUser &&
+            currentUser.role &&
+            currentUser.role.length === 1 &&
+            currentUser.role[0] === "client" &&
+            introduce.map((item, index) => (
+              <ReceivedMessage key={index} message={item} />
+            ))}
           <Messages />
         </div>
 

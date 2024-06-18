@@ -72,7 +72,15 @@ export const updateUser = async (req, res, next) => {
       }
     } else {
       const updateFields = {};
-      if (username) updateFields.username = username;
+      if (username) {
+        updateFields.username = username;
+        const existingUser = await User.findOne({
+          username: username,
+        });
+        if (existingUser) {
+          return next(errorHandler(401, "Username has been taken already"));
+        }
+      }
       if (profile_picture) updateFields.profile_picture = profile_picture;
 
       updatedUser = await User.findByIdAndUpdate(
