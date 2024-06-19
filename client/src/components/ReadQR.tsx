@@ -184,8 +184,8 @@ const ReadQR = () => {
       )}
       {step === 1 && (
         <FormStep
-          title="Front of driver license"
-          subtitle="Take a clear photo of the front of your driver license"
+          title="Front of CCCD card"
+          subtitle="Take a clear photo of the front of your CCCD card"
         >
           <div className="h-full w-full bg-[#edf1fc] py-10">
             <VerificationCard />

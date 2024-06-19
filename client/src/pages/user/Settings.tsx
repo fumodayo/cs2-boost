@@ -262,7 +262,7 @@ const Settings = () => {
                                   password.
                                 </p>
                                 <Input
-                                  label="Old Password"
+                                  label="Old Password (password default: 0123@Abc)"
                                   register={register}
                                   errors={errors}
                                   style="h-9"
