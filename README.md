@@ -28,3 +28,10 @@ CS2Boost is developed with ReactJS, tailwindcss, Nodejs, MongoDB and Socket.io.
 - Accept new orders.
 - Search, filter, view, and confirm completion or cancellation of accepted orders.
 - Track revenue and order statistics by week or month.
+### Test Account: 
+User: 
+- email: user.test@gmail.com
+- password: 0123@Abc
+Booster:
+- email: booster.test@gmail.com
+- password: 0123@Abc
