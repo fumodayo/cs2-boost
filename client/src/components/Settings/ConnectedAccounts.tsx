@@ -110,7 +110,7 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
           <div className="truncate text-xs text-muted-foreground">
             {hasConnectedSocialMedia(currentUser?.social_media, title)
               ? "Connected"
-              : `Connect your ${title} account Connected`}
+              : `Connect your ${title}`}
           </div>
         </div>
       </div>
@@ -139,10 +139,10 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
             )}
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 z-40 bg-background/80" />
+            <Dialog.Overlay className="fixed inset-0 z-30 bg-background/80" />
             <Dialog.Content
               className={clsx(
-                "min-h fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all",
+                "min-h fixed top-1/2 z-30 mx-auto min-h-fit w-full -translate-y-1/2 overflow-clip rounded-xl bg-card text-left shadow-xl outline-none transition-all",
                 "focus:outline-none ",
                 "sm:left-1/2 sm:max-w-lg sm:-translate-x-1/2",
               )}

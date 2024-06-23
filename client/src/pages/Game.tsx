@@ -108,7 +108,7 @@ const GameMode = ({
       </div>
       <div
         className={clsx(
-          "mt-4 h-28 rounded-2xl border border-border bg-card px-4 py-2 transition duration-300 ",
+          "mt-4 h-36 rounded-2xl border border-border bg-card px-4 py-2 transition duration-300 ",
           "group-hover:bg-accent sm:h-36 sm:px-8 sm:py-4 md:h-32 lg:h-24",
         )}
       >

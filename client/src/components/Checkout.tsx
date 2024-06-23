@@ -184,7 +184,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         {server ? (
           <div className="text-md -mx-6 my-4 bg-accent py-3 text-center text-muted-foreground">
             <span className="flex justify-center">
-              <span className="mx-4 font-bold text-foreground">
+              <span className="md:mx-4 mx-1 font-bold text-foreground">
                 {beginText && t(beginText)}
               </span>
               {currentExp && <p className="w-4">{currentExp}</p>}
@@ -197,7 +197,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 />
               )}
               <span className="ml-8">{"->"}</span>
-              <span className="mx-4 font-bold text-foreground">
+              <span className="md:mx-4 mx-1 font-bold text-foreground">
                 {lastText && t(lastText)}
               </span>
               {selectedDesiredRank && (

@@ -78,10 +78,10 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                         <Dialog.Close>
                           <button
                             type="button"
-                            className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                            className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
                           >
                             <span className="sr-only">Close</span>
-                            <FaXmark />
+                            <FaXmark className="text-lg" />
                           </button>
                         </Dialog.Close>
                       </div>

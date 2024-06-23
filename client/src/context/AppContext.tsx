@@ -29,13 +29,13 @@ export default function AppContextProvider({ children }: ContextProviderProps) {
   const [theme, setTheme] = useState<Theme>(
     storedTheme === "dark" || storedTheme === "light"
       ? (storedTheme as Theme)
-      : "light",
+      : "dark",
   );
 
   const [currency, setCurrency] = useState<Currency>(
     storedCurrency === "vnd" || storedCurrency === "usd"
       ? (storedCurrency as Currency)
-      : "usd",
+      : "vnd",
   );
 
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<Modal>(false);

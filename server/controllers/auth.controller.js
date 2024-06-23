@@ -254,7 +254,9 @@ export const google = async (req, res, next) => {
 
       res.status(200).json({ user: rest });
     } else {
-      const generatedPassword = "0123@Abc";
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
         // Example: fumo dayo -> fumo-dayo-17283

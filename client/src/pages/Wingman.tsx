@@ -351,7 +351,7 @@ const Wingman = () => {
             extraOptions={extraOptions}
           />
         </main>
-        <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
+        <div className="mt-6 hidden w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md md:flex">
           <div className="flex flex-col items-center">
             <p className="text-lg font-bold">{t("Price list")}</p>
             <p className="text-md mb-4 text-muted-foreground">

@@ -68,7 +68,7 @@ const Input: React.FC<InputProps> = ({
           }
           {...register(id, { required, ...rules })}
           className={clsx(
-            `block w-full rounded-md border-0 bg-field !${style} px-4 py-1.5 text-field-foreground shadow-sm ring-1 placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50`,
+            `block w-full rounded-md border-0 bg-field !${style} py-1.5 px-3 text-field-foreground shadow-sm ring-1 placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50 md:px-4 md:py-1.5`,
             "sm:text-sm",
             errors[id] ? "ring-red-500" : "ring-field-ring",
             errors[id] ? "focus:ring-red-500" : "focus:ring-field-ring-hover",

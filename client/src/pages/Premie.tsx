@@ -18,51 +18,51 @@ import SEO from "../components/SEO";
 const markOfRanks = {
   5000: (
     <div className="py-2">
-      <span className="text-base text-foreground">5000</span>
+      <span className="text-xs text-foreground md:text-base">5000</span>
       <img
         src="/assets/counter-strike-2/premier/cyan.png"
         alt="rank"
-        className="mt-2 h-full w-20"
+        className="mt-2 h-full w-10 md:w-20"
       />
     </div>
   ),
   10000: (
     <div className="py-2">
-      <span className="text-base text-foreground">10000</span>
+      <span className="text-xs text-foreground md:text-base">10000</span>
       <img
         src="/assets/counter-strike-2/premier/blue.png"
         alt="rank"
-        className="mt-2 h-full w-20"
+        className="mt-2 h-full w-10 md:w-20"
       />
     </div>
   ),
   15000: (
     <div className="py-2">
-      <span className="text-base text-foreground">15000</span>
+      <span className="text-xs text-foreground md:text-base">15000</span>
       <img
         src="/assets/counter-strike-2/premier/purple.png"
         alt="rank"
-        className="mt-2 h-full w-20"
+        className="mt-2 h-full w-10 md:w-20"
       />
     </div>
   ),
   20000: (
     <div className="py-2">
-      <span className="text-base text-foreground">20000</span>
+      <span className="text-xs text-foreground md:text-base">20000</span>
       <img
         src="/assets/counter-strike-2/premier/pink.png"
         alt="rank"
-        className="mt-2 h-full w-20"
+        className="mt-2 h-full w-10 md:w-20"
       />
     </div>
   ),
   25000: (
     <div className="py-2">
-      <span className="text-base text-foreground">25000</span>
+      <span className="text-xs text-foreground md:text-base">25000</span>
       <img
         src="/assets/counter-strike-2/premier/red.png"
         alt="rank"
-        className="mt-2 h-full w-20"
+        className="mt-2 h-full w-10 md:w-20"
       />
     </div>
   ),
@@ -308,10 +308,10 @@ const Premie = () => {
                       )}
                       )
                     </p>
-                    <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-muted-foreground">
+                    <div className="-ml-4 mb-8 flex max-w-[250px] flex-col justify-start gap-1 text-sm text-muted-foreground md:text-base">
                       <span className="flex justify-between">
                         <span className="font-bold">{t("My Rating")}:</span>
-                        <span className="w-14 rounded-md bg-accent px-2">
+                        <span className="w-14 rounded-md bg-accent px-2 md:w-16">
                           {currentRating}
                         </span>
                       </span>
@@ -319,7 +319,7 @@ const Premie = () => {
                         <span className="font-bold">
                           {t("Desired Rating")}:
                         </span>
-                        <span className="w-14 rounded-md bg-accent px-2">
+                        <span className="w-14 rounded-md bg-accent px-2 md:w-16">
                           {desiredRating}
                         </span>
                       </span>
@@ -385,7 +385,7 @@ const Premie = () => {
                           max={30000}
                           step={100}
                           allowCross={false}
-                          defaultValue={[10000, 20000]}
+                          defaultValue={[5000, 15000]}
                           onChange={(value) =>
                             onChangeSliderValue(value as number[])
                           }
@@ -419,7 +419,7 @@ const Premie = () => {
             extraOptions={extraOptions}
           />
         </main>
-        <div className="mt-6 flex w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md">
+        <div className="mt-6 hidden w-full flex-col items-center justify-center space-y-2 rounded-lg bg-card py-10 shadow-md md:flex">
           <div className="flex flex-col items-center">
             <p className="text-lg font-bold">{t("Price list")}</p>
             <p className="text-md mb-4 text-muted-foreground">
