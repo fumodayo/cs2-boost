@@ -71,7 +71,7 @@ const Settings = () => {
     setValue,
   } = useForm<FieldValues>({
     defaultValues: {
-      username: user?.username,
+      username: "",
       email: user?.email,
       old_password: "",
       new_password: "",
@@ -81,7 +81,6 @@ const Settings = () => {
   useEffect(() => {
     if (user) {
       setLoading(false);
-      setValue("username", user.username || "");
       setValue("email", user.email || "");
     }
   }, [user, setValue]);
@@ -93,8 +92,6 @@ const Settings = () => {
         `/user/update/${currentUser?._id}`,
         { ...form, profile_picture: avatarImage },
       );
-
-      // if (data.message ==== "")
 
       if (data.success === false) {
         return;
