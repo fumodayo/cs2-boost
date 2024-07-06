@@ -50,15 +50,10 @@ interface QuantityItemProps {
   active?: boolean;
 }
 
-export const QuantityItem: React.FC<QuantityItemProps> = ({
-  icon: Icon,
-  title,
-  subtitle,
-  label,
-  active,
-}) => {
+export const QuantityItem: React.FC<QuantityItemProps> = (props) => {
   const { theme } = useContext(AppContext);
   const { t } = useTranslation();
+  const { icon: Icon, title, subtitle, label, active } = props;
 
   return (
     <div className="w-full">
@@ -183,15 +178,8 @@ const Quantity = () => {
           "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
         )}
       >
-        {quantities.map(({ icon, title, subtitle, label, active }) => (
-          <QuantityItem
-            key={title}
-            icon={icon}
-            title={title}
-            subtitle={subtitle}
-            label={label}
-            active={active}
-          />
+        {quantities.map((item, i) => (
+          <QuantityItem key={i} {...item} />
         ))}
       </div>
     </div>

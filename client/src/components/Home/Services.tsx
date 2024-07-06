@@ -10,13 +10,10 @@ interface CardServiceProps {
   subtitle?: string;
 }
 
-const CardService: React.FC<CardServiceProps> = ({
-  image_number,
-  title,
-  subtitle,
-}) => {
+const CardService: React.FC<CardServiceProps> = (props) => {
   const { t } = useTranslation();
   const { theme } = useContext(AppContext);
+  const { image_number, title, subtitle } = props;
 
   return (
     <div

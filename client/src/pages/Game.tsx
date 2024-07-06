@@ -78,18 +78,14 @@ const modeOfGame = [
   },
 ];
 
-const GameMode = ({
-  title,
-  subtitle,
-  image,
-  link,
-}: {
+const GameMode = (props: {
   title: string;
   subtitle: string;
   image: string;
   link: string;
 }) => {
   const { t } = useTranslation();
+  const { title, subtitle, image, link } = props;
 
   return (
     <Link
@@ -154,14 +150,8 @@ const Game = () => {
             )}
           >
             <div className="flex w-full justify-between gap-4">
-              {modeOfGame.map(({ title, subtitle, image, link }) => (
-                <GameMode
-                  key={title}
-                  title={title}
-                  subtitle={subtitle}
-                  image={image}
-                  link={link}
-                />
+              {modeOfGame.map((item, i) => (
+                <GameMode key={i} {...item} />
               ))}
             </div>
           </div>
@@ -195,10 +185,10 @@ const Game = () => {
                     </p>
                   </div>
                   <ul className="flex flex-col gap-6 space-y-2 text-muted-foreground">
-                    {stepToBuy.map((item, idx) => (
+                    {stepToBuy.map(({ label, icon: Icon }, idx) => (
                       <li key={idx} className="flex items-center gap-2">
-                        <item.icon className="text-4xl" />
-                        <span>{t(item.label)}</span>
+                        <Icon className="text-4xl" />
+                        <span>{t(label)}</span>
                       </li>
                     ))}
                   </ul>
@@ -221,8 +211,8 @@ const Game = () => {
                   <span>{t("FAQs About Counter Strike 2 Boosting")}</span>
                 </h2>
                 <div className="relative flex flex-col pt-5">
-                  {boostingServices.map(({ title, subtitle }, idx) => (
-                    <Discovery key={idx} title={title} subtitle={subtitle} />
+                  {boostingServices.map((item, i) => (
+                    <Discovery key={i} {...item} />
                   ))}
                 </div>
               </div>

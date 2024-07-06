@@ -8,6 +8,7 @@ import { IoIosSunny } from "react-icons/io";
 
 import { AppContext } from "../../context/AppContext";
 import { Theme } from "../../types";
+import { Button } from "../Buttons/Button";
 
 const MenuTheme = () => {
   const { t } = useTranslation();
@@ -21,22 +22,19 @@ const MenuTheme = () => {
   return (
     <Popover.Root>
       <Popover.Trigger>
-        <button
-          type="button"
-          className={clsx(
-            "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-            "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-          )}
+        <Button
+          color="light"
+          className="h-10 w-10 rounded-full text-sm font-medium"
         >
           {theme === "dark" ? <FaMoon /> : <IoIosSunny className="text-2xl" />}
-        </button>
+        </Button>
       </Popover.Trigger>
       <Popover.Content
         side="bottom"
         align="end"
         sideOffset={10}
         alignOffset={10}
-        className="backdrop-brightness-5 z-50 w-48 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover/75 p-2 text-popover-foreground shadow-md ring-1 ring-border/10 backdrop-blur-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+        className="popover-content w-48 min-w-[8rem]"
       >
         <div className="min-w-[150px] flex-1 space-y-1">
           <div className="px-2 py-1.5 text-sm font-medium">

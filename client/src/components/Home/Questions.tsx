@@ -79,8 +79,8 @@ const Questions = () => {
               "lg:col-span-3 lg:mt-0",
             )}
           >
-            {questions.map(({ title, subtitle }) => (
-              <Discovery key={title} title={title} subtitle={subtitle} />
+            {questions.map((item, id) => (
+              <Discovery key={id} {...item} />
             ))}
           </div>
         </div>

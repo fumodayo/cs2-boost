@@ -7,6 +7,7 @@ import { GiSamuraiHelmet } from "react-icons/gi";
 import { FaGraduationCap } from "react-icons/fa6";
 
 import { AppContext } from "../../context/AppContext";
+import { Button } from "../Buttons/Button";
 
 const services = [
   {
@@ -103,16 +104,14 @@ const Information = () => {
               className={clsx("h-[40px] border-t border-border", "dark:hidden")}
             />
             <div className="-mt-2.5 flex items-center justify-center px-6 pb-6">
-              <button
+              <Button
                 className={clsx(
-                  "blue-glow relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-[#0B6CFB] px-5 py-3 text-sm font-medium text-white outline-none ring-inset transition-colors",
+                  "w-full rounded-md px-5 py-3 text-sm font-medium",
                   "sm:py-2.5",
-                  "dark:ring-1 dark:ring-[#1a13a1]/50",
-                  "hover:brightness-110 focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                 )}
               >
                 {t(service.label)} →
-              </button>
+              </Button>
             </div>
           </div>
         ))}

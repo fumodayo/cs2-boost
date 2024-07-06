@@ -64,7 +64,7 @@ const NotFound = () => {
             <div className="mt-10">
               <button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(-1)}
                 className={clsx(
                   "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
                   "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",

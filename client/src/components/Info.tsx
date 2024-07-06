@@ -2,6 +2,7 @@ import { Tab } from "@headlessui/react";
 import Discovery from "./Discovery";
 import { FaCheck } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 type PanelItem = {
   id: number;
@@ -34,11 +35,10 @@ const Info: React.FC<InfoProps> = ({ title, serviceInfo }) => {
               <Tab key={idx}>
                 {({ selected }) => (
                   <div
-                    className={
-                      selected
-                        ? "text-md text-md w-full rounded-lg bg-blue-600 px-8 py-2.5 font-medium text-foreground focus:outline-none"
-                        : "text-md text-md w-full rounded-lg bg-accent px-8 py-2.5 font-medium text-foreground focus:outline-none"
-                    }
+                    className={clsx(
+                      selected ? "bg-blue-600" : "bg-accent",
+                      "text-md text-md w-full rounded-lg px-8 py-2.5 font-medium text-foreground focus:outline-none",
+                    )}
                   >
                     {t(item.tab)}
                   </div>

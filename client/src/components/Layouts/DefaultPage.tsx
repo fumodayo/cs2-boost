@@ -8,6 +8,7 @@ import Footer from "./Footer";
 import MiniSidebar from "./MiniSidebar";
 import Services from "../Home/Services";
 import { FaChevronLeft } from "react-icons/fa6";
+import queryString from "query-string";
 
 const serviceItems = [
   {
@@ -41,6 +42,9 @@ const DefaultPage: React.FC<DefaultPageProps> = ({ children }) => {
 
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const location = useLocation();
+  console.log("location: ", location);
+  console.log("pathname", pathname);
   const segments = pathname.split("/").filter(Boolean);
   const slug = segments.length > 1 ? segments.pop() : null;
 

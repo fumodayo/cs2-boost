@@ -1,17 +1,15 @@
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";
-import Tooltip from "rc-tooltip";
 
 import { totalExp } from "../utils/totalExp";
 import Checkout from "../components/Checkout";
 import DefaultPage from "../components/Layouts/DefaultPage";
 import Info from "../components/Info";
-import { AppContext } from "../context/AppContext";
 import Board from "../components/Common/Board";
 import SEO from "../components/SEO";
+import Range from "../components/Range";
 
 type ExtraOption = {
   name: string;
@@ -19,27 +17,17 @@ type ExtraOption = {
   extra: number;
 };
 
+const MarkOfPoint = ({ point }: { point: string }) => (
+  <div className="py-2">
+    <span className="text-lg text-foreground">{point}</span>
+  </div>
+);
+
 const markOfExp = {
-  0: (
-    <div className="py-2">
-      <span className="text-lg text-foreground">0</span>
-    </div>
-  ),
-  5000: (
-    <div className="py-2">
-      <span className="text-lg text-foreground">5000</span>
-    </div>
-  ),
-  10000: (
-    <div className="py-2">
-      <span className="text-lg text-foreground">10000</span>
-    </div>
-  ),
-  12000: (
-    <div className="py-2">
-      <span className="text-lg text-foreground">12000</span>
-    </div>
-  ),
+  0: <MarkOfPoint point="0" />,
+  5000: <MarkOfPoint point="5000" />,
+  10000: <MarkOfPoint point="10000" />,
+  12000: <MarkOfPoint point="12000" />,
 };
 
 const extraOptions: ExtraOption[] = [
@@ -155,7 +143,6 @@ const xpPenalty = {
 
 const FarmExp = () => {
   const { t } = useTranslation();
-  const { theme } = useContext(AppContext);
   const [startPoint, setStartPoint] = useState(0);
   const [endPoint, setEndPoint] = useState(5000);
 
@@ -209,64 +196,10 @@ const FarmExp = () => {
                   </div>
                   <div className="flex">
                     <div className="mb-16 w-full pl-[14px] pr-5">
-                      <Slider
-                        className="mt-4"
-                        handleRender={(node, handleProps) => {
-                          return (
-                            <Tooltip
-                              visible={true}
-                              showArrow={false}
-                              overlayInnerStyle={{
-                                minHeight: "auto",
-                                borderRadius: "20px",
-                                border: "none",
-                                outline: "none",
-                                background: "none",
-                                fontSize: "14px",
-                                fontWeight: "bold",
-                                color: theme === "light" ? "#000" : "#fff",
-                              }}
-                              zIndex={10}
-                              overlay={handleProps.value}
-                              placement="top"
-                            >
-                              {node}
-                            </Tooltip>
-                          );
-                        }}
-                        range
-                        trackStyle={{
-                          backgroundColor: "#3071f0",
-                          height: 15,
-                        }}
-                        railStyle={{
-                          height: 15,
-                          borderRadius: "1rem",
-                          borderWidth: "1px",
-                          backgroundColor:
-                            theme === "light" ? "white" : "#13151b",
-                          borderColor:
-                            theme === "light" ? "#d8d8d8" : "#393939",
-                          boxShadow: "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
-                          right: "10px",
-                        }}
-                        handleStyle={{
-                          borderColor: "white",
-                          background: "#d8d8d8",
-                          opacity: 1,
-                          borderWidth: "8px",
-                          height: "30px",
-                          width: "30px",
-                          marginTop: "-9px",
-                          backgroundColor: "#d8d8d8",
-                          outline: "1px solid #f2f2f2",
-                          boxShadow:
-                            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
-                        }}
+                      <Range
                         min={0}
                         max={12000}
                         step={100}
-                        allowCross={false}
                         defaultValue={[0, 5000]}
                         marks={markOfExp}
                         onChange={(value) =>

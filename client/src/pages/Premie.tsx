@@ -1,71 +1,35 @@
 import { useTranslation } from "react-i18next";
-import { useContext, useMemo, useState } from "react";
-import Slider from "rc-slider";
-import Tooltip from "rc-tooltip";
+import { useMemo, useState } from "react";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";
 
 import { totalTimeOfPremie } from "../utils/totalTimeOfPremie";
 import { totalCostOfPremie } from "../utils/totalCostOfPremie";
-import { AppContext } from "../context/AppContext";
 import DefaultPage from "../components/Layouts/DefaultPage";
 import Checkout from "../components/Checkout";
 import ChooseServer from "../components/ChooseServer";
 import Info from "../components/Info";
 import Board from "../components/Common/Board";
 import SEO from "../components/SEO";
+import Range from "../components/Range";
+
+const MarkOfRating = ({ point, rank }: { point: string; rank: string }) => (
+  <div className="py-2">
+    <span className="text-xs text-foreground md:text-base">{point}</span>
+    <img
+      src={`/assets/counter-strike-2/premier/${rank}.png`}
+      alt={point}
+      className="mt-2 h-full w-10 md:w-20"
+    />
+  </div>
+);
 
 const markOfRanks = {
-  5000: (
-    <div className="py-2">
-      <span className="text-xs text-foreground md:text-base">5000</span>
-      <img
-        src="/assets/counter-strike-2/premier/cyan.png"
-        alt="rank"
-        className="mt-2 h-full w-10 md:w-20"
-      />
-    </div>
-  ),
-  10000: (
-    <div className="py-2">
-      <span className="text-xs text-foreground md:text-base">10000</span>
-      <img
-        src="/assets/counter-strike-2/premier/blue.png"
-        alt="rank"
-        className="mt-2 h-full w-10 md:w-20"
-      />
-    </div>
-  ),
-  15000: (
-    <div className="py-2">
-      <span className="text-xs text-foreground md:text-base">15000</span>
-      <img
-        src="/assets/counter-strike-2/premier/purple.png"
-        alt="rank"
-        className="mt-2 h-full w-10 md:w-20"
-      />
-    </div>
-  ),
-  20000: (
-    <div className="py-2">
-      <span className="text-xs text-foreground md:text-base">20000</span>
-      <img
-        src="/assets/counter-strike-2/premier/pink.png"
-        alt="rank"
-        className="mt-2 h-full w-10 md:w-20"
-      />
-    </div>
-  ),
-  25000: (
-    <div className="py-2">
-      <span className="text-xs text-foreground md:text-base">25000</span>
-      <img
-        src="/assets/counter-strike-2/premier/red.png"
-        alt="rank"
-        className="mt-2 h-full w-10 md:w-20"
-      />
-    </div>
-  ),
+  5000: <MarkOfRating point="5000" rank="cyan" />,
+  10000: <MarkOfRating point="10000" rank="blue" />,
+  15000: <MarkOfRating point="15000" rank="purple" />,
+  20000: <MarkOfRating point="20000" rank="pink" />,
+  25000: <MarkOfRating point="25000" rank="red" />,
 };
 
 type ExtraOption = {
@@ -254,7 +218,6 @@ const coefficientPremierEarn = {
 
 const Premie = () => {
   const { t } = useTranslation();
-  const { theme } = useContext(AppContext);
   const [currentRating, setCurrentRating] = useState(1000);
   const [desiredRating, setDesiredRating] = useState(10000);
 
@@ -326,70 +289,15 @@ const Premie = () => {
                     </div>
                     <div className="flex">
                       <div className="mb-16 w-full pl-[14px] pr-5">
-                        <Slider
-                          className="mt-4"
-                          handleRender={(node, handleProps) => {
-                            return (
-                              <Tooltip
-                                visible={true}
-                                showArrow={false}
-                                overlayInnerStyle={{
-                                  minHeight: "auto",
-                                  borderRadius: "20px",
-                                  border: "none",
-                                  outline: "none",
-                                  background: "none",
-                                  fontSize: "14px",
-                                  fontWeight: "bold",
-                                  color: theme === "light" ? "#000" : "#fff",
-                                }}
-                                zIndex={10}
-                                overlay={handleProps.value}
-                                placement="top"
-                              >
-                                {node}
-                              </Tooltip>
-                            );
-                          }}
-                          range
-                          trackStyle={{
-                            backgroundColor: "#3071f0",
-                            height: 15,
-                          }}
-                          railStyle={{
-                            height: 15,
-                            borderRadius: "1rem",
-                            borderWidth: "1px",
-                            backgroundColor:
-                              theme === "light" ? "white" : "#13151b",
-                            borderColor:
-                              theme === "light" ? "#d8d8d8" : "#393939",
-                            boxShadow:
-                              "rgba(0, 0, 0, 0.1) 0px 2px 4px 0px inset",
-                            right: "10px",
-                          }}
-                          handleStyle={{
-                            borderColor: "white",
-                            background: "#d8d8d8",
-                            opacity: 1,
-                            borderWidth: "8px",
-                            height: "30px",
-                            width: "30px",
-                            marginTop: "-9px",
-                            backgroundColor: "#d8d8d8",
-                            outline: "1px solid #f2f2f2",
-                            boxShadow:
-                              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19)",
-                          }}
+                        <Range
                           min={1000}
                           max={30000}
                           step={100}
-                          allowCross={false}
                           defaultValue={[5000, 15000]}
+                          marks={markOfRanks}
                           onChange={(value) =>
                             onChangeSliderValue(value as number[])
                           }
-                          marks={markOfRanks}
                         />
                       </div>
                     </div>

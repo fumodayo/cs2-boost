@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 
 import { FaBars } from "react-icons/fa";
-import { FaArrowRight, FaXmark } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa6";
 
 import { AppContext } from "../../context/AppContext";
 import { RootState } from "../../redux/store";
@@ -15,6 +15,7 @@ import MenuGame from "../Common/MenuGame";
 import Avatar from "../Common/Avatar";
 import Logo from "../Common/Logo";
 import { listOfGame } from "../../constants";
+import { Button, CloseButton } from "../Buttons/Button";
 
 interface NavbarProps {
   isNonSticky?: boolean;
@@ -64,10 +65,13 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
           <div className={clsx("flex items-center gap-2 lg:hidden")}>
             <Dialog.Root>
               <Dialog.Trigger>
-                <button className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1.5 text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
+                <Button
+                  color="secondary"
+                  className="h-9 w-9 rounded-md px-2 py-1.5 text-xs font-medium shadow-sm"
+                >
                   <span className="sr-only">Open menu</span>
                   <FaBars className="text-lg" />
-                </button>
+                </Button>
               </Dialog.Trigger>
               <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm">
@@ -76,13 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                       <div className="flex items-center justify-between border-b border-border bg-card-surface px-4 py-4">
                         <Logo />
                         <Dialog.Close>
-                          <button
-                            type="button"
-                            className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-                          >
-                            <span className="sr-only">Close</span>
-                            <FaXmark className="text-lg" />
-                          </button>
+                          <CloseButton />
                         </Dialog.Close>
                       </div>
                       <div className="border-t border-border px-4 pt-4">
@@ -177,17 +175,13 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                   </button>
                 </Avatar>
               ) : (
-                <button
-                  type="button"
+                <Button
                   onClick={handleOpenLoginModal}
-                  className={clsx(
-                    "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                    "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                  )}
+                  className="rounded-full px-4 py-2 text-sm font-medium shadow-sm"
                 >
                   {t("Log in")}
                   <FaArrowRight className="ml-2" />
-                </button>
+                </Button>
               )}
             </div>
           </div>

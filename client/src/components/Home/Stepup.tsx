@@ -8,6 +8,7 @@ import { FaRightToBracket } from "react-icons/fa6";
 import { AppContext } from "../../context/AppContext";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { Button } from "../Buttons/Button";
 
 const Stepup = () => {
   const { t } = useTranslation();
@@ -41,33 +42,30 @@ const Stepup = () => {
         .
       </p>
       <div className="mt-8 flex items-center gap-x-4">
-        <button
-          type="button"
+        <Button
           onClick={() =>
             window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
           }
           className={clsx(
-            "blue-glow relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-[#0B6CFB] px-6 py-3 text-sm font-medium text-white outline-none ring-inset transition-colors",
-            "hover:brightness-110 focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            "dark:ring-1 dark:ring-[#1a13a1]/50 sm:py-2.5",
+            "rounded-md border-none px-6 py-3 text-sm font-medium",
+            "sm:py-2.5",
           )}
         >
           <BsJoystick className="mr-2.5" />
           {t("Select Game")}
-        </button>
+        </Button>
         {!currentUser && (
-          <button
+          <Button
+            color="light"
             onClick={() => onOpenSignUpModal()}
-            type="button"
             className={clsx(
-              "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-6 py-3 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-              "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+              "border-none px-6 py-3 text-sm font-medium",
               "sm:py-2.5",
             )}
           >
             <FaRightToBracket className="mr-2" />
             {t("Sign Up Today")}
-          </button>
+          </Button>
         )}
       </div>
     </div>

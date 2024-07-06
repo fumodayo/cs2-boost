@@ -8,7 +8,8 @@ interface DiscoveryProps {
   subtitle?: string;
 }
 
-const Discovery: React.FC<DiscoveryProps> = ({ title, subtitle }) => {
+const Discovery: React.FC<DiscoveryProps> = (props) => {
+  const { title, subtitle } = props;
   const { t } = useTranslation();
 
   return (

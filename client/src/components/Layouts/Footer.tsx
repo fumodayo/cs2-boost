@@ -14,6 +14,7 @@ import { LuMessagesSquare } from "react-icons/lu";
 import MenuLanguage from "../Common/MenuLanguage";
 import MenuTheme from "../Common/MenuTheme";
 import Tooltip from "../Tooltip";
+import { Button } from "../Buttons/Button";
 
 const social = [
   {
@@ -96,7 +97,9 @@ interface TaskItemProps {
   tasks?: Task[];
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ name, tasks }) => {
+const TaskItem: React.FC<TaskItemProps> = (props) => {
+  const { name, tasks } = props;
+
   return (
     <div className={clsx("w-1/2 p-6", "md:w-[calc(25%)] xl:w-[calc(14.28%)]")}>
       <h3 className="font-display mb-6 text-lg font-semibold leading-normal text-foreground">
@@ -147,8 +150,8 @@ const Footer = () => {
           )}
         >
           <div className={clsx("flex flex-wrap", "lg:-m-8")}>
-            {services.map(({ name, tasks }) => (
-              <TaskItem key={name} name={name} tasks={tasks} />
+            {services.map((service, i) => (
+              <TaskItem key={i} {...service} />
             ))}
 
             <div
@@ -173,27 +176,28 @@ const Footer = () => {
                     "md:max-w-xl",
                   )}
                 >
-                  <button
-                    type="button"
+                  <Button
+                    color="light"
                     className={clsx(
-                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-5 py-3 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                      "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "rounded-md px-5 py-3 text-sm font-medium shadow-sm",
                       "sm:py-2.5",
                     )}
                   >
                     <LuMessagesSquare className="mr-2 text-xl" />
                     {t("Let's Chat")}
-                  </button>
-                  <a
-                    href="_blank"
-                    className={clsx(
-                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md !bg-[#5865f2] bg-secondary px-5 py-3 text-sm font-medium !text-white text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors ",
-                      "hover:!bg-[#6773f4] hover:bg-secondary-hover hover:!ring-[#5865f2] focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                      "sm:py-2.5",
-                    )}
-                  >
-                    <FaDiscord className="mr-2 text-xl" />
-                    {t("Join Discord")}
+                  </Button>
+
+                  <a href="_blank">
+                    <Button
+                      className={clsx(
+                        "rounded-md bg-[#5865f2] px-5 py-3 text-sm font-medium text-white shadow-sm",
+                        "hover:bg-[#6773f4] hover:ring-[#5865f2]",
+                        "sm:py-2.5",
+                      )}
+                    >
+                      <FaDiscord className="mr-2 text-xl" />
+                      {t("Join Discord")}
+                    </Button>
                   </a>
                 </div>
                 <div className="flex w-full flex-1 items-center gap-x-2">
@@ -226,18 +230,18 @@ const Footer = () => {
           <div className="w-auto">
             <div className="flex flex-wrap gap-x-2">
               <div className="flex w-auto">
-                {social.map((item) => (
-                  <Tooltip key={item.name} content={item.name}>
+                {social.map(({ name, icon: Icon }) => (
+                  <Tooltip key={name} content={name}>
                     <a
-                      href={`https://${item.name}.com`}
+                      href={`https://${name}.com`}
                       className={clsx(
                         "relative inline-flex h-9 w-9 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-1 py-0.5 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
                         "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
                       )}
                       target="_blank"
                     >
-                      <span className="sr-only">{item.name}</span>
-                      <item.icon />
+                      <span className="sr-only">{name}</span>
+                      <Icon />
                     </a>
                   </Tooltip>
                 ))}
