@@ -12,6 +12,7 @@ import {
   HiOutlineChevronDoubleRight,
 } from "react-icons/hi";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "./Buttons/Button";
 
 type NavigationButtonProps = {
   icon: IconType;
@@ -37,16 +38,16 @@ const ArrowButton: React.FC<NavigationButtonProps> = ({
   onClick,
 }) => {
   return (
-    <button
+    <Button
+      color="transparent"
       onClick={() => onClick(value)}
       className={clsx(
-        "inline-flex h-10 w-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0 text-sm font-medium shadow-sm transition-colors",
-        "hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        "h-10 w-10 flex-grow rounded-md border border-input text-sm font-medium shadow-sm",
         "sm:flex-grow-0",
       )}
     >
       {Icon && <Icon />}
-    </button>
+    </Button>
   );
 };
 
@@ -56,16 +57,19 @@ const NumberButton: React.FC<NumberButtonProps> = ({
   onClick,
 }) => {
   return (
-    <button
+    <Button
+      color="none"
       onClick={() => onClick(value)}
-      className={
+      className={clsx(
         active
-          ? "inline-flex h-10 flex-grow items-center justify-center rounded-md bg-primary p-0 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 sm:w-10 sm:flex-grow-0"
-          : "inline-flex h-10 flex-grow items-center justify-center rounded-md border border-input bg-transparent p-0  text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50  sm:w-10  sm:flex-grow-0"
-      }
+          ? "bg-primary p-0 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90"
+          : "border border-input bg-transparent p-0  text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground",
+        "h-10 flex-grow rounded-md",
+        "sm:w-10 sm:flex-grow-0",
+      )}
     >
       {value}
-    </button>
+    </Button>
   );
 };
 
@@ -137,12 +141,15 @@ const Navigation: React.FC<NavigationProps> = ({
           <p className="text-sm font-medium">Rows per page</p>
           <Select.Root value={pageSize} onValueChange={handlePageSizeChange}>
             <Select.Trigger>
-              <button className="flex h-8 w-[70px] items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+              <Button
+                color="transparent"
+                className="h-8 w-[70px] justify-between rounded-md px-3 py-2 text-sm shadow-sm"
+              >
                 <Select.Value placeholder="5" />
                 <Select.Icon>
                   <FaChevronDown className="h-4 w-4 opacity-50" />
                 </Select.Icon>
-              </button>
+              </Button>
             </Select.Trigger>
             <Select.Portal>
               <Select.Content

@@ -12,6 +12,7 @@ import DataTable from "../../components/DataTable";
 import PlusButton from "../../components/Buttons/PlusButton";
 import Navigation from "../../components/Navigation";
 import SEO from "../../components/SEO";
+import { Button } from "../../components/Buttons/Button";
 
 const headers = [
   { name: "title", value: "title", active: true },
@@ -162,18 +163,17 @@ const Boosts = () => {
                   options={statuses}
                 />
                 {location.search && (
-                  <button
+                  <Button
+                    color="transparent"
                     onClick={resetFilters}
-                    type="button"
                     className={clsx(
-                      "relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
-                      "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "h-8 rounded-md px-2 py-1.5 text-xs font-medium",
                       "lg:px-3",
                     )}
                   >
                     Reset
                     <IoMdClose className="ml-2" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </DataTable>

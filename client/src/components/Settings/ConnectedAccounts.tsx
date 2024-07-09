@@ -14,6 +14,7 @@ import { updateUserSuccess } from "../../redux/user/userSlice";
 import { ListSocialMedia } from "../../types";
 import { axiosAuth } from "../../axiosAuth";
 import SEO from "../SEO";
+import { Button, CloseButton, DangerButton } from "../Buttons/Button";
 
 const hasConnectedSocialMedia = (
   listSocialMedia?: ListSocialMedia[],
@@ -121,21 +122,18 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
         >
           <Dialog.Trigger>
             {hasConnectedSocialMedia(currentUser?.social_media, title) ? (
-              <button
-                type="button"
-                className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-xs font-medium text-danger-light-foreground outline-none transition-colors hover:bg-danger-light focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-              >
+              <DangerButton className="gap-x-2">
                 <IoMdSettings />
                 Edit
-              </button>
+              </DangerButton>
             ) : (
-              <button
-                type="button"
-                className="relative flex items-center justify-center gap-x-2 overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+              <Button
+                color="light"
+                className="gap-x-2 rounded-md px-4 py-2 text-xs font-medium shadow-sm"
               >
                 <RiLinksFill />
                 Connect
-              </button>
+              </Button>
             )}
           </Dialog.Trigger>
           <Dialog.Portal>
@@ -168,13 +166,9 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                   </Dialog.Title>
                 </div>
                 <Dialog.Close>
-                  <button
-                    type="button"
-                    className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
-                  >
-                    <span className="sr-only">Close</span>
+                  <CloseButton>
                     <FaXmark className="flex h-5 w-5 items-center justify-center" />
-                  </button>
+                  </CloseButton>
                 </Dialog.Close>
               </div>
 
@@ -228,26 +222,21 @@ const SocailWidget: React.FC<SocialMediaProps> = ({
                   "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
                 )}
               >
-                <button
+                <Button
                   type="submit"
                   onClick={handleSubmit(onSubmit)}
-                  className={clsx(
-                    "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                  )}
+                  className="rounded-md px-4 py-2 text-sm font-medium shadow-sm"
                 >
                   <FaCheck className="mr-2" />
                   Apply
-                </button>
+                </Button>
                 <Dialog.Close asChild>
-                  <button
-                    type="button"
-                    className={clsx(
-                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                      "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                    )}
+                  <Button
+                    color="light"
+                    className="rounded-md px-4 py-2 text-sm font-medium shadow-sm"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </Dialog.Close>
               </div>
             </Dialog.Content>

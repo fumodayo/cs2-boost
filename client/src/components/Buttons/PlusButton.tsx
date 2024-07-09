@@ -10,6 +10,7 @@ import { IoSearch } from "react-icons/io5";
 import { ListOfGame } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import queryString from "query-string";
+import { Button } from "./Button";
 
 interface PlusButtonProps {
   name: string;
@@ -66,12 +67,10 @@ const PlusButton: React.FC<PlusButtonProps> = ({
 
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>
-        <button
-          className={clsx(
-            "inline-flex h-8 items-center justify-center rounded-md border border-dashed border-input bg-transparent px-3 text-xs font-medium shadow-sm transition-colors",
-            "hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
-          )}
+      <Popover.Trigger>
+        <Button
+          color="transparent"
+          className="h-8 rounded-md border border-dashed border-input px-3 text-xs font-medium shadow-sm"
         >
           <FaPlus className="mr-2" />
           {name}
@@ -104,7 +103,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({
               </div>
             </>
           )}
-        </button>
+        </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content

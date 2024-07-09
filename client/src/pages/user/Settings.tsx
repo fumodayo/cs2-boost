@@ -27,6 +27,8 @@ import Loading from "../Loading";
 import { axiosAuth } from "../../axiosAuth";
 import SEO from "../../components/SEO";
 import axios, { AxiosError } from "axios";
+import { Button, CloseButton } from "../../components/Buttons/Button";
+import clsx from "clsx";
 
 const tabHeaders = [
   {
@@ -182,10 +184,10 @@ const Settings = () => {
                 onOpenChange={(value) => setOpenModal(value)}
               >
                 <Dialog.Trigger>
-                  <button className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50">
+                  <Button className="rounded-md px-4 py-2 text-sm font-medium shadow-sm">
                     <FaUserEdit className="mr-2" />
                     Edit Profile
-                  </button>
+                  </Button>
                 </Dialog.Trigger>
                 <Dialog.Portal>
                   <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
@@ -198,14 +200,9 @@ const Settings = () => {
                             Edit Your Profile
                           </Dialog.Title>
                           <Dialog.Close className="ml-3 flex h-7 items-center">
-                            <button
-                              onClick={() => reset()}
-                              type="button"
-                              className="relative inline-flex h-8 w-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-                            >
-                              <span className="sr-only">Close</span>
+                            <CloseButton>
                               <FaXmark className="flex items-center justify-center text-2xl" />
-                            </button>
+                            </CloseButton>
                           </Dialog.Close>
                         </div>
                       </div>
@@ -283,22 +280,28 @@ const Settings = () => {
 
                       {/* FOOTER */}
                       <div className="flex flex-shrink-0 flex-row-reverse gap-3 rounded-b-xl border-t border-border bg-card-surface px-4 py-4">
-                        <button
+                        <Button
                           type="submit"
                           onClick={handleSubmit(onSubmit)}
-                          className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:py-2.5"
+                          className={clsx(
+                            "rounded-md px-5 py-3 text-sm font-medium shadow-sm",
+                            "sm-py-2.5 sm:w-auto",
+                          )}
                         >
                           <FaSave className="mr-2" />
                           Save changes
-                        </button>
+                        </Button>
                         <Dialog.Close>
-                          <button
+                          <Button
+                            color="light"
                             onClick={() => reset()}
-                            type="button"
-                            className="relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
+                            className={clsx(
+                              "rounded-md px-4 py-2 text-sm font-medium shadow-sm",
+                              "sm:w-auto",
+                            )}
                           >
                             Cancel
-                          </button>
+                          </Button>
                         </Dialog.Close>
                       </div>
                     </div>

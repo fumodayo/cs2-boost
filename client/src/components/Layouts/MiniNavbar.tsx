@@ -14,6 +14,7 @@ import { BiSolidCog } from "react-icons/bi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaMoneyBillTrendUp, FaWallet } from "react-icons/fa6";
 import Notifications from "../Common/Notifications";
+import { Button, CloseButton } from "../Buttons/Button";
 
 const sidebarItemsForClient = [
   {
@@ -143,13 +144,13 @@ const MiniNavbar = () => {
     <div className="flex w-full items-center gap-x-2 border-b border-border bg-card-alt px-4 py-4 sm:px-6 xl:hidden">
       <Dialog.Root>
         <Dialog.Trigger>
-          <button
-            type="button"
-            className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1.5 text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+          <Button
+            color="secondary"
+            className="h-9 w-9 rounded-md px-2 py-1.5 text-xs font-medium shadow-sm"
           >
             <FaBarsStaggered />
             <span className="sr-only">Open Sidebar</span>
-          </button>
+          </Button>
         </Dialog.Trigger>
         <Dialog.Portal>
           <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80 backdrop-blur-sm">
@@ -158,13 +159,9 @@ const MiniNavbar = () => {
                 <div className="flex items-center justify-between border-b border-border bg-card-surface px-4 py-4">
                   <Logo />
                   <Dialog.Close>
-                    <button
-                      type="button"
-                      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
-                    >
-                      <span className="sr-only">Close</span>
+                    <CloseButton>
                       <FaXmark className="text-xl" />
-                    </button>
+                    </CloseButton>
                   </Dialog.Close>
                 </div>
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto px-2 py-4 sm:px-4">

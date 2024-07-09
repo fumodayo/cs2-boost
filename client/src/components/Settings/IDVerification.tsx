@@ -7,6 +7,7 @@ import { RootState } from "../../redux/store";
 import Widget from "../Widget";
 import ReadQR from "../ReadQR";
 import SEO from "../SEO";
+import { Button, CloseButton } from "../Buttons/Button";
 
 const headers = [
   "full name",
@@ -76,15 +77,16 @@ const IDVerification = () => {
               >
                 <Dialog.Root>
                   <Dialog.Trigger>
-                    <button
+                    <Button
+                      color="none"
                       className={clsx(
-                        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-primary-light-foreground outline-none transition-colors ",
-                        "hover:bg-primary-light focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                        "rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-primary-light-foreground",
+                        "hover:bg-primary-light",
                       )}
                     >
                       <FaPlay className="mr-2" />
                       Start Verification
-                    </button>
+                    </Button>
                   </Dialog.Trigger>
                   <Dialog.Portal>
                     <Dialog.Overlay className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" />
@@ -96,15 +98,9 @@ const IDVerification = () => {
                     >
                       <Dialog.Close asChild>
                         <div className="ml-3 flex h-7 items-center justify-end">
-                          <button
-                            className={clsx(
-                              "relative h-8 w-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors ",
-                              "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                            )}
-                          >
-                            <span className="sr-only">Close</span>
+                          <CloseButton>
                             <FaXmark className="flex items-center justify-center text-2xl" />
-                          </button>
+                          </CloseButton>
                         </div>
                       </Dialog.Close>
                       <ReadQR />

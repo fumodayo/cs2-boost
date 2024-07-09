@@ -17,6 +17,7 @@ import Modal from "./Modal";
 import Input from "../Input";
 import { useGetIP } from "../../hooks/useGetIP";
 import { axiosInstance } from "../../axiosAuth";
+import { Button } from "../Buttons/Button";
 
 const LoginModal = () => {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const LoginModal = () => {
       dispatch(authStart());
       const ip = localStorage.getItem("ip_address");
       const country = localStorage.getItem("country_name");
-      
+
       const { data } = await axiosInstance.post(`/auth/signin`, {
         ...form,
         ip: ip,
@@ -96,18 +97,17 @@ const LoginModal = () => {
           failure={error}
         />
       </div>
-      <button
+      <Button
         disabled={loading}
         type="submit"
         className={clsx(
-          "relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-          "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+          "mt-4 w-full rounded-md px-5 py-3 text-sm font-medium shadow-sm",
           "sm:py-2.5",
         )}
       >
         {loading ? "Loading..." : t("Continue")}
         <FaArrowRight className="ml-2" />
-      </button>
+      </Button>
     </form>
   );
 

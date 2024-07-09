@@ -14,6 +14,7 @@ import Circle from "../Icons/Circle";
 import Widget from "../Widget";
 import { formatDistance } from "date-fns";
 import SEO from "../SEO";
+import { Button, CancelButton, DangerButton } from "../Buttons/Button";
 
 const headers = ["username", "user ID", "email address", "address"];
 
@@ -95,14 +96,10 @@ const General = () => {
                   you will lose all the store credit and loyalty coins you have.
                 </div>
               </div>
-              <button
-                className={clsx(
-                  "relative inline-flex cursor-default items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground opacity-50 shadow-sm outline-none transition-colors",
-                )}
-              >
+              <DangerButton disabled>
                 <FaTrashCan className="mr-2" />
                 Delete Account
-              </button>
+              </DangerButton>
             </div>
           </div>
 
@@ -123,12 +120,10 @@ const General = () => {
                 Login Sessions
               </h3>
               <div className="ml-auto flex items-center gap-x-1.5">
-                <button
+                <Button
+                  color="light"
                   onClick={handleShowIPs}
-                  className={clsx(
-                    "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
-                    "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                  )}
+                  className="rounded-md px-2 py-1.5 text-xs font-medium"
                 >
                   {showIps ? (
                     <>
@@ -141,16 +136,14 @@ const General = () => {
                       Show IPs
                     </>
                   )}
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <CancelButton
+                  className="!ring-0"
+                  disabled
                   // onClick={handleLogoutAllDevices}
-                  className={clsx(
-                    "relative inline-flex cursor-default items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger-light px-2 py-1.5 text-xs font-medium text-danger-light-foreground opacity-50 outline-none transition-colors",
-                  )}
                 >
                   <FaXmark className="mr-2" /> Logout All Devices
-                </button>
+                </CancelButton>
               </div>
             </div>
             <div className="px-0 pt-0 sm:px-6">

@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +12,7 @@ import {
   updateUserSuccess,
 } from "../redux/user/userSlice";
 import { axiosAuth } from "../axiosAuth";
+import { Button, CancelButton } from "./Buttons/Button";
 
 interface QRComponentProps {
   file?: File | null;
@@ -39,27 +39,19 @@ const QRComponent: React.FC<QRComponentProps> = ({
       {data && <p>Data: {data}</p>}
       <div className="space-y-2">
         {handleConfirm && (
-          <button
-            type="button"
+          <Button
             onClick={handleConfirm}
-            className={clsx(
-              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            )}
+            className="w-full rounded-md px-4 py-2.5 text-sm font-medium"
           >
             Use this photo
-          </button>
+          </Button>
         )}
-        <button
-          type="button"
-          className={clsx(
-            "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-bold text-primary shadow-sm outline-none ring-2 ring-primary-ring transition-colors",
-            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-          )}
+        <CancelButton
+          className="w-full px-4 py-2.5 text-sm font-medium"
           onClick={handleBack}
         >
           Retake photo
-        </button>
+        </CancelButton>
       </div>
     </div>
   );
@@ -170,16 +162,12 @@ const ReadQR = () => {
           subtitle="We need some information to help us confirm your identity"
         >
           <Persona />
-          <button
-            type="button"
-            className={clsx(
-              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            )}
+          <Button
+            className="w-full rounded-md  px-4 py-2 text-sm font-medium shadow-sm"
             onClick={handleBegin}
           >
             Begin verifying
-          </button>
+          </Button>
         </FormStep>
       )}
       {step === 1 && (
@@ -190,16 +178,12 @@ const ReadQR = () => {
           <div className="h-full w-full bg-[#edf1fc] py-10">
             <VerificationCard />
           </div>
-          <button
-            type="button"
-            className={clsx(
-              "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-              "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-            )}
+          <Button
+            className="w-full rounded-md  px-4 py-2 text-sm font-medium shadow-sm"
             onClick={handleClick}
           >
             Upload a photo
-          </button>
+          </Button>
           <input
             type="file"
             ref={fileRef}

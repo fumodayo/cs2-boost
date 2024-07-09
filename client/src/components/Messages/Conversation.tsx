@@ -12,6 +12,7 @@ import { RootState } from "../../redux/store";
 import { ReceivedMessage } from "./ReceivedMessage";
 import Messages from "./Messages";
 import useListenMessages from "../../hooks/useListeningMessages";
+import { Button } from "../Buttons/Button";
 
 const introduce = [
   {
@@ -191,11 +192,11 @@ const Conversation: React.FC<ConversationProps> = ({ order }) => {
               )}
             </div>
           </div>
-          <button
+          <Button
+            color="transparent"
             type="submit"
             className={clsx(
-              "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-full text-xl font-medium text-secondary-light-foreground outline-none transition-colors",
-              "hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px",
+              "h-10 w-10 rounded-full text-xl font-medium",
               "sm:h-8 sm:w-8",
             )}
           >
@@ -205,7 +206,7 @@ const Conversation: React.FC<ConversationProps> = ({ order }) => {
                 message && "text-primary"
               } flex h-4 w-4 items-center justify-center`}
             />
-          </button>
+          </Button>
         </form>
       </footer>
     </div>

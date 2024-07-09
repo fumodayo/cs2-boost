@@ -12,6 +12,7 @@ import Navigation from "../../components/Navigation";
 import { IoMdClose } from "react-icons/io";
 import clsx from "clsx";
 import SEO from "../../components/SEO";
+import { Button } from "../../components/Buttons/Button";
 
 const headers = [
   {
@@ -101,13 +102,13 @@ const WidgetBoost: React.FC<WidgetBoostProps> = ({ title, value, status }) => {
         </dd>
       </div>
       <div className="flex items-center border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
-        <button
-          type="submit"
+        <Button
+          color="transparent"
           onClick={() => handleStatusKey(status)}
-          className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+          className="rounded-md px-2 py-1.5 text-xs font-medium shadow-sm"
         >
           <IoReceiptSharp className="mr-2" /> View More
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -245,18 +246,17 @@ const ProgressBoosts = () => {
                   options={statuses}
                 />
                 {location.search && (
-                  <button
+                  <Button
+                    color="transparent"
                     onClick={resetFilters}
-                    type="button"
                     className={clsx(
-                      "relative inline-flex h-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
-                      "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                      "h-8 rounded-md px-2 py-1.5 text-xs font-medium",
                       "lg:px-3",
                     )}
                   >
                     Reset
                     <IoMdClose className="ml-2" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </DataTable>

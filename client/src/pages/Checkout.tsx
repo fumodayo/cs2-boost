@@ -17,6 +17,7 @@ import { AppContext } from "../context/AppContext";
 import { useExchangeMoney } from "../hooks/useExchangeMoney";
 import { axiosAuth } from "../axiosAuth";
 import SEO from "../components/SEO";
+import { Button } from "../components/Buttons/Button";
 
 const modeOfPayment = [
   {
@@ -167,13 +168,13 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
-                  <button
-                    type="submit"
+                  <Button
+                    color="light"
                     onClick={handleSubmit(onSubmit)}
-                    className="relative ml-1.5 inline-flex items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9"
+                    className="ml-1.5 rounded-md px-4 py-2 text-xs font-medium shadow-sm sm:h-9"
                   >
                     Apply
-                  </button>
+                  </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt>Subtotal</dt>
@@ -189,13 +190,13 @@ const Checkout = () => {
                   </div>
                 </div>
               </dl>
-              <button
+              <Button
                 onClick={handleCheckout}
-                className="relative mt-4 inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2.5"
+                className="mt-4 w-full rounded-md px-5 py-3 text-sm font-medium shadow-sm sm:py-2.5"
               >
                 Pay Now
                 <FaArrowRight className="ml-2" />
-              </button>
+              </Button>
             </div>
           </section>
 

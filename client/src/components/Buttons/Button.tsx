@@ -1,10 +1,9 @@
 import clsx from "clsx";
 import React from "react";
-import { FaXmark } from "react-icons/fa6";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   type?: "submit" | "button";
-  color?: "primary" | "secondary" | "light" | "transparent";
+  color?: "primary" | "secondary" | "light" | "transparent" | "none";
 };
 
 export const Button = ({
@@ -15,6 +14,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const colorVariants = {
+    none: null,
     primary:
       "bg-primary text-primary-foreground hover:bg-primary-hover focus:outline-primary",
     secondary:
@@ -30,7 +30,7 @@ export const Button = ({
       type={type}
       className={clsx(
         colorVariants[color],
-        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap outline-none transition-colors focus:outline focus:outline-offset-2 focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap outline-none transition-colors focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
         className,
       )}
       {...props}
@@ -40,14 +40,75 @@ export const Button = ({
   );
 };
 
-export const CloseButton = (props: ButtonProps) => {
+export const CloseButton = ({ children, className, ...props }: ButtonProps) => {
   return (
-    <button
-      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+    <Button
+      color="none"
+      className={clsx(
+        "h-10 w-10 rounded-md bg-transparent px-2 py-2 text-sm font-medium text-secondary-light-foreground hover:bg-secondary-light sm:h-9 sm:w-9",
+        className,
+      )}
       {...props}
     >
       <span className="sr-only">Close</span>
-      <FaXmark className="flex items-center justify-center text-2xl" />
-    </button>
+      {children}
+    </Button>
+  );
+};
+
+export const CancelButton = ({
+  children,
+  className,
+  ...props
+}: ButtonProps) => {
+  return (
+    <Button
+      color="none"
+      className={clsx(
+        "rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm ring-1 ring-danger-ring hover:bg-danger-hover hover:text-primary-foreground sm:py-2",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
+export const CompleteButton = ({
+  children,
+  className,
+  ...props
+}: ButtonProps) => {
+  return (
+    <Button
+      color="none"
+      className={clsx(
+        "rounded-md bg-success px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm hover:bg-success-hover",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
+export const DangerButton = ({
+  children,
+  className,
+  ...props
+}: ButtonProps) => {
+  return (
+    <Button
+      color="none"
+      className={clsx(
+        "rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm hover:bg-danger-hover",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Button>
   );
 };

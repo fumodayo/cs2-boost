@@ -27,6 +27,13 @@ import clsx from "clsx";
 import { axiosAuth } from "../axiosAuth";
 import queryString from "query-string";
 import axios, { AxiosError } from "axios";
+import {
+  Button,
+  CancelButton,
+  CloseButton,
+  CompleteButton,
+  DangerButton,
+} from "./Buttons/Button";
 
 type ServiceButtonProps = {
   value: string;
@@ -89,7 +96,10 @@ const Header: React.FC<HeaderProps> = ({ title, value, onHideColumn }) => {
       <div className="flex items-center justify-start space-x-2">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button className="-ml-3 inline-flex h-8 flex-shrink-0 items-center justify-center gap-x-2 rounded-md px-3 text-xs font-medium uppercase tracking-wide transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+            <button
+              type="button"
+              className="-ml-3 inline-flex h-8 flex-shrink-0 items-center justify-center gap-x-2 rounded-md px-3 text-xs font-medium uppercase tracking-wide transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            >
               <span>{title}</span>
               <PiArrowsDownUp className="fa-regular text-base opacity-0 group-hover:opacity-100" />
             </button>
@@ -195,11 +205,17 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
         {children}
         {/* TOGGLE */}
         <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button className="ml-auto hidden  h-8 items-center justify-center rounded-md border border-input bg-transparent px-3 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 lg:flex">
+          <DropdownMenu.Trigger>
+            <Button
+              color="light"
+              className={clsx(
+                "ml-auto h-8 rounded-md px-3 text-xs font-medium shadow-sm",
+                "lg:flex",
+              )}
+            >
               <PiSlidersHorizontal className="mr-2" />
               View
-            </button>
+            </Button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content
@@ -427,36 +443,30 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
                       ) && (
                         <td className="flex gap-x-2 px-2.5 py-2.5 text-left align-middle first:pl-4 last:pr-4 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]">
                           {status === "in active" && (
-                            <button
-                              type="button"
-                              className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                            <Button
+                              className="rounded-md px-3 py-1.5 text-sm font-medium shadow-sm"
                               onClick={() => handleAccept(boost_id as string)}
                             >
                               <FaCheck className="mr-1" />
                               Accept
-                            </button>
+                            </Button>
                           )}
                           {status === "in progress" && (
                             <>
-                              <button
-                                type="button"
-                                className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+                              <CompleteButton
                                 onClick={() =>
                                   handleComplete(boost_id as string)
                                 }
                               >
                                 <FaCircleCheck className="mr-1" />
                                 Completed
-                              </button>
+                              </CompleteButton>
                               <Dialog.Root>
                                 <Dialog.Trigger>
-                                  <button
-                                    type="button"
-                                    className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm outline-none ring-1 ring-danger-ring transition-colors hover:bg-danger-hover hover:text-primary-foreground focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2"
-                                  >
+                                  <CancelButton>
                                     <IoClose className="mr-1 text-xl" />
                                     Cancel
-                                  </button>
+                                  </CancelButton>
                                 </Dialog.Trigger>
                                 <Dialog.Portal>
                                   <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
@@ -483,13 +493,9 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
                                         </Dialog.Title>
                                       </div>
                                       <Dialog.Close>
-                                        <button
-                                          type="button"
-                                          className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
-                                        >
-                                          <span className="sr-only">Close</span>
+                                        <CloseButton>
                                           <FaXmark className="flex h-5 w-5 items-center justify-center" />
-                                        </button>
+                                        </CloseButton>
                                       </Dialog.Close>
                                     </div>
 
@@ -515,30 +521,22 @@ const DataTable: React.FC<DataTableProps> = ({ headers, items, children }) => {
                                         "sm:gap-3 sm:rounded-b-xl sm:px-6 sm:py-4",
                                       )}
                                     >
-                                      <Dialog.Close asChild>
-                                        <button
-                                          type="submit"
+                                      <Dialog.Close>
+                                        <DangerButton
                                           onClick={() =>
                                             handleCancel(boost_id as string)
                                           }
-                                          className={clsx(
-                                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-danger px-4 py-2 text-sm font-medium text-danger-foreground shadow-sm outline-none transition-colors",
-                                            "hover:bg-danger-hover focus:outline focus:outline-offset-2 focus:outline-danger focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                          )}
                                         >
                                           Cancel Boost
-                                        </button>
+                                        </DangerButton>
                                       </Dialog.Close>
-                                      <Dialog.Close asChild>
-                                        <button
-                                          type="button"
-                                          className={clsx(
-                                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                                            "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                          )}
+                                      <Dialog.Close>
+                                        <Button
+                                          color="secondary"
+                                          className="rounded-md px-4 py-2 text-sm font-medium shadow-sm"
                                         >
-                                          Cancel
-                                        </button>
+                                          Close
+                                        </Button>
                                       </Dialog.Close>
                                     </div>
                                   </Dialog.Content>

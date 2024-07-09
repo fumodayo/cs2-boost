@@ -24,6 +24,11 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { axiosAuth } from "../../axiosAuth";
 import SEO from "../../components/SEO";
+import {
+  Button,
+  CloseButton,
+  CompleteButton,
+} from "../../components/Buttons/Button";
 
 ChartJS.register(
   LinearScale,
@@ -211,13 +216,13 @@ const Income: React.FC = () => {
                 <div className="border-t border-border bg-muted/50 px-4 py-3 sm:rounded-b-xl sm:px-6">
                   <Dialog.Root>
                     <Dialog.Trigger>
-                      <button
-                        type="button"
-                        className="relative inline-flex items-center justify-center rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/10"
+                      <Button
+                        color="transparent"
+                        className="rounded-md px-2 py-1.5 text-xs font-medium text-secondary-light-foreground hover:bg-success/20"
                       >
                         <FaMoneyBill1 className="mr-2 text-xl text-success" />{" "}
                         Cashout
-                      </button>
+                      </Button>
                     </Dialog.Trigger>
                     <Dialog.Portal>
                       <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
@@ -247,13 +252,9 @@ const Income: React.FC = () => {
                             </Dialog.Title>
                           </div>
                           <Dialog.Close>
-                            <button
-                              type="button"
-                              className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary-light text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:h-9 sm:w-9"
-                            >
-                              <span className="sr-only">Close</span>
+                            <CloseButton>
                               <FaXmark className="flex h-5 w-5 items-center justify-center" />
-                            </button>
+                            </CloseButton>
                           </Dialog.Close>
                         </div>
 
@@ -286,27 +287,20 @@ const Income: React.FC = () => {
                           )}
                         >
                           <Dialog.Close asChild>
-                            <button
-                              type="submit"
+                            <CompleteButton
+                              className="px-4 py-2"
                               onClick={handleSubmit(onSubmit)}
-                              className={clsx(
-                                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-4 py-2 text-sm font-medium text-success-foreground shadow-sm outline-none transition-colors",
-                                "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                              )}
                             >
                               Withdraw
-                            </button>
+                            </CompleteButton>
                           </Dialog.Close>
                           <Dialog.Close asChild>
-                            <button
-                              type="button"
-                              className={clsx(
-                                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                                "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                              )}
+                            <Button
+                              className="rounded-md px-4 py-2 text-sm shadow-sm"
+                              color="light"
                             >
                               Cancel
-                            </button>
+                            </Button>
                           </Dialog.Close>
                         </div>
                       </Dialog.Content>

@@ -19,6 +19,7 @@ import { useExchangeMoney } from "../hooks/useExchangeMoney";
 import { addCartStart, addCartSuccess } from "../redux/cart/cartSlice";
 import Input from "./Input";
 import { axiosAuth } from "../axiosAuth";
+import { Button } from "./Buttons/Button";
 
 type ExtraOption = {
   name: string;
@@ -184,7 +185,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         {server ? (
           <div className="text-md -mx-6 my-4 bg-accent py-3 text-center text-muted-foreground">
             <span className="flex justify-center">
-              <span className="md:mx-4 mx-1 font-bold text-foreground">
+              <span className="mx-1 font-bold text-foreground md:mx-4">
                 {beginText && t(beginText)}
               </span>
               {currentExp && <p className="w-4">{currentExp}</p>}
@@ -197,7 +198,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 />
               )}
               <span className="ml-8">{"->"}</span>
-              <span className="md:mx-4 mx-1 font-bold text-foreground">
+              <span className="mx-1 font-bold text-foreground md:mx-4">
                 {lastText && t(lastText)}
               </span>
               {selectedDesiredRank && (
@@ -245,7 +246,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     </div>
                     <button
                       onClick={() => handleToggleExtraOption(index)}
-                      className="emboss-shadow relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center rounded-full border border-border bg-accent transition-colors duration-200 ease-in-out hover:brightness-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary"
+                      className="relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center rounded-full border border-border bg-accent transition-colors duration-200 ease-in-out hover:brightness-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary"
                       id="switch"
                       role="switch"
                       type="button"
@@ -334,17 +335,17 @@ const Checkout: React.FC<CheckoutProps> = ({
                 />
               </div>
             </div>
-            <button
+            <Button
               type="submit"
+              color="secondary"
               onClick={handleSubmit(onSubmit)}
               className={clsx(
-                "relative ml-1 inline-flex h-9 items-center justify-center overflow-hidden truncate whitespace-nowrap rounded-md bg-secondary px-4 py-2 !text-xs font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                "ml-1 h-9 truncate rounded-md px-4 py-2 text-xs font-medium shadow-sm",
                 "sm:h-8",
               )}
             >
               {t("Apply")}
-            </button>
+            </Button>
           </div>
         </div>
         <div className="mt-6 flex items-end justify-between">
@@ -359,22 +360,22 @@ const Checkout: React.FC<CheckoutProps> = ({
         </div>
 
         {server ? (
-          <button
+          <Button
             onClick={handleCreateOrder}
             className={clsx(
-              "text-md mt-4 w-full rounded-md bg-blue-600 py-2 font-semibold text-foreground",
-              "hover:bg-blue-700",
+              "text-md mt-4 w-full rounded-md py-2 font-semibold text-foreground",
+              "hover:!bg-blue-700",
             )}
           >
             {t("Buy Now")} →
-          </button>
+          </Button>
         ) : (
-          <button
-            className="text-md mt-4 w-full cursor-not-allowed rounded-md bg-accent py-2 font-semibold text-foreground"
+          <Button
+            className="text-md mt-4 w-full cursor-not-allowed rounded-md !bg-accent py-2 font-semibold text-foreground"
             disabled
           >
             {t("Buy Now")} →
-          </button>
+          </Button>
         )}
 
         <div className="mt-4 flex items-center justify-center text-center text-sm font-semibold text-muted-foreground">

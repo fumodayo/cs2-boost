@@ -5,6 +5,7 @@ import "swiper/css";
 import SwiperCore from "swiper";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useRef } from "react";
+import { Button } from "./Buttons/Button";
 
 interface ChooseServerProps {
   server?: string;
@@ -28,18 +29,20 @@ const ChooseServer: React.FC<ChooseServerProps> = ({
           {t("Select the server you play on")}
         </p>
         <div className="space-x-1">
-          <button
+          <Button
+            color="transparent"
             onClick={() => swiperRef.current && swiperRef.current.slidePrev()}
-            className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            className="rounded-md px-4 py-2 text-sm font-medium"
           >
             <FaChevronLeft className="text-base" />
-          </button>
-          <button
+          </Button>
+          <Button
+            color="transparent"
             onClick={() => swiperRef.current && swiperRef.current.slideNext()}
-            className="relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-4 py-2 text-sm font-medium text-secondary-light-foreground outline-none transition-colors hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50"
+            className="rounded-md px-4 py-2 text-sm font-medium"
           >
             <FaChevronRight className="text-base" />
-          </button>
+          </Button>
         </div>
       </div>
       <Swiper

@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 
 import { FaBars } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowRight, FaXmark } from "react-icons/fa6";
 
 import { AppContext } from "../../context/AppContext";
 import { RootState } from "../../redux/store";
@@ -80,7 +80,9 @@ const Navbar: React.FC<NavbarProps> = ({ isNonSticky }) => {
                       <div className="flex items-center justify-between border-b border-border bg-card-surface px-4 py-4">
                         <Logo />
                         <Dialog.Close>
-                          <CloseButton />
+                          <CloseButton>
+                            <FaXmark className="flex items-center justify-center text-2xl" />
+                          </CloseButton>
                         </Dialog.Close>
                       </div>
                       <div className="border-t border-border px-4 pt-4">

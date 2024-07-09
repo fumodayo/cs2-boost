@@ -23,6 +23,7 @@ import Stripe from "stripe";
 import { app, io, server } from "./socket/socket.js";
 import connectToMongoDB from "./database/connectToMogoDB.js";
 import Notification from "./models/notification.model.js";
+import job from "./utils/cron.js";
 
 dotenv.config();
 
@@ -149,6 +150,9 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/revenue", revenueRouter);
+app.get("/", (req, res) => {
+  res.json("Server listening");
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -161,6 +165,8 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
+job.start();
 
 server.listen(PORT, () => {
   console.log(`listening on ${process.env.PORT}`);

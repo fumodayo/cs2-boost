@@ -43,6 +43,13 @@ import { IoClose } from "react-icons/io5";
 import { axiosAuth } from "../../axiosAuth";
 import SEO from "../../components/SEO";
 import axios, { AxiosError } from "axios";
+import {
+  Button,
+  CancelButton,
+  CloseButton,
+  CompleteButton,
+  DangerButton,
+} from "../../components/Buttons/Button";
 
 const AccountField = ({ label, value }: { label?: string; value?: string }) => {
   return (
@@ -127,15 +134,12 @@ const AccountWidget = ({ order }: { order: Order }) => {
       >
         <Dialog.Root>
           <Dialog.Trigger asChild>
-            <button
-              type="button"
-              className={clsx(
-                "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors",
-                "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-              )}
+            <Button
+              color="transparent"
+              className="rounded-md px-2 py-1.5 text-xs font-medium"
             >
               <FaEdit className="mr-2" /> Edit Logins
-            </button>
+            </Button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
@@ -152,17 +156,12 @@ const AccountWidget = ({ order }: { order: Order }) => {
                     <Dialog.Title className="font-display text-lg font-medium leading-6 text-foreground">
                       Edit Account Logins
                     </Dialog.Title>
-                    <Dialog.Close asChild>
+                    <Dialog.Close>
                       <div className="ml-3 flex h-7 items-center">
-                        <button
-                          className={clsx(
-                            "relative inline-flex h-8 w-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors ",
-                            "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                          )}
-                        >
+                        <CloseButton>
                           <span className="sr-only">Close</span>
                           <FaXmark className="flex items-center justify-center text-2xl" />
-                        </button>
+                        </CloseButton>
                       </div>
                     </Dialog.Close>
                   </div>
@@ -260,26 +259,27 @@ const AccountWidget = ({ order }: { order: Order }) => {
 
                 {/* FOOTER */}
                 <div className="flex flex-shrink-0 flex-row-reverse gap-3 rounded-b-xl border-t border-border bg-card-surface px-4 py-4">
-                  <button
+                  <Button
                     type="submit"
                     onClick={handleSubmit(onSubmit)}
                     className={clsx(
-                      "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors ",
-                      "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:py-2.5",
+                      "w-full rounded-md px-5 py-3 text-sm font-medium",
+                      "sm:w-auto sm:py-2.5",
                     )}
                   >
                     <FaEdit className="mr-2" />
                     Edit Account
-                  </button>
+                  </Button>
                   <Dialog.Close>
-                    <button
+                    <Button
+                      color="light"
                       className={clsx(
-                        "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                        "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:w-auto",
+                        "rounded-md px-4 py-2 text-sm font-medium shadow-sm",
+                        "sm:w-auto",
                       )}
                     >
                       Cancel
-                    </button>
+                    </Button>
                   </Dialog.Close>
                 </div>
               </div>
@@ -444,12 +444,24 @@ const BoostId = () => {
     booster: order?.booster?._id,
   };
 
-  if (
-    currentUser?._id !== allowedIds.client &&
-    currentUser?._id !== allowedIds.booster
-  ) {
-    navigate(-1);
-    return null;
+  if (allowedIds.booster) {
+    // Khi đã có booster nhận order
+    if (
+      currentUser?._id !== allowedIds.client &&
+      currentUser?._id !== allowedIds.booster
+    ) {
+      navigate(-1);
+      return null;
+    }
+  } else {
+    // Khi chưa có ai nhận order
+    if (
+      currentUser?._id !== allowedIds.client &&
+      !currentUser?.role?.includes("booster")
+    ) {
+      navigate(-1);
+      return null;
+    }
   }
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
@@ -615,57 +627,44 @@ const BoostId = () => {
                 )}
                 {currentUser?.role?.includes("booster") &&
                   order.status === "in active" && (
-                    <button
-                      type="button"
+                    <Button
                       onClick={handleAcceptBoost}
-                      className={clsx(
-                        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                        "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                      )}
+                      className="rounded-md px-4 py-2 text-sm font-medium shadow-sm"
                     >
                       <FaSquareCheck className="mr-2" />
                       Accept Boost
-                    </button>
+                    </Button>
                   )}
                 {currentUser?.role?.includes("booster") &&
                   order.status === "in progress" && (
                     <div className="flex gap-x-2">
-                      <button
+                      <CompleteButton
                         onClick={() => handleComplete(order.boost_id as string)}
-                        type="button"
-                        className={clsx(
-                          "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-success px-3 py-1.5 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                          "hover:bg-success-hover focus:outline focus:outline-offset-2 focus:outline-success focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                        )}
                       >
                         <FaCircleCheck className="mr-1" />
                         Completed Boost
-                      </button>
-                      <button
+                      </CompleteButton>
+                      <CancelButton
                         onClick={() => handleCancel(order.boost_id as string)}
-                        className={clsx(
-                          "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-2 py-1 text-sm font-medium text-danger shadow-sm outline-none ring-1 ring-danger-ring transition-colors ",
-                          "hover:bg-danger-hover hover:text-primary-foreground focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50 sm:py-2",
-                        )}
                       >
                         <IoClose className="mr-1 text-xl" />
                         Cancel Boost
-                      </button>
+                      </CancelButton>
                     </div>
                   )}
                 {order.status === "pending" && (
                   <Popover.Root>
-                    <Popover.Trigger asChild>
-                      <button
+                    <Popover.Trigger>
+                      <Button
+                        color="light"
                         className={clsx(
-                          "relative inline-flex h-10 w-10 items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                          "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                          "rounded-md bg-secondary text-sm font-medium shadow-sm",
                           "sm:h-9 sm:w-9",
                         )}
                       >
                         <span className="sr-only">Open actions menu</span>
                         <FaEllipsisVertical />
-                      </button>
+                      </Button>
                     </Popover.Trigger>
                     <Popover.Portal>
                       <Popover.Content
@@ -728,25 +727,16 @@ const BoostId = () => {
                                   )}
                                 >
                                   <Dialog.Close>
-                                    <button
-                                      type="button"
-                                      className={clsx(
-                                        "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                                        "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                      )}
+                                    <Button
+                                      color="light"
+                                      className="rounded-md px-4 py-2 text-sm font-medium shadow-sm"
                                     >
                                       Cancel
-                                    </button>
+                                    </Button>
                                   </Dialog.Close>
-                                  <button
-                                    type="button"
-                                    className={clsx(
-                                      "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors",
-                                      "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                    )}
-                                  >
-                                    Confirm <FaArrowRight className="ml-1" />
-                                  </button>
+                                  <DangerButton>
+                                    Confirm <FaArrowRight className="ml-2" />
+                                  </DangerButton>
                                 </div>
                               </div>
                             </Dialog.Content>
@@ -830,14 +820,12 @@ const BoostId = () => {
                   >
                     <Dialog.Root>
                       <Dialog.Trigger asChild>
-                        <button
-                          className={clsx(
-                            "relative inline-flex items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-transparent px-2 py-1.5 text-xs font-medium text-secondary-light-foreground outline-none transition-colors ",
-                            "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                          )}
+                        <Button
+                          color="transparent"
+                          className="rounded-md px-3 py-2 text-xs font-medium"
                         >
                           <FaPlus className="mr-2" /> Add Logins
-                        </button>
+                        </Button>
                       </Dialog.Trigger>
                       <Dialog.Portal>
                         <Dialog.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
@@ -855,15 +843,9 @@ const BoostId = () => {
                                 </Dialog.Title>
                                 <Dialog.Close asChild>
                                   <div className="ml-3 flex h-7 items-center">
-                                    <button
-                                      className={clsx(
-                                        "relative inline-flex h-8 w-8 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-transparent p-1 text-sm font-medium text-secondary-light-foreground outline-none transition-colors",
-                                        "hover:bg-secondary-light focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
-                                      )}
-                                    >
-                                      <span className="sr-only">Close</span>
+                                    <CloseButton>
                                       <FaXmark className="flex items-center justify-center text-2xl" />
-                                    </button>
+                                    </CloseButton>
                                   </div>
                                 </Dialog.Close>
                               </div>
@@ -945,28 +927,27 @@ const BoostId = () => {
 
                             {/* FOOTER */}
                             <div className="flex flex-shrink-0 flex-row-reverse gap-3 rounded-b-xl border-t border-border bg-card-surface px-4 py-4">
-                              <button
+                              <Button
                                 type="submit"
                                 onClick={handleSubmit(onSubmit)}
                                 className={clsx(
-                                  "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm outline-none transition-colors ",
-                                  "hover:bg-primary-hover focus:outline focus:outline-offset-2 focus:outline-primary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                                  "w-full rounded-md px-5 py-3 text-sm font-medium shadow-sm",
                                   "sm:w-auto sm:py-2.5",
                                 )}
                               >
                                 <FaPlus className="mr-2" />
                                 Add Account
-                              </button>
+                              </Button>
                               <Dialog.Close>
-                                <button
+                                <Button
+                                  color="light"
                                   className={clsx(
-                                    "relative inline-flex w-full items-center justify-center overflow-hidden whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm outline-none ring-1 ring-secondary-ring transition-colors",
-                                    "hover:bg-secondary-hover focus:outline focus:outline-offset-2 focus:outline-secondary focus-visible:outline active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+                                    "rounded-md px-4 py-2 text-sm font-medium shadow-sm",
                                     "sm:w-auto",
                                   )}
                                 >
                                   Cancel
-                                </button>
+                                </Button>
                               </Dialog.Close>
                             </div>
                           </div>
