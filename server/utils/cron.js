@@ -2,7 +2,7 @@
 import * as cron from "cron";
 import https from "https";
 
-const backendUrl = process.env.PORT || "http://localhost:3000";
+const backendUrl = process.env.BACKEND_URL;
 
 const job = new cron.CronJob("*/14 * * * *", function () {
   console.log("Restarting server");
