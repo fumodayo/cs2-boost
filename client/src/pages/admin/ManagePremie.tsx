@@ -19,7 +19,7 @@ interface Server {
 }
 
 const ManagePremie = () => {
-  const { price_list, unit_price } = useGetPremierPrice();
+  const { price_list, unit_price } = useGetPremierPrice() || {};
 
   const [servers, setServers] = useState<Server[]>([]);
   const [selectedServerIndex, setSelectedServerIndex] = useState<number | null>(
@@ -131,7 +131,6 @@ const ManagePremie = () => {
               color="light"
               onClick={() => {
                 setIsSaveEnabled(false);
-                setServers(price_list);
               }}
               disabled={!isSaveEnabled}
               className="h-9 w-[120px] gap-1 rounded-md px-4 py-2 text-sm font-medium"

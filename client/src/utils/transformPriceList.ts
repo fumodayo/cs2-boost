@@ -1,5 +1,11 @@
-export const transformWingmanPriceList = (data) => {
-  const result = {
+import { PremierPriceList, WingmanPriceList } from "../types";
+
+type TransformedPriceList = {
+  [key: string]: { label: string | number; note?: string }[];
+};
+
+export const transformWingmanPriceList = (data: WingmanPriceList[]) => {
+  const result: TransformedPriceList = {
     "Rating/ Server": [
       { label: "Silver I", note: "Rank" },
       { label: "Silver II", note: undefined },
@@ -34,8 +40,8 @@ export const transformWingmanPriceList = (data) => {
   return result;
 };
 
-export const transformPremiePriceList = (data) => {
-  const result = {
+export const transformPremiePriceList = (data: PremierPriceList[]) => {
+  const result: TransformedPriceList = {
     "Rating/ Server": [
       { label: "1000->4999", note: "Rating score" },
       { label: "5,000->9,999" },

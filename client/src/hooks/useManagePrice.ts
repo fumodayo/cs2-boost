@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../axiosAuth";
+import { PremierPriceList, WingmanPriceList } from "../types";
+
+interface WingmanPrice {
+  price_list: WingmanPriceList[];
+  unit_price: number;
+}
+
+interface PremierPrice {
+  price_list: PremierPriceList[];
+  unit_price: number;
+}
 
 export const useGetWingmanPrice = () => {
-  const [priceList, setPriceList] = useState({});
+  const [priceList, setPriceList] = useState<WingmanPrice>();
 
   useEffect(() => {
     (async () => {
@@ -15,7 +26,7 @@ export const useGetWingmanPrice = () => {
 };
 
 export const useGetPremierPrice = () => {
-  const [priceList, setPriceList] = useState({});
+  const [priceList, setPriceList] = useState<PremierPrice>();
 
   useEffect(() => {
     (async () => {

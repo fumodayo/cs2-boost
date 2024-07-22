@@ -136,3 +136,30 @@ export interface Revenue {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface WingmanPriceList {
+  _id?: string;
+  name: string;
+  value: string;
+  costs: [
+    {
+      code: string;
+      name: string;
+      image: string;
+      bonus: number;
+    },
+  ];
+}
+
+export interface PremierPriceList {
+  _id?: string;
+  name: string;
+  value: string;
+  costs: [
+    {
+      start: number;
+      end: number;
+      bonus: number;
+    },
+  ];
+}

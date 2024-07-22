@@ -12,6 +12,7 @@ import Board from "../components/Common/Board";
 import SEO from "../components/SEO";
 import { useGetWingmanPrice } from "../hooks/useManagePrice";
 import { transformWingmanPriceList } from "../utils/transformPriceList";
+import Loading from "./Loading";
 
 type ExtraOption = {
   name: string;
@@ -116,7 +117,7 @@ const serviceInfo = [
 const Wingman = () => {
   const { t } = useTranslation();
   const [server, setServer] = useState<string>("");
-  const { price_list } = useGetWingmanPrice();
+  const { price_list } = useGetWingmanPrice() || {};
   const [currentRank, setCurrentRank] = useState("silver_1");
   const [desiredRank, setDesiredRank] = useState("silver_2");
 
@@ -140,7 +141,7 @@ const Wingman = () => {
   }, [currentRank, desiredRank, server, price_list]);
 
   if (!price_list) {
-    return -1;
+    return <Loading />;
   }
 
   return (

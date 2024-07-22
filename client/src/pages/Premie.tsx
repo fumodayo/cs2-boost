@@ -14,6 +14,7 @@ import SEO from "../components/SEO";
 import Range from "../components/Range";
 import { useGetPremierPrice } from "../hooks/useManagePrice";
 import { transformPremiePriceList } from "../utils/transformPriceList";
+import Loading from "./Loading";
 
 const MarkOfRating = ({ point, rank }: { point: string; rank: string }) => (
   <div className="py-2">
@@ -139,7 +140,7 @@ const Premie = () => {
   const [currentRating, setCurrentRating] = useState(1000);
   const [desiredRating, setDesiredRating] = useState(10000);
 
-  const { price_list, unit_price } = useGetPremierPrice();
+  const { price_list, unit_price } = useGetPremierPrice() || {};
 
   const [server, setServer] = useState("");
 
@@ -168,7 +169,7 @@ const Premie = () => {
   }, [currentRating, desiredRating, server, price_list, unit_price]);
 
   if (!price_list) {
-    return -1;
+    return <Loading />;
   }
 
   return (

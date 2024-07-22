@@ -21,7 +21,7 @@ interface Server {
 }
 
 const ManageWingman = () => {
-  const { price_list, unit_price } = useGetWingmanPrice();
+  const { price_list, unit_price } = useGetWingmanPrice() || {};
 
   const [servers, setServers] = useState<Server[]>([]);
   const [selectedServer, setSelectedServer] = useState<string>("Asia");
@@ -143,7 +143,6 @@ const ManageWingman = () => {
               color="light"
               onClick={() => {
                 setIsSaveEnabled(false);
-                setServers(price_list);
               }}
               disabled={!isSaveEnabled}
               className="h-9 w-[120px] gap-1 rounded-md px-4 py-2 text-sm font-medium"
