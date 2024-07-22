@@ -1,5 +1,8 @@
+import { WingmanPriceList } from "../types";
+
 export const totalCostOfWingman = (
-  price_list,
+  unit_price: number,
+  price_list: WingmanPriceList[],
   currentRank: string,
   desiredRank: string,
   server: string,
@@ -9,7 +12,6 @@ export const totalCostOfWingman = (
   }
   // Lấy thông tin về server cụ thể
   const selectedServer = price_list.find((s) => s.value === server);
-  console.log({selectedServer});
 
   if (selectedServer) {
     // Lấy index của currentRank và desiredRank trong mảng ranks
@@ -32,7 +34,7 @@ export const totalCostOfWingman = (
       // Kiểm tra giá trị của currentBonus và desiredBonus
       if (desiredBonus > 0 && currentBonus > 0) {
         // Tính toán tổng chi phí dựa trên công thức đã cung cấp
-        const totalCost = (desiredBonus - currentBonus) * 10000;
+        const totalCost = (desiredBonus - currentBonus) * unit_price;
         return totalCost;
       }
     }

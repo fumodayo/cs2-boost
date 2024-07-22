@@ -117,7 +117,7 @@ const serviceInfo = [
 const Wingman = () => {
   const { t } = useTranslation();
   const [server, setServer] = useState<string>("");
-  const { price_list } = useGetWingmanPrice() || {};
+  const { price_list, unit_price } = useGetWingmanPrice() || {};
   const [currentRank, setCurrentRank] = useState("silver_1");
   const [desiredRank, setDesiredRank] = useState("silver_2");
 
@@ -131,14 +131,19 @@ const Wingman = () => {
   }, [currentRank, desiredRank]);
 
   const totalCostOfBoostWingman = useMemo(() => {
+    if (!unit_price || !price_list) {
+      return -1;
+    }
+
     const total = totalCostOfWingman(
+      unit_price,
       price_list,
       currentRank,
       desiredRank,
       server,
     );
     return total;
-  }, [currentRank, desiredRank, server, price_list]);
+  }, [currentRank, desiredRank, server, price_list, unit_price]);
 
   if (!price_list) {
     return <Loading />;

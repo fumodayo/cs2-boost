@@ -1,11 +1,13 @@
+import { PremierPriceList } from "../types";
+
 export const totalCostOfPremie = (
-  unit_price,
-  price_list,
+  unit_price: number,
+  price_list: PremierPriceList[],
   startingPoint: number,
   endPoint: number,
   server: string,
 ) => {
-  if (!price_list) {
+  if (!price_list || !unit_price) {
     return -1;
   }
 
