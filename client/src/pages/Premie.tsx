@@ -158,6 +158,10 @@ const Premie = () => {
   }, [currentRating, desiredRating]);
 
   const totalCostOfBoostPremie = useMemo(() => {
+    if (!unit_price || !price_list) {
+      return -1;
+    }
+
     const total = totalCostOfPremie(
       unit_price,
       price_list,
