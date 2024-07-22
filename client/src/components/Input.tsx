@@ -25,6 +25,9 @@ interface InputProps {
   autoFocused?: boolean;
   min?: number;
   max?: number;
+  value?: number | string;
+  className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -42,6 +45,9 @@ const Input: React.FC<InputProps> = ({
   autoFocused,
   min,
   max,
+  value,
+  className,
+  onChange,
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -68,7 +74,7 @@ const Input: React.FC<InputProps> = ({
           }
           {...register(id, { required, ...rules })}
           className={clsx(
-            `block w-full rounded-md border-0 bg-field !${style} py-1.5 px-3 text-field-foreground shadow-sm ring-1 placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50 md:px-4 md:py-1.5`,
+            `block w-full rounded-md border-0 bg-field !${style} px-3 py-1.5 text-field-foreground shadow-sm ring-1 placeholder:text-muted-foreground disabled:pointer-events-none disabled:opacity-50 md:px-4 md:py-1.5`,
             "sm:text-sm",
             errors[id] ? "ring-red-500" : "ring-field-ring",
             errors[id] ? "focus:ring-red-500" : "focus:ring-field-ring-hover",
@@ -76,8 +82,11 @@ const Input: React.FC<InputProps> = ({
             failure ? "ring-red-500" : "ring-field-ring",
             failure ? "focus:ring-red-500" : "focus:ring-field-ring-hover",
             failure ? "hover:ring-red-500" : "hover:ring-field-ring-hover",
+            className,
           )}
           autoFocus={autoFocused}
+          value={value}
+          onChange={onChange}
         />
         {type === "password" && (
           <span className="text-md absolute right-4 top-0 z-10 origin-[0] translate-y-2 transform cursor-pointer text-neutral-600 duration-150 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75">

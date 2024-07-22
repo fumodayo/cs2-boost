@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,9 +19,33 @@ import { useGetIP } from "../../hooks/useGetIP";
 import { axiosInstance } from "../../axiosAuth";
 import { Button } from "../Buttons/Button";
 
+const accounts = {
+  user: {
+    email: "user.test@gmail.com",
+    password: "0123@Abc",
+  },
+  booster: {
+    email: "booster.test@gmail.com",
+    password: "0123@Abc",
+  },
+  admin: {
+    email: "admin.test@gmail.com",
+    password: "0123@Abc",
+  },
+};
+
+type AccountKeys = keyof typeof accounts;
+
 const LoginModal = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state: RootState) => state.user);
+  const [selectedAccount, setSelectedAccount] = useState(accounts.user);
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedKey = event.target.value as AccountKeys;
+    setSelectedAccount(accounts[selectedKey]);
+    dispatch(authFailure(""));
+  };
 
   const { t } = useTranslation();
 
@@ -34,6 +58,7 @@ const LoginModal = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -41,6 +66,13 @@ const LoginModal = () => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    const { email, password } = selectedAccount;
+    setValue("email", email);
+    setValue("password", password);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedAccount]);
 
   const toggle = useCallback(() => {
     reset();
@@ -76,6 +108,20 @@ const LoginModal = () => {
 
   const bodyContent = (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col pb-2">
+        <h3 className="text-lg font-bold">Demo</h3>
+        <select
+          defaultValue="user"
+          onChange={handleSelectChange}
+          className="h-8 w-[100px] justify-between rounded-md border-0 bg-field px-2 text-sm text-field-foreground shadow-sm outline-none ring-1 ring-field-ring"
+        >
+          {Object.keys(accounts).map((account) => (
+            <option className="capitalize" key={account} value={account}>
+              {account}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="space-y-2">
         <Input
           id="email"

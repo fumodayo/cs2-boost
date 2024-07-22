@@ -16,6 +16,7 @@ import cookieParser from "cookie-parser";
 import Order from "./models/order.model.js";
 import Invoice from "./models/invoice.model.js";
 import revenueRouter from "./routes/revenue.route.js";
+import manageRouter from "./routes/manage.route.js";
 import { NOTIFICATION_TYPE, ORDER_STATUS } from "./constants/index.js";
 
 import Stripe from "stripe";
@@ -150,6 +151,7 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/revenue", revenueRouter);
+app.use("/api/manage", manageRouter);
 app.get("/", (req, res) => {
   res.json("Server listening");
 });

@@ -12,6 +12,8 @@ import Info from "../components/Info";
 import Board from "../components/Common/Board";
 import SEO from "../components/SEO";
 import Range from "../components/Range";
+import { useGetPremierPrice } from "../hooks/useManagePrice";
+import { transformPremiePriceList } from "../utils/transformPriceList";
 
 const MarkOfRating = ({ point, rank }: { point: string; rank: string }) => (
   <div className="py-2">
@@ -132,94 +134,12 @@ const serviceInfo = [
   },
 ];
 
-const coefficientPremierEarn = {
-  "Rating/ Server": [
-    { label: "1000->4999", note: "Rating score" },
-    { label: "5,000->9,999" },
-    { label: "10,000->14,999" },
-    { label: "15,000->19,999" },
-    { label: "20,000->24,999" },
-    { label: "25,000->29,999" },
-    { label: "30,000+" },
-  ],
-  "Africa (AF)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 2 },
-    { label: 4 },
-    { label: 8 },
-    { label: 16 },
-    { label: 32 },
-  ],
-  "Asia (AS)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 2 },
-    { label: 4 },
-    { label: 8 },
-    { label: 16 },
-    { label: 32 },
-    { label: 64 },
-  ],
-  "Australia (AU)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1.2 },
-    { label: 2.4 },
-    { label: 4.8 },
-    { label: 9.6 },
-    { label: 19.2 },
-    { label: 38.4 },
-  ],
-  "China (CN)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1.5 },
-    { label: 3 },
-    { label: 6 },
-    { label: 12 },
-    { label: 24 },
-    { label: 48 },
-  ],
-  "Europe (EU)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1.2 },
-    { label: 2.4 },
-    { label: 4.8 },
-    { label: 9.6 },
-    { label: 19.2 },
-    { label: 38.4 },
-  ],
-  "North America (NA)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1.2 },
-    { label: 2.4 },
-    { label: 4.8 },
-    { label: 9.6 },
-    { label: 19.2 },
-    { label: 38.4 },
-  ],
-  "South America (SA)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1.2 },
-    { label: 2.4 },
-    { label: 4.8 },
-    { label: 9.6 },
-    { label: 19.2 },
-    { label: 38.4 },
-  ],
-  "Earn Point": [
-    { label: 500, note: "Premier points earned per win (estimated)" },
-    { label: 500 },
-    { label: 400 },
-    { label: 300 },
-    { label: 200 },
-    { label: 100 },
-    { label: 50 },
-  ],
-};
-
 const Premie = () => {
   const { t } = useTranslation();
   const [currentRating, setCurrentRating] = useState(1000);
   const [desiredRating, setDesiredRating] = useState(10000);
+
+  const { price_list, unit_price } = useGetPremierPrice();
 
   const [server, setServer] = useState("");
 
@@ -237,9 +157,19 @@ const Premie = () => {
   }, [currentRating, desiredRating]);
 
   const totalCostOfBoostPremie = useMemo(() => {
-    const total = totalCostOfPremie(currentRating, desiredRating, server);
+    const total = totalCostOfPremie(
+      unit_price,
+      price_list,
+      currentRating,
+      desiredRating,
+      server,
+    );
     return total;
-  }, [currentRating, desiredRating, server]);
+  }, [currentRating, desiredRating, server, price_list, unit_price]);
+
+  if (!price_list) {
+    return -1;
+  }
 
   return (
     <>
@@ -338,7 +268,7 @@ const Premie = () => {
               )
             </p>
           </div>
-          <Board services={coefficientPremierEarn} />
+          <Board services={transformPremiePriceList(price_list)} />
         </div>
       </DefaultPage>
     </>

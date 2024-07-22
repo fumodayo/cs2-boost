@@ -25,7 +25,8 @@ import Profile from "./pages/Profile";
 import Loading from "./pages/Loading";
 import { AppContext } from "./context/AppContext";
 import AdminRoute from "./layouts/AdminRoute";
-import AdminPage from "./pages/admin/AdminPage";
+import ManagePremie from "./pages/admin/ManagePremie";
+import ManageWingman from "./pages/admin/ManageWingman";
 
 function App() {
   const { theme } = useContext(AppContext);
@@ -45,8 +46,11 @@ function App() {
             <Route path="level-farming" element={<FarmExp />} />
           </Route>
           <Route element={<AdminRoute />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
-            <Route path="admin" element={<AdminPage />} />
+            <Route path="admin/*">
+              <Route index element={<Navigate to="/admin/premier" replace />} />
+              <Route path="premier" element={<ManagePremie />} />
+              <Route path="wingman" element={<ManageWingman />} />
+            </Route>
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path="profile/:id" element={<Profile />} />

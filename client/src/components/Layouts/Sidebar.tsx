@@ -1,138 +1,30 @@
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { IoGrid } from "react-icons/io5";
-import { HiMiniRocketLaunch } from "react-icons/hi2";
-import { GiSamuraiHelmet } from "react-icons/gi";
-import { BiSolidCog } from "react-icons/bi";
-import { MdOutlinePendingActions } from "react-icons/md";
-import { FaMoneyBillTrendUp, FaWallet } from "react-icons/fa6";
-
 import Logo from "../Common/Logo";
 import Avatar from "../Common/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Notifications from "../Common/Notifications";
-
-const sidebarItemsForClient = [
-  {
-    title: "MAIN",
-    items: [
-      {
-        label: "Dashboard",
-        value: "dashboard",
-        icon: IoGrid,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "ORDERS",
-    items: [
-      {
-        label: "My Boosts List",
-        value: "boosts",
-        icon: HiMiniRocketLaunch,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "BILLING",
-    items: [
-      {
-        label: "Wallet",
-        value: "wallet",
-        icon: FaWallet,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "ACCOUNT",
-    items: [
-      {
-        label: "Settings",
-        value: "settings",
-        icon: BiSolidCog,
-        active: false,
-      },
-    ],
-  },
-];
-
-const sidebarItemsForBooster = [
-  {
-    title: "MAIN",
-    items: [
-      {
-        label: "Dashboard",
-        value: "dashboard",
-        icon: IoGrid,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "ORDERS",
-    items: [
-      {
-        label: "My Boosts List",
-        value: "boosts",
-        icon: HiMiniRocketLaunch,
-        active: false,
-      },
-      {
-        label: "Pending Boosts List",
-        value: "pending-boosts",
-        icon: MdOutlinePendingActions,
-        active: false,
-      },
-      {
-        label: "Progress Boosts List",
-        value: "progress-boosts",
-        icon: GiSamuraiHelmet,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "BILLING",
-    items: [
-      {
-        label: "Wallet",
-        value: "wallet",
-        icon: FaWallet,
-        active: false,
-      },
-      {
-        label: "Income",
-        value: "income",
-        icon: FaMoneyBillTrendUp,
-        active: false,
-      },
-    ],
-  },
-  {
-    title: "ACCOUNT",
-    items: [
-      {
-        label: "Settings",
-        value: "settings",
-        icon: BiSolidCog,
-        active: false,
-      },
-    ],
-  },
-];
+import {
+  sidebarItemsForAdmin,
+  sidebarItemsForBooster,
+  sidebarItemsForClient,
+} from "../../constants";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
-  const listOfServices = currentUser?.role?.includes("booster")
-    ? sidebarItemsForBooster
-    : sidebarItemsForClient;
+  let listOfServices;
+
+  if (currentUser?.role?.includes("booster")) {
+    listOfServices = sidebarItemsForBooster;
+  } else if (currentUser?.role?.includes("admin")) {
+    listOfServices = sidebarItemsForAdmin;
+  } else {
+    listOfServices = sidebarItemsForClient;
+  }
 
   const { pathname } = useLocation();
   const segments = pathname.split("/").filter(Boolean);
@@ -183,7 +75,7 @@ const Sidebar = () => {
                         </a>
                       ) : (
                         <a
-                          onClick={() => navigate(`/dashboard/${item.value}`)}
+                          onClick={() => navigate(`${item.value}`)}
                           className={`${
                             item.value === slug && "bg-muted"
                           } group mb-1 flex items-center rounded-md px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-card-alt-foreground`}

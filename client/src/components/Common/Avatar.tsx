@@ -38,10 +38,7 @@ const AvatarItem: React.FC<AvatarItemProps> = ({ label, link, icon: Icon }) => {
         "focus:bg-accent focus:text-accent-foreground",
       )}
     >
-      <a
-        className="flex items-center justify-center"
-        href={`/dashboard/${link}`}
-      >
+      <a className="flex items-center justify-center" href={`${link}`}>
         {Icon && (
           <Icon className="mr-2 w-5 text-center text-base text-muted-foreground" />
         )}
@@ -111,7 +108,11 @@ const Avatar: React.FC<AvatarProps> = ({ children }) => {
           </div>
           <Separator />
 
-          <AvatarItem label="Dashboard" link="" icon={BsGrid1X2Fill} />
+          <AvatarItem
+            label="Dashboard"
+            link={listOfServices[0].link}
+            icon={BsGrid1X2Fill}
+          />
           <Separator />
           {listOfServices
             .filter((service) => service.label !== "Dashboard")

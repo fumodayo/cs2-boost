@@ -10,7 +10,7 @@ import {
 import { BsGlobeAsiaAustralia } from "react-icons/bs";
 import { BsRocketTakeoffFill } from "react-icons/bs";
 import { GiSamuraiHelmet } from "react-icons/gi";
-import { HiCog6Tooth } from "react-icons/hi2";
+import { HiCog6Tooth, HiMiniRocketLaunch } from "react-icons/hi2";
 import { BsGrid1X2Fill } from "react-icons/bs";
 import { MdOutlinePendingActions } from "react-icons/md";
 import {
@@ -20,6 +20,8 @@ import {
   FaSteam,
   FaTwitch,
 } from "react-icons/fa";
+import { IoGrid } from "react-icons/io5";
+import { BiSolidCog } from "react-icons/bi";
 
 interface RankOption {
   name: string;
@@ -254,22 +256,22 @@ export interface ListOfService {
 export const listOfServicesForUser: ListOfService[] = [
   {
     label: "Dashboard",
-    link: "",
+    link: "/dashboard",
     icon: BsGrid1X2Fill,
   },
   {
     label: "My Boosts",
-    link: "boosts",
+    link: "/dashboard/boosts",
     icon: BsRocketTakeoffFill,
   },
   {
     label: "Wallet",
-    link: "wallet",
+    link: "/dashboard/wallet",
     icon: FaWallet,
   },
   {
     label: "Settings",
-    link: "settings",
+    link: "/dashboard/settings",
     icon: HiCog6Tooth,
   },
 ];
@@ -277,37 +279,37 @@ export const listOfServicesForUser: ListOfService[] = [
 export const listOfServicesForBooster: ListOfService[] = [
   {
     label: "Dashboard",
-    link: "",
+    link: "/dashboard",
     icon: BsGrid1X2Fill,
   },
   {
     label: "My Boosts",
-    link: "boosts",
+    link: "/dashboard/boosts",
     icon: BsRocketTakeoffFill,
   },
   {
     label: "Pending Boosts",
-    link: "pending-boosts",
+    link: "/dashboard/pending-boosts",
     icon: MdOutlinePendingActions,
   },
   {
     label: "Progress Boosts",
-    link: "progress-boosts",
+    link: "/dashboard/progress-boosts",
     icon: GiSamuraiHelmet,
   },
   {
     label: "Settings",
-    link: "settings",
+    link: "/dashboard/settings",
     icon: HiCog6Tooth,
   },
   {
     label: "Wallet",
-    link: "wallet",
+    link: "/dashboard/wallet",
     icon: FaWallet,
   },
   {
     label: "Income",
-    link: "income",
+    link: "/dashboard/income",
     icon: FaMoneyBillTrendUp,
   },
 ];
@@ -315,8 +317,161 @@ export const listOfServicesForBooster: ListOfService[] = [
 export const listOfServicesForAdmin: ListOfService[] = [
   {
     label: "Dashboard",
-    link: "",
+    link: "/admin",
     icon: BsGrid1X2Fill,
+  },
+  {
+    label: "Manage Premier",
+    link: "/admin/premier",
+    icon: BsRocketTakeoffFill,
+  },
+  {
+    label: "Manage Wingman",
+    link: "/admin/wingman",
+    icon: MdOutlinePendingActions,
+  },
+];
+
+export const sidebarItemsForClient = [
+  {
+    title: "MAIN",
+    items: [
+      {
+        label: "Dashboard",
+        value: "dashboard",
+        icon: IoGrid,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ORDERS",
+    items: [
+      {
+        label: "My Boosts List",
+        value: "/dashboard/boosts",
+        icon: HiMiniRocketLaunch,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "BILLING",
+    items: [
+      {
+        label: "Wallet",
+        value: "/dashboard/wallet",
+        icon: FaWallet,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ACCOUNT",
+    items: [
+      {
+        label: "Settings",
+        value: "/dashboard/settings",
+        icon: BiSolidCog,
+        active: false,
+      },
+    ],
+  },
+];
+
+export const sidebarItemsForBooster = [
+  {
+    title: "MAIN",
+    items: [
+      {
+        label: "Dashboard",
+        value: "dashboard",
+        icon: IoGrid,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ORDERS",
+    items: [
+      {
+        label: "My Boosts List",
+        value: "/dashboard/boosts",
+        icon: HiMiniRocketLaunch,
+        active: false,
+      },
+      {
+        label: "Pending Boosts List",
+        value: "/dashboard/pending-boosts",
+        icon: MdOutlinePendingActions,
+        active: false,
+      },
+      {
+        label: "Progress Boosts List",
+        value: "/dashboard/progress-boosts",
+        icon: GiSamuraiHelmet,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "BILLING",
+    items: [
+      {
+        label: "Wallet",
+        value: "/dashboard/wallet",
+        icon: FaWallet,
+        active: false,
+      },
+      {
+        label: "Income",
+        value: "/dashboard/income",
+        icon: FaMoneyBillTrendUp,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "ACCOUNT",
+    items: [
+      {
+        label: "Settings",
+        value: "/dashboard/settings",
+        icon: BiSolidCog,
+        active: false,
+      },
+    ],
+  },
+];
+
+export const sidebarItemsForAdmin = [
+  {
+    title: "MAIN",
+    items: [
+      {
+        label: "Dashboard",
+        value: "admin",
+        icon: IoGrid,
+        active: false,
+      },
+    ],
+  },
+  {
+    title: "MANAGE",
+    items: [
+      {
+        label: "Manage Premier",
+        value: "/admin/premier",
+        icon: HiMiniRocketLaunch,
+        active: false,
+      },
+      {
+        label: "Manage Wingman",
+        value: "/admin/wingman",
+        icon: MdOutlinePendingActions,
+        active: false,
+      },
+    ],
   },
 ];
 

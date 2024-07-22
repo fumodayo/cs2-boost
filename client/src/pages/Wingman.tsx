@@ -10,6 +10,8 @@ import ChooseRank from "../components/WingMan/ChooseRank";
 import Info from "../components/Info";
 import Board from "../components/Common/Board";
 import SEO from "../components/SEO";
+import { useGetWingmanPrice } from "../hooks/useManagePrice";
+import { transformWingmanPriceList } from "../utils/transformPriceList";
 
 type ExtraOption = {
   name: string;
@@ -111,172 +113,10 @@ const serviceInfo = [
   },
 ];
 
-const coefficientRankEarn = {
-  "Rating/ Server": [
-    { label: "Silver I", note: "Rank" },
-    { label: "Silver II" },
-    { label: "Silver III" },
-    { label: "Silver IV" },
-    { label: "Silver Elite" },
-    { label: "Silver Elite Master" },
-    { label: "Gold Nova I" },
-    { label: "Gold Nova II" },
-    { label: "Gold Nova III" },
-    { label: "Gold Nova Master" },
-    { label: "Master Guardian I" },
-    { label: "Master Guardian II" },
-    { label: "Master Guardian Elite" },
-    { label: "Distinguished Master Guardian" },
-    { label: "Legendary Eagle" },
-    { label: "Legendary Eagle Master" },
-    { label: "Supreme Master First Class" },
-    { label: "The Global Elite" },
-  ],
-  "Africa (AF)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-  ],
-  "Asia (AS)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 8 },
-  ],
-  "Australia (AU)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-  ],
-  "China (CN)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 8 },
-  ],
-  "Europe (EU)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-  ],
-  "North America (NA)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-  ],
-  "South America (SA)": [
-    { label: 1, note: "Coefficient calculated by region" },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 1.5 },
-    { label: 2 },
-    { label: 2 },
-    { label: 2 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 4 },
-    { label: 8 },
-  ],
-};
-
 const Wingman = () => {
   const { t } = useTranslation();
   const [server, setServer] = useState<string>("");
+  const { price_list } = useGetWingmanPrice();
   const [currentRank, setCurrentRank] = useState("silver_1");
   const [desiredRank, setDesiredRank] = useState("silver_2");
 
@@ -290,9 +130,18 @@ const Wingman = () => {
   }, [currentRank, desiredRank]);
 
   const totalCostOfBoostWingman = useMemo(() => {
-    const total = totalCostOfWingman(currentRank, desiredRank, server);
+    const total = totalCostOfWingman(
+      price_list,
+      currentRank,
+      desiredRank,
+      server,
+    );
     return total;
-  }, [currentRank, desiredRank, server]);
+  }, [currentRank, desiredRank, server, price_list]);
+
+  if (!price_list) {
+    return -1;
+  }
 
   return (
     <>
@@ -362,7 +211,7 @@ const Wingman = () => {
               )
             </p>
           </div>
-          <Board services={coefficientRankEarn} />
+          <Board services={transformWingmanPriceList(price_list)} />
         </div>
       </DefaultPage>
     </>
