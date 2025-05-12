@@ -1,11 +1,13 @@
-export const formatMoney = (currency?: string, money?: number) => {
-  if (money && currency) {
-    const cur = currency === "usd" ? "$" : "₫ ";
+const formatMoney = (money?: number, currency: string = "vnd") => {
+  const cur = currency === "usd" ? "$" : "vnđ";
 
+  if (money) {
     return `${cur} ${money.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
   }
-  return 0;
+  return `${cur} 0`;
 };
+
+export default formatMoney;

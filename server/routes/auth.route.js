@@ -2,7 +2,6 @@ import express from "express";
 
 import {
   google,
-  logoutAll,
   refreshToken,
   signin,
   signout,
@@ -18,6 +17,5 @@ router.post("/signup", signup);
 router.post("/signin", signin);
 router.post("/google", google);
 router.post("/signout", verifyToken, signout);
-router.post("/logout-all", verifyToken, logoutAll);
 
 export default router;

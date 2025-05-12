@@ -9,9 +9,13 @@ i18next
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
-    lng: "en",
+    lng: localStorage.getItem("i18nextLng") || "en",
     interpolation: {
       escapeValue: false,
+    },
+    detection: {
+      order: ["queryString", "cookie", "localStorage", "navigator"],
+      caches: ["localStorage"], // Lưu ngôn ngữ vào localStorage
     },
   });
 

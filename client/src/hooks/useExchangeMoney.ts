@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "~/components/context/AppContext";
 
 const useExchangeRate = (fromCurrency: string, toCurrency: string) => {
   const [exchangeRate, setExchangeRate] = useState();
@@ -7,11 +8,10 @@ const useExchangeRate = (fromCurrency: string, toCurrency: string) => {
   useEffect(() => {
     const fetchExchangeRate = async () => {
       try {
-        const response = await fetch(
+        const { data } = await axios.get(
           `https://latest.currency-api.pages.dev/v1/currencies/${fromCurrency}.json`,
         );
 
-        const data = await response.json();
         if (!data || !data[fromCurrency] || !data[fromCurrency][toCurrency]) {
           throw new Error("Exchange rate not available");
         }
@@ -28,16 +28,13 @@ const useExchangeRate = (fromCurrency: string, toCurrency: string) => {
   return exchangeRate;
 };
 
-export const useExchangeMoney = (point?: number) => {
+export const useExchangeMoney = (amount: number) => {
   const { currency } = useContext(AppContext);
   const exchangeRate = useExchangeRate("usd", "vnd");
 
-  // Vì tất cả giá tiền đều cho sẵn là VND nên hệ số đối với VND là 1/1
-  let money = point || -1;
-
-  if (point && exchangeRate && currency === "usd") {
-    money = point / exchangeRate;
+  if (amount && exchangeRate && currency === "usd") {
+    return amount / exchangeRate;
   }
 
-  return money;
+  return amount;
 };

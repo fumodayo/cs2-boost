@@ -1,0 +1,413 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css");
+@import url("https://cdn.syncfusion.com/ej2/material.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 218deg 29% 97%;
+    --foreground: 235deg 27% 9%;
+    --card: 0deg 0% 100%;
+    --card-foreground: 222.2deg 84% 4.9%;
+    --card-alt: 0deg 0% 100%;
+    --card-alt-foreground: 222.2deg 84% 4.9%;
+    --card-surface: 0deg 0% 100%;
+    --card-surface-foreground: 222.2deg 84% 4.9%;
+    --popover: 0deg 0% 100%;
+    --popover-foreground: 222.2deg 84% 4.9%;
+    --primary: 221.2deg 83.2% 53.3%;
+    --primary-hover: 217deg 100% 60%;
+    --primary-foreground: 0deg 0% 100%;
+    --primary-ring: 213.12deg 93.9% 67.84%;
+    --primary-light: 217deg 100% 60%;
+    --primary-light-hover: 217deg 100% 60%;
+    --primary-light-foreground: 222deg 83% 53%;
+    --secondary: 0deg 0% 98%;
+    --secondary-hover: 0deg 0% 96%;
+    --secondary-foreground: 0deg 0% 9%;
+    --secondary-ring: 0deg 0% 83%;
+    --secondary-light: 217.89deg 10.61% 64.9%;
+    --secondary-light-hover: 217.89deg 10.61% 64.9%;
+    --secondary-light-foreground: 0deg 0% 9%;
+    --danger: 360deg 84% 60%;
+    --danger-hover: 0deg 91% 71%;
+    --danger-foreground: 0deg 0% 100%;
+    --danger-ring: 0deg 90.6% 70.78%;
+    --danger-light: 0deg 90.6% 70.78%;
+    --danger-light-hover: 0deg 90.6% 70.78%;
+    --danger-light-foreground: 0deg 72% 60%;
+    --success: 142deg 76% 36%;
+    --success-hover: 142deg 70% 45%;
+    --success-foreground: 0deg 0% 100%;
+    --success-ring: 142.09deg 70.56% 45.29%;
+    --success-ring-full: 142.09deg 70.56% 45.29%;
+    --success-light: 141.89deg 69.16% 58.04%;
+    --success-light-hover: 141.89deg 69.16% 58.04%;
+    --success-light-foreground: 142deg 76% 36%;
+    --warning: 47.9deg 95.8% 53.1%;
+    --warning-hover: 48deg 95% 59%;
+    --warning-foreground: 26deg 83.3% 14.1%;
+    --warning-ring: 47.95deg 95.82% 53.14%;
+    --warning-light: 47.95deg 95.82% 53.14%;
+    --warning-light-hover: 47.95deg 95.82% 53.14%;
+    --warning-light-foreground: 40deg 95% 40%;
+    --info: 243deg 75% 59%;
+    --info-hover: 239deg 85% 67%;
+    --info-foreground: 0deg 0% 100%;
+    --info-ring: 234.45deg 89.47% 73.92%;
+    --info-light: 234.45deg 89.47% 73.92%;
+    --info-light-hover: 234.45deg 89.47% 73.92%;
+    --info-light-foreground: 243deg 75% 59%;
+    --muted: 210deg 40% 96.5%;
+    --muted-foreground: 215.4deg 16.3% 46.9%;
+    --accent: 210deg 40% 96.1%;
+    --accent-foreground: 222.2deg 47.4% 11.2%;
+    --destructive: 0deg 84.2% 60.2%;
+    --destructive-foreground: 210deg 40% 98%;
+    --border: 214.3deg 25.8% 89.4%;
+    --input: 214.3deg 25.8% 89.4%;
+    --field: 0deg 0% 100%;
+    --field-ring: 0deg 0% 83%;
+    --field-ring-hover: 0deg 0% 75%;
+    --field-foreground: 222.2deg 84% 4.9%;
+    --radio: 210deg 16% 90%;
+    --radio-hover: 210deg 16% 100%;
+    --radio-foreground: 222.2deg 84% 4.9%;
+    --ring: 221.2deg 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 223deg 20% 7%;
+    --foreground: 0deg 0% 98%;
+    --card: 220deg 20% 9%;
+    --card-foreground: 225deg 11% 93%;
+    --card-surface: 225deg 14% 11%;
+    --card-surface-foreground: 225deg 11% 93%;
+    --card-alt: 225deg 17% 9%;
+    --card-alt-foreground: 225deg 11% 93%;
+    --popover: 218deg 14% 11%;
+    --popover-foreground: 0deg 0% 98%;
+    --primary: 221.2deg 83.2% 53.3%;
+    --primary-hover: 217deg 100% 60%;
+    --primary-foreground: 0deg 0% 98%;
+    --primary-ring: 213.12deg 93.9% 67.84%;
+    --primary-light: 217deg 100% 60%;
+    --primary-light-hover: 217deg 100% 60%;
+    --primary-light-foreground: 217deg 100% 70%;
+    --secondary: 220deg 10% 17%;
+    --secondary-hover: 220deg 10% 23%;
+    --secondary-foreground: 0deg 0% 98%;
+    --secondary-ring: 217.89deg 10.61% 64.9%;
+    --secondary-light: 217.89deg 10.61% 64.9%;
+    --secondary-light-hover: 217.89deg 10.61% 64.9%;
+    --secondary-light-foreground: 0deg 0% 92%;
+    --danger: 360deg 84% 60%;
+    --danger-hover: 0deg 91% 71%;
+    --danger-foreground: 0deg 0% 98%;
+    --danger-ring: 0deg 90.6% 70.78%;
+    --danger-light: 0deg 90.6% 70.78%;
+    --danger-light-hover: 0deg 90.6% 70.78%;
+    --danger-light-foreground: 0deg 92.5% 65.7%;
+    --success: 142deg 76% 36%;
+    --success-hover: 142deg 70% 45%;
+    --success-foreground: 0deg 0% 98%;
+    --success-ring: 142.09deg 70.56% 45.29%;
+    --success-ring-full: 142.09deg 70.56% 45.29%;
+    --success-light: 141.89deg 69.16% 58.04%;
+    --success-light-hover: 141.89deg 69.16% 58.04%;
+    --success-light-foreground: 141.89deg 69.16% 58.04%;
+    --warning: 47.9deg 95.8% 53.1%;
+    --warning-hover: 48deg 95% 59%;
+    --warning-foreground: 26deg 83.3% 14.1%;
+    --warning-ring: 47.95deg 95.82% 53.14%;
+    --warning-light: 47.95deg 95.82% 53.14%;
+    --warning-light-hover: 47.95deg 95.82% 53.14%;
+    --warning-light-foreground: 45.4deg 93.39% 47.45%;
+    --info: 243deg 75% 59%;
+    --info-hover: 239deg 85% 67%;
+    --info-foreground: 0deg 0% 98%;
+    --info-ring: 234.45deg 89.47% 73.92%;
+    --info-light: 234.45deg 89.47% 73.92%;
+    --info-light-hover: 234.45deg 89.47% 73.92%;
+    --info-light-foreground: 234.45deg 89.47% 73.92%;
+    --muted: 218deg 14% 11%;
+    --muted-foreground: 240deg 5% 64.9%;
+    --accent: 220deg 10% 17%;
+    --accent-foreground: 0deg 0% 98%;
+    --destructive: 0deg 62.8% 30.6%;
+    --destructive-foreground: 0deg 0% 98%;
+    --border: 213deg 13% 14%;
+    --input: 220deg 10% 17%;
+    --field: 225deg 17% 9%;
+    --field-ring: 223deg 8% 17%;
+    --field-ring-hover: 220deg 6% 30%;
+    --field-foreground: 0deg 0% 98%;
+    --radio: 227deg 8% 23%;
+    --radio-hover: 227deg 7% 26%;
+    --radio-foreground: 0deg 0% 98%;
+    --ring: 220deg 10% 17%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer components {
+  .secondary {
+    color: #9ca3af !important;
+  }
+
+  .active-tab {
+    @apply bg-card text-foreground shadow-sm ring-inset ring-border;
+  }
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* Fonts */
+.font-display[lang="en"] {
+  font-family: "Red Hat Display", sans-serif;
+}
+
+.font-display[lang="vi"] {
+  font-family: "Manrope", sans-serif;
+}
+
+/* Slider */
+.rc-slider-dot {
+  visibility: hidden !important;
+}
+
+/* Success Light Gradient */
+.success-light-gradient {
+  position: relative;
+}
+
+.success-light-gradient::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: solid 2px transparent;
+  background-image: linear-gradient(
+      90deg,
+      transparent -100%,
+      hsl(var(--card)) 100%,
+      transparent 100%
+    ),
+    linear-gradient(
+      90deg,
+      hsl(var(--success-light-foreground) / 30%),
+      hsl(var(--success-light-foreground) / 5%)
+    );
+  border-image-slice: 1;
+  border-radius: 300px;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Flag Icon */
+.fi {
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+  border-radius: 40%;
+  border: none;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+
+.flag-select {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+/* Border Gradient Card */
+.border-gradient:before {
+  background: radial-gradient(
+    350px circle at var(--x) var(--y),
+    rgba(36, 127, 246, 0.2) 0%,
+    transparent 100%
+  );
+}
+
+/* Game Card Group */
+.game-card-image-wrapper {
+  position: relative;
+  display: flex;
+  aspect-ratio: 0.75;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: var(--radius);
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-card-image-wrapper:active {
+  --tw-scale-x: 0.95;
+  --tw-scale-y: 0.95;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.group:hover .game-card-image-wrapper {
+  z-index: 1;
+  --tw-scale-x: 1.03;
+  --tw-scale-y: 1.03;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+    rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+    scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.game-card-image-wrapper {
+  transform-style: preserve-3d;
+}
+
+.game-card-group:hover .game-card-image-wrapper:before {
+  background: radial-gradient(
+    152.75% 153.33% at 54.4% 0%,
+    #15181e00 13.7%,
+    #15181e
+  );
+  border-radius: 5px;
+  opacity: 0.6;
+}
+
+.game-card-group:hover .game-card-image-wrapper {
+  outline: 2px solid hsla(222deg 7% 30%/1);
+  outline-offset: 0.125rem;
+}
+
+.game-card-image-wrapper .game-card-image {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  outline-width: 2px;
+  outline-offset: 2px;
+  outline-color: #e3e5ea;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+
+.game-card-image-wrapper .game-card-text-image {
+  z-index: 2;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-card-image-wrapper:active .game-card-text-image {
+  transform: translate3d(0, -0.25rem, 0) scale(1);
+}
+
+.bg-custom-radial-gradient {
+  background-image: radial-gradient(
+    152.75% 153.33% at 54.4% 0%,
+    #15181e00 13.7%,
+    #15181e
+  );
+}
+
+.game-card-image-wrapper:before {
+  background: radial-gradient(
+    152.75% 153.33% at 54.4% 0%,
+    #15181e00 13.7%,
+    #15181e
+  );
+  content: "";
+}
+
+@media screen and (max-width: 767px) {
+  .game-card-image-wrapper .game-card-image {
+    height: auto;
+    width: 100%;
+  }
+}
+
+.game-card-image-wrapper .game-card-text-image {
+  width: 234px;
+  height: 87.28px;
+}
+
+/* Trustpilot Badge */
+.dark .trustpilot-badge-bg {
+  background: radial-gradient(44.73% 58.02% at 50% 100%, #00b67a4d, #00b67a00),
+    #141825 !important;
+}
+
+/* Verify modal */
+#reader {
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: 1rem !important;
+}
+#reader__scan_region {
+  width: 100%;
+  min-height: 100px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#reader__scan_region img {
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPUPPObe8bkov6CluwLDx5FNgla0wkgvJxAgPhrGxg_ZcXu36M1nBLZDnHfRyltQNjZVw4VROMhokT0D4mTrQ57g") !important;
+}
+
+#html5-qrcode-button-camera-permission {
+  font-weight: bold;
+}
+
+.html5-qrcode-element {
+  color: hsl(var(--foreground) / 80) !important;
+}
+
+#html5-qrcode-anchor-scan-type-change {
+  background-color: #3b82f6;
+  padding: 2px 10px;
+  text-decoration: none !important;
+  border-radius: var(--radius);
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#html5-qrcode-anchor-scan-type-change:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}

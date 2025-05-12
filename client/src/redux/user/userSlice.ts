@@ -1,18 +1,18 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { User } from "../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ICurrentUserProps } from "~/types";
 
 interface CounterState {
   theme: string;
-  currentUser: User | null;
+  currentUser: ICurrentUserProps | null;
   loading?: boolean;
-  error?: boolean | string;
+  error: string | null;
 }
 
 const initialState: CounterState = {
-  theme: "light",
+  theme: "dark",
   currentUser: null,
   loading: false,
-  error: false,
+  error: null,
 };
 
 const userSlice = createSlice({
@@ -21,46 +21,47 @@ const userSlice = createSlice({
   reducers: {
     authStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
-    authSuccess: (state, action: PayloadAction<User>) => {
+    authSuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
       state.currentUser = action.payload;
       state.loading = false;
-      state.error = false;
+      state.error = null;
     },
     authFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
-    updateUserStart: (state) => {
+    updatedStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
-    updateUserSuccess: (state, action: PayloadAction<User>) => {
+    updateSuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
       state.currentUser = action.payload;
       state.loading = false;
-      state.error = false;
+      state.error = null;
     },
-    updateUserFailure: (state, action: PayloadAction<string>) => {
+    updateFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
-    deleteUserStart: (state) => {
+    verifyStart: (state) => {
       state.loading = true;
+      state.error = null;
     },
-    deleteUserSuccess: (state, action: PayloadAction<User>) => {
+    verifySuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
       state.currentUser = action.payload;
       state.loading = false;
-      state.error = false;
+      state.error = null;
     },
-    deleteUserFailure: (state, action: PayloadAction<string>) => {
+    verifyFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
     signOut: (state) => {
       state.currentUser = null;
       state.loading = false;
-      state.error = false;
-      localStorage.removeItem("ip_address");
-      localStorage.removeItem("country_name");
+      state.error = null;
     },
   },
 });
@@ -69,12 +70,12 @@ export const {
   authStart,
   authSuccess,
   authFailure,
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-  // deleteUserStart,
-  // deleteUserSuccess,
-  // deleteUserFailure,
+  updatedStart,
+  updateSuccess,
+  updateFailure,
+  verifyStart,
+  verifySuccess,
+  verifyFailure,
   signOut,
 } = userSlice.actions;
 

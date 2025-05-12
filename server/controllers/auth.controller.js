@@ -12,10 +12,12 @@ export const refreshToken = async (req, res, next) => {
   const { refresh_token } = req.cookies;
   const { id, ip } = req.body;
 
-  if (!refresh_token) {
-    const validUser = await User.findById(id);
-    if (!validUser) return next(errorHandler(404, "User not found"));
+  const validUser = await User.findById(id);
+  if (!validUser) return next(errorHandler(404, "User not found"));
 
+  if (!ip) return next(errorHandler(404, "Invalid IP address"));
+
+  if (!refresh_token) {
     validUser.ip_logger.forEach((log) => {
       if (log.ip === ip) {
         log.status = IP_STATUS.OFFLINE;
@@ -129,10 +131,10 @@ export const signin = async (req, res, next) => {
   const { email, password, ip, country } = req.body;
   try {
     const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, "User not found"));
+    if (!validUser) return next(errorHandler(404, "Wrong username"));
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(errorHandler(401, "Wrong credentials"));
+    if (!validPassword) return next(errorHandler(401, "Wrong password"));
 
     let isNewIP = true;
 
@@ -324,6 +326,8 @@ export const signout = async (req, res, next) => {
     const validUser = await User.findById(id);
     if (!validUser) return next(errorHandler(404, "User not found"));
 
+    if (!ip) return next(errorHandler(404, "Invalid IP address"));
+
     validUser.ip_logger.forEach((log) => {
       if (log.ip === ip) {
         log.status = IP_STATUS.OFFLINE;
@@ -336,30 +340,6 @@ export const signout = async (req, res, next) => {
       .clearCookie("refresh_token")
       .status(200)
       .json("Signout success");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const logoutAll = async (req, res, next) => {
-  try {
-    const { id } = req.body;
-
-    const validUser = await User.findById(id);
-    if (!validUser) {
-      return next(errorHandler(404, "User not found"));
-    }
-
-    validUser.ip_logger.forEach((ip) => {
-      ip.status = IP_STATUS.OFFLINE;
-    });
-
-    await validUser.save();
-
-    return res
-      .clearCookie("access_token")
-      .status(200)
-      .json("Logout all devices success");
   } catch (error) {
     next(error);
   }

@@ -1,8 +1,6 @@
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import User from "../models/user.model.js";
-import Order from "../models/order.model.js";
-import Account from "../models/account.model.js";
 import { ROLE } from "../constants/index.js";
 
 /*
@@ -26,11 +24,17 @@ export const getUser = async (req, res, next) => {
  * GET BOOOSTER
  */
 export const getBooster = async (req, res, next) => {
+  const { id } = req.params; // user_id && role = 'booster
+
   try {
-    const user = await User.findOne({ user_id: req.params.id }).select(
-      "-password"
-    );
-    res.status(200).json(user);
+    const validUser = await User.findOne({
+      user_id: id,
+      role: { $elemMatch: { $eq: ROLE.BOOSTER } },
+    }).select("-password");
+
+    if (!validUser) return next(errorHandler(404, "User not found"));
+
+    res.status(200).json(validUser);
   } catch (error) {
     next(error);
   }
@@ -38,22 +42,18 @@ export const getBooster = async (req, res, next) => {
 
 // UPDATE USER
 export const updateUser = async (req, res, next) => {
-  try {
-    const { id } = req.user;
-    const { username, profile_picture, old_password, new_password } = req.body;
+  const { id } = req.user;
+  const { username, profile_picture, old_password, new_password } = req.body;
 
-    if (id !== req.params.id) {
-      return next(errorHandler(401, "You can update only your account"));
+  try {
+    const validUser = await User.findById(id);
+    if (!validUser) {
+      return next(errorHandler(404, "User not found"));
     }
 
     let updatedUser;
 
     if (old_password || new_password) {
-      const validUser = await User.findById(id);
-      if (!validUser) {
-        return next(errorHandler(404, "User not found"));
-      }
-
       const validPassword = await bcryptjs.compare(
         old_password,
         validUser.password
@@ -98,31 +98,6 @@ export const updateUser = async (req, res, next) => {
     res.status(200).json(rest);
   } catch (error) {
     next(error);
-  }
-};
-
-/*
- * DELETE USER
- * 1. CHECK EXISTS USER IN DATABASE
- * 2. DELETE USER BY ID
- * 3. DELETE ALL ORDER BY ID
- * 4. DELETE ALL ACCOUNT BY ID
- * 5. CLEAR COOKIES
- */
-export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id) {
-    return next(errorHandler(401, "You can delete only your account!"));
-  }
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    await Order.deleteMany({ user: req.params.id });
-    await Account.deleteMany({ user_id: req.params.id });
-    res
-      .clearCookie("access_token")
-      .status(200)
-      .json({ success: true, message: "User has been deleted" });
-  } catch (error) {
-    next(errorHandler(401, error.message));
   }
 };
 

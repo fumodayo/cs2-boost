@@ -1,28 +1,27 @@
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./main.scss";
-
-import "tippy.js/dist/tippy.css";
-import "tippy.js/animations/shift-away.css";
-
-import "./i18n.ts";
-import AppContextProvider from "./context/AppContext.tsx";
-import { persistor, store } from "./redux/store.ts";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
+import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
-import { SocketContextProvider } from "./context/SocketContext.tsx";
 import { HelmetProvider } from "react-helmet-async";
+import "~/styles/index.css";
+import App from "./App";
+import "./i18n.ts";
+import AppContextProvider from "./components/context/AppContext";
+import { SocketContextProvider } from "./components/context/SocketContext.tsx";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>
         <AppContextProvider>
           <SocketContextProvider>
-            <App />
+            <HelmetProvider>
+              <App />
+            </HelmetProvider>
           </SocketContextProvider>
         </AppContextProvider>
       </PersistGate>
     </Provider>
-  </HelmetProvider>,
+  </StrictMode>,
 );

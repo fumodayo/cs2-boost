@@ -1,171 +1,626 @@
 {
-  "Log in": "Log in",
-  "Change Language": "Change Language",
-  "Change Currency": "Change Currency",
-  "Change Theme": "Change Theme",
-  "Select Game": "Select Game",
-  "English": "English",
-  "Vietnamese": "Vietnamese",
-  "VND": "VND",
-  "US Dollar": "US Dollar",
-
-  "The": "The",
-  "All-In-One": "All-In-One",
-  "Platform for Gamers": "Platform for Gamers",
-  "Premium Elo Boosting": "Premium Elo Boosting",
-  "Expert Coaching": "Expert Coaching",
-  "High-Quality Accounts": "High-Quality Accounts",
-  "Coming Soon": "Coming Soon",
-
-  "Our Services": "Our Services",
-  "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered": "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered",
-  "Ranking up and progressing has never been easier and more stress-free": "Ranking up and progressing has never been easier and more stress-free",
-  "Boosting": "Boosting",
-  "Step up your game with our vast catalog of affordable, top-quality accounts": "Step up your game with our vast catalog of affordable, top-quality accounts",
-  "Accounts": "Accounts",
-  "Expert coaching by former C9 analysts, LCS players, and more": "Expert coaching by former C9 analysts, LCS players, and more",
-  "Coaching": "Coaching",
-
-  "We Like To Keep It Fast And Easy": "We Like To Keep It Fast And Easy",
-  "Buying boosting, accounts and coaching has never been this easy.Just select your service, make a payment and enjoy!": "Buying boosting, accounts and coaching has never been this easy. Just select your service, make a payment and enjoy!",
-  "Select Service": "Select Service",
-  "Select the game, service and customize your order": "Select the game, service and customize your order",
-  "Secure Payment": "Secure Payment",
-  "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!": "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!",
-  "Order Starts": "Order Starts",
-  "Sit back, relax and enjoy - We will take care of everything for you": "Sit back, relax and enjoy - We will take care of everything for you",
-  "Order Completed": "Order Completed",
-  "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us": "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us",
-
-  "Gaming Services Just Got Better": "Gaming Services Just Got Better",
-  "We are setting the new standard in the gaming industry.": "We are setting the new standard in the gaming industry.",
-  "Instant 24/7 Human Support": "Instant 24/7 Human Support",
-  "No bots, no ChatGPT – just humans": "No bots, no ChatGPT – just humans",
-  "3-6% Cashback on all purchases": "3-6% Cashback on all purchases",
-  "Full Privacy & Anonymity": "Full Privacy & Anonymity",
-  "Who are you? We don't know": "Who are you? We don't know",
-  "Secure & Instant Payments": "Secure & Instant Payments",
-  "Buy gaming services with PaysafeCard, Apple Pay, and more": "Buy gaming services with PaysafeCard, Apple Pay, and more",
-
-  "CS2Boost in Numbers": "CS2Boost in Numbers",
-  "Our team has united the most experienced people in the gaming industry, from all over the world, with one mission": "Our team has united the most experienced people in the gaming industry, from all over the world, with one mission",
-  "To truly change the life of every day gamers": "To truly change the life of every day gamers",
-
-  "Gamers we Empowered": "Gamers we Empowered",
-  "Proudly serving a thriving community of passionate gamers worldwide": "Proudly serving a thriving community of passionate gamers worldwide",
-  "Orders Completed": "Orders Completed",
-  "Boosting, Coaching, Accounts and we're just getting started": "Boosting, Coaching, Accounts and we're just getting started",
-  "Operating Since": "Operating Since",
-  "That's all it took us to revolutionize the game services industry": "That's all it took us to revolutionize the game services industry",
-  "Pro Players": "Pro Players",
-  "The very best gamers stand ready to fulfill your orders": "The very best gamers stand ready to fulfill your orders",
-
-  "Frequently Asked Questions": "Frequently Asked Questions",
-  "Got anymore questions? Feel free to contact us on Discord or Live Chat": "Got anymore questions? Feel free to contact us on Discord or Live Chat",
-
-  "What is CS2Boost": "What is CS2Boost",
-  "CS2Boost is your all-in-one gaming solution for affordable Boosting, expert Coaching, and top-quality gaming accounts. We support popular games such as": "CS2Boost is your all-in-one gaming solution for affordable Boosting, expert Coaching, and top-quality gaming accounts. We support popular games such as",
-  "What types of payment methods does CS2Boost accept": "What types of payment methods does CS2Boost accept",
-  "CS2Boost accepts all major debit and credit cards, PayPal, PaySafeCard, Apple Pay, Google Pay, Direct Bank Transfer, and Skrill, providing you with a variety of payment options to choose from": "CS2Boost accepts all major debit and credit cards, PayPal, PaySafeCard, Apple Pay, Google Pay, Direct Bank Transfer, and Skrill, providing you with a variety of payment options to choose from",
-  "Why Should I Choose CS2Boost": "Why Should I Choose CS2Boost",
-  "CS2Boost is the highest rated platform on TrustPilot, with a 5.0-star rating and up to 40% lower prices than the competition. Combined with 24/7 live support, this makes us the most affordable and trustworthy gaming services platform on the market": "CS2Boost is the highest rated platform on TrustPilot, with a 5.0-star rating and up to 40% lower prices than the competition. Combined with 24/7 live support, this makes us the most affordable and trustworthy gaming services platform on the market",
-  "How do I leave feedback or review for the services": "How do I leave feedback or review for the services",
-  "We highly value customer feedback so if you want to take a moment to leave us a review you can do it on: Trustpilot and Discord. We really appreciate it": "We highly value customer feedback so if you want to take a moment to leave us a review you can do it on: Trustpilot and Discord. We really appreciate it",
-  "Does CS2Boost offer discounts or promotions for its services": "Does CS2Boost offer discounts or promotions for its services",
-  "At CS2Boost, we offer discounts, promotions, and events with the chance to win amazing prizes. Feel free to contact our LiveChat for a discount code if you don't have one and to follow our Discord for new events! Discord": "At CS2Boost, we offer discounts, promotions, and events with the chance to win amazing prizes. Feel free to contact our LiveChat for a discount code if you don't have one and to follow our Discord for new events! Discord",
-  "I have more questions, where can I get more info": "I have more questions, where can I get more info",
-  "We are here 24/7. Feel free to contact us on our Live Chat": "We are here 24/7. Feel free to contact us on our Live Chat",
-
-  "What are you waiting for": "What are you waiting for",
-  "Step up your game now! Let our pros boost your level and guide you to the higher ranks you deserve": "Step up your game now! Let our pros boost your level and guide you to the higher ranks you deserve",
-  "Sign Up Today": "Sign Up Today",
-
-  "Need Help": "Need Help",
-  "We're here to help. Our expert human-support team is at your service 24/7": "We're here to help. Our expert human-support team is at your service 24/7",
-  "Let's Chat": "Let's Chat",
-  "Join Discord": "Join Discord",
-
-  "Rank Up Now": "Rank Up Now",
-  "Browse Accounts": "Browse Accounts",
-  "Get Coaching": "Get Coaching",
-
-  "CS2 Boost & Carry Services": "CS2 Boost & Carry Services",
-  "Buy CS2 Boosting & Carry services": "Buy CS2 Boosting & Carry services",
-
-  "Premier": "Premier",
-  "Elevate your ranking to new heights with our top-tier boosting service, enhancing your position effectively and remarkably": "Elevate your ranking to new heights with our top-tier boosting service, enhancing your position effectively and remarkably",
-  "Wingman": "Wingman",
-  "Unleash hidden power, ignite performance, and soar to the pinnacle with the premier optimized experience": "Unleash hidden power, ignite performance, and soar to the pinnacle with the premier optimized experience",
-
-  "What is Counter Strike 2 Boost": "What is Counter Strike 2 Boost",
-  "If you’re seeking to elevate your gaming experience in Counter Strike 2 but lack the time or dedication to climb the ranks on your own, you can explore the option of utilizing a CS2 boosting service. This service enables you to enlist the expertise of a skilled player who will play on your behalf and help you attain your desired rank": "If you’re seeking to elevate your gaming experience in Counter Strike 2 but lack the time or dedication to climb the ranks on your own, you can explore the option of utilizing a CS2 boosting service. This service enables you to enlist the expertise of a skilled player who will play on your behalf and help you attain your desired rank",
-  "CS2 Boosting is it safe": "CS2 Boosting is it safe",
-  "When striving for progress in the gaming world, the preservation of your achievements becomes paramount. To guarantee a secure and discreet CS2 boost, we exclusively enlist the services of exceptional and trustworthy boosters, each equipped with our premium private VPN. This extensively tested approach has proven its effectiveness in countless games, providing you with peace of mind and assurance of a risk-free experience when utilizing our service": "When striving for progress in the gaming world, the preservation of your achievements becomes paramount. To guarantee a secure and discreet CS2 boost, we exclusively enlist the services of exceptional and trustworthy boosters, each equipped with our premium private VPN. This extensively tested approach has proven its effectiveness in countless games, providing you with peace of mind and assurance of a risk-free experience when utilizing our service",
-  "How can I be sure my Steam account won't be stolen": "How can I be sure my Steam account won't be stolen",
-  "The combination of your unique login credentials and the protection provided by Steam Guard makes it virtually impossible for anyone to steal your account. We prioritize the utmost security measures to ensure your peace of mind and safeguard your valuable gaming assets": "The combination of your unique login credentials and the protection provided by Steam Guard makes it virtually impossible for anyone to steal your account. We prioritize the utmost security measures to ensure your peace of mind and safeguard your valuable gaming assets",
-  "How does CS2 boosting work": "How does CS2 boosting work",
-  "CS2 boosting involves hiring professional players who will play on your account to help you achieve your desired rank. They use their skills and expertise to win matches and enhance your in-game performance": "CS2 boosting involves hiring professional players who will play on your account to help you achieve your desired rank. They use their skills and expertise to win matches and enhance your in-game performance",
-  "How long does CS2 boosting take": "How long does CS2 boosting take",
-  "The duration of CS2 boosting depends on various factors, including your current rank and the desired rank. Generally, our boosters work efficiently to complete the boosting process as quickly as possible while maintaining the highest quality standards. You can check the estimated completion time for your specific order in our Members Area dashboard": "The duration of CS2 boosting depends on various factors, including your current rank and the desired rank. Generally, our boosters work efficiently to complete the boosting process as quickly as possible while maintaining the highest quality standards. You can check the estimated completion time for your specific order in our Members Area dashboard",
-
-  "How Does Premier and Wingman Carry Work?": "How Does Premier and Wingman Carry Work?",
-  "The fastest & easiest way to get your desired gear, rating, titles & achievements": "The fastest & easiest way to get your desired gear, rating,titles & achievements",
-
-  "Choose between Premier and Wingman services": "Choose between Premier and Wingman services",
-  "Pick the Boost service that fits your goals": "Pick the Boost service that fits your goals",
-  "Make a secured payment & enjoy your Boost": "Make a secured payment & enjoy your Boost",
-
-  "FAQs About Counter Strike 2 Boosting": "FAQs About Counter Strike 2 Boosting",
-
-  "Select your current Exp and desired Exp": "Select your current Exp and desired Exp",
-  "My Exp": "My Exp",
-  "Desired Exp": "Desired Exp",
-
-  "Info": "Info",
-  "All the important details about our Level Farming": "All the important details about our Level Farming",
-  "Earned XP": "Earned XP",
-
-  "Requirements": "Requirements",
-  "Have prime": "Have prime",
-  "Only players with prime can drop weekly": "Only players with prime can drop weekly",
-  "Extra Options": "Extra Options",
-  "Live Stream": "Live Stream",
-  "Watch your booster's gameplay in real-time": "Watch your booster's gameplay in real-time",
-  "Priority Order": "Priority Order",
-  "Get your order prioritized for faster completion": "Get your order prioritized for faster completion",
-
-  "All the important details about our Wingman Boost": "All the important details about our Wingman Boost",
-  "All important details about experience points of each mode": "All important details about experience points of each mode",
-  "XP Penalty": "XP Penalty",
-  "All important details about experience points": "All important details about experience points",
-
-  "Game mode": "Game mode",
-  "XP multiplier": "XP multiplier",
-  "Approximate": "Approximate",
-  "Bonus XP multiplier": "Bonus XP multiplier",
-  "Checkout": "Checkout",
-  "Add extra options to your boost": "Add extra options to your boost",
-  "Completion Time": "Completion Time",
-  "Hours": "Hours",
-  "Discount Code": "Discount Code",
-  "Total Price": "Total Price",
-  "Using a VPN is prohibited when making a purchase": "Using a VPN is prohibited when making a purchase",
-  "Buy Now": "Buy Now",
-  "Apply": "Apply",
-  "Start by selecting the server": "Start by selecting the server",
-
-  "Africa": "Africa",
-  "AF": "AF",
-  "Asia": "Asia",
-  "AS": "AS",
-  "Australia": "Australia",
-  "AU": "AU",
-  "China": "China",
-  "CN": "CN",
-  "Europe": "Europe",
-  "EU": "EU",
-  "North America": "North America",
-  "NA": "NA",
-  "South America": "South America",
-  "SA": "SA"
+  "Globals": {
+    "English": "English",
+    "Vietnamese": "Vietnamese",
+    "VND": "VND",
+    "USD": "US Dollar",
+    "Back": "Back",
+    "Home": "Home",
+    "Coming Soon": "Coming Soon",
+    "Join Discord": "Join Discord",
+    "Go Back": "Go Back",
+    "Services": {
+      "Dashboard": "Dashboard",
+      "Boosting": "Boosting",
+      "Accounts": "Accounts",
+      "Items": "Items",
+      "Pending Boosts": "Pending Boosts",
+      "Progress Boosts": "Progress Boosts",
+      "Income": "Income",
+      "Orders": "Orders",
+      "Wallet": "Wallet",
+      "Settings": "Settings",
+      "Follow Partners": "Follow Partners"
+    },
+    "Server": {
+      "Africa": "Africa",
+      "Asia": "Asia",
+      "Australia": "Australia",
+      "China": "China",
+      "Europe": "Europe",
+      "North America": "North America",
+      "South America": "South America"
+    },
+    "GameMode": {
+      "Services": "Services",
+      "Level Farming": "Level Farming",
+      "Premier": "Premier",
+      "Wingman": "Wingman"
+    },
+    "label": {
+      "My Exp": "My Exp",
+      "My Rating": "My Rating",
+      "My Rank": "My Rank",
+      "Desired Exp": "Desired Exp",
+      "Desired Rating": "Desired Rating",
+      "Desired Rank": "Desired Rank"
+    },
+    "TrustpilotBadge": {
+      "Excellent": "Excellent",
+      "out of": "out of",
+      "Based on 9,510 reviews": "Based on 9,510 reviews"
+    },
+    "Order": {
+      "label": {
+        "boost id": "boost id",
+        "server": "server",
+        "title": "title",
+        "game": "game",
+        "price": "price",
+        "type": "type",
+        "status": "status",
+        "begin rating": "begin rating",
+        "end rating": "end rating",
+        "begin exp": "begin exp",
+        "end exp": "end exp",
+        "begin rank": "begin rank",
+        "end rank": "end rank"
+      },
+      "status": {
+        "Waiting For Payment": "Waiting For Payment",
+        "Waiting For Booster": "Waiting For Booster",
+        "Boost in progress": "Boost in progress",
+        "Boost has been cancelled": "Boost has been cancelled",
+        "Boost completed": "Boost completed"
+      }
+    },
+    "User": {
+      "label": {
+        "username": "username",
+        "user id": "user id",
+        "email address": "email address",
+        "phone number": "phone number",
+        "cccd number": "cccd number",
+        "full name": "full name",
+        "date of birth": "date of birth",
+        "gender": "gender",
+        "address": "address",
+        "cccd issue date": "cccd issue date",
+        "language": "language"
+      },
+      "ip_address": {
+        "label": {
+          "Login Sessions": "Login Sessions",
+          "Show IPs": "Show IPs",
+          "Logout All Devices": "Logout All Devices"
+        },
+        "device": {
+          "Desktop": "Desktop",
+          "Mobile": "Mobile",
+          "Tablet": "Tablet"
+        }
+      }
+    }
+  },
+  "Dialog": {
+    "title": {
+      "Add Account Logins": "Add Account Logins",
+      "Edit Account Logins": "Edit Account Logins",
+      "Edit Your Profile": "Edit Your Profile",
+      "Change password": "Change password",
+      "Getting started": "Getting started",
+      "Front of CCCD Card": "Front of CCCD Card",
+      "Verify Your CCCD Information": "Verify Your CCCD Information"
+    },
+    "subtitle": {
+      "We need some information to help us confirm your identity.": "We need some information to help us confirm your identity.",
+      "Capture or upload a clear image of your CCCD card.": "Capture or upload a clear image of your CCCD card.",
+      "Please review and confirm your details below.": "Please review and confirm your details below."
+    },
+    "label": {
+      "How to Generate Steam Guard Backup Codes?": "How to Generate Steam Guard Backup Codes?",
+      "Your login credentials are secured using state-of-the-art encryption and are only visible to you and the booster.": "Your login credentials are secured using state-of-the-art encryption and are only visible to you and the booster.",
+      "Please contact support if you need to change your email.": "Vui lòng liên hệ bộ phận hỗ trợ nếu bạn muốn thay đổi email.",
+      "Change current password": "Change current password",
+      "Please enter your old password to change your password.": "Please enter your old password to change your password.",
+      "Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%).": "Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%)."
+    },
+    "btn": {
+      "Add Account": "Add Account",
+      "Edit Account": "Edit Account",
+      "Save Changes": "Save Changes",
+      "Change password": "Change password",
+      "Begin Verify": "Begin Verify",
+      "Confirm": "Confirm",
+      "Back": "Back",
+      "Cancel": "Cancel"
+    }
+  },
+  "Avatar": {
+    "label": {
+      "username": "username",
+      "Change Theme": "Change Theme",
+      "Dark Mode": "Dark Mode",
+      "Light Mode": "Light Mode",
+      "Logout": "Logout"
+    }
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "subtitle": "Sorry, we couldn’t find the page you’re looking for."
+  },
+  "MenuLanguage": {
+    "title1": "Change Language",
+    "title2": "Change Currency"
+  },
+  "MenuGames": {
+    "title1": "Select Game",
+    "title2": "Switch Game"
+  },
+  "Header": {
+    "Active Partners": "Active Partners",
+    "My Orders": "My Orders",
+    "Log in": "Log in"
+  },
+  "Hero": {
+    "The": "The",
+    "All-In-One": "All-In-One",
+    "Platform for Gamers": "Platform for Gamers",
+    "description": {
+      "part1": "High-Quality Accounts",
+      "part2": "Premium Gaming Services",
+      "part3": "Expert Coaching"
+    },
+    "card": {
+      "New": "New",
+      "Coming Soon": "Coming Soon"
+    }
+  },
+  "OurServices": {
+    "heading": "Our Services",
+    "subheading": "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered.",
+    "card": {
+      "title": {
+        "Boosting": "Boosting",
+        "Accounts": "Accounts",
+        "Coaching": "Coaching"
+      },
+      "subtitle": {
+        "Ranking up and progressing has never been easier and more stress-free.": "Ranking up and progressing has never been easier and more stress-free.",
+        "Step up your game with our vast catalog of affordable, top-quality accounts.": "Step up your game with our vast catalog of affordable, top-quality accounts.",
+        "Expert coaching by former C9 analysts, LCS players, and more.": "Expert coaching by former C9 analysts, LCS players, and more."
+      },
+      "label": {
+        "Rank Up Now": "Rank Up Now",
+        "Browse Accounts": "Browse Accounts",
+        "Get Coaching": "Get Coaching"
+      }
+    }
+  },
+  "StepByStep": {
+    "heading": "We Like To Keep It Fast And Easy",
+    "subheading": "Buying boosting, accounts and coaching has never been this easy. Just select your service, make a payment and enjoy!",
+    "card": {
+      "title": {
+        "Select Service": "Select Service",
+        "Secure Payment": "Secure Payment",
+        "Order Starts": "Order Starts",
+        "Order Completed": "Order Completed"
+      },
+      "subtitle": {
+        "Select the game, service and customize your order": "Select the game, service and customize your order",
+        "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!": "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!",
+        "Sit back, relax and enjoy - We will take care of everything for you": "Sit back, relax and enjoy - We will take care of everything for you",
+        "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us": "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us"
+      }
+    }
+  },
+  "NewStandard": {
+    "heading": "Gaming Services Just Got Better",
+    "subheading": "We are setting the new standard in the gaming industry.",
+    "card": {
+      "title": {
+        "Instant 24/7 Human Support": "Instant 24/7 Human Support",
+        "Full Privacy & Anonymity": "Full Privacy & Anonymity",
+        "3-6% Cashback on all purchases": "3-6% Cashback on all purchases",
+        "Secure & Instant Payments": "Secure & Instant Payments"
+      },
+      "subtitle": {
+        "No bots, no ChatGPT – just humans.": "No bots, no ChatGPT – just humans.",
+        "Who are you? We don't know.": "Who are you? We don't know.",
+        "Buy gaming services with PaysafeCard, Apple Pay, and more.": "Buy gaming services with PaysafeCard, Apple Pay, and more."
+      }
+    }
+  },
+  "MarqueeComment": {
+    "heading": "More Than 97,000+ Gamers Trust Us"
+  },
+  "QuantityClient": {
+    "heading": "CS2Boost in Numbers",
+    "subheading": "Our team has united the most experienced people in the gaming industry, from all over the world, with one mission:",
+    "quotes": "‟To truly change the life of every day gamers.”",
+    "card": {
+      "subtitle": {
+        "Gamers we Empowered": "Gamers we Empowered",
+        "Orders Completed": "Orders Completed",
+        "Operating Since": "Operating Since",
+        "Partners": "Partners"
+      },
+      "label": {
+        "Proudly serving a thriving community of passionate gamers worldwide": "Proudly serving a thriving community of passionate gamers worldwide.",
+        "Boosting, Coaching, Accounts and we're just getting started": "Boosting, Coaching, Accounts and we're just getting started.",
+        "That's all it took us to revolutionize the game services industry": "That's all it took us to revolutionize the game services industry.",
+        "The very best gamers stand ready to fulfill your orders": "The very best gamers stand ready to fulfill your orders."
+      }
+    }
+  },
+  "AskList": {
+    "title": "FAQs About Counter Strike 2 Boosting",
+    "heading": "Frequently Asked Questions",
+    "subheading": "Got anymore questions? Feel free to contact us on Discord or Live Chat!",
+    "card": {
+      "title": {
+        "What is CS2Boost?": "What is CS2Boost?",
+        "What types of payment methods does CS2Boost accept?": "What types of payment methods does CS2Boost accept?",
+        "Why Should I Choose CS2Boost?": "Why Should I Choose CS2Boost?",
+        "How do I leave feedback or review for the services?": "How do I leave feedback or review for the services?",
+        "Does CS2Boost offer discounts or promotions for its services?": "Does CS2Boost offer discounts or promotions for its services?",
+        "I have more questions, where can I get more info?": "I have more questions, where can I get more info?",
+        "What is Counter Strike 2 Boost?": "What is Counter Strike 2 Boost?",
+        "CS2 Boosting is it safe?": "CS2 Boosting is it safe?",
+        "How can I be sure my Steam account won't be stolen?": "How can I be sure my Steam account won't be stolen?",
+        "How does CS2 boosting work?": "How does CS2 boosting work?",
+        "How long does CS2 boosting take?": "How long does CS2 boosting take?"
+      },
+      "subtitle": {
+        "GameBoost is your all-in-one gaming solution for affordable Boosting, expert Coaching, and top-quality gaming accounts. We support popular games such as League of Legends, Valorant, Overwatch 2, LoL_Wild Rift, Teamfight Tactics, CS2, and World of Warcraft.": "GameBoost is your all-in-one gaming solution for affordable Boosting, expert Coaching, and top-quality gaming accounts. We support popular games such as League of Legends, Valorant, Overwatch 2, LoL: Wild Rift, Teamfight Tactics, CS2, and World of Warcraft.",
+        "CS2Boost accepts all major debit and credit cards, PayPal, PaySafeCard, Apple Pay, Google Pay, Direct Bank Transfer, and Skrill, providing you with a variety of payment options to choose from.": "CS2Boost accepts all major debit and credit cards, PayPal, PaySafeCard, Apple Pay, Google Pay, Direct Bank Transfer, and Skrill, providing you with a variety of payment options to choose from.",
+        "CS2Boost is the highest rated platform on TrustPilot, with a 5.0-star rating and up to 40% lower prices than the competition. Combined with 24/7 live support, this makes us the most affordable and trustworthy gaming services platform on the market.": "CS2Boost is the highest rated platform on TrustPilot, with a 5.0-star rating and up to 40% lower prices than the competition. Combined with 24/7 live support, this makes us the most affordable and trustworthy gaming services platform on the market.",
+        "We highly value customer feedback so if you want to take a moment to leave us a review you can do it on: Trustpilot and Discord. We really appreciate it.": "We highly value customer feedback so if you want to take a moment to leave us a review you can do it on: Trustpilot and Discord. We really appreciate it.",
+        "At CS2Boost, we offer discounts, promotions, and events with the chance to win amazing prizes. Feel free to contact our LiveChat for a discount code if you don't have one and to follow our Discord for new events!": "At CS2Boost, we offer discounts, promotions, and events with the chance to win amazing prizes. Feel free to contact our LiveChat for a discount code if you don't have one and follow our Discord for new events!",
+        "We are here 24/7. Feel free to contact us on our Live Chat!": "We are here 24/7. Feel free to contact us on our Live Chat.",
+        "If you’re seeking to elevate your gaming experience in Counter Strike 2 but lack the time or dedication to climb the ranks on your own, you can explore the option of utilizing a CS2 boosting service. This service enables you to enlist the expertise of a skilled player who will play on your behalf and help you attain your desired rank.": "If you’re seeking to elevate your gaming experience in Counter Strike 2 but lack the time or dedication to climb the ranks on your own, you can explore the option of utilizing a CS2 boosting service. This service enables you to enlist the expertise of a skilled player who will play on your behalf and help you attain your desired rank.",
+        "When striving for progress in the gaming world, the preservation of your achievements becomes paramount. To guarantee a secure and discreet CS2 boost, we exclusively enlist the services of exceptional and trustworthy boosters, each equipped with our premium private VPN. This extensively tested approach has proven its effectiveness in countless games, providing you with peace of mind and assurance of a risk-free experience when utilizing our service.": "When striving for progress in the gaming world, the preservation of your achievements becomes paramount. To guarantee a secure and discreet CS2 boost, we exclusively enlist the services of exceptional and trustworthy boosters, each equipped with our premium private VPN. This extensively tested approach has proven its effectiveness in countless games, providing you with peace of mind and assurance of a risk-free experience when utilizing our service.",
+        "The combination of your unique login credentials and the protection provided by Steam Guard makes it virtually impossible for anyone to steal your account. We prioritize the utmost security measures to ensure your peace of mind and safeguard your valuable gaming assets.": "The combination of your unique login credentials and the protection provided by Steam Guard makes it virtually impossible for anyone to steal your account. We prioritize the utmost security measures to ensure your peace of mind and safeguard your valuable gaming assets.",
+        "CS2 boosting involves hiring professional players who will play on your account to help you achieve your desired rank. They use their skills and expertise to win matches and enhance your in-game performance.": "CS2 boosting involves hiring professional players who will play on your account to help you achieve your desired rank. They use their skills and expertise to win matches and enhance your in-game performance.",
+        "The duration of CS2 boosting depends on various factors, including your current rank and the desired rank. Generally, our boosters work efficiently to complete the boosting process as quickly as possible while maintaining the highest quality standards. You can check the estimated completion time for your specific order in our Members Area dashboard.": "The duration of CS2 boosting depends on various factors, including your current rank and the desired rank. Generally, our boosters work efficiently to complete the boosting process as quickly as possible while maintaining the highest quality standards. You can check the estimated completion time for your specific order in our Members Area dashboard."
+      }
+    }
+  },
+  "Stepup": {
+    "heading": "What are you waiting for?",
+    "subheading": "Step up your game now! Let our pros boost your level and guide you to the higher ranks you deserve.",
+    "btn1": "Select Game",
+    "btn2": "Sign up Today"
+  },
+  "Footer": {
+    "title1": "The All-In-One Platform for Gamers",
+    "subtitle1": "Changing the lives of everyday gamers, one game at a time.",
+    "title2": "Need Help?",
+    "subtitle2": "We're here to help. Our expert human-support team is at your service 24/7.",
+    "btn1": "Let's Chat",
+    "btn2": "Join Discord"
+  },
+  "LoginModal": {
+    "title": "Login",
+    "subtitle1": "Don't have an account?",
+    "btn1": "Create one here.",
+    "btn2": "Login with Google",
+    "subtitle2": "Or login with email",
+    "subtitle3": "Forgot your password?",
+    "btn3": "Continue"
+  },
+  "ForgotModal": {
+    "title": "One-Time Password",
+    "subtitle1": "Enter the 6 digit code sent to your email.",
+    "subtitle2": "Didn't get a code?",
+    "subtitle3": "Click here to re-send.",
+    "btn": "Login"
+  },
+  "RegisterModal": {
+    "title": "Create Account",
+    "subtitle1": "Already a member?",
+    "btn1": "Login here.",
+    "btn2": "Signup with Google",
+    "subtitle2": "Or sign up with email",
+    "description1": "By creating an account, you agree to our",
+    "description2": "Terms of Service",
+    "description3": "Privacy Policy",
+    "btn3": "Continue"
+  },
+  "NewGamePage": {
+    "title": "are coming soon",
+    "subtitle1": "Our team is working hard to bring you the best services. We'll be launching soon, and when we do, we'll shake up the industry with unbeatable prices, expert boosters, and the best customer service.",
+    "subtitle2": "To get a notification when our services are live, sign up with your email.",
+    "description": "We'll only use your email to notify you about our services release.",
+    "btn": "Get Notified"
+  },
+  "Heading": {
+    "title": {
+      "CS2 Classic Services Boost": "CS2 Classic Services Boost",
+      "Counter Strike 2 Leveling": "Counter Strike 2 Leveling",
+      "Counter Strike 2 Premier": "Counter Strike 2 Premier",
+      "Counter Strike 2 Wingman": "Counter Strike 2 Wingman",
+      "My Settings": "My Settings",
+      "My Wallet": "My Wallet",
+      "My Orders": "My Orders",
+      "Pending Boosts List": "Pending Boosts List",
+      "Progress Boosts List": "Progress Boosts List",
+      "Income": "Income"
+    },
+    "subtitle": {
+      "Get The Best CS2 Classic Experience!": "Get The Best CS2 Classic Experience!",
+      "Maximize Your Level In No Time!": "Maximize Your Level In No Time!",
+      "Maximize Your Rank In No Time!": "Maximize Your Rank In No Time!",
+      "View and update your account settings.": "View and update your account settings.",
+      "List of all your payments and transactions.": "List of all your payments and transactions.",
+      "List of all your products and services.": "List of all your products and services.",
+      "List of all pending boosts.": "List of all pending boosts.",
+      "List of all progress boosts.": "List of all progress boosts.",
+      "View and update your income.": "View and update your income."
+    }
+  },
+  "GameModePage": {
+    "card": {
+      "subtitle": {
+        "Farming levels to gain experience points and rewards": "Farming levels to gain experience points and rewards",
+        "A competitive ranked mode with the new Elo system": "A competitive ranked mode with the new Elo system",
+        "A 2v2 mode on smaller maps, focused on strategy and teamwork": "A 2v2 mode on smaller maps, focused on strategy and teamwork"
+      }
+    },
+    "howtowork": {
+      "title": "How Does Premier and Wingman Carry Work?",
+      "subtitle": "The fastest & easiest way to get your desired gear, rating, titles & achievements",
+      "label": {
+        "Choose between Premier and Wingman services": "Choose between Premier and Wingman services",
+        "Pick the Boost service that fits your goals": "Pick the Boost service that fits your goals",
+        "Make a secured payment & enjoy your Boost": "Make a secured payment & enjoy your Boost"
+      }
+    }
+  },
+  "SelectServer": {
+    "title": "Server",
+    "subtitle": "Select the server you play on"
+  },
+  "RangePoint": {
+    "title": {
+      "Select your current Exp and desired Exp": "Select your current Exp and desired Exp",
+      "Select your current Rating and desired Rating": "Select your current Rating and desired Rating"
+    },
+    "subtitle": {
+      "ratings above 20000 are only available as piloted service": "ratings above 20000 are only available as piloted service"
+    }
+  },
+  "Details": {
+    "title": {
+      "Info": "Info"
+    },
+    "subtitle": {
+      "All the important details about our Level Farming": "All the important details about our Level Farming",
+      "All the important details about our Premier Boost": "All the important details about our Premier Boost",
+      "All the important details about our Wingman Boost": "All the important details about our Wingman Boost"
+    },
+    "tabs": {
+      "heading": {
+        "Requirements": "Requirements",
+        "Extra Options": "Extra Options",
+        "FAQ": "FAQ"
+      },
+      "title": {
+        "Have prime": "Have prime",
+        "Live Stream": "Live Stream",
+        "Play with Partners (Duo)": "Play with Partners (Duo)",
+        "Complete the first 10 win matches": "Complete the first 10 matches"
+      },
+      "subtitle": {
+        "Only players with prime can drop weekly": "Only players with prime can drop weekly",
+        "Watch your booster's gameplay in real-time": "Watch your booster's gameplay in real-time",
+        "Your booster will team up with you in duo mode": "Your booster will team up with you in duo mode",
+        "We need your starting rank to conveniently boost": "We need your starting rank to conveniently boost"
+      }
+    }
+  },
+  "Board": {
+    "title": { "Earned XP": "Earned XP", "XP Penalty": "XP Penalty" },
+    "subtitle": {
+      "All important details about experience points of each mode": "All important details about experience points of each mode",
+      "All important details about experience points": "All important details about experience points"
+    },
+    "header": {
+      "Game mode": "Game mode",
+      "XP multiplier": "XP multiplier",
+      "Approximate": "Approximate",
+      "Bonus XP multiplier": "Bonus XP multiplier"
+    }
+  },
+  "BillCard": {
+    "header": "Checkout",
+    "title": "Start by selecting the server !",
+    "subtitle": "Add extra options to your boost",
+    "description": "Using a VPN is prohibited when making a purchase.",
+    "price": "Total Price",
+    "time1": "Completion Time",
+    "time2": "Hours",
+    "options": {
+      "Stream": "Stream",
+      "Play with Partner (Duo)": "Play with Partner (Duo)"
+    },
+    "btn": "Buy Now"
+  },
+  "DataTable": {
+    "label": {
+      "No results": "No results.",
+      "Asc": "Asc",
+      "Desc": "Desc",
+      "Hide": "Hide"
+    },
+    "header": {
+      "id": "id",
+      "ID": "ID",
+      "price": "price",
+      "order": "order",
+      "payment method": "payment method",
+      "status": "status",
+      "transaction id": "transaction id",
+      "order id": "order id",
+      "amount": "amount",
+      "last updated": "last updated",
+      "": ""
+    },
+    "actions": {
+      "Status": "Status",
+      "Accept Order": "Accept Order",
+      "Pay Now": "Pay Now",
+      "Completed": "Completed",
+      "Cancel": "Cancel",
+      "Recovery Order": "Recovery Order",
+      "Renew Order": "Renew Order"
+    },
+    "PlusButton": {
+      "label": {
+        "Search": "Search",
+        "Pending": "Pending",
+        "Waiting": "Waiting",
+        "In Active": "In Active",
+        "In Progress": "In Progress",
+        "Completed": "Completed",
+        "Cancel": "Cancel",
+        "Wingman": "Wingman",
+        "Premier": "Premier",
+        "Level Farming": "Level Farming",
+        "status": "status",
+        "type": "type",
+        "selected": "selected"
+      }
+    },
+    "ViewButton": {
+      "label": {
+        "View": "View",
+        "Toggle columns": "Toggle columns"
+      }
+    },
+    "Pagination": {
+      "label": {
+        "Rows per page": "Rows per page",
+        "rows – Page": "rows – Page",
+        "to": "to"
+      }
+    },
+    "Btn": {
+      "label": {
+        "Reset": "Reset"
+      }
+    }
+  },
+  "Boost": {
+    "BoosterWidget": {
+      "header": "Booster Information",
+      "BlankBooster": {
+        "title": "No Boosters Found",
+        "subtitle": "Once your order is paid, a booster will be assigned to your order."
+      }
+    },
+    "AccountWidget": {
+      "BlankAccount": {
+        "title": "No Logins Provided",
+        "subtitle": "Click the button below to add the logins of your account.",
+        "btn": "Add Logins"
+      },
+      "EditAccount": {
+        "title": "Edit Login Information",
+        "btn": "Edit Login"
+      }
+    }
+  },
+  "SettingsPage": {
+    "navigation": {
+      "General": "General",
+      "Notifications": "Notifications",
+      "Information": "Information"
+    },
+    "UserWidget": {
+      "title": "User Information",
+      "btn": {
+        "Edit Profile": "Edit Profile",
+        "Change Password": "Change Password"
+      }
+    },
+    "VerificationWidget": {
+      "Blank": {
+        "title": "ID Verification",
+        "subtitle": "You can verify your identity here.",
+        "btn": "Verify Identity"
+      }
+    },
+    "Notifications": {
+      "AllowedWidget": {
+        "title": "You need to allow permission for push notifications",
+        "subtitle": "Stay ahead of the curve with real-time notifications.",
+        "btn": "Allow Push Notifications"
+      },
+      "label": {
+        "Notify me when...": "Notify me when...",
+        "Desktop": "Desktop (Push)",
+        "My boost is updated": "Send Order Update Notification",
+        "Account balance is updated": "Send Account Balance Notification",
+        "New Messages": "Send New Messages Notification",
+        "New Boost Created": "Send New Order Notification"
+      }
+    }
+  },
+  "CheckoutPage": {
+    "label": {
+      "Pay with": "Pay with",
+      "Debit/Credit cards (Stripe)": "Debit/Credit cards (Stripe)",
+      "Alternative cards payment method.": "Alternative cards payment method.",
+      "Prepaid card for online payments.": "Prepaid card for online payments.",
+      "Order summary": "Order summary",
+      "Amount due": "Amount due",
+      "Selected Booster": "Selected Booster",
+      "Cancel": "Cancel",
+      "Request Booster": "Request Booster",
+      "Looking for a specific booster?": "Looking for a specific booster?",
+      "Request": "Request",
+      "Request a specific Booster": "Request a specific Booster",
+      "Total": "Total",
+      "Pay Now": "Pay Now"
+    }
+  },
+  "Input": {
+    "label": {
+      "Email Address": "Email Address",
+      "Password": "Password",
+      "Username": "Username",
+      "Email": "Email",
+      "Current Password": "Current Password",
+      "New Password": "New Password"
+    },
+    "Errors": {
+      "label": {
+        "Wrong email address or password": "Wrong email address or password",
+        "Please turn off your VPN": "Please turn off your VPN",
+        "Must not be empty": "Must not be empty",
+        "Please enter a valid email address": "Please enter a valid email address",
+        "MustNotBeShorter": "Must not be shorter than {{minLength}} characters",
+        "MustNotBeLonger": "Must not exceed {{maxLength}} characters",
+        "The password must include at least one uppercase letter, one lowercase letter, one number, and one special character": "The password must include: at least one uppercase letter, one lowercase letter, one number, and one special character",
+        "Email address has taken": "Email address has taken"
+      }
+    },
+    "noteText": {
+      "label": {
+        "Please contact support if you need to change your email.": "Please contact support if you need to change your email.",
+        "If you create an account with a google account, your password has been sent to gmail.": "If you create an account with a google account, your password has been sent to gmail.",
+        "Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%).": "Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%)."
+      }
+    }
+  },
+  "UploadImage": {
+    "title": "Avatar",
+    "subtitle": "Select or drag max 1 file | PNG, JPEG, WEBP, GIF",
+    "label": {
+      "Type": "Type",
+      "Remove": "Remove"
+    }
+  }
 }

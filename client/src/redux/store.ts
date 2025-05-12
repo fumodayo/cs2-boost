@@ -2,15 +2,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userSlice from "./user/userSlice";
-import cartSlice from "./cart/cartSlice";
-import conversationSlice from "./conversation/conversationSlice";
-import notificationSlice from "./notification/notificationSlice";
+import adminSlice from "./admin/adminSlice";
 
 const rootReducer = combineReducers({
   user: userSlice,
-  cart: cartSlice,
-  conversation: conversationSlice,
-  notification: notificationSlice,
+  admin: adminSlice,
 });
 
 const persistsConfig = {

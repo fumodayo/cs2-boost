@@ -1,165 +1,147 @@
-export type Currency = "vnd" | "usd";
-export type Theme = "dark" | "light";
+export type ICurrencyProps = "vnd" | "usd";
+export type IThemeProps = "dark" | "light";
 
-interface IPLogger {
-  _id?: string;
-  country?: string;
-  ip?: string;
-  status?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface ListSocialMedia {
-  type: string;
-  username?: string;
-  code?: string;
-  link?: string;
-}
-
-export interface User {
-  _id?: string;
-  username?: string;
-  user_id?: string;
-  email?: string;
+export interface IUserProps {
   profile_picture?: string;
-  is_verified?: boolean;
-  role?: string[];
-  ip_logger?: IPLogger[];
-  social_media?: ListSocialMedia[];
-
-  // VERIFICATION
-  addresses?: string;
-  cccd_number?: string;
-  cccd_issue_date?: Date;
-  date_of_birth?: Date;
-  gender?: string;
   phone_number?: string;
-  real_name?: string;
-  handle?: string;
-
-  createdAt?: string;
-  updatedAt?: string;
+  cccd_number?: string;
+  full_name?: string;
+  date_of_birth?: string;
+  gender?: string;
+  address?: string;
+  cccd_issue_date?: string;
 }
 
-export interface Conversation {
-  _id?: string;
-  participants?: string[];
-  messages?: Message[];
-}
-export interface Order {
-  _id?: string;
-  image?: string;
-  options?: Array<string>;
-  title?: title;
-  boost_id?: string;
-  booster?: User;
-  conversation?: string | Conversation;
-  status?: string;
-  game?: string;
-  type?: string;
-  price?: number;
-  currency?: string;
-  // Farm Exp
-  start_exp?: number;
-  end_exp?: number;
-  // Premier
-  server?: string;
-  start_rating?: number;
-  end_rating?: number;
-  // Wingman
-  start_rank?: string;
-  end_rank?: string;
-  user?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
-
-  account?: Account;
-}
-
-export interface Account {
+export interface IAccountProps {
   _id?: string;
   user_id?: string;
-  username?: string;
+  game?: string;
+  login?: string;
   password?: string;
   backup_code?: string;
 }
+export interface IIPAddressProps {
+  ip_location: string;
+  device: string;
+  country: string;
+  status: "online" | "offline";
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-export interface Message {
+export interface ICurrentUserProps {
   _id?: string;
-  sender_id?: string;
-  receiver_id?: string;
-  message?: string;
+  username?: string;
+  user_id?: string;
+  email_address?: string;
+  language?: string;
+  ip_addresses?: IIPAddressProps[];
+  profile_picture?: string;
+  role?: string[];
+  is_verified?: boolean;
+
+  // VERIFICATION
+  phone_number?: string;
+  cccd_number?: string;
+  full_name?: string;
+  date_of_birth?: string;
+  gender?: string;
+  address?: string;
+  cccd_issue_date?: string;
+
+  total_followers?: number;
+  total_working_time?: number;
+  total_completion_rate?: number;
+  total_rating?: number;
+  total_reviews?: number;
+  social_links?: ISocialLinkProps[];
+  details?: string;
+  followers_count: number;
+  following: ICurrentUserProps[];
+
+  status?: string;
+  otp?: string;
+  otp_expired?: Date;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
-export interface Notify {
+export interface ISocialLinkProps {
+  id: string;
+  type: string;
+  link: string;
+}
+
+export interface IMessageProps {
   _id?: string;
-  sender?: User | null;
-  receiver?: User | null;
+  message?: string;
+  created_at?: string;
+  sender?: string;
+  receiver?: string;
+  updatedAt?: Date;
+}
+
+export interface IOrderProps {
+  _id?: string;
+  title?: string;
   boost_id?: string;
-  content?: string;
-  isRead?: boolean;
   type?: string;
-  createdAt?: string;
-}
-type Income = {
-  amount: number;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-type Amount = {
-  amount: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export interface Revenue {
-  _id?: string;
-  user?: User | null;
-  income: Array<Income>;
-  money_pending: Array<Amount>;
-  money_profit: Array<Amount>;
-  money_fine: Array<Amount>;
-  orders_pending: Array<Order>;
-  orders_completed: Array<Order>;
-  orders_cancel: Array<Order>;
-  total_order_pending: Array<Amount>;
-  total_order_completed: Array<Amount>;
-  total_order_cancel: Array<Amount>;
-  total_money_pending: number;
-  total_money_profit: number;
-  total_money_fine: number;
-  total_money: number;
-  createdAt?: string;
-  updatedAt?: string;
+  server?: string;
+  price?: number;
+  game?: string;
+  begin_rating?: number;
+  end_rating?: number;
+  begin_rank?: string;
+  end_rank?: string;
+  begin_exp?: number;
+  end_exp?: number;
+  total_time?: number;
+  options?: { name: string; label: string; value: number }[];
+  retryCount: number;
+  status?: string;
+  user?: ICurrentUserProps;
+  partner?: ICurrentUserProps;
+  assign_partner?: ICurrentUserProps;
+  account?: IAccountProps;
+  review?: IReviewProps;
+  conversation?: IConversationProps;
+  updatedAt?: DateTime;
 }
 
-export interface WingmanPriceList {
-  _id?: string;
-  name: string;
-  value: string;
-  costs: [
-    {
-      code: string;
-      name: string;
-      image: string;
-      bonus: number;
-    },
-  ];
+export interface IConversationProps {
+  _id: string;
+  participants: string[];
+  messages: IMessageProps[];
 }
 
-export interface PremierPriceList {
+export interface IReviewProps {
+  _id: string;
+  order: IOrderProps;
+  receiver: ICurrentUserProps;
+  sender: ICurrentUserProps;
+  content: string;
+  rating: number;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+}
+
+export interface IPaymentProps {
+  receipt_id?: string;
+  payment_method?: string;
+  status?: string;
+  price?: number;
+  order: IOrderProps;
+  updatedAt?: DateTime;
+}
+
+export interface INotifyProps {
+  sender?: ICurrentUserProps;
+  receiver?: ICurrentUserProps;
+  content?: string;
   _id?: string;
-  name: string;
-  value: string;
-  costs: [
-    {
-      start: number;
-      end: number;
-      bonus: number;
-    },
-  ];
+  boost_id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  type?: "new_order" | "boost" | "message";
+  isRead?: boolean;
 }
