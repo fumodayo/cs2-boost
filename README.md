@@ -1,6 +1,6 @@
 # CS2Boost
 
-![logo](./public/assets/documents/cs2-boost-banner.png)
+![logo](./documents/cs2-boost-banner.png)
 
 ## Web Technical Information
 
@@ -40,7 +40,7 @@ CS2Boost is developed with ReactJS, React Redux, MongoDB, NodeJS, Express, socke
 
 ## ERD (Entity Relationship Diagram):
 
-![model](./public/assets/documents/cs2-boost-erd.png)
+![model](./documents/cs2-boost-erd.png)
 
 ## Testing:
 
