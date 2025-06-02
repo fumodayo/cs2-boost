@@ -66,7 +66,7 @@ const RegisterModal = () => {
       reset();
       toggleRegisterModal();
     } catch (err) {
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(authFailure(message));
     }
   };
@@ -180,7 +180,7 @@ const RegisterModal = () => {
                       }}
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                     />
                     <FormField
                       id="password"
@@ -199,7 +199,7 @@ const RegisterModal = () => {
                       }}
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                     />
                     <span className="mt-4 block text-sm text-muted-foreground sm:text-xs">
                       {t("RegisterModal.description1")}{" "}

@@ -23,7 +23,7 @@ const BoostPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id: boost_id } = useParams();
-  const [order, setOrder] = useState<IOrderProps>({});
+  const [order, setOrder] = useState<IOrderProps>({} as IOrderProps);
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { socket } = useSocketContext();
 
@@ -35,6 +35,7 @@ const BoostPage = () => {
         );
         setOrder(data);
       } catch (e) {
+        console.error(e);
         toast.error("Something went wrong");
       }
     })();

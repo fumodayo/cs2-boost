@@ -11,7 +11,7 @@ import cn from "~/libs/utils";
 import { Card } from "./components";
 import { useEffect, useState } from "react";
 import { ICurrentUserProps } from "~/types";
-import { axiosAuth, axiosInstance } from "~/axiosAuth";
+import { axiosInstance } from "~/axiosAuth";
 import { useSearchParams } from "react-router-dom";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { RootState } from "~/redux/store";
@@ -44,6 +44,8 @@ const PartnersPage = () => {
       }
     })();
   }, [searchParams]);
+
+  console.log(isLoading);
 
   const handleReset = () => {
     const params = new URLSearchParams();

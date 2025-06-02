@@ -30,7 +30,7 @@ const WalletPage = () => {
     (async () => {
       try {
         const { data } = await axiosAuth.get(
-          `/order/get-receipts?${searchParams}`,
+          `/receipt/get-receipts?${searchParams}`,
         );
         const { receipts, total } = data;
         setReceipts(receipts);

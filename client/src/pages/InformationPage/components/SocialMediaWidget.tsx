@@ -80,7 +80,7 @@ const SocialMediaWidget = ({
   // Lọc ra các link hợp lệ & không trùng lặp
   const validateAndCleanLinks = () => {
     const uniqueLinks = new Set();
-    return socialLinks.filter(({ type, link, isValid }) => {
+    return socialLinks.filter(({ link, isValid }) => {
       if (!isValid) return false;
       if (uniqueLinks.has(link)) return false;
       uniqueLinks.add(link);
@@ -104,7 +104,8 @@ const SocialMediaWidget = ({
       dispatch(updateSuccess(data));
       toast.success("Edit Successfully");
     } catch (err) {
-      const { message } = err;
+      const message =
+        err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(updateFailure(message));
     }
   };

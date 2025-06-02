@@ -111,7 +111,9 @@ const SubHeader = () => {
   }, [secondQuery]);
 
   const tabs: IListOfPath[] = useMemo(() => {
-    return optionTabs[secondQuery] as IListOfPath[];
+    return (Object.keys(optionTabs).includes(secondQuery)
+      ? optionTabs[secondQuery as keyof typeof optionTabs]
+      : []) as IListOfPath[];
   }, [secondQuery]);
 
   useEffect(() => {

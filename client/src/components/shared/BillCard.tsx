@@ -190,6 +190,7 @@ const BillCard = ({
         } else {
           toast.error("Order failed");
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         toast.error("Order failed");
       } finally {
@@ -293,11 +294,7 @@ const BillCard = ({
           )}
         </div>
         <Button
-          disabled={
-            !server ||
-            loading ||
-            totalCost <= 0
-          }
+          disabled={!server || loading || totalCost <= 0}
           variant="primary"
           className="text-md mt-4 w-full rounded-md py-2 font-semibold text-primary-foreground hover:!bg-blue-700"
           onClick={handleCreateOrder}

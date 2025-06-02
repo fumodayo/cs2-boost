@@ -3,7 +3,13 @@ import { useTranslation } from "react-i18next";
 import Switch from "~/components/@radix-ui/Switch";
 import { Button, Helmet } from "~/components/shared";
 
-const notificationsDesktop = [
+type NotificationKey =
+  | "updated_order"
+  | "updated_account_balance"
+  | "new_messages"
+  | "new_order";
+
+const notificationsDesktop: { label: string; value: NotificationKey }[] = [
   {
     label: "My boost is updated",
     value: "updated_order",
@@ -25,7 +31,9 @@ const notificationsDesktop = [
 const NotificationsPage = () => {
   const { t } = useTranslation();
   const [isAllowed, setIsAllowed] = useState(false);
-  const [notificationStatus, setNotificationStatus] = useState({
+  const [notificationStatus, setNotificationStatus] = useState<
+    Record<NotificationKey, boolean>
+  >({
     updated_order: false,
     updated_account_balance: false,
     new_messages: false,
@@ -79,7 +87,7 @@ const NotificationsPage = () => {
     });
   };
 
-  const toggleNotification = (value) => {
+  const toggleNotification = (value: keyof typeof notificationStatus) => {
     setNotificationStatus((prev) => ({
       ...prev,
       [value]: !prev[value],

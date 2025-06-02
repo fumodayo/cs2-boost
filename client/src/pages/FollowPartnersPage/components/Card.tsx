@@ -30,7 +30,7 @@ const Card = ({ _id, username, profile_picture }: ICurrentUserProps) => {
       dispatch(updateSuccess(data));
       toast.success("UnFollowed");
     } catch (err) {
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(updateFailure(message));
     } finally {
       setLoading(false);

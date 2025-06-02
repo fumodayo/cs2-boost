@@ -29,3 +29,4 @@ export { default as ManageUsersPage } from "./ManageUsersPage/ManageUsers";
 export { default as ManageOrdersPage } from "./ManageOrdersPage/ManageOrdersPage";
 export { default as AdminSettingsPage } from "./AdminSettingsPage/AdminSettingsPage";
 export { default as SupportsPage } from "./SupportsPage/SupportsPage";
+export { default as BillReturnPage } from "./BillReturnPage/BillReturnPage";

@@ -39,6 +39,7 @@ const UploadImage = ({ onChangeImage }: IUploadImageProps) => {
 
       setAvatarUrl(data.url);
     } catch (e) {
+      console.error(e);
       setErrorMessage("Failed to upload image");
     } finally {
       setIsLoading(false);

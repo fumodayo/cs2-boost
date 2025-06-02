@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { FaArrowRight, FaGoogle, FaXmark } from "react-icons/fa6";
 import { Dialog, DialogClose, DialogContent } from "../@radix-ui/Dialog";
@@ -191,7 +190,7 @@ const LoginModal = () => {
                       className="px-4 py-2.5"
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                     />
                     <FormField
                       id="password"
@@ -200,7 +199,7 @@ const LoginModal = () => {
                       type="password"
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                     />
                     <span
                       onClick={toggledForgotPassword}

@@ -16,13 +16,12 @@ import { axiosInstance } from "~/axiosAuth";
 const ResetPasswordModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state: RootState) => state.user);
+  const { error } = useSelector((state: RootState) => state.user);
 
   const {
     register,
     handleSubmit,
     reset,
-    clearErrors,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -67,7 +66,7 @@ const ResetPasswordModal = () => {
         reset();
         toggleResetPasswordModal();
       } catch (err) {
-        const { message } = err;
+        const message = err instanceof Error ? err.message : "An unknown error occurred";
         dispatch(authFailure(message));
       }
     }
@@ -114,7 +113,7 @@ const ResetPasswordModal = () => {
                       placeholder="New password"
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                       required
                       maxLength={24}
                       minLength={8}
@@ -134,7 +133,7 @@ const ResetPasswordModal = () => {
                       placeholder="Confirm your password"
                       register={register}
                       errors={errors}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                       required
                       maxLength={24}
                       minLength={8}

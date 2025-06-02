@@ -78,7 +78,11 @@ const renderWidgetBoosItem = (key: string, value: string | number) => {
         </Copy>
       );
     case "type":
-      return <span>{(value as string) && value.replace("_", " ")} Boost</span>;
+      return (
+        <span>
+          {(value as string) && String(value).replace("_", " ")} Boost
+        </span>
+      );
     case "status":
       return <WidgetItemWithStatus status={value as string} />;
     case "price":

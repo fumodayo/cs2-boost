@@ -5,18 +5,13 @@ import { useEffect, useState } from "react";
 import { IOrderProps } from "~/types";
 import { axiosAuth } from "~/axiosAuth";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { formatMoney } from "~/utils";
-import { useSelector } from "react-redux";
-import { RootState } from "~/redux/store";
-import { getLocalStorage, removeLocalStorage } from "~/utils/localStorage";
 import { useTranslation } from "react-i18next";
 
 const CheckoutPage = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
-  const [order, setOrder] = useState<IOrderProps>({});
+  const [order, setOrder] = useState<IOrderProps>({} as IOrderProps);
   const [loading, setLoading] = useState(false);
-  const navigator = useNavigate();
   const { t } = useTranslation();
 
   const { id: boost_id } = useParams();
@@ -29,6 +24,7 @@ const CheckoutPage = () => {
         );
         setOrder(data);
       } catch (e) {
+        console.error(e);
         toast.error("Something went wrong");
       }
     })();
@@ -39,21 +35,21 @@ const CheckoutPage = () => {
   const handleCheckout = async () => {
     try {
       setLoading(true);
-      const { data } = await axiosAuth.post(`/transaction/payment-order`, {
-        game,
-        price,
-        type,
-        order_id: boost_id,
-        assign_partner: getLocalStorage("assign_partner", ""),
+      const { data } = await axiosAuth.post(`/vn-pay/create-payment`, {
+        amountInput: price,
+        contentPayment: `${boost_id}`,
+        productTypeSelect: "other",
+        langSelect: "vn",
       });
       if (data.success) {
         window.location.href = data.url;
+        console.log(data.url);
       }
     } catch (e) {
+      console.error(e);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
-      removeLocalStorage("assign_partner");
     }
   };
 
@@ -143,6 +139,18 @@ const CheckoutPage = () => {
                 {t("CheckoutPage.label.Pay Now")}
                 <FaArrowRight className="ml-2" />
               </Button>
+            </div>
+            <div className="mt-4 bg-muted px-6 py-4">
+              Vì đây là sản phẩm demo nên đây là tài khoản ngân hàng dùng để
+              test thanh toán:
+              <Link
+                target="_blank"
+                className="text-primary hover:underline"
+                to={"https://sandbox.vnpayment.vn/apis/vnpay-demo/"}
+              >
+                {" "}
+                Tại đây
+              </Link>
             </div>
           </section>
         </div>

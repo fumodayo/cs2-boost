@@ -28,6 +28,7 @@ const PATH = {
     SETTINGS: "/settings/*",
     NOTIFICATIONS: "notifications",
     INFORMATION: "information",
+    BILL_RETURN: "/bill-return",
   },
   ADMIN: {
     DEFAULT: "/admin/*",

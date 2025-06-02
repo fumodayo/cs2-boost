@@ -64,7 +64,7 @@ const InputOtpModal = () => {
           toggleResetPasswordModal();
         }
       } catch (err) {
-        const { message } = err;
+        const message = (err as { message: string }).message;
         setErrorMessage(message);
       }
     }
@@ -112,7 +112,7 @@ const InputOtpModal = () => {
         toggleResetPasswordModal();
       }
     } catch (err) {
-      const { message } = err;
+      const message = (err as { message: string }).message;
       setErrorMessage(message);
     }
   };
@@ -121,7 +121,7 @@ const InputOtpModal = () => {
   const [countdownTime, setCountdownTime] = useState(60);
 
   useEffect(() => {
-    let timer;
+    let timer: string | number | NodeJS.Timeout | undefined;
 
     if (isResendCountdown) {
       timer = setInterval(() => {
@@ -159,6 +159,7 @@ const InputOtpModal = () => {
       } else {
         setErrorMessage("Failed to send OTP!");
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       setErrorMessage("Failed to send OTP!");
     }

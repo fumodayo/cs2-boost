@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import {
@@ -12,7 +12,7 @@ import { RootState } from "~/redux/store";
 
 const AuthLayout = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const [isLocked, setIsLocked] = useState(false);
+  // const [isLocked, setIsLocked] = useState(false);
 
   const isUser = currentUser?.role?.includes("client");
 

@@ -13,7 +13,7 @@ const RequestBooster = () => {
   const [isShowSelect, setIsShowSelect] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [partners, setPartners] = useState<ICurrentUserProps[]>([]);
-  const [selectedPartner, setSelectedPartner] = useState<ICurrentUserProps>({});
+  const [selectedPartner, setSelectedPartner] = useState<ICurrentUserProps>({} as ICurrentUserProps);
   const [isSelect, setIsSelect] = useState(false);
 
   const { onlinePartners } = useSocketContext();

@@ -2,6 +2,7 @@ import { Navigate, Route } from "react-router-dom";
 import PATH from "~/constants/path";
 import { AuthLayout, PartnerLayout } from "~/layouts";
 import {
+  BillReturnPage,
   BoostPage,
   CheckoutPage,
   FollowPartnersPage,
@@ -21,6 +22,7 @@ const UserRoutes = () => {
   return (
     <>
       <Route path={PATH.USER.CHECKOUT} element={<CheckoutPage />} />
+      <Route path={PATH.USER.BILL_RETURN} element={<BillReturnPage />} />
       <Route element={<AuthLayout />}>
         <Route path={PATH.USER.SUPPORTS} element={<SupportsPage />} />
         <Route path={PATH.USER.ORDERS} element={<OrdersPage />} />

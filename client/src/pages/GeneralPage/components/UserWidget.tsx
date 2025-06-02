@@ -51,7 +51,7 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [username, setUsername] = useState("");
 
-  const { loading, error } = useSelector((state: RootState) => state.user);
+  const { error } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -83,7 +83,7 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
       setProfileImage(null);
       toast.success("Edit Successfully");
     } catch (err) {
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(updateFailure(message));
     }
   };
@@ -96,7 +96,7 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
       toast.success("Change Password Successfully");
       reset();
     } catch (err) {
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       setErrorMessage(message);
     }
   };
@@ -137,7 +137,7 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
                       label="Username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      errorMessage={error}
+                      errorMessage={error ?? undefined}
                       placeholder={currentUser?.username}
                     />
                   </div>

@@ -58,7 +58,7 @@ const RichTextEditor = ({
       dispatch(updateSuccess(data));
       toast.success("Edit Successfully");
     } catch (err) {
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(updateFailure(message));
     }
   };

@@ -79,7 +79,7 @@ const AdminLoginPage = () => {
                   className="px-4 py-2.5"
                   register={register}
                   errors={errors}
-                  errorMessage={error}
+                  errorMessage={error ?? undefined}
                 />
                 <FormField
                   id="password"
@@ -88,7 +88,7 @@ const AdminLoginPage = () => {
                   type="password"
                   register={register}
                   errors={errors}
-                  errorMessage={error}
+                  errorMessage={error ?? undefined}
                 />
                 <Button
                   disabled={loading}

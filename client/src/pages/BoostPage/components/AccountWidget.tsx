@@ -20,7 +20,7 @@ const BlankAccountWidget = () => {
   const { t } = useTranslation();
 
   const { id: boost_id } = useParams();
-  const [order, setOrder] = useState<IOrderProps>({});
+  const [order, setOrder] = useState<IOrderProps>();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -44,6 +44,7 @@ const BlankAccountWidget = () => {
         );
         setOrder(data);
       } catch (e) {
+        console.error(e);
         toast.error("Something went wrong");
       }
     })();
@@ -107,10 +108,10 @@ const BlankAccountWidget = () => {
                   </div>
                   <div className="ml-2.5 truncate">
                     <div className="truncate text-sm font-medium text-foreground">
-                      {order.title}
+                      {order?.title}
                     </div>
                     <p className="truncate text-xs capitalize text-muted-foreground">
-                      {order.type?.replace("-", " ")} Boost
+                      {order?.type?.replace("-", " ")} Boost
                     </p>
                   </div>
                 </div>
@@ -193,10 +194,10 @@ const BlankAccountWidget = () => {
 
 const EditAccountWidget = (account: IAccountProps) => {
   const { t } = useTranslation();
-  const { login, password, backup_code, _id } = account;
+  const { login, backup_code } = account;
 
   const { id: boost_id } = useParams();
-  const [order, setOrder] = useState<IOrderProps>({});
+  const [order, setOrder] = useState<IOrderProps>();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -220,6 +221,7 @@ const EditAccountWidget = (account: IAccountProps) => {
         );
         setOrder(data);
       } catch (e) {
+        console.error(e);
         toast.error("Something went wrong");
       }
     })();
@@ -302,10 +304,10 @@ const EditAccountWidget = (account: IAccountProps) => {
                   </div>
                   <div className="ml-2.5 truncate">
                     <div className="truncate text-sm font-medium text-foreground">
-                      {order.title}
+                      {order?.title}
                     </div>
                     <p className="truncate text-xs text-muted-foreground">
-                      {order.type?.replace("-", " ")} Boost
+                      {order?.type?.replace("-", " ")} Boost
                     </p>
                   </div>
                 </div>

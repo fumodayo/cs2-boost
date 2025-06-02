@@ -120,13 +120,14 @@ const PartnerPage = () => {
       }
       setIsFollow((prevState) => !prevState);
     } catch (err) {
-      const { message } = err;
+      const message =
+        err instanceof Error ? err.message : "An unknown error occurred";
       dispatch(updateFailure(message));
     }
   };
 
   const filteredSocials = socials.filter((social) =>
-    partner?.social_links.some((link) => link.type === social.name),
+    (partner?.social_links ?? []).some((link) => link.type === social.name),
   );
 
   return (
@@ -167,7 +168,7 @@ const PartnerPage = () => {
                     <p className="pb-2 font-bold">Liên hệ qua:</p>
                     <div className="flex items-center justify-center space-x-3">
                       {filteredSocials.map(({ name, icon: Icon, color }) => {
-                        const socialLink = partner?.social_links.find(
+                        const socialLink = (partner?.social_links ?? []).find(
                           (link) => link.type === name,
                         );
                         return (

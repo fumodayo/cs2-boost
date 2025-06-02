@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
 import InputOtpModal from "./components/shared/InputOtpModal";
 import { LoadingPage } from "./pages";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
   return (
@@ -31,6 +32,8 @@ const App = () => {
           <Route>{AdminRoutes()}</Route>
           <Route>{ComingRoutes()}</Route>
         </Routes>
+
+        <SpeedInsights />
       </Suspense>
     </BrowserRouter>
   );

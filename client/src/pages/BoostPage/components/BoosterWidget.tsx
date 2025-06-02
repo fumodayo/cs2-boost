@@ -41,7 +41,7 @@ const BlankBoosterWidget = () => {
 
 const FoundBoosterWidget = (partner: ICurrentUserProps) => {
   const { t } = useTranslation();
-  const { username, profile_picture, user_id, _id } = partner;
+  const { username, profile_picture, _id } = partner;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(_id as string);
   const [loading, setLoading] = useState(false);

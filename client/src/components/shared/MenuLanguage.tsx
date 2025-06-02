@@ -2,7 +2,6 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Popover, PopoverContent } from "../@radix-ui/Popover";
 import { Button } from "./Button";
 import cn from "~/libs/utils";
-import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { ICurrencyProps } from "~/types";

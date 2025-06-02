@@ -59,6 +59,7 @@ export const SocketContextProvider = ({ children }: IContextProviderProps) => {
         setSocket(null);
       }
     }
+  
   }, [currentUser]);
 
   return (

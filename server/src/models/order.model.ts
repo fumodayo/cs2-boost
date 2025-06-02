@@ -1,0 +1,102 @@
+import mongoose from 'mongoose';
+import { ORDER_STATUS, ORDER_TYPES } from '../constants';
+
+const orderSchema = new mongoose.Schema(
+    {
+        title: { type: String, required: true },
+        boost_id: { type: String, required: true },
+        type: {
+            type: String,
+            enum: ORDER_TYPES,
+            required: true,
+        },
+        server: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        game: {
+            type: String,
+            default: 'counter-strike-2',
+        },
+        begin_rating: {
+            type: Number,
+        },
+        end_rating: {
+            type: Number,
+        },
+        begin_rank: {
+            type: String,
+        },
+        end_rank: {
+            type: String,
+        },
+        begin_exp: {
+            type: Number,
+        },
+        end_exp: {
+            type: Number,
+        },
+        total_time: {
+            type: Number,
+        },
+        options: {
+            type: Array,
+            default: [],
+        },
+        retryCount: {
+            type: Number,
+            default: 0,
+        },
+        status: {
+            type: String,
+            enum: ORDER_STATUS,
+            default: ORDER_STATUS.PENDING,
+        },
+        status_history: [
+            {
+                status: { type: String, enum: ORDER_STATUS },
+                date: { type: Date, default: Date.now() },
+            },
+        ],
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        partner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        assign_partner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        account: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Account',
+        },
+        conversation: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Conversation',
+        },
+        review: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Review',
+        },
+    },
+    { timestamps: true },
+);
+
+orderSchema.pre('save', function (next) {
+    if (this.isModified('status')) {
+        this.status_history.push({
+            status: this.status,
+            date: new Date(),
+        });
+    }
+    next();
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+export default Order;

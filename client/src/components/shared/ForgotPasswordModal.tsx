@@ -53,8 +53,7 @@ const ForgotPasswordModal = () => {
         toggleForgotModal();
       }
     } catch (err) {
-      console.log(err);
-      const { message } = err;
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
       setError(message);
     }
   };
