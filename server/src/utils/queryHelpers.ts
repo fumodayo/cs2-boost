@@ -13,23 +13,23 @@ export const buildQueryOrderOptions = (
         ['filter-status']: filterStatus,
         ['filter-type']: filterType,
         sort = '-createdAt',
-        search = '',
+        q = '',
         page = '1',
-        ['per-page']: perPage = '15',
+        ['per-page']: perPage = '5',
     } = query;
 
     const filters: Record<string, any> = {};
-    if (Array.isArray(filterStatus) && filterStatus.length) {
-        filters.status = { $in: filterStatus };
+    if (filterStatus) {
+        filters.status = { $in: Array.isArray(filterStatus) ? filterStatus : [filterStatus] };
     }
 
-    if (Array.isArray(filterType) && filterType.length) {
-        filters.type = { $in: filterType };
+    if (filterType) {
+        filters.type = { $in: Array.isArray(filterType) ? filterType : [filterType] };
     }
 
-    if (search && searchFields.length) {
+    if (q && searchFields.length) {
         filters.$or = searchFields.map((field) => ({
-            [field]: { $regex: search, $options: 'i' },
+            [field]: { $regex: q, $options: 'i' },
         }));
     }
 

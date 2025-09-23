@@ -1,40 +1,44 @@
+import useSWR from "swr";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "~/components/context/AppContext";
 
-const useExchangeRate = (fromCurrency: string, toCurrency: string) => {
-  const [exchangeRate, setExchangeRate] = useState();
-
-  useEffect(() => {
-    const fetchExchangeRate = async () => {
-      try {
-        const { data } = await axios.get(
-          `https://latest.currency-api.pages.dev/v1/currencies/${fromCurrency}.json`,
-        );
-
-        if (!data || !data[fromCurrency] || !data[fromCurrency][toCurrency]) {
-          throw new Error("Exchange rate not available");
-        }
-
-        setExchangeRate(data[fromCurrency][toCurrency]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchExchangeRate();
-  }, [fromCurrency, toCurrency]);
-
-  return exchangeRate;
+const rateFetcher = async (url: string) => {
+  try {
+    const { data } = await axios.get(url);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch exchange rate:", error);
+    throw new Error("Could not fetch exchange rate.");
+  }
 };
 
-export const useExchangeMoney = (amount: number) => {
-  const { currency } = useContext(AppContext);
-  const exchangeRate = useExchangeRate("usd", "vnd");
+/**
+ * Custom hook sử dụng SWR để lấy và cache tỷ giá hối đoái.
+ *
+ * @param fromCurrency - Mã tiền tệ gốc (ví dụ: 'usd').
+ * @param toCurrency - Mã tiền tệ muốn đổi sang (ví dụ: 'vnd').
+ * @returns Tỷ giá hối đoái, hoặc undefined nếu đang tải hoặc có lỗi.
+ */
+const useExchangeRate = (
+  fromCurrency: string = "usd",
+  toCurrency: string = "vnd",
+) => {
+  const apiKey = `https://latest.currency-api.pages.dev/v1/currencies/${fromCurrency}.json`;
 
-  if (amount && exchangeRate && currency === "usd") {
-    return amount / exchangeRate;
+  const { data, error } = useSWR(apiKey, rateFetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60 * 60 * 1000,
+  });
+
+  if (
+    error ||
+    !data ||
+    !data[fromCurrency] ||
+    !data[fromCurrency][toCurrency]
+  ) {
+    return undefined;
   }
 
-  return amount;
+  return data[fromCurrency][toCurrency] as number | undefined;
 };
+
+export default useExchangeRate;

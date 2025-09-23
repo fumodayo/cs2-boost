@@ -1,42 +1,65 @@
 import express, { RequestHandler } from 'express';
-import { verifyToken } from '../utils/verifyToken';
 import {
     acceptOrder,
-    addAccount,
+    addAccountToOrder,
+    assignPartner,
     cancelOrder,
     completedOrder,
     createOrder,
     deleteOrder,
-    editAccount,
+    editAccountOnOrder,
+    getMyOrders,
     getOrderById,
-    getOrders,
     getPendingOrders,
     getProgressOrders,
-    paymentOrder,
     recoveryOrder,
     refuseOrder,
     renewOrder,
 } from '../controllers/order.controller';
+import { authorize, protect } from '../middlewares/auth.middleware';
+import { ROLE } from '../constants';
 
 const router = express.Router();
+router.use(protect as RequestHandler);
 
-// USER
-router.get('/get-orders', verifyToken, getOrders as RequestHandler);
-router.get('/get-order-by-id/:id', verifyToken, getOrderById);
-router.post('/create-order/:id', verifyToken, createOrder as RequestHandler);
-router.post('/payment-order/:customer_id/:order_id', verifyToken, paymentOrder as RequestHandler);
-router.post('/refuse-order/:id', verifyToken, refuseOrder as RequestHandler);
-router.post('/renew-order/:id', verifyToken, renewOrder as RequestHandler);
-router.post('/recovery-order/:id', verifyToken, recoveryOrder as RequestHandler);
-router.delete('/delete-order/:id', verifyToken, deleteOrder as RequestHandler);
-router.post('/add-account/:id', verifyToken, addAccount as RequestHandler);
-router.post('/edit-account/:id', verifyToken, editAccount as RequestHandler);
+router.get('/my-orders', getMyOrders as RequestHandler);
+router.get('/pending', getPendingOrders as RequestHandler);
+router.get(
+    '/in-progress',
+    authorize(ROLE.PARTNER) as RequestHandler,
+    getProgressOrders as RequestHandler,
+);
 
-// PARTNER
-router.get('/get-pending-orders', verifyToken, getPendingOrders as RequestHandler);
-router.get('/get-progress-orders', verifyToken, getProgressOrders as RequestHandler);
-router.post('/accept-order/:id', verifyToken, acceptOrder as RequestHandler);
-router.post('/completed-order/:id', verifyToken, completedOrder as RequestHandler);
-router.post('/cancel-order/:id', verifyToken, cancelOrder as RequestHandler);
+// Route tạo mới
+router.post('/', createOrder as RequestHandler);
+
+router.get('/:boostId', getOrderById as RequestHandler);
+router.delete('/:boostId', deleteOrder as RequestHandler);
+
+
+// Account Management on Orders
+router.post('/:boostId/account', addAccountToOrder as RequestHandler);
+router.patch('/accounts/:accountId', editAccountOnOrder as RequestHandler);
+
+// Order Actions
+router.post('/:boostId/assign', assignPartner as RequestHandler);
+router.post('/:boostId/refuse', refuseOrder as RequestHandler);
+router.post('/:boostId/renew', renewOrder as RequestHandler);
+router.post('/:boostId/recover', recoveryOrder as RequestHandler);
+router.post(
+    '/:boostId/accept',
+    authorize(ROLE.PARTNER) as RequestHandler,
+    acceptOrder as RequestHandler,
+);
+router.post(
+    '/:boostId/complete',
+    authorize(ROLE.PARTNER) as RequestHandler,
+    completedOrder as RequestHandler,
+);
+router.post(
+    '/:boostId/cancel',
+    authorize(ROLE.PARTNER) as RequestHandler,
+    cancelOrder as RequestHandler,
+);
 
 export default router;

@@ -1,9 +1,13 @@
 import express, { RequestHandler } from 'express';
-import { getReceipts } from '../controllers/receipt.controller';
-import { verifyToken } from '../utils/verifyToken';
+import { createReceipt, getReceipts } from '../controllers/receipt.controller';
+import { protect } from '../middlewares/auth.middleware';
 
 const router = express.Router();
+router.use(protect as RequestHandler);
 
-router.get('/get-receipts', verifyToken, getReceipts as RequestHandler);
+router
+    .route('/')
+    .get(getReceipts as RequestHandler)
+    .post(createReceipt as RequestHandler);
 
 export default router;

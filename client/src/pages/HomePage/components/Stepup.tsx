@@ -4,7 +4,7 @@ import { BsJoystick } from "react-icons/bs";
 import { FaRightToBracket } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { AppContext } from "~/components/context/AppContext";
-import { Button } from "~/components/shared";
+import { Button } from "~/components/shared/Button";
 import cn from "~/libs/utils";
 import { RootState } from "~/redux/store";
 

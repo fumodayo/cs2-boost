@@ -1,13 +1,13 @@
 interface IStatsItemProps {
-  title?: string;
-  subtitle?: string;
+  title: string;
+  value: string | number;
 }
 
-const Stats = ({ title, subtitle }: IStatsItemProps) => {
+const Stats = ({ title, value }: IStatsItemProps) => {
   return (
-    <div>
-      <div className="font-semibold">{title}</div>
-      <div className="font-semibold text-danger">{subtitle}</div>
+    <div className="rounded-lg bg-card-alt p-3">
+      <p className="text-sm text-muted-foreground">{title}</p>
+      <p className="text-2xl font-bold text-foreground">{value}</p>
     </div>
   );
 };

@@ -1,18 +1,22 @@
 import { IntroductionWidget, SocialMediaWidget } from "./components";
 import { useSelector } from "react-redux";
+import { SkeletonLoader } from "~/components/shared";
 import { RootState } from "~/redux/store";
-import { ICurrentUserProps } from "~/types";
 
 const InformationPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
 
+  if (!currentUser) {
+    return <SkeletonLoader />;
+  }
+
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
-      <div className="h-full">
-        <SocialMediaWidget currentUser={currentUser as ICurrentUserProps} />
+    <div className="grid gap-6 p-6 xl:grid-cols-2">
+      <div className="h-fit w-full">
+        <SocialMediaWidget currentUser={currentUser} />
       </div>
-      <div className="h-full">
-        <IntroductionWidget currentUser={currentUser as ICurrentUserProps} />
+      <div className="h-fit w-full">
+        <IntroductionWidget currentUser={currentUser} />
       </div>
     </div>
   );

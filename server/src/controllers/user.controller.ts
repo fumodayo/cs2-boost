@@ -1,16 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/user.model';
+import User, { IUser } from '../models/user.model';
 import { errorHandler } from '../utils/error';
 import { ROLE } from '../constants';
-import { AuthRequest, IUserProps } from '../types';
 import bcryptjs from 'bcryptjs';
+import { AuthRequest } from '../interfaces';
+import { FilterQuery } from 'mongoose';
 
 /**
- * @route GET /api/user/get-user/:id
- * @access Private (User)
- * @description Lấy thông tin chi tiết của người dùng theo ID.
+ * @desc    Lấy thông tin công khai của một người dùng bằng ID.
+ *          Loại bỏ các trường nhạy cảm.
+ * @route   GET /api/users/:id
+ * @access  Public
  */
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
@@ -18,97 +20,132 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
             return next(errorHandler(404, 'User not found'));
         }
 
-        res.status(200).json(user);
+        res.status(200).json({ success: true, data: user });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/get-partners
- * @access Public
- * @description Lấy danh sách partners theo các tiêu chí:
- *  - search: tìm theo username hoặc user_id
- *  - star-min, star-max: lọc theo đánh giá
- *  - rate-min, rate-max: lọc theo tỉ lệ hoàn thành
- *  - user_id: loại trừ bản thân khỏi danh sách
- *  - role: chỉ lọc người dùng có vai trò là partner
+ * @desc    (Admin) Tìm kiếm người dùng trong hệ thống (trừ admin).
+ * @route   GET /api/users/search
+ * @access  Private (Admin)
  */
-const getPartners = async (req: Request, res: Response, next: NextFunction) => {
+const searchUsers = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const { user_id } = req.body;
-        const search = req.query['search'] || '';
-        const starMin = Number(req.query['star-min']) || 0;
-        const starMax = Number(req.query['star-max']) || 5;
-        const rateMin = Number(req.query['rate-min']) || 0;
-        const rateMax = Number(req.query['rate-max']) || 100;
+        const query = req.query.q as string;
+        const adminId = req.user.id;
 
-        const filters: Record<string, any> = {
-            role: ROLE.PARTNER,
-            _id: { $ne: user_id },
+        const filter: FilterQuery<IUser> = {
+            _id: { $ne: adminId },
+            role: { $ne: ROLE.ADMIN },
         };
 
-        if (search) {
-            filters.$or = [
-                { username: { $regex: search, $options: 'i' } },
-                ...(user_id ? [{ user_id: { $regex: search, $options: 'i' } }] : []),
+        if (query) {
+            filter.$or = [
+                { username: { $regex: query, $options: 'i' } },
+                { full_name: { $regex: query, $options: 'i' } },
             ];
         }
 
-        if (starMin > 0 || starMax < 5) {
-            filters.total_rating = {
-                ...(starMin > 0 && { $gte: starMin }),
-                ...(starMax < 5 && { $lte: starMax }),
-            };
-        }
+        const users = await User.find(filter)
+            .sort({ createdAt: -1 })
+            .select('username full_name profile_picture')
+            .limit(10);
 
-        if (rateMin > 0 || rateMax < 100) {
-            filters.total_completion_rate = {
-                ...(rateMin > 0 && { $gte: rateMin }),
-                ...(rateMax < 100 && { $lte: rateMax }),
-            };
-        }
-
-        const partners = await User.find(filters);
-        if (!partners?.length) return next(errorHandler(404, 'No partners found'));
-
-        res.status(200).json(partners);
+        res.status(200).json({ success: true, data: users });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route GET /api/user/get-partner/:username
- * @access Public
- * @description Lấy thông tin chi tiết của partner theo username.
+ * @desc    Lấy danh sách các Partner với bộ lọc và phân trang.
+ * @route   GET /api/users/partners
+ * @access  Public
+ */
+const getPartners = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.query['partner_id'];
+        const page = parseInt(req.query.page as string) || 1;
+        const perPage = parseInt(req.query['per-page'] as string) || 15;
+        const skip = (page - 1) * perPage;
+
+        const search = (req.query.q as string) || '';
+        const starMin = parseFloat(req.query['star-min'] as string) || 0;
+        const starMax = parseFloat(req.query['star-max'] as string) || 5;
+        const rateMin = parseFloat(req.query['rate-min'] as string) || 0;
+        const rateMax = parseFloat(req.query['rate-max'] as string) || 100;
+
+        const query: Record<string, any> = { role: ROLE.PARTNER };
+        if (userId) query._id = { $ne: userId };
+        if (search)
+            query.$or = [
+                { username: { $regex: search, $options: 'i' } },
+                { full_name: { $regex: search, $options: 'i' } },
+            ];
+        if (starMin > 0 || starMax < 5) query.total_rating = { $gte: starMin, $lte: starMax };
+        if (rateMin > 0 || rateMax < 100)
+            query.total_completion_rate = { $gte: rateMin, $lte: rateMax };
+
+        const [partners, total] = await Promise.all([
+            User.find(query)
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(perPage)
+                .select(
+                    'username full_name profile_picture total_rating total_reviews total_completion_rate is_verified user_id',
+                ),
+            User.countDocuments(query),
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: partners,
+            pagination: {
+                total,
+                page,
+                perPage,
+                totalPages: Math.ceil(total / perPage),
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * @desc    Lấy thông tin chi tiết của một Partner bằng username.
+ * @route   GET /api/users/partner/:username
+ * @access  Public
  */
 const getPartnerByUsername = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username } = req.params;
-        const user = await User.findOne({ username });
+        const partner = await User.findOne({ username: username, role: ROLE.PARTNER }).select(
+            '-password -otp',
+        );
+        if (!partner) return next(errorHandler(404, 'User not found'));
 
-        if (!user) return next(errorHandler(404, 'User not found'));
-
-        res.status(200).json(user);
+        res.status(200).json({ success: true, data: partner });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/follow/:partner_id
- * @access Private (User)
- * @description Theo dõi một partner theo ID. Tăng số lượng người theo dõi của partner.
+ * @desc    Người dùng theo dõi một Partner.
+ * @route   POST /api/users/:partnerId/follow
+ * @access  Private
  */
-const followPartnerById = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const followPartner = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const user_id = req.user.id;
-        const { partner_id } = req.params;
+        const { partnerId } = req.params;
 
         await Promise.all([
-            User.findByIdAndUpdate(user_id, { $addToSet: { following: partner_id } }),
-            User.findByIdAndUpdate(partner_id, { $inc: { followers_count: 1 } }),
+            User.findByIdAndUpdate(user_id, { $addToSet: { following: partnerId } }),
+            User.findByIdAndUpdate(partnerId, { $inc: { followers_count: 1 } }),
         ]);
 
         const updatedUser = await User.findById(user_id)
@@ -116,25 +153,25 @@ const followPartnerById = async (req: AuthRequest, res: Response, next: NextFunc
             .populate('following', '_id username profile_picture')
             .lean();
 
-        res.status(201).json(updatedUser);
+        res.status(200).json({ success: true, message: 'Follow successfully.', data: updatedUser });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/unfollow/:partner_id
- * @access Private (User)
- * @description Bỏ theo dõi một partner theo ID. Giảm số lượng người theo dõi của partner.
+ * @desc    Người dùng bỏ theo dõi một Partner.
+ * @route   POST /api/users/:partnerId/unfollow
+ * @access  Private
  */
-const unFollowPartnerById = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const unfollowPartner = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const user_id = req.user.id;
-        const { partner_id } = req.params;
+        const { partnerId } = req.params;
 
         await Promise.all([
-            User.findByIdAndUpdate(user_id, { $pull: { following: partner_id } }),
-            User.findByIdAndUpdate(partner_id, { $inc: { followers_count: -1 } }),
+            User.findByIdAndUpdate(user_id, { $pull: { following: partnerId } }),
+            User.findByIdAndUpdate(partnerId, { $inc: { followers_count: -1 } }),
         ]);
 
         const updatedUser = await User.findById(user_id)
@@ -142,82 +179,75 @@ const unFollowPartnerById = async (req: AuthRequest, res: Response, next: NextFu
             .populate('following', '_id username profile_picture')
             .lean();
 
-        res.status(201).json(updatedUser);
+        res.status(200).json({
+            success: true,
+            message: 'Unfollow successfully.',
+            data: updatedUser,
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/update/:id
- * @access Private (User)
- * @description Cập nhật thông tin cá nhân của người dùng (chỉ cho phép chính chủ).
- *              Kiểm tra username đã tồn tại hay chưa nếu có thay đổi.
+ * @desc    Người dùng hiện tại cập nhật thông tin cá nhân của mình.
+ * @route   PATCH /api/users/me
+ * @access  Private
  */
 const updateUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: userid } = req.user;
-    const { username, profile_picture, social_links, details } = req.body;
-
     try {
-        if (userid !== req.params.id) {
-            return next(errorHandler(403, 'You can update only your account'));
-        }
+        const { username, profile_picture, social_links, details } = req.body;
 
-        const updateFields: Partial<IUserProps> = {};
+        const updateFields: Partial<IUser> = {};
 
         if (username) {
-            const existUser = await User.findOne({ username });
-            if (existUser) {
-                return next(errorHandler(409, 'Username has been taken already'));
+            const userToUpdate = await User.findById(req.user.id);
+            if (userToUpdate && userToUpdate.username !== username) {
+                const existUser = await User.findOne({ username });
+                if (existUser) {
+                    return next(errorHandler(409, 'Username has been taken already'));
+                }
+                updateFields.username = username;
             }
-            updateFields.username = username;
         }
 
-        if (profile_picture) {
-            updateFields.profile_picture = profile_picture;
-        }
-
-        if (social_links) {
-            updateFields.social_links = social_links;
-        }
-
-        if (details) {
-            updateFields.details = details;
-        }
+        if (profile_picture) updateFields.profile_picture = profile_picture;
+        if (social_links) updateFields.social_links = social_links;
+        if (details) updateFields.details = details;
 
         if (Object.keys(updateFields).length === 0) {
-            return next(errorHandler(400, 'Nothing to update'));
+            return next(errorHandler(400, 'No fields to update'));
         }
 
         const updatedUser = await User.findByIdAndUpdate(
-            userid,
+            req.user.id,
             { $set: updateFields },
             { new: true },
-        );
+        ).select('-password');
 
         if (!updatedUser) {
             return next(errorHandler(404, 'User not found'));
         }
 
-        const { password, ...rest } = updatedUser.toObject();
-        res.status(200).json(rest);
+        res.status(200).json({
+            success: true,
+            message: 'Information updated successfully.',
+            data: updatedUser,
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/change-password/:id
- * @access Private (User)
- * @description Đổi mật khẩu tài khoản. Yêu cầu nhập đúng mật khẩu hiện tại.
+ * @desc    Người dùng thay đổi mật khẩu của mình.
+ * @route   POST /api/users/me/change-password
+ * @access  Private
  */
 const changePassword = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const { id: userid } = req.user;
-        const { id: param_id } = req.params;
         const { current_password, new_password } = req.body;
-
-        if (userid !== param_id) return next(errorHandler(403, 'You can update only your account'));
 
         if (!current_password || !new_password)
             return next(errorHandler(400, 'Password not valid'));
@@ -231,23 +261,27 @@ const changePassword = async (req: AuthRequest, res: Response, next: NextFunctio
         const hashed = await bcryptjs.hash(new_password, 10);
         await User.findByIdAndUpdate(userid, { password: hashed });
 
-        res.status(200).send('Password updated successfully');
+        res.status(200).json({ success: true, message: 'Password changed successfully.' });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/user/verify-user/:id
- * @access Private (User)
- * @description Xác minh tài khoản người dùng. Sau khi xác minh sẽ gán thêm vai trò partner.
+ * @desc    Người dùng xác minh tài khoản để trở thành Partner.
+ * @route   POST /api/users/me/verify
+ * @access  Private
  */
 const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const { id: userid } = req.user;
-        const { id: param_id } = req.params;
+        const userToVerify = await User.findById(req.user.id);
+        if (!userToVerify) {
+            return next(errorHandler(404, 'User not found'));
+        }
 
-        if (userid !== param_id) return next(errorHandler(401, 'You can verify only your account'));
+        if (userToVerify.is_verified) {
+            return next(errorHandler(400, 'User already verified'));
+        }
 
         const {
             address,
@@ -255,7 +289,6 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
             cccd_issue_date,
             date_of_birth,
             gender,
-            language,
             phone_number,
             full_name,
         } = req.body;
@@ -267,26 +300,28 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
             cccd_issue_date,
             date_of_birth,
             gender,
-            language,
             phone_number,
             full_name,
         };
 
         const updatedUser = await User.findByIdAndUpdate(
-            userid,
+            req.user.id,
             {
                 $addToSet: { role: ROLE.PARTNER },
                 $set: { ...updateFields },
             },
             { new: true },
-        );
+        ).select('-password');
 
-        if (!updatedUser) return next(errorHandler(400, 'Can not verify user'));
+        if (!updatedUser) {
+            return next(errorHandler(500, 'Could not verify user'));
+        }
 
-        if (updatedUser.is_verified) return next(errorHandler(400, 'User already verified'));
-
-        const { password, ...safeUser } = updatedUser.toObject();
-        res.status(201).json(safeUser);
+        res.status(200).json({
+            success: true,
+            message: 'Verification successful!',
+            data: updatedUser,
+        });
     } catch (e) {
         next(e);
     }
@@ -295,10 +330,11 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
 export {
     getPartners,
     getPartnerByUsername,
-    followPartnerById,
-    unFollowPartnerById,
+    followPartner,
+    unfollowPartner,
     updateUser,
     changePassword,
     verifyUser,
-    getUser,
+    getUserById,
+    searchUsers,
 };

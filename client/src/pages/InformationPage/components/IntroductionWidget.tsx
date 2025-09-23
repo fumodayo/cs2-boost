@@ -1,132 +1,135 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Button, Widget } from "~/components/shared";
+import { Spinner, Widget } from "~/components/shared";
 import parse from "html-react-parser";
-import { FaPencilAlt } from "react-icons/fa";
-import { IoEyeOutline } from "react-icons/io5";
-import { FaCheck } from "react-icons/fa6";
-import { MdClose } from "react-icons/md";
-import { ICurrentUserProps } from "~/types";
-import { useDispatch } from "react-redux";
+import { FaPencilAlt, FaCheck, FaTimes } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import {
   updatedStart,
   updateFailure,
   updateSuccess,
 } from "~/redux/user/userSlice";
-import { axiosAuth } from "~/axiosAuth";
 import toast from "react-hot-toast";
+import { RootState } from "~/redux/store";
+import getErrorMessage from "~/utils/errorHandler";
+import { IUser } from "~/types";
+import { Button } from "~/components/shared/Button";
+import { useTranslation } from "react-i18next";
+import { userService } from "~/services/user.service";
 
 const modules = {
   toolbar: [
-    ["bold", "italic", "underline", "strike"],
+    ["bold", "italic", "underline"],
     [{ list: "ordered" }, { list: "bullet" }],
     ["clean"],
   ],
 };
 
-const RichTextEditor = ({
-  currentUser,
-}: {
-  currentUser?: ICurrentUserProps;
-}) => {
-  const { details = "" } = currentUser || {};
+const IntroductionWidget = ({ currentUser }: { currentUser: IUser }) => {
+  const { t } = useTranslation();
+  const { details = "" } = currentUser;
   const [content, setContent] = useState(details);
-  const [isPreview, setIsPreview] = useState(details.trim().length > 0);
-  const [isDisabledContent, setIsDisabledContent] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state: RootState) => state.user);
 
-  const isContentEmpty = (content: string) => {
-    return content.replace(/<p><br><\/p>/g, "").trim().length === 0;
-  };
-
-  useEffect(() => {
-    setIsDisabledContent(isContentEmpty(content));
+  const isContentEmpty = useMemo(() => {
+    const text = content.replace(/<[^>]*>/g, "").trim();
+    return text.length === 0;
   }, [content]);
 
+  const isContentChanged = content !== details;
+
   const handleSave = async () => {
-    console.log({ content });
+    dispatch(updatedStart());
     try {
-      dispatch(updatedStart());
-      const { data } = await axiosAuth.post(
-        `/user/update/${currentUser?._id}`,
-        {
-          details: content,
-        },
-      );
-      console.log({ data });
+      const data = await userService.updateUser({
+        details: content,
+      });
       dispatch(updateSuccess(data));
-      toast.success("Edit Successfully");
+      toast.success("Introduction updated successfully!");
+      setIsPreview(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "An unknown error occurred";
+      const message = getErrorMessage(err);
       dispatch(updateFailure(message));
+      toast.error(message);
     }
   };
 
   const handleCancel = () => {
     setContent(details);
+    setIsPreview(true);
   };
 
   return (
     <Widget>
-      <Widget.Header>Details</Widget.Header>
+      <Widget.Header>
+        {t("SettingsPage.Information.IntroductionWidget.title")}
+      </Widget.Header>
       <Widget.Content>
-        <div className="w-full space-y-4 rounded-lg p-5 shadow-sm">
-          {!isPreview ? (
+        {isPreview ? (
+          <div className="group relative min-h-[12rem] w-full space-y-4 rounded-lg p-5">
+            {isContentEmpty ? (
+              <p className="text-muted-foreground">
+                {t("SettingsPage.Information.IntroductionWidget.empty")}
+              </p>
+            ) : (
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                {parse(content)}
+              </div>
+            )}
+            <div className="absolute right-4 top-4">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => setIsPreview(false)}
+                className="rounded-md"
+              >
+                <FaPencilAlt className="mr-2 h-3 w-3" />
+                {t("SettingsPage.Information.IntroductionWidget.editBtn")}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full space-y-4 rounded-lg p-5">
             <ReactQuill
               value={content}
               onChange={setContent}
               modules={modules}
-              className="h-40 rounded-md"
+              className="h-40 rounded-md pb-10"
             />
-          ) : (
-            <div className="rounded-md border bg-secondary p-4 text-secondary-foreground">
-              Preview Content:
-              {parse(content)}
+            <div className="flex justify-end space-x-2 pt-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={handleCancel}
+                disabled={!isContentChanged || loading}
+                className="rounded-md"
+              >
+                <FaTimes className="mr-2 h-4 w-4" />
+                {t("Dialog.btn.Cancel")}
+              </Button>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={handleSave}
+                disabled={!isContentChanged || loading}
+                className="rounded-md"
+              >
+                {loading ? (
+                  <Spinner size="sm" className="mr-2" />
+                ) : (
+                  <FaCheck className="mr-2 h-4 w-4" />
+                )}
+                {t("Dialog.btn.Save Changes")}
+              </Button>
             </div>
-          )}
-          <div className="flex justify-end space-x-2 pt-10">
-            <Button
-              disabled={isDisabledContent}
-              variant="secondary"
-              className="rounded-md px-4 py-2 text-sm"
-              onClick={() => setIsPreview((prevState) => !prevState)}
-            >
-              {isPreview ? (
-                <>
-                  <FaPencilAlt className="mr-1.5" />
-                  Edit
-                </>
-              ) : (
-                <>
-                  <IoEyeOutline className="mr-1.5" />
-                  Preview
-                </>
-              )}
-            </Button>
-            <Button
-              disabled={isDisabledContent}
-              variant="secondary"
-              onClick={handleCancel}
-              className="rounded-md px-4 py-2 text-sm"
-            >
-              <MdClose size={18} className="mr-1" />
-              Cancel
-            </Button>
-            <Button
-              disabled={isDisabledContent}
-              variant="primary"
-              onClick={handleSave}
-              className="rounded-md px-4 py-2 text-sm"
-            >
-              <FaCheck size={18} className="mr-1" />
-              Save
-            </Button>
           </div>
-        </div>
+        )}
       </Widget.Content>
     </Widget>
   );
 };
 
-export default RichTextEditor;
+export default IntroductionWidget;

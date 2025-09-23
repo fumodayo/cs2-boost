@@ -19,7 +19,6 @@ const Circle: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({
     const dpkCursor = dpkCursorRef.current;
     const container = containerRef.current;
 
-    // Set initial position of the circle
     gsap.set(dpkCursor, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -35,9 +34,9 @@ const Circle: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({
           x: e.clientX,
           y: e.clientY,
           autoAlpha: 1,
-          duration: 0.3, // Increased duration for smoothness
+          duration: 0.3,
           ease: "power2.out",
-          overwrite: "auto", // Ensures smooth transitions
+          overwrite: "auto",
         });
       } else {
         gsap.to(dpkCursor, {

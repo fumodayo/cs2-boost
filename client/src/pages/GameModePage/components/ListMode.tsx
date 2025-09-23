@@ -66,7 +66,7 @@ const cards = [
 
 const ListMode = () => (
   <div className="col-span-4 my-4 flex w-full gap-8 lg:col-span-4 xl:col-span-5">
-    <div className="flex w-full justify-between gap-4">
+    <div className="flex w-full flex-wrap justify-between gap-4 xl:flex-nowrap">
       {cards.map((props) => (
         <Card key={uuidv4()} {...props} />
       ))}

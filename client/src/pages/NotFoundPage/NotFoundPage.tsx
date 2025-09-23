@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Button, Helmet, Logo } from "~/components/shared";
+import { Helmet, Logo } from "~/components/shared";
 import PATH from "~/constants/path";
 import { IconDot } from "~/icons";
+import { Button } from "~/components/shared/Button";
 
 const NotFoundPage = () => {
   const { t } = useTranslation();

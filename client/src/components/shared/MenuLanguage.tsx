@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import cn from "~/libs/utils";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { ICurrencyProps } from "~/types";
+import { ICurrency } from "~/types";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 
@@ -98,18 +98,17 @@ const MenuLanguage = ({
               {t("MenuLanguage.title2")}
             </div>
             {money.map(({ label, flag, value }) => (
-              <button
+              <Button
                 key={label}
-                type="button"
                 className={cn(
                   value === currency && "bg-accent",
                   "relative flex w-full cursor-default select-none items-center rounded-md px-2 py-2 text-sm text-accent-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
                 )}
-                onClick={() => setCurrency(value as ICurrencyProps)}
+                onClick={() => setCurrency(value as ICurrency)}
               >
                 <span className={cn(`fi fi-${flag} fis flag-select mr-2`)} />
                 {label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

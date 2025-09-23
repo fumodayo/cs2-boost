@@ -1,9 +1,10 @@
 import axios from "axios";
 import { store } from "~/redux/store";
-import { signOut } from "~/redux/user/userSlice";
+import { signOut as userSignOut } from "~/redux/user/userSlice";
+import { authService } from "~/services/auth.service";
 import { getLocalStorage } from "~/utils/localStorage";
 
-const SERVER_URL = "http://localhost:5030";
+const SERVER_URL = "http://localhost:5040";
 
 const axiosBase = axios.create({
   baseURL: `${SERVER_URL}/api/v1`,
@@ -21,47 +22,51 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-const axiosAuth = axios.create({
+const axiosPrivate = axios.create({
   baseURL: `${SERVER_URL}/api/v1`,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
 
-axiosAuth.interceptors.request.use(
+axiosPrivate.interceptors.request.use(
   async (config) => {
     try {
       const { user } = store.getState();
       if (!user.currentUser) return config;
 
-      const ip_location = getLocalStorage("ip_location", "");
-      const response = await axiosBase.post("/auth/refresh-token", {
+      const payload = {
         id: user.currentUser?._id,
-        ip_location,
-      });
-
+        ip_location: getLocalStorage("ip_location", ""),
+      };
+      const response = await authService.refreshToken(payload);
       if (response.status === 200) {
         config.headers["Authorization"] = `Bearer ${response.data.accessToken}`;
       }
     } catch (error) {
       console.error("Failed to refresh token", error);
     }
+
     return config;
   },
   (error) => Promise.reject(error),
 );
 
-axiosAuth.interceptors.response.use(
+axiosPrivate.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
+      const originalRequestConfig = error.config;
 
-      console.log("response", { status, data });
+      console.log("response error", {
+        status,
+        data,
+        url: originalRequestConfig.url,
+      });
 
       if (status === 401) {
-        store.dispatch(signOut());
+        console.log("User session expired, signing out user...");
+        store.dispatch(userSignOut());
       }
 
       return Promise.reject({
@@ -88,7 +93,7 @@ axiosInstance.interceptors.response.use(
       console.log({ status, data });
 
       if (status === 401) {
-        store.dispatch(signOut());
+        store.dispatch(userSignOut());
       }
 
       return Promise.reject({
@@ -106,4 +111,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export { axiosInstance, axiosAuth, axiosBase };
+export { axiosInstance, axiosBase, axiosPrivate };

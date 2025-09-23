@@ -2,11 +2,14 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { Banner, Sidebar } from "~/components/shared";
 import { RootState } from "~/redux/store";
+import { ROLE } from "~/types/constants";
 
 const AdminLayout = () => {
-  const { currentAdmin } = useSelector((state: RootState) => state.admin);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
-  return currentAdmin ? (
+  const isAdmin = currentUser?.role?.includes(ROLE.ADMIN);
+
+  return isAdmin ? (
     <div>
       <Sidebar />
       {/* Banner */}

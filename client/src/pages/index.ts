@@ -14,7 +14,7 @@ export { default as ProgressBoostsPage } from "./ProgressBoostsPage/ProgressBoos
 export { default as PendingBoostsPage } from "./PendingBoostsPage/PendingBoostsPage";
 export { default as IncomePage } from "./IncomePage/IncomePage";
 export { default as General } from "./GeneralPage/GeneralPage";
-export { default as NotificationsPage } from "./NotificationsPage/NotificationsPage";
+export { default as PushSettingsPage } from "./PushSettingsPage/PushSettingsPage";
 export { default as AdminLoginPage } from "./AdminLoginPage/AdminLoginPage";
 export { default as LoadingPage } from "./LoadingPage/LoadingPage";
 export { default as PartnersPage } from "./PartnersPage/PartnersPage";
@@ -30,3 +30,8 @@ export { default as ManageOrdersPage } from "./ManageOrdersPage/ManageOrdersPage
 export { default as AdminSettingsPage } from "./AdminSettingsPage/AdminSettingsPage";
 export { default as SupportsPage } from "./SupportsPage/SupportsPage";
 export { default as BillReturnPage } from "./BillReturnPage/BillReturnPage";
+export { default as ManageRevenue } from "./ManageRevenue/ManageRevenue";
+export { default as BannedPage } from "./BannedPage/BannedPage";
+export { default as UserDetailPage } from "./UserDetailPage/UserDetailsPage";
+export { default as OrderDetailPage } from "./OrderDetailPage/OrderDetailPage";
+export { default as NotificationPage } from "./NotificationPage/NotificationPage";

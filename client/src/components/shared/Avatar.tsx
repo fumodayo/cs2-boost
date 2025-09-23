@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { BsGrid1X2Fill } from "react-icons/bs";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaChevronRight, FaPalette } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import cn from "~/libs/utils";
 import {
@@ -24,10 +24,13 @@ import { useTranslation } from "react-i18next";
 import { RootState } from "~/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useDeviceType, useStorageIPLocation } from "~/hooks";
-import { axiosInstance } from "~/axiosAuth";
 import { getLocalStorage } from "~/utils/localStorage";
 import { signOut } from "~/redux/user/userSlice";
 import { v4 as uuidv4 } from "uuid";
+import toast from "react-hot-toast";
+import getErrorMessage from "~/utils/errorHandler";
+import { authService } from "~/services/auth.service";
+import { Button } from "./Button";
 
 const DropdownItem = ({ path, icon: Icon, label }: IListOfPath) => {
   const { t } = useTranslation();
@@ -43,6 +46,7 @@ const DropdownItem = ({ path, icon: Icon, label }: IListOfPath) => {
 };
 
 const Avatar = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { theme, setTheme } = useContext(AppContext);
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -54,13 +58,16 @@ const Avatar = () => {
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.post("/auth/signout", {
+      const payload = {
         ip_location: getLocalStorage("ip_location", ""),
-        id: currentUser?._id,
-      });
+        id: currentUser?._id as string,
+      };
+      await authService.signout(payload);
       dispatch(signOut());
-    } catch (e) {
-      console.error(e);
+      navigate("/");
+    } catch (err) {
+      const error = getErrorMessage(err);
+      toast.error(error);
     }
   };
 
@@ -70,8 +77,7 @@ const Avatar = () => {
         className="flex flex-col items-center outline-none"
         asChild
       >
-        <button
-          type="button"
+        <Button
           className="h-10 rounded-full ring-1 ring-accent focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <div className="relative block h-10 w-10 shrink-0 rounded-full text-base">
@@ -85,7 +91,7 @@ const Avatar = () => {
             )}
           </div>
           <span className="sr-only">Open user menu for user</span>
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72">
         <div className="flex items-center gap-x-3 px-2 py-2 text-sm font-medium">
@@ -154,12 +160,12 @@ const Avatar = () => {
               }`}
               onClick={() => setTheme("dark")}
             >
-              <button className="flex items-center justify-center">
+              <Button className="flex items-center justify-center">
                 <i
                   className={`ring-foreground/20" mr-2.5 h-4 w-4 rounded-full bg-[#181A20] ring-1`}
                 />
                 {t("Avatar.label.Dark Mode")}
-              </button>
+              </Button>
             </DropdownMenuItem>
             <DropdownMenuItem
               className={`relative mt-1 flex w-full cursor-default select-none items-center rounded-sm px-2 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground ${
@@ -167,12 +173,12 @@ const Avatar = () => {
               }`}
               onClick={() => setTheme("light")}
             >
-              <button className="flex items-center justify-center">
+              <Button className="flex items-center justify-center">
                 <i
                   className={`ring-foreground/20" mr-2.5 h-4 w-4 rounded-full bg-[#F5F7FA] ring-1`}
                 />
                 {t("Avatar.label.Light Mode")}
-              </button>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>

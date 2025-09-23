@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { FaSave, FaUnlockAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { axiosAuth } from "~/axiosAuth";
 import {
   Dialog,
   DialogClose,
@@ -13,9 +12,9 @@ import {
   EditDialogContent,
 } from "~/components/@radix-ui/Dialog";
 import {
-  Button,
   FormField,
   Input,
+  Spinner,
   UploadImage,
   Widget,
 } from "~/components/shared";
@@ -26,9 +25,10 @@ import {
   updateFailure,
   updateSuccess,
 } from "~/redux/user/userSlice";
-import { ICurrentUserProps } from "~/types";
 import { formateDate } from "~/utils";
-import { v4 as uuidv4 } from "uuid";
+import getErrorMessage from "~/utils/errorHandler";
+import { Button } from "~/components/shared/Button";
+import { userService } from "~/services/user.service";
 
 /* Col data user */
 const showInformation = [
@@ -45,14 +45,15 @@ const showInformation = [
   "cccd_issue_date",
 ];
 
-const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
+const UserWidget = () => {
   const { t } = useTranslation();
+  const { currentUser, loading, error } = useSelector(
+    (state: RootState) => state.user,
+  );
+  const dispatch = useDispatch();
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [username, setUsername] = useState("");
-
-  const { error } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -69,34 +70,36 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
   });
 
   const handleEditProfile = async () => {
+    const payload: { username?: string; profile_picture?: string } = {};
+    if (username !== currentUser?.username) payload.username = username;
+    if (profileImage) payload.profile_picture = profileImage;
+
+    if (Object.keys(payload).length === 0) {
+      toast.error("No changes to save.");
+      return;
+    }
+
     try {
       dispatch(updatedStart());
-      const { data } = await axiosAuth.post(
-        `/user/update/${currentUser?._id}`,
-        {
-          profile_picture: profileImage,
-          username,
-        },
-      );
+      const data = await userService.updateUser(payload);
       dispatch(updateSuccess(data));
-      setUsername("");
       setProfileImage(null);
-      toast.success("Edit Successfully");
+      toast.success("Profile updated successfully!");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "An unknown error occurred";
+      const message = getErrorMessage(err);
       dispatch(updateFailure(message));
+      toast.error(message);
     }
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (form) => {
     try {
-      await axiosAuth.post(`/user/change-password/${currentUser?._id}`, {
-        ...form,
-      });
+      const { current_password, new_password } = form;
+      await userService.changePassword({ current_password, new_password });
       toast.success("Change Password Successfully");
       reset();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "An unknown error occurred";
+      const message = getErrorMessage(err);
       setErrorMessage(message);
     }
   };
@@ -109,7 +112,11 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
         </h3>
         <div className="flex space-x-2">
           {/* EDIT PROFILE */}
-          <Dialog>
+          <Dialog
+            onOpenChange={(open) =>
+              !open && setUsername(currentUser?.username || "")
+            }
+          >
             <DialogTrigger>
               <Button
                 variant="secondary"
@@ -137,7 +144,9 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
                       label="Username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      errorMessage={error ?? undefined}
+                      errorMessage={
+                        error && error.includes("Username") ? error : undefined
+                      }
                       placeholder={currentUser?.username}
                     />
                   </div>
@@ -157,12 +166,13 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
               {/* FOOTER */}
               <div className="flex flex-shrink-0 flex-row-reverse gap-3 rounded-b-xl border-t border-border bg-card-surface px-4 py-4">
                 <Button
+                  disabled={loading}
                   onClick={handleEditProfile}
                   variant="primary"
                   className="w-full rounded-md px-5 py-3 text-sm sm:w-auto sm:py-2.5"
                 >
                   <FaSave className="mr-2" />
-                  {t("Dialog.btn.Save Changes")}
+                  {loading ? <Spinner /> : t("Dialog.btn.Save Changes")}
                 </Button>
                 <DialogClose>
                   <Button
@@ -273,17 +283,20 @@ const UserWidget = ({ currentUser }: { currentUser?: ICurrentUserProps }) => {
         <div className="grid grid-cols-2 lg:grid-cols-3">
           {currentUser &&
             Object.entries(currentUser)
-              .filter(([key]) => showInformation.includes(key))
+              .filter(
+                ([key]) =>
+                  showInformation.includes(key) &&
+                  currentUser[key as keyof typeof currentUser],
+              )
               .map(([key, value]) => (
-                <div key={uuidv4()} className="px-4 py-6 sm:col-span-1 sm:px-0">
+                <div key={key} className="px-4 py-6 sm:col-span-1 sm:px-0">
                   <dt className="text-sm font-medium capitalize text-foreground">
                     {t(`Globals.User.label.${key.split("_").join(" ")}`)}
                   </dt>
-
                   <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                     {["cccd_issue_date", "date_of_birth"].includes(key) && value
-                      ? formateDate(value)
-                      : value}
+                      ? formateDate(value as string)
+                      : String(value)}
                   </dd>
                 </div>
               ))}

@@ -1,14 +1,29 @@
-import mongoose from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 import { NOTIFY_TYPE } from '../constants';
 
-const notifySchema = new mongoose.Schema(
+export interface INotification extends Document {
+    sender?: Types.ObjectId;
+    receiver?: Types.ObjectId;
+
+    boost_id?: string;
+
+    content: string;
+
+    isRead: boolean;
+    type: (typeof NOTIFY_TYPE)[keyof typeof NOTIFY_TYPE];
+
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const notifySchema = new Schema<INotification>(
     {
         sender: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
         },
         receiver: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
         },
         boost_id: {
@@ -16,6 +31,7 @@ const notifySchema = new mongoose.Schema(
         },
         content: {
             type: String,
+            required: true,
         },
         isRead: {
             type: Boolean,
@@ -24,13 +40,13 @@ const notifySchema = new mongoose.Schema(
         },
         type: {
             type: String,
-            enum: NOTIFY_TYPE,
+            enum: Object.values(NOTIFY_TYPE),
             default: NOTIFY_TYPE.BOOST,
         },
     },
     { timestamps: true },
 );
 
-const Notification = mongoose.model('Notification', notifySchema);
+const Notification = model<INotification>('Notification', notifySchema);
 
 export default Notification;

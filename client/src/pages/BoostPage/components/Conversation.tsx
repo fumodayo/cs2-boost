@@ -1,92 +1,76 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { axiosAuth } from "~/axiosAuth";
 import { RootState } from "~/redux/store";
-import { IConversationProps, IMessageProps } from "~/types";
-import { useSocketContext } from "~/hooks/useSocketContext";
-import { formatDistanceDate } from "~/utils";
-import { useTranslation } from "react-i18next";
+import { formatDistanceToNow } from "date-fns";
+import { IMessage } from "~/types"; 
+import { isUserObject } from "~/utils/typeGuards";
+import { Spinner } from "~/components/shared";
 
-const SentMessage = ({ message, updatedAt }: IMessageProps) => {
-  const { i18n } = useTranslation();
-  return (
-    <div className="flex justify-end">
-      <div className="my-1 flex gap-x-4 overflow-hidden whitespace-normal rounded-lg bg-primary px-2 font-medium text-primary-foreground">
-        <div className="whitespace-pre-wrap p-2 text-sm">{message}</div>
-        <span className="flex justify-end pt-4 text-xs text-primary-foreground/75">
-          {updatedAt && formatDistanceDate(updatedAt, i18n.language)}
-        </span>
-      </div>
+const SentMessage = ({
+  message,
+  updatedAt,
+}: {
+  message: string;
+  updatedAt: string;
+}) => (
+  <div className="flex justify-end">
+    <div className="my-1 flex max-w-lg flex-col rounded-lg bg-primary px-3 py-2 text-primary-foreground">
+      <p className="whitespace-pre-wrap text-sm">{message}</p>
+      <span className="self-end pt-1 text-[10px] text-primary-foreground/75">
+        {formatDistanceToNow(updatedAt, { addSuffix: true })}
+      </span>
     </div>
-  );
-};
+  </div>
+);
 
-const ReceivedMessage = ({ message, updatedAt }: IMessageProps) => {
-  const { i18n } = useTranslation();
-
-  return (
-    <div className="flex justify-start">
-      <div className="my-1 flex gap-x-4 overflow-hidden whitespace-normal rounded-lg border-l-4 border-border/90 bg-background px-4 pl-2 font-medium text-foreground">
-        <div className="whitespace-pre-wrap p-2 text-sm">{message}</div>
-        <span className="flex justify-end pt-4 text-xs">
-          {updatedAt && formatDistanceDate(updatedAt, i18n.language)}
-        </span>
-      </div>
+const ReceivedMessage = ({
+  message,
+  updatedAt,
+}: {
+  message: string;
+  updatedAt: string;
+}) => (
+  <div className="flex justify-start">
+    <div className="my-1 flex max-w-lg flex-col rounded-lg bg-muted px-3 py-2 text-foreground">
+      <p className="whitespace-pre-wrap text-sm">{message}</p>
+      <span className="self-end pt-1 text-[10px] text-muted-foreground/75">
+        {formatDistanceToNow(updatedAt, { addSuffix: true })}
+      </span>
     </div>
-  );
-};
+  </div>
+);
 
-const Conversation = (conversation: IConversationProps) => {
+const Conversation = ({ messages }: { messages: IMessage[] }) => {
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const [messages, setMessages] = useState<IMessageProps[]>([]);
-  const { socket } = useSocketContext();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axiosAuth.get(`/chat/${conversation?._id}`);
-        setMessages(data);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [conversation?._id]);
-
-  useEffect(() => {
-    socket?.on("newMessage", ({ sender_id, message, updatedAt }) => {
-      setMessages((prev) => [
-        ...prev,
-        { sender: sender_id, message, updatedAt },
-      ]);
-    });
-
-    return () => {
-      socket?.off("newMessage");
-    };
-  }, [socket]);
-
-  const lastMessageRef = useRef<null | HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({
+  const scrollAnchorRef = useRef<null | HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (scrollAnchorRef.current) {
+      scrollAnchorRef.current.scrollIntoView({
         behavior: "smooth",
         block: "end",
       });
     }
-  }, []);
+  }, [messages]);
+
+  if (!currentUser) {
+    return <Spinner />;
+  }
 
   return (
-    <>
-      {messages.map(({ sender, ...props }: IMessageProps, idx) =>
-        sender === currentUser?._id ? (
-          <SentMessage key={idx} {...props} />
+    <div className="flex flex-col space-y-2">
+      {messages.map((msg: IMessage) => {
+        const senderId = isUserObject(msg.sender) ? msg.sender._id : msg.sender;
+        const isSentByMe = String(senderId) === String(currentUser._id);
+
+        return isSentByMe ? (
+          <SentMessage key={msg._id} {...msg} />
         ) : (
-          <ReceivedMessage key={idx} {...props} />
-        ),
-      )}
-      <div ref={lastMessageRef} />
-    </>
+          <ReceivedMessage key={msg._id} {...msg} />
+        );
+      })}
+      <div ref={scrollAnchorRef} />
+    </div>
   );
 };
 

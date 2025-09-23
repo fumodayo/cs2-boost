@@ -7,8 +7,24 @@ import { HelmetProvider } from "react-helmet-async";
 import "~/styles/index.css";
 import App from "./App";
 import "./i18n.ts";
-import AppContextProvider from "./components/context/AppContext";
-import { SocketContextProvider } from "./components/context/SocketContext.tsx";
+import AppContextProvider from "./components/context/AppContextProvider.tsx";
+import { SocketContextProvider } from "./components/context/SocketContextProvider.tsx";
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        console.log(
+          "Service Worker registered with scope:",
+          registration.scope,
+        );
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -1,71 +1,86 @@
-import { Avatar, Button, Helmet, Logo } from "~/components/shared";
-import { ListPayment, RequestBooster } from "./component";
-import { FaArrowRight } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { IOrderProps } from "~/types";
-import { axiosAuth } from "~/axiosAuth";
-import toast from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
-import { formatMoney } from "~/utils";
 import { useTranslation } from "react-i18next";
+import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import useSWR from "swr";
+import toast from "react-hot-toast";
+import { FaArrowRight } from "react-icons/fa6";
+import {
+  Avatar,
+  Helmet,
+  Logo,
+  Spinner,
+  ErrorDisplay,
+} from "~/components/shared";
+import { ListPayment, RequestBooster } from "./component";
+import { Button } from "~/components/shared/Button";
+import { formatMoney } from "~/utils";
+import { createPaymentUrl } from "~/services/payment.service";
+import { IUser } from "~/types";
+import { orderService } from "~/services/order.service";
 
 const CheckoutPage = () => {
-  const [order, setOrder] = useState<IOrderProps>({} as IOrderProps);
-  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+  const { id: boost_id } = useParams<{ id: string }>();
 
-  const { id: boost_id } = useParams();
+  const {
+    data: order,
+    error,
+    isLoading,
+  } = useSWR(boost_id ? `/order/${boost_id}` : null, () =>
+    orderService.getOrderById(boost_id!),
+  );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axiosAuth.get(
-          `/order/get-order-by-id/${boost_id}`,
-        );
-        setOrder(data);
-      } catch (e) {
-        console.error(e);
-        toast.error("Something went wrong");
-      }
-    })();
-  }, [boost_id]);
-
-  const { price, title, type, game } = order;
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const handleCheckout = async () => {
+    if (!order?.price || !boost_id) return;
+
     try {
-      setLoading(true);
-      const { data } = await axiosAuth.post(`/vn-pay/create-payment`, {
-        amountInput: price,
-        contentPayment: `${boost_id}`,
+      setIsCheckingOut(true);
+      const { success, data } = await createPaymentUrl({
+        amountInput: order.price,
+        contentPayment: boost_id,
         productTypeSelect: "other",
         langSelect: "vn",
       });
-      if (data.success) {
-        window.location.href = data.url;
-        console.log(data.url);
+
+      if (success) {
+        window.location.href = data;
+      } else {
+        toast.error("Could not create payment URL. Please try again.");
       }
     } catch (e) {
       console.error(e);
-      toast.error("Something went wrong");
+      toast.error("Something went wrong during checkout.");
     } finally {
-      setLoading(false);
+      setIsCheckingOut(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (error || !order) {
+    return (
+      <ErrorDisplay message="The order you are looking for does not exist or could not be loaded." />
+    );
+  }
+
+  const { price, title, type, game, assign_partner } = order;
 
   return (
     <>
       <Helmet
-        title={`Buy ${order.type?.replace("_", " ").toLocaleLowerCase()} Boost ${order.title}`}
+        title={`Buy ${type?.replace("_", " ").toLocaleLowerCase()} Boost ${title}`}
       />
       <div>
-        {/* LEFT BANNER */}
         <div className="fixed left-0 top-0 hidden h-full w-1/2 bg-background lg:block" />
-
-        {/* RIGHT BANNER */}
         <div className="fixed right-0 top-0 hidden h-full w-1/2 bg-card lg:block" />
-
-        {/* CONTENT */}
         <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8 lg:pt-16">
           <h4 className="sr-only">Checkout</h4>
           {/* PAYMENT METHODS */}
@@ -73,7 +88,6 @@ const CheckoutPage = () => {
             id="section-one-heading"
             className="pb-6 pt-2.5 lg:mx-auto lg:w-full lg:max-w-lg lg:py-16 lg:pb-24 lg:pt-0"
           >
-            <h2 className="sr-only">Select payment processor</h2>
             <div className="mx-auto max-w-2xl lg:max-w-none">
               <div className="flex items-center justify-between">
                 <Logo />
@@ -118,12 +132,13 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              {/* REQUEST BOOSTER */}
               <div className="mb-4">
-                <RequestBooster />
+                <RequestBooster
+                  orderId={order.boost_id}
+                  initialAssignedPartner={assign_partner as IUser}
+                />
               </div>
 
-              {/* BILLBOARD */}
               <dl className="space-y-6 border-t border-border pt-6 text-sm font-medium">
                 <div className="flex items-center justify-between text-foreground">
                   <dt className="text-base">{t("CheckoutPage.label.Total")}</dt>
@@ -131,7 +146,7 @@ const CheckoutPage = () => {
                 </div>
               </dl>
               <Button
-                disabled={loading}
+                disabled={isCheckingOut}
                 onClick={handleCheckout}
                 variant="primary"
                 className="blue-glow mt-4 hidden w-full rounded-lg bg-[#0B6CFB] px-5 py-3.5 text-base text-white ring-inset hover:brightness-110 focus:outline-primary dark:ring-1 dark:ring-[#1a13a1]/50 sm:flex sm:py-2.5"
@@ -141,15 +156,15 @@ const CheckoutPage = () => {
               </Button>
             </div>
             <div className="mt-4 bg-muted px-6 py-4">
-              Vì đây là sản phẩm demo nên đây là tài khoản ngân hàng dùng để
-              test thanh toán:
+              Since this is a demo product, you can find the bank account for
+              testing payments
               <Link
                 target="_blank"
                 className="text-primary hover:underline"
                 to={"https://sandbox.vnpayment.vn/apis/vnpay-demo/"}
               >
                 {" "}
-                Tại đây
+                here
               </Link>
             </div>
           </section>

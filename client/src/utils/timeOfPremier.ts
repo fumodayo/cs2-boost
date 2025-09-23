@@ -3,8 +3,7 @@ type ITimeOfPremier = {
   endRating: number;
 };
 
-const timeOfPremier = ({ beginRating, endRating }: ITimeOfPremier) => {
-  // Thời gian cho mỗi trận: 40 phút
+const timeOfPremier = ({ beginRating, endRating }: ITimeOfPremier): number => {
   const totalTimePerMatch = 40;
 
   const bonusPerMatch = [
@@ -19,29 +18,22 @@ const timeOfPremier = ({ beginRating, endRating }: ITimeOfPremier) => {
 
   let totalTime = 0;
 
-  for (let i = 0; i < bonusPerMatch.length; i++) {
-    const { start, end, bonus } = bonusPerMatch[i];
-
-    // Kiểm tra khoảng điểm hiện tại có liên quan đến đoạn từ beginRating đến endRating
-    if (endRating < start || beginRating > end) {
-      continue; // Bỏ qua nếu khoảng điểm không nằm trong phạm vi
+  for (const tier of bonusPerMatch) {
+    if (endRating <= tier.start || beginRating >= tier.end) {
+      continue;
     }
 
-    // Xác định điểm bắt đầu và kết thúc trong khoảng điểm hiện tại
-    const effectiveStart = Math.max(beginRating, start);
-    const effectiveEnd = Math.min(endRating, end);
-
-    // Tính điểm cần thêm trong khoảng điểm hiện tại
+    const effectiveStart = Math.max(beginRating, tier.start);
+    const effectiveEnd = Math.min(endRating, tier.end);
     const pointsToGain = effectiveEnd - effectiveStart;
 
-    // Tính số trận cần để thêm đủ điểm
-    const matches = Math.ceil(pointsToGain / bonus);
-
-    // Tính thời gian cần thiết (mỗi trận 40 phút)
-    totalTime += matches * totalTimePerMatch;
+    if (pointsToGain > 0 && tier.bonus > 0) {
+      const matches = Math.ceil(pointsToGain / tier.bonus);
+      totalTime += matches * totalTimePerMatch;
+    }
   }
 
-  return totalTime;
+  return totalTime > 0 ? totalTime : -1;
 };
 
 export default timeOfPremier;

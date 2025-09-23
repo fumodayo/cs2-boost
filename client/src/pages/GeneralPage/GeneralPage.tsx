@@ -5,7 +5,7 @@ import {
 } from "./components";
 import { useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
-import { ICurrentUserProps } from "~/types";
+import { IUser } from "~/types";
 
 const GeneralPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -21,10 +21,10 @@ const GeneralPage = () => {
       {/* LIST WIDGET */}
       <div className="space-y-4 lg:col-span-2 lg:row-span-2 lg:row-end-2 lg:space-y-6">
         {/* USER INFORMATION */}
-        <UserWidget currentUser={currentUser as ICurrentUserProps} />
+        <UserWidget />
 
         {/* LOGIN SESSIONS */}
-        <LoginSessionsWidget currentUser={currentUser as ICurrentUserProps} />
+        <LoginSessionsWidget currentUser={currentUser as IUser} />
       </div>
     </div>
   );

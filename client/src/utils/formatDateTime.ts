@@ -8,7 +8,7 @@ const formatDateTime = (dateInput?: Date | string) => {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    hour12: false, // Sử dụng định dạng 24 giờ
+    hour12: false,
   }).format(date);
 };
 

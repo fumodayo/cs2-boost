@@ -6,9 +6,10 @@ import {
   DialogClose,
   DialogTrigger,
 } from "~/components/@radix-ui/Dialog";
-import { Button, Widget } from "~/components/shared";
+import {  Widget } from "~/components/shared";
 import UploadImageModal from "./UploadImageModal";
 import { useTranslation } from "react-i18next";
+import { Button } from "~/components/shared/Button";
 
 const VerificationWidget = () => {
   const { t } = useTranslation();

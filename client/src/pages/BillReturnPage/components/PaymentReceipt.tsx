@@ -1,41 +1,43 @@
-import { IBillProps } from "~/types";
+import { useTranslation } from "react-i18next";
+import { IBill } from "~/types";
+import { formatMoney } from "~/utils";
 
-const PaymentReceipt = ({ bill }: { bill: IBillProps }) => {
+const PaymentReceipt = ({ bill }: { bill: IBill }) => {
+  const { t } = useTranslation();
+
+  const details = [
+    { label: t("BillReturnPage.receipt.orderInfo"), value: bill.vnp_OrderInfo },
+    {
+      label: t("BillReturnPage.receipt.transactionId"),
+      value: bill.vnp_TransactionNo,
+    },
+    { label: t("BillReturnPage.receipt.bank"), value: bill.vnp_BankCode },
+    { label: t("BillReturnPage.receipt.cardType"), value: bill.vnp_CardType },
+    { label: t("BillReturnPage.receipt.paymentTime"), value: bill.vnp_PayDate },
+  ];
+
   return (
-    <table className="w-full text-sm">
-      <tbody>
-        <tr>
-          <td className="py-2 font-medium">Mã giao dịch:</td>
-          <td className="py-2 text-right">{bill.vnp_TransactionNo}</td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Số tiền:</td>
-          <td className="py-2 text-right">
-            {Number(bill.vnp_Amount).toLocaleString()} VND
-          </td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Ngân hàng:</td>
-          <td className="py-2 text-right">{bill.vnp_BankCode}</td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Loại thẻ:</td>
-          <td className="py-2 text-right">{bill.vnp_CardType}</td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Thời gian thanh toán:</td>
-          <td className="py-2 text-right">{bill.vnp_PayDate}</td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Thông tin đơn hàng:</td>
-          <td className="py-2 text-right">{bill.vnp_OrderInfo}</td>
-        </tr>
-        <tr>
-          <td className="py-2 font-medium">Trạng thái:</td>
-          <td className="py-2 text-right">{bill.message}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div className="space-y-4 rounded-lg border border-border bg-accent/50 p-4">
+      <dl className="space-y-3">
+        {details.map(
+          (item, index) =>
+            item.value && (
+              <div key={index} className="flex justify-between text-sm">
+                <dt className="text-muted-foreground">{item.label}:</dt>
+                <dd className="font-medium text-foreground">{item.value}</dd>
+              </div>
+            ),
+        )}
+      </dl>
+      <div className="flex justify-between border-t border-border pt-4 text-base">
+        <dt className="font-semibold text-foreground">
+          {t("BillReturnPage.receipt.totalAmount")}:
+        </dt>
+        <dd className="font-bold text-foreground">
+          {formatMoney(Number(bill.vnp_Amount) / 100, "vnd")}
+        </dd>
+      </div>
+    </div>
   );
 };
 

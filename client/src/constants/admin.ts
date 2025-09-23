@@ -1,5 +1,5 @@
 import { FaCog, FaUsers } from "react-icons/fa";
-import { FaCartShopping } from "react-icons/fa6";
+import { FaCartShopping, FaChartSimple } from "react-icons/fa6";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { IoGrid } from "react-icons/io5";
 import { TbMessageReportFilled } from "react-icons/tb";
@@ -37,6 +37,11 @@ const listOfServices = [
         label: "Manage Report",
         value: "/admin/manage-reports",
         icon: TbMessageReportFilled,
+      },
+      {
+        label: "Manage Revenue",
+        value: "/admin/manage-revenue",
+        icon: FaChartSimple,
       },
     ],
   },

@@ -1,6 +1,5 @@
 import {
   Banner,
-  Button,
   Footer,
   Header,
   Helmet,
@@ -10,6 +9,7 @@ import { MarqueeComment, StepByStep } from "../HomePage/components";
 import cn from "~/libs/utils";
 import NewStandard from "../HomePage/components/NewStandard";
 import { useTranslation } from "react-i18next";
+import { Button } from "~/components/shared/Button";
 
 interface INewGamePage {
   image: string;

@@ -1,7 +1,5 @@
 import {
-  DataTable,
   Helmet,
-  Pagination,
   PlusButton,
   ResetButton,
   Search,
@@ -9,48 +7,41 @@ import {
 } from "~/components/shared";
 import { Heading } from "../GameModePage/components";
 import { MdOutlinePendingActions } from "react-icons/md";
-import { useEffect, useState } from "react";
 import { pendingBoostsHeaders } from "~/constants/headers";
-import { useToggleColumns } from "~/hooks/useToggleColumns";
-import { IOrderProps } from "~/types";
-import { axiosAuth } from "~/axiosAuth";
-import { useSearchParams } from "react-router-dom";
 import { filterOrderType } from "~/constants/order";
+import { BoostsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { useDataTable } from "~/hooks/useDataTable";
+import { orderService } from "~/services/order.service";
+import { IOrder, IPaginatedResponse } from "~/types";
 
 const PendingBoostsPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [orders, setOrders] = useState<IOrderProps[]>([]);
-  const [totalOrders, setTotalOrders] = useState<number>(0);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [filterType, setFilterType] = useState<string[]>([]);
+  const {
+    data: ordersData,
+    error,
+    isLoading,
+    filters,
+    setFilter,
+    handleReset,
+    isAnyFilterActive,
+    selectedColumns,
+    visibleHeaders,
+    toggleColumn,
+  } = useDataTable<IPaginatedResponse<IOrder>>({
+    swrKey: "/order/pending",
+    fetcher: orderService.getPendingOrders,
+    initialFilters: {
+      search: "",
+      "filter-type": [],
+    },
+    columnConfig: {
+      key: "pending-boosts-headers",
+      headers: pendingBoostsHeaders,
+    },
+    socketEvent: "statusOrderChange",
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axiosAuth.get(
-          `/order/get-pending-orders?${searchParams}`,
-        );
-        const { orders, total } = data;
-        setOrders(orders);
-        setTotalOrders(total);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [searchParams]);
-
-  const { selectedColumns, visibleHeaders, toggleColumn } = useToggleColumns(
-    "pending-boosts-headers",
-    pendingBoostsHeaders,
-  );
-
-  const handleReset = () => {
-    const params = new URLSearchParams();
-    params.delete("filter-type");
-    setSearchParams(params);
-    setSearchTerm("");
-    setFilterType([]);
-  };
+  const ordersFromAPI = ordersData?.data || [];
+  const paginationFromAPI = ordersData?.pagination;
 
   return (
     <>
@@ -61,44 +52,46 @@ const PendingBoostsPage = () => {
           title="Pending Boosts List"
           subtitle="List of all pending boosts."
         />
-        <main>
-          <div className="mt-8">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-1 flex-wrap items-center gap-2">
-                  {/* SEARCH */}
-                  <Search
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
+        <main className="mt-8">
+          <div className="space-y-4">
+            <DataTableLayout
+              filterBar={
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-1 flex-wrap items-center gap-2">
+                    <Search
+                      value={filters.search as string}
+                      onChangeValue={(val) => setFilter("search", val)}
+                    />
+                    <PlusButton
+                      name="type"
+                      lists={filterOrderType}
+                      selectValues={filters["filter-type"] as string[]}
+                      setSelectValues={(val) =>
+                        setFilter("filter-type", val as string[])
+                      }
+                    />
+                    {isAnyFilterActive && <ResetButton onReset={handleReset} />}
+                  </div>
+                  <ViewButton
+                    headers={pendingBoostsHeaders}
+                    toggleColumn={toggleColumn}
+                    selectedColumns={selectedColumns}
                   />
-                  <PlusButton
-                    name="type"
-                    lists={filterOrderType}
-                    selectValues={filterType}
-                    setSelectValues={setFilterType}
-                  />
-                  {(searchTerm || filterType.length > 0) && (
-                    <ResetButton onReset={handleReset} />
-                  )}
                 </div>
-                {/* VIEW LIST */}
-                <ViewButton
-                  headers={pendingBoostsHeaders}
+              }
+              isLoading={isLoading}
+              error={error}
+              data={ordersFromAPI}
+              pagination={paginationFromAPI}
+            >
+              {(data) => (
+                <BoostsTable
+                  headers={visibleHeaders}
                   toggleColumn={toggleColumn}
-                  selectedColumns={selectedColumns}
+                  boosts={data}
                 />
-              </div>
-
-              {/* DATA LIST */}
-              <DataTable
-                headers={visibleHeaders}
-                toggleColumn={toggleColumn}
-                boosts={orders}
-              />
-
-              {/* PAGINATION */}
-              <Pagination total={totalOrders} />
-            </div>
+              )}
+            </DataTableLayout>
           </div>
         </main>
       </div>

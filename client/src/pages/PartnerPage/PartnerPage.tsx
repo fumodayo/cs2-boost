@@ -1,276 +1,309 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useMemo, useState } from "react";
+import { FaHeart, FaRegHeart, FaCircleCheck } from "react-icons/fa6";
+import { useParams } from "react-router-dom";
 import {
-  FaCircleCheck,
-  FaFacebook,
-  FaHeart,
-  FaInstagram,
-  FaRegHeart,
-  FaTiktok,
-  FaTwitter,
-  FaYoutube,
-} from "react-icons/fa6";
-import { Link, useParams } from "react-router-dom";
-import Tooltip from "~/components/@radix-ui/Tooltip";
-import { Button, Chip, Footer, Header, Helmet } from "~/components/shared";
+  ErrorDisplay,
+  Footer,
+  Header,
+  Helmet,
+  Spinner,
+} from "~/components/shared";
+import { AppContext } from "~/components/context/AppContext";
+import { useSocketContext } from "~/hooks/useSocketContext";
 import cn from "~/libs/utils";
-import { Comment, Information, Pagination, Stats } from "./components";
-import { v4 as uuidv4 } from "uuid";
-import { axiosAuth, axiosInstance } from "~/axiosAuth";
-import { ICurrentUserProps, IReviewProps } from "~/types";
-import formatDate from "~/utils/formatDate";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
-import { AppContext } from "~/components/context/AppContext";
+import { updateSuccess } from "~/redux/user/userSlice";
 import toast from "react-hot-toast";
-import { useSocketContext } from "~/hooks/useSocketContext";
-import {
-  updatedStart,
-  updateFailure,
-  updateSuccess,
-} from "~/redux/user/userSlice";
+import getErrorMessage from "~/utils/errorHandler";
+import { Comment, Information, Pagination, Stats } from "./components";
+import Tooltip from "~/components/@radix-ui/Tooltip";
+import { SOCIAL_MEDIA } from "~/constants/user";
+import { Button } from "~/components/shared/Button";
+import { useTranslation } from "react-i18next";
+import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
+import { reviewService } from "~/services/review.service";
+import { userService } from "~/services/user.service";
+import { IReview } from "~/types";
 
-const socials = [
-  {
-    name: "facebook",
-    icon: FaFacebook,
-    color: "bg-[#1877F2] hover:bg-[#145dbf]",
-  },
-  {
-    name: "instagram",
-    icon: FaInstagram,
-    color: "bg-[#E4405F] hover:bg-[#c13584]",
-  },
-  {
-    name: "x",
-    icon: FaTwitter,
-    color: "bg-[#000000] hover:bg-[#1a1a1a]",
-  },
-  {
-    name: "youtube",
-    icon: FaYoutube,
-    color: "bg-[#FF0000] hover:bg-[#cc0000]",
-  },
-  {
-    name: "tiktok",
-    icon: FaTiktok,
-    color: "bg-[#000000] hover:bg-[#1a1a1a]",
-  },
-];
+const PartnerPageSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="h-48 bg-card-alt"></div>
+    <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+        <div className="flex">
+          <div className="h-24 w-24 rounded-full bg-card-alt ring-4 ring-card sm:h-32 sm:w-32"></div>
+        </div>
+        <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+          <div className="min-w-0 flex-1 space-y-2 sm:hidden md:block">
+            <div className="h-8 w-48 rounded-md bg-card-alt"></div>
+            <div className="h-4 w-24 rounded-md bg-card-alt"></div>
+          </div>
+          <div className="h-10 w-32 rounded-full bg-card-alt"></div>
+        </div>
+      </div>
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="h-24 rounded-xl bg-card"></div>
+          <div className="h-64 rounded-xl bg-card"></div>
+        </div>
+        <div className="h-96 rounded-xl bg-card lg:col-span-1"></div>
+      </div>
+    </div>
+  </div>
+);
 
 const PartnerPage = () => {
-  const { username } = useParams();
-  const [partner, setPartner] = useState<ICurrentUserProps>();
-  const [reviews, setReviews] = useState<IReviewProps[]>([]);
-  const [page, setPage] = useState(1);
-  const perPage = 5;
-  const [totalPages, setTotalPages] = useState(1);
-
-  const { loading, currentUser } = useSelector(
-    (state: RootState) => state.user,
-  );
-  const { toggleLoginModal } = useContext(AppContext);
+  const { t } = useTranslation();
+  const { username } = useParams<{ username: string }>();
   const dispatch = useDispatch();
-
+  const { toggleLoginModal } = useContext(AppContext);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const { onlinePartners } = useSocketContext();
-  const isOnline = onlinePartners.includes(partner?._id as string);
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axiosInstance.get(`/user/get-partner/${username}`);
-      setPartner(data);
-    })();
-  }, [username]);
+  const {
+    data: partner,
+    error: partnerError,
+    isLoading: isFetchingPartner,
+  } = useSWR(username ? `/user/get-partner/${username}` : null, () =>
+    userService.getPartnerByUsername(username!),
+  );
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axiosInstance.get(
-        `/review/get-reviews/${username}?page=${page}$per_page=${perPage}`,
-      );
-      const { reviews, totalPages } = data;
-      setReviews(reviews);
-      setTotalPages(totalPages);
-    })();
-  }, [username, page]);
+  const { data: reviewsData } = useSWR(
+    username ? `/review/get-reviews/${username}?page=${page}` : null,
+    () =>
+      reviewService.getReviewsByUsername(
+        username!,
+        new URLSearchParams({ page: String(page) }),
+      ),
+    { keepPreviousData: true },
+  );
 
-  const isFollowed = currentUser?.following.some((i) => i._id === partner?._id);
-  const [isFollow, setIsFollow] = useState(isFollowed);
+  const { trigger: triggerFollow, isMutating: isFollowing } = useSWRMutation(
+    partner ? `/user/follow/${partner._id}` : null,
+    () => userService.followPartner(partner!._id),
+  );
+  const { trigger: triggerUnfollow, isMutating: isUnfollowing } =
+    useSWRMutation(partner ? `/user/unfollow/${partner._id}` : null, () =>
+      userService.unfollowPartner(partner!._id),
+    );
 
-  useEffect(() => {
-    setIsFollow(isFollowed);
-  }, [isFollowed]);
+  const isFollowed = useMemo(
+    () => currentUser?.following?.some((p) => p._id === partner?._id),
+    [currentUser, partner],
+  );
+  const isOnline = partner
+    ? onlinePartners.includes(partner._id as string)
+    : false;
+  const isLoadingAction = isFollowing || isUnfollowing;
 
-  const handleFollow = async () => {
+  const handleFollowToggle = async () => {
     if (!currentUser) {
       toggleLoginModal();
       return;
     }
-    if (loading) return;
+    if (isLoadingAction || !partner) return;
 
-    dispatch(updatedStart());
+    const successMessage = isFollowed
+      ? t("Toast.unfollowed", { username: partner.username })
+      : t("Toast.followed", { username: partner.username });
 
     try {
-      if (isFollow) {
-        const { data } = await axiosAuth.post(`/user/unfollow/${partner?._id}`);
-        dispatch(updateSuccess(data));
-        toast.success("UnFollowed");
-      } else {
-        const { data } = await axiosAuth.post(`/user/follow/${partner?._id}`);
-        dispatch(updateSuccess(data));
-        toast.success("Followed");
-      }
-      setIsFollow((prevState) => !prevState);
+      const { data } = isFollowed
+        ? await triggerUnfollow()
+        : await triggerFollow();
+
+      dispatch(updateSuccess(data));
+      toast.success(successMessage);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      dispatch(updateFailure(message));
+      toast.error(getErrorMessage(err));
     }
   };
 
-  const filteredSocials = socials.filter((social) =>
-    (partner?.social_links ?? []).some((link) => link.type === social.name),
-  );
+  if (isFetchingPartner) return <PartnerPageSkeleton />;
+  if (partnerError || !partner)
+    return <ErrorDisplay message="Partner not found." />;
+
+  const reviewsFromAPI = reviewsData?.data || [];
+  const paginationFromAPI = reviewsData?.pagination;
 
   return (
     <>
-      <Helmet title="Orders List · CS2Boost" />
-      <div>
-        {/* HEADER */}
-        <Header />
-        <main>
-          <div
-            className={cn(
-              "ml-10 min-h-screen space-y-20",
-              "sm:space-y-40 lg:mt-20 lg:space-y-52",
-            )}
-          >
-            <div
-              className={cn(
-                "relative mx-auto flex w-full max-w-7xl space-x-6 px-2 py-6",
-                "sm:px-2 lg:px-8",
-              )}
-            >
-              <div className="flex basis-1/4 flex-col items-center space-y-2">
-                <img
-                  className="w-[250px] border border-border sm:rounded-xl"
-                  src={partner?.profile_picture}
-                  alt="avatar"
-                />
+      <Helmet title={`${partner.username} · CS2Boost`} />
+      <Header />
+      <main className="bg-background-alt pb-16">
+        {/* Banner */}
+        <div>
+          <img
+            className="h-32 w-full object-cover lg:h-48"
+            src="/assets/games/honkai-star-rail/banner.png"
+            alt="Banner"
+          />
+        </div>
+
+        {/* Profile Header */}
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+            <div className="flex">
+              <img
+                className="h-24 w-24 rounded-full object-cover ring-4 ring-card sm:h-32 sm:w-32"
+                src={partner.profile_picture}
+                alt={partner.username}
+              />
+            </div>
+            <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+              <div className="min-w-0 flex-1 sm:hidden md:block">
+                <h1 className="flex items-center gap-2 truncate text-2xl font-bold text-foreground">
+                  {partner.username}
+                  <Tooltip content={t("PartnerPage.verifiedTooltip")}>
+                    <FaCircleCheck className="h-5 w-5 text-success" />
+                  </Tooltip>
+                </h1>
                 <p
                   className={cn(
-                    "pt-1 text-xl font-bold",
-                    isOnline ? "text-success" : "text-danger",
+                    "text-sm font-medium",
+                    isOnline ? "text-success" : "text-muted-foreground",
                   )}
                 >
-                  {isOnline ? "Is ready" : "Not ready"}
+                  {isOnline
+                    ? t("PartnerPage.online")
+                    : t("PartnerPage.offline")}
                 </p>
-                {filteredSocials.length > 0 && (
-                  <div className="pt-2">
-                    <p className="pb-2 font-bold">Liên hệ qua:</p>
-                    <div className="flex items-center justify-center space-x-3">
-                      {filteredSocials.map(({ name, icon: Icon, color }) => {
-                        const socialLink = (partner?.social_links ?? []).find(
-                          (link) => link.type === name,
-                        );
-                        return (
-                          <div key={uuidv4()} className="w-auto">
-                            {socialLink && (
-                              <Link to={socialLink.link} target="_blank">
-                                <Tooltip content={name}>
-                                  <Button
-                                    variant="transparent"
-                                    className={cn(
-                                      "h-9 w-9 items-center justify-center rounded-md transition-colors",
-                                      color,
-                                    )}
-                                  >
-                                    <span className="sr-only">{name}</span>
-                                    <Icon />
-                                  </Button>
-                                </Tooltip>
-                              </Link>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-                <span className="pt-2">
-                  Ngày tham gia: {formatDate(partner?.createdAt)}
-                </span>
               </div>
-              <div className="basis-2/4">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <h1 className="text-3xl font-bold">{partner?.username}</h1>
-                    <Tooltip content="Đã được xác minh">
-                      <div>
-                        <FaCircleCheck className="ml-1 mt-0.5 text-success" />
-                      </div>
-                    </Tooltip>
-                  </div>
-                  <Button variant="none" disabled={loading}>
-                    {isFollow ? (
-                      <Chip
-                        onClick={handleFollow}
-                        className="cursor-pointer bg-danger pb-2 text-sm text-foreground ring-0"
-                      >
-                        <FaHeart className="mr-1.5" />
-                        Hủy theo dõi
-                      </Chip>
-                    ) : (
-                      <Chip
-                        onClick={handleFollow}
-                        className="cursor-pointer bg-danger pb-2 text-sm text-foreground ring-0"
-                      >
-                        <FaRegHeart className="mr-1.5" />
-                        Theo dõi
-                      </Chip>
-                    )}
-                  </Button>
-                </div>
-                <div className="flex space-x-4">
-                  <Stats
-                    title="Số người theo dõi"
-                    subtitle={partner?.followers_count + " người"}
-                  />
-                  <Stats
-                    title="Đã được thuê"
-                    subtitle={partner?.total_working_time + " giờ"}
-                  />
-                  <Stats
-                    title="Tỷ lệ hoàn thành"
-                    subtitle={partner?.total_rating + " %"}
-                  />
-                </div>
-                <hr className="mb-4 mt-4 w-full border-foreground opacity-10" />
-                <div className="flex flex-col">
-                  <p className="text-xl font-bold">Thông tin</p>
-                  <Information details={partner?.details} />
-                </div>
-                <hr className="mb-4 mt-4 w-full border-foreground opacity-10" />
-                <h3 className="pb-4 text-xl font-bold">Đánh giá</h3>
-                <div className="flex flex-col items-center">
-                  {reviews.map(({ ...props }) => (
-                    <div key={uuidv4()}>
-                      <Comment {...props} />
-                      <hr className="mb-4 mt-4 w-full border-foreground opacity-10" />
-                    </div>
-                  ))}
-
-                  <Pagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    setPage={setPage}
-                  />
-                </div>
+              <div className="flex flex-col items-stretch justify-center space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0">
+                <Button
+                  variant={isFollowed ? "secondary" : "primary"}
+                  onClick={handleFollowToggle}
+                  disabled={isLoadingAction}
+                  className="rounded-full px-5 py-2"
+                >
+                  {isLoadingAction ? (
+                    <Spinner size="sm" />
+                  ) : isFollowed ? (
+                    <>
+                      <FaHeart className="mr-2" />{" "}
+                      {t("PartnerPage.unfollowBtn")}
+                    </>
+                  ) : (
+                    <>
+                      <FaRegHeart className="mr-2" />{" "}
+                      {t("PartnerPage.followBtn")}
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
           </div>
-        </main>
-        {/* FOOTER */}
-        <Footer />
-      </div>
+          <div className="mt-6 hidden min-w-0 flex-1 sm:block md:hidden">
+            <h1 className="truncate text-2xl font-bold text-foreground">
+              {partner.username}
+            </h1>
+          </div>
+        </div>
+
+        {/* Content Grid */}
+        <div className="mx-auto mt-8 grid max-w-5xl grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+          {/* Left Column */}
+          <div className="space-y-6 lg:col-span-1">
+            <div className="rounded-xl bg-card p-4 shadow-sm">
+              <h3 className="mb-3 font-semibold text-foreground">
+                {t("PartnerPage.statsTitle")}
+              </h3>
+              <div className="grid grid-cols-1 gap-4">
+                <Stats
+                  title={t("PartnerPage.rating")}
+                  value={partner.total_rating || 0}
+                />
+                <Stats
+                  title={t("PartnerPage.followers")}
+                  value={partner.followers_count || 0}
+                />
+                <Stats
+                  title={t("PartnerPage.hoursBoosted")}
+                  value={partner.total_working_time || 0}
+                />
+                <Stats
+                  title={t("PartnerPage.completionRate")}
+                  value={`${partner.total_completion_rate || 100}%`}
+                />
+              </div>
+            </div>
+            <div className="rounded-xl bg-card p-4 shadow-sm">
+              <h3 className="mb-3 font-semibold text-foreground">
+                Contact via
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {SOCIAL_MEDIA.map(({ value, label, icon: Icon, color }) => {
+                  const socialLink = partner.social_links?.find(
+                    (l) => l.type === value,
+                  );
+                  if (!socialLink?.link) return null;
+                  return (
+                    <Tooltip content={label}>
+                      <a
+                        key={value}
+                        href={socialLink.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          className={cn(
+                            "rounded-full text-white shadow",
+                            color,
+                          )}
+                          size="icon"
+                        >
+                          <Icon className="h-5 w-5" />
+                        </Button>
+                      </a>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6 lg:col-span-2">
+            <div className="rounded-xl bg-card p-4 shadow-sm">
+              <h3 className="mb-2 font-semibold text-foreground">
+                {t("PartnerPage.introductionTitle")}
+              </h3>
+              <Information details={partner.details} />
+            </div>
+            <div className="rounded-xl bg-card p-4 shadow-sm">
+              <h3 className="mb-4 font-semibold text-foreground">
+                {t("PartnerPage.reviewsTitle", {
+                  count: paginationFromAPI?.total || 0,
+                })}
+              </h3>
+              <div className="space-y-6">
+                {reviewsFromAPI.length > 0 ? (
+                  reviewsFromAPI.map((review: IReview) => (
+                    <Comment key={review._id} {...review} />
+                  ))
+                ) : (
+                  <p className="py-4 text-center text-sm text-muted-foreground">
+                    {t("PartnerPage.noReviews")}
+                  </p>
+                )}
+              </div>
+              {paginationFromAPI && paginationFromAPI.totalPages > 0 && (
+                <div className="mt-6 flex justify-center">
+                  <Pagination
+                    currentPage={page}
+                    totalPages={paginationFromAPI.totalPages}
+                    setPage={setPage}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
     </>
   );
 };

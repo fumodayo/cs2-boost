@@ -11,7 +11,7 @@ export const DropdownMenuContent = React.forwardRef<
   React.ComponentProps<typeof DropdownMenuPrimitive.Content> & {
     className?: string;
   }
->(({ children, className, ...props }, forwardedRef) => {
+>(({ children, className, onCloseAutoFocus, ...props }, forwardedRef) => {
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -23,6 +23,7 @@ export const DropdownMenuContent = React.forwardRef<
           className,
         )}
         {...props}
+        onCloseAutoFocus={onCloseAutoFocus}
         ref={forwardedRef}
       >
         {children}

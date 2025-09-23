@@ -1,92 +1,81 @@
-import {
-  DataTable,
-  Helmet,
-  Pagination,
-  ResetButton,
-  Search,
-  ViewButton,
-} from "~/components/shared";
+import { Helmet, ResetButton, Search, ViewButton } from "~/components/shared";
 import { Heading } from "../GameModePage/components";
 import { FaWallet } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { useToggleColumns } from "~/hooks/useToggleColumns";
 import { walletHeaders } from "~/constants/headers";
-import { IPaymentProps } from "~/types";
-import { axiosAuth } from "~/axiosAuth";
-import { useSearchParams } from "react-router-dom";
+import { ReceiptsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { useDataTable } from "~/hooks/useDataTable";
+import { receiptService } from "~/services/receipt.service";
+import { IReceipt, IPaginatedResponse } from "~/types";
 
 const WalletPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [receipts, setReceipts] = useState<IPaymentProps[]>([]);
-  const [totalReceipts, setTotalReceipts] = useState<number>(0);
+  const {
+    data: receiptsData,
+    error,
+    isLoading,
+    filters,
+    setFilter,
+    handleReset,
+    isAnyFilterActive,
+    selectedColumns,
+    visibleHeaders,
+    toggleColumn,
+  } = useDataTable<IPaginatedResponse<IReceipt>>({
+    swrKey: "/receipt/get-receipts",
+    fetcher: receiptService.getReceipts,
+    initialFilters: {
+      search: "",
+    },
+    columnConfig: {
+      key: "wallet-headers",
+      headers: walletHeaders,
+    },
+  });
 
-  const { selectedColumns, visibleHeaders, toggleColumn } = useToggleColumns(
-    "wallet-headers",
-    walletHeaders,
-  );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axiosAuth.get(
-          `/receipt/get-receipts?${searchParams}`,
-        );
-        const { receipts, total } = data;
-        setReceipts(receipts);
-        setTotalReceipts(total);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [searchParams]);
-
-  const handleReset = () => {
-    const params = new URLSearchParams();
-    setSearchParams(params);
-    setSearchTerm("");
-  };
+  const receiptsFromAPI = receiptsData?.data || [];
+  const paginationFromAPI = receiptsData?.pagination;
 
   return (
     <>
-      <Helmet title="My Wallet" />
+      <Helmet title="My Wallet · CS2Boost" />
       <div>
         <Heading
           icon={FaWallet}
           title="My Wallet"
           subtitle="List of all your payments and transactions."
         />
-        <main>
-          <div className="mt-8">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-1 flex-wrap items-center gap-2">
-                  {/* SEARCH */}
-                  <Search
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
+        <main className="mt-8">
+          <div className="space-y-4">
+            <DataTableLayout
+              filterBar={
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-1 flex-wrap items-center gap-2">
+                    <Search
+                      value={filters.search as string}
+                      onChangeValue={(val) => setFilter("search", val)}
+                    />
+                    {isAnyFilterActive && <ResetButton onReset={handleReset} />}
+                  </div>
+
+                  <ViewButton
+                    headers={walletHeaders}
+                    toggleColumn={toggleColumn}
+                    selectedColumns={selectedColumns}
                   />
-                  {searchTerm && <ResetButton onReset={handleReset} />}
                 </div>
-
-                {/* VIEW LIST */}
-                <ViewButton
-                  headers={walletHeaders}
+              }
+              isLoading={isLoading}
+              error={error}
+              data={receiptsFromAPI}
+              pagination={paginationFromAPI}
+            >
+              {(data) => (
+                <ReceiptsTable
+                  headers={visibleHeaders}
                   toggleColumn={toggleColumn}
-                  selectedColumns={selectedColumns}
+                  receipts={data}
                 />
-              </div>
-
-              {/* DATA LIST */}
-              <DataTable
-                headers={visibleHeaders}
-                toggleColumn={toggleColumn}
-                payments={receipts}
-              />
-
-              {/* PAGINATION */}
-              <Pagination total={totalReceipts} />
-            </div>
+              )}
+            </DataTableLayout>
           </div>
         </main>
       </div>

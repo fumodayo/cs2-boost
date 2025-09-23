@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
-import { IUserProps } from '../types';
+import { IUser } from '../models/user.model';
 
 const MAX_VALUE = 1000000;
+const EXPIRED_ACCESS_TOKEN = '30m'; // 30 minutes
+const EXPIRED_REFRESH_TOKEN = '7d'; // 7 days
 const TIME_EXPIRED_ACCESS_TOKEN = 30 * 60 * 1000; // 30 minutes
 const TIME_EXPIRED_REFRESH_TOKEN = 7 * 24 * 60 * 60 * 1000; // 7 days
+const COOKIE_PATH = '/';
 
 /**
  * Tạo mới username từ email
@@ -58,51 +61,49 @@ const generatePassword = () => {
 };
 
 /**
- *
- * @param res
- * @param user
+ * Tạo Access Token và đặt cookie với path phù hợp.
+ * @param res - Đối tượng Response của Express.
+ * @param user - Đối tượng người dùng.
  */
-const generateAccessToken = (res: Response, user: IUserProps) => {
+const generateAccessToken = (res: Response, user: IUser) => {
     const secret_token = process.env.ACCESS_TOKEN_SECRET;
     if (!secret_token) {
         throw new Error('ACCESS_TOKEN_SECRET is not defined');
     }
     const accessToken = jwt.sign({ id: user._id, role: user.role }, secret_token, {
-        expiresIn: '30m',
+        expiresIn: EXPIRED_ACCESS_TOKEN,
     });
 
     res.cookie('access_token', accessToken, {
         httpOnly: true,
-        secure: 'development' === process.env.NODE_ENV,
+        secure: process.env.NODE_ENV !== 'development',
         sameSite: 'lax',
         maxAge: TIME_EXPIRED_ACCESS_TOKEN,
+        path: COOKIE_PATH,
     });
 };
 
 /**
- *
- * @param res
- * @param user
+ * Tạo Refresh Token và đặt cookie với path phù hợp.
+ * @param res - Đối tượng Response của Express.
+ * @param user - Đối tượng người dùng.
+ * @param isAdminLogin - `true` nếu đây là luồng đăng nhập của admin.
  */
-const generateRefreshToken = (res: Response, user: IUserProps) => {
+const generateRefreshToken = (res: Response, user: IUser) => {
     const secret_token = process.env.REFRESH_TOKEN_SECRET;
     if (!secret_token) {
-        throw new Error('ACCESS_TOKEN_SECRET is not defined');
+        throw new Error('REFRESH_TOKEN_SECRET is not defined');
     }
-    const refreshToken = jwt.sign(
-        {
-            id: user._id,
-            role: user.role,
-        },
-        secret_token,
-        { expiresIn: '7d' },
-    );
+    const refreshToken = jwt.sign({ id: user._id, role: user.role }, secret_token, {
+        expiresIn: EXPIRED_REFRESH_TOKEN,
+    });
 
     res.cookie('refresh_token', refreshToken, {
         httpOnly: true,
-        secure: 'development' === process.env.NODE_ENV,
+        secure: process.env.NODE_ENV !== 'development',
         sameSite: 'lax',
         maxAge: TIME_EXPIRED_REFRESH_TOKEN,
+        path: COOKIE_PATH,
     });
 };
 

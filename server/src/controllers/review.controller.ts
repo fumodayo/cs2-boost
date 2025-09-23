@@ -1,17 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import Order from '../models/order.model';
 import Review from '../models/review.model';
 import User from '../models/user.model';
-import { AuthRequest } from '../types';
 import { errorHandler } from '../utils/error';
+import { AuthRequest } from '../interfaces';
+import mongoose from 'mongoose';
 
 /**
- * @route GET /api/review/:username
- * @access Public
- * @description This endpoint retrieves reviews for a user by their username.
- * It supports pagination with `page` and `perPage` query parameters.
+ * @desc    Lấy danh sách đánh giá của một người dùng theo username.
+ *          Hỗ trợ phân trang để không tải quá nhiều dữ liệu cùng lúc.
+ * @route   GET /api/reviews/user/:username
+ * @access  Public
  */
-const getReviewByUsername = async (req: Request, res: Response, next: NextFunction) => {
+const getReviewsByUsername = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const { username } = req.params;
         let { page = 1, perPage = 5 } = req.query;
@@ -19,7 +20,7 @@ const getReviewByUsername = async (req: Request, res: Response, next: NextFuncti
         page = parseInt(page as string);
         perPage = parseInt(perPage as string);
 
-        if (page < 1 || perPage < 1) {
+        if (isNaN(page) || isNaN(perPage) || page < 1 || perPage < 1) {
             return next(errorHandler(400, 'Invalid page or perPage value'));
         }
 
@@ -30,15 +31,20 @@ const getReviewByUsername = async (req: Request, res: Response, next: NextFuncti
         const totalPages = Math.ceil(total / perPage);
 
         const reviews = await Review.find({ receiver: user._id })
-            .populate('sender', 'username profile_picture')
+            .populate('sender')
             .sort({ createdAt: -1 })
             .skip((page - 1) * perPage)
             .limit(perPage);
 
         res.status(200).json({
-            reviews,
-            currentPage: page,
-            totalPages,
+            success: true,
+            data: reviews,
+            pagination: {
+                total,
+                page,
+                perPage,
+                totalPages: totalPages,
+            },
         });
     } catch (e) {
         next(e);
@@ -46,21 +52,28 @@ const getReviewByUsername = async (req: Request, res: Response, next: NextFuncti
 };
 
 /**
- * @route POST /api/review
- * @access Private
- * @description This endpoint allows a user to send a review for a partner after completing an order.
- * It checks if the user is the customer of the order and updates the order with the review.
+ * @desc    Gửi một bài đánh giá cho một Partner sau khi hoàn thành đơn hàng.
+ *          Hệ thống sẽ cập nhật điểm số trung bình và tổng số đánh giá của Partner đó.
+ * @route   POST /api/reviews
+ * @access  Private
  */
 const sendReview = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const { id: user_id } = req.user;
         const { customer_id, partner_id, order_id, rating, content } = req.body;
-
         if (user_id !== customer_id) {
             return next(errorHandler(401, 'You can review only your account'));
         }
 
-        const review = new Review({
+        const existingReview = await Review.findOne({ order: order_id }).session(session);
+        if (existingReview) {
+            throw errorHandler(409, 'You have already reviewed this order.');
+        }
+
+        const newReview = new Review({
             sender: customer_id,
             receiver: partner_id,
             order: order_id,
@@ -68,39 +81,55 @@ const sendReview = async (req: AuthRequest, res: Response, next: NextFunction) =
             rating,
         });
 
-        const savedReview = await review.save();
+        const savedReview = await newReview.save({ session });
 
-        // Cập nhật đơn hàng với review vừa tạo
-        const updatedOrder = await Order.findByIdAndUpdate(
+        await Order.findByIdAndUpdate(
             order_id,
             { review: savedReview._id },
-            { new: true },
+            { new: true, session },
         );
 
-        if (!updatedOrder) {
-            return next(errorHandler(401, 'Missing review'));
+        const partner = await User.findById(partner_id).session(session);
+        if (!partner) {
+            throw errorHandler(404, 'Partner not found');
         }
+        const currentTotalScore = partner.total_rating * partner.total_reviews;
+        const newTotalReviews = partner.total_reviews + 1;
+        const newAverageRating = (currentTotalScore + rating) / newTotalReviews;
+        partner.total_reviews = newTotalReviews;
+        partner.total_rating = Math.round(newAverageRating * 100) / 100;
 
-        res.status(201).json({ success: true, message: 'Review submitted successfully' });
+        await partner.save({ session });
+
+        await session.commitTransaction();
+
+        res.status(201).json({
+            success: true,
+            message: 'Review sent successfully.',
+            data: newReview,
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route DELETE /api/review/:review_id
- * @access Private
- * @description This endpoint allows a user to delete their own review.
- * It checks if the review exists and if the user is the sender of the review.
+ * @desc    Xóa một bài đánh giá đã gửi.
+ *          Chỉ người gửi mới có quyền xóa. Hệ thống sẽ tính toán lại điểm số trung bình của Partner.
+ * @route   DELETE /api/reviews/:reviewId
+ * @access  Private
  */
 const deleteReview = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
         const { id: user_id } = req.user;
-        const { review_id } = req.params;
+        const { reviewId } = req.params;
 
-        const review = await Review.findById(review_id);
+        const review = await Review.findById(reviewId).session(session);
 
-        if (!review || !review.sender) {
+        if (!review || !review.sender || !review.receiver || !review.rating) {
             return next(errorHandler(404, 'Review not found'));
         }
 
@@ -108,8 +137,27 @@ const deleteReview = async (req: AuthRequest, res: Response, next: NextFunction)
             return next(errorHandler(403, 'You can delete only your own review'));
         }
 
-        await Review.findByIdAndDelete(review_id);
-        await Order.findByIdAndUpdate(review.order, { review: null });
+        const partner_id = review.receiver.toString();
+        const ratingToDelete = review.rating;
+        const partner = await User.findById(partner_id).session(session);
+        if (!partner) {
+            throw errorHandler(404, 'Partner not found');
+        }
+        const currentTotalScore = partner.total_rating * partner.total_reviews;
+        const newTotalReviews = partner.total_reviews - 1;
+        let newAverageRating = 0;
+        if (newTotalReviews > 0) {
+            newAverageRating = (currentTotalScore - ratingToDelete) / newTotalReviews;
+        }
+        partner.total_reviews = newTotalReviews;
+        partner.total_rating = Math.round(newAverageRating * 100) / 100;
+
+        await partner.save({ session });
+
+        await Review.findByIdAndDelete(reviewId, { session });
+        await Order.findByIdAndUpdate(review.order, { $unset: { review: 1 } }, { session });
+
+        await session.commitTransaction();
 
         res.status(200).json({ success: true, message: 'Review deleted successfully' });
     } catch (e) {
@@ -117,4 +165,4 @@ const deleteReview = async (req: AuthRequest, res: Response, next: NextFunction)
     }
 };
 
-export { getReviewByUsername, sendReview, deleteReview };
+export { getReviewsByUsername, sendReview, deleteReview };

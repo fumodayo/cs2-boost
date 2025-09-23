@@ -6,3 +6,5 @@ export { default as ChatWidget } from "./ChatWidget";
 export { default as Conversation } from "./Conversation";
 export { default as ReviewWidget } from "./ReviewWidget";
 export { default as DialogSuccessReport } from "./DialogSuccessReport";
+export { default as BlankAccountWidget } from "./BlankAccountWidget";
+export { default as EditAccountWidget } from "./EditAccountWidget";

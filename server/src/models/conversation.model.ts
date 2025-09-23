@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { CONVERSATION_STATUS } from '../constants';
 
 const conversationSchema = new mongoose.Schema(
     {
@@ -15,9 +16,16 @@ const conversationSchema = new mongoose.Schema(
                 default: [],
             },
         ],
+        status: {
+            type: String,
+            enum: Object.values(CONVERSATION_STATUS),
+            default: CONVERSATION_STATUS.OPEN,
+        },
     },
     { timestamps: true },
 );
+
+conversationSchema.index({ participants: 1 });
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 

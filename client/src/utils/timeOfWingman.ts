@@ -80,15 +80,12 @@ const timeOfWingman = ({ beginRank, endRank }: ITimeOfWingman) => {
   ];
 
   let totalTime = 0;
-  // Thời gian cho mỗi trận: 40 phút
   const totalTimePerMatch = 40;
 
-  // Lấy idx của beginRank và endRank trong mảng bonusPerRank
   const currentIdx = bonusPerRank.findIndex((r) => r.name === beginRank);
 
   const desiredIdx = bonusPerRank.findIndex((r) => r.name === endRank);
 
-  // Tính toán điểm bonus theo từng rank
   const currentBonus = bonusPerRank
     .slice(0, currentIdx + 1)
     .reduce((sum, rank) => sum + rank.bonus, 0);
@@ -98,7 +95,7 @@ const timeOfWingman = ({ beginRank, endRank }: ITimeOfWingman) => {
     .reduce((sum, rank) => sum + rank.bonus, 0);
 
   totalTime = (desiredBonus - currentBonus) * totalTimePerMatch;
-  return totalTime;
+  return totalTime > 0 ? totalTime : -1;
 };
 
 export default timeOfWingman;

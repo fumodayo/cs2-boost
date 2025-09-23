@@ -1,25 +1,38 @@
 import express, { RequestHandler } from 'express';
 import {
     changePassword,
-    followPartnerById,
+    followPartner,
     getPartnerByUsername,
     getPartners,
-    getUser,
-    unFollowPartnerById,
+    getUserById,
+    searchUsers,
+    unfollowPartner,
     updateUser,
     verifyUser,
 } from '../controllers/user.controller';
-import { verifyToken } from '../utils/verifyToken';
+import { authorize, protect } from '../middlewares/auth.middleware';
+import { ROLE } from '../constants';
 
 const router = express.Router();
 
-router.get('/get-user/:id', verifyToken, getUser);
-router.post('/get-partners', getPartners);
-router.get('/get-partner/:username', getPartnerByUsername);
-router.post('/update/:id', verifyToken, updateUser as RequestHandler);
-router.post('/change-password/:id', verifyToken, changePassword as RequestHandler);
-router.post('/verify-user/:id', verifyToken, verifyUser as RequestHandler);
-router.post('/follow/:partner_id', verifyToken, followPartnerById as RequestHandler);
-router.post('/unfollow/:partner_id', verifyToken, unFollowPartnerById as RequestHandler);
+router.get('/partners', getPartners as RequestHandler);
+router.get(
+    '/search',
+    protect as RequestHandler,
+    authorize(ROLE.ADMIN) as RequestHandler,
+    searchUsers as RequestHandler,
+);
+
+router.get('/partner/:username', getPartnerByUsername as RequestHandler);
+router.get('/:id', getUserById as RequestHandler);
+
+router.use(protect as RequestHandler);
+
+router.patch('/me', updateUser as RequestHandler);
+router.post('/me/change-password', changePassword as RequestHandler);
+router.post('/me/verify', verifyUser as RequestHandler);
+
+router.post('/:partnerId/follow', followPartner as RequestHandler);
+router.post('/:partnerId/unfollow', unfollowPartner as RequestHandler);
 
 export default router;

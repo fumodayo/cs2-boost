@@ -28,7 +28,7 @@ const Copy = ({ value, children }: ICopyProps) => {
     >
       {children}
       {isOpenCopy ? (
-        <Tooltip content={"Copied to clipboard!"}>
+        <Tooltip content={"Copied!"}>
           <div>
             <FaCheck className="text-success" />
           </div>

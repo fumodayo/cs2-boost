@@ -1,5 +1,41 @@
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { ORDER_STATUS, ORDER_TYPES } from '../constants';
+
+export interface IOrder extends Document {
+    title: string;
+    boost_id: string;
+    type: string;
+    server: string;
+    price: number;
+    game: string;
+    begin_rating?: number;
+    end_rating?: number;
+    begin_rank?: string;
+    end_rank?: string;
+    begin_exp?: number;
+    end_exp?: number;
+    total_time?: number;
+    options: any[];
+    retryCount: number;
+    status: string;
+    status_history: Array<{
+        status: string;
+        date: Date;
+        admin_action?: boolean;
+        admin_id?: mongoose.Types.ObjectId;
+        action?: string;
+        previous_partner?: mongoose.Types.ObjectId;
+        new_partner?: mongoose.Types.ObjectId;
+    }>;
+    user?: mongoose.Types.ObjectId;
+    partner?: mongoose.Types.ObjectId;
+    assign_partner?: mongoose.Types.ObjectId | null;
+    account?: mongoose.Types.ObjectId;
+    conversation?: mongoose.Types.ObjectId;
+    review?: mongoose.Types.ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
 const orderSchema = new mongoose.Schema(
     {
@@ -59,7 +95,12 @@ const orderSchema = new mongoose.Schema(
         status_history: [
             {
                 status: { type: String, enum: ORDER_STATUS },
-                date: { type: Date, default: Date.now() },
+                date: { type: Date, default: Date.now },
+                admin_action: { type: Boolean, default: false },
+                admin_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+                action: { type: String },
+                previous_partner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+                new_partner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
             },
         ],
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -70,6 +111,7 @@ const orderSchema = new mongoose.Schema(
         assign_partner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
+            default: null,
         },
         account: {
             type: mongoose.Schema.Types.ObjectId,
@@ -97,6 +139,6 @@ orderSchema.pre('save', function (next) {
     next();
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order: Model<IOrder> = mongoose.model<IOrder>('Order', orderSchema);
 
 export default Order;

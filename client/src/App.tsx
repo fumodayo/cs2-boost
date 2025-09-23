@@ -10,13 +10,17 @@ import { AdminRoutes, ComingRoutes, DefaultRoutes, UserRoutes } from "./routes";
 import ScrollToTopRouter from "./components/shared/ScrollToTopRouter";
 import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
-import InputOtpModal from "./components/shared/InputOtpModal";
+import InputOtpModal from "./components/shared/Modal/InputOtpModal";
 import { LoadingPage } from "./pages";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+      }}
+    >
       <Suspense fallback={<LoadingPage />}>
         <ScrollToTopRouter />
         <Toaster />

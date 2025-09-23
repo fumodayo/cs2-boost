@@ -1,6 +1,6 @@
 import { IconType } from "react-icons";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
-import { Button } from "~/components/shared";
+import { Button } from "~/components/shared/Button";
 import cn from "~/libs/utils";
 
 interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

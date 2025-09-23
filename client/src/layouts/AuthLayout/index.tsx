@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import {
@@ -9,12 +8,16 @@ import {
   SubHeader,
 } from "~/components/shared";
 import { RootState } from "~/redux/store";
+import { ROLE } from "~/types/constants";
 
 const AuthLayout = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
-  // const [isLocked, setIsLocked] = useState(false);
 
-  const isUser = currentUser?.role?.includes("client");
+  if (currentUser?.is_banned) {
+    return <Navigate to="/banned" replace />;
+  }
+
+  const isUser = currentUser?.role?.includes(ROLE.CLIENT);
 
   return isUser ? (
     <div>

@@ -9,6 +9,10 @@
     "Coming Soon": "Coming Soon",
     "Join Discord": "Join Discord",
     "Go Back": "Go Back",
+    "Button": {
+      "ViewMyOrders": "View My Orders",
+      "DownloadReceipt": "Download Receipt"
+    },
     "Services": {
       "Dashboard": "Dashboard",
       "Boosting": "Boosting",
@@ -20,7 +24,8 @@
       "Orders": "Orders",
       "Wallet": "Wallet",
       "Settings": "Settings",
-      "Follow Partners": "Follow Partners"
+      "Follow Partners": "Follow Partners",
+      "Supports": "Supports"
     },
     "Server": {
       "Africa": "Africa",
@@ -315,6 +320,7 @@
     "subtitle1": "Enter the 6 digit code sent to your email.",
     "subtitle2": "Didn't get a code?",
     "subtitle3": "Click here to re-send.",
+    "subtitle4": "Resend in ",
     "btn": "Login"
   },
   "RegisterModal": {
@@ -327,6 +333,14 @@
     "description2": "Terms of Service",
     "description3": "Privacy Policy",
     "btn3": "Continue"
+  },
+  "ForgotPasswordModal": {
+    "title": "Enter your email",
+    "subtitle": "We'll send a otp number to your email."
+  },
+  "ResetPasswordModal": {
+    "title": "Change your password",
+    "subtitle": "Enter a new password below to change your password"
   },
   "NewGamePage": {
     "title": "are coming soon",
@@ -346,7 +360,17 @@
       "My Orders": "My Orders",
       "Pending Boosts List": "Pending Boosts List",
       "Progress Boosts List": "Progress Boosts List",
-      "Income": "Income"
+      "Income": "Income",
+      "Following Partners": "Following Partners",
+      "My Support Tickets": "My Support Tickets",
+      "My Income": "My Income",
+      "Dashboard": "Dashboard",
+      "Manage Orders": "Manage Orders",
+      "Manage Users": "Manage Users",
+      "Manage Boost": "Manage Boost",
+      "Manage User Reports": "Manage User Reports",
+      "Manage Revenue": "Manage Revenue",
+      "My Account Settings": "My Account Settings"
     },
     "subtitle": {
       "Get The Best CS2 Classic Experience!": "Get The Best CS2 Classic Experience!",
@@ -357,7 +381,17 @@
       "List of all your products and services.": "List of all your products and services.",
       "List of all pending boosts.": "List of all pending boosts.",
       "List of all progress boosts.": "List of all progress boosts.",
-      "View and update your income.": "View and update your income."
+      "View and update your income.": "View and update your income.",
+      "A list of all the partners you are following.": "A list of all the partners you are following.",
+      "Track status and chat with admins about your issues.": "Track status and chat with admins about your issues.",
+      "Track your earnings and request payouts.": "Track your earnings and request payouts.",
+      "Welcome back, Admin! Here's a summary of your platform's activity.": "Welcome back, Admin! Here's a summary of your platform's activity.",
+      "Manage all orders across the platform.": "Manage all orders across the platform.",
+      "List of all registered users in the system.": "List of all registered users in the system.",
+      "Adjust rate multipliers for each region": "Adjust rate multipliers for each region",
+      "Handle reports and mediate conversations.": "Handle reports and mediate conversations.",
+      "Track, filter, and manage all financial activities on the platform.": "Track, filter, and manage all financial activities on the platform.",
+      "Manage your personal information and security settings.": "Manage your personal information and security settings."
     }
   },
   "GameModePage": {
@@ -421,7 +455,10 @@
     }
   },
   "Board": {
-    "title": { "Earned XP": "Earned XP", "XP Penalty": "XP Penalty" },
+    "title": {
+      "Earned XP": "Earned XP",
+      "XP Penalty": "XP Penalty"
+    },
     "subtitle": {
       "All important details about experience points of each mode": "All important details about experience points of each mode",
       "All important details about experience points": "All important details about experience points"
@@ -434,18 +471,26 @@
     }
   },
   "BillCard": {
-    "header": "Checkout",
+    "header": "Order Summary",
     "title": "Start by selecting the server !",
-    "subtitle": "Add extra options to your boost",
-    "description": "Using a VPN is prohibited when making a purchase.",
-    "price": "Total Price",
-    "time1": "Completion Time",
-    "time2": "Hours",
-    "options": {
-      "Stream": "Stream",
-      "Play with Partner (Duo)": "Play with Partner (Duo)"
+    "label": {
+      "Total Price": "Total Price",
+      "Extra Options": "Extra Options",
+      "My XP": "My XP",
+      "Desired XP": "Desired XP",
+      "My Rating": "My Rating",
+      "Desired Rating": "Desired Rating",
+      "My Rank": "My Rank",
+      "Desired Rank": "Desired Rank",
+      "Live Stream": "Live Stream",
+      "Estimated time": "Estimated time",
+      "hours": "hours",
+      "Using a VPN is prohibited when making a purchase.": "Using a VPN is prohibited when making a purchase."
     },
-    "btn": "Buy Now"
+    "options": {
+      "Live Stream": "Live Stream",
+      "Play with Partner": "Play with Partner"
+    }
   },
   "DataTable": {
     "label": {
@@ -465,6 +510,12 @@
       "order id": "order id",
       "amount": "amount",
       "last updated": "last updated",
+      "assign_partner": "assign_partner",
+      "user": "user",
+      "role": "role",
+      "created at": "created at",
+      "actions": "actions",
+      "type": "type",
       "": ""
     },
     "actions": {
@@ -530,6 +581,33 @@
         "title": "Edit Login Information",
         "btn": "Edit Login"
       }
+    },
+    "ReviewWidget": {
+      "Send": {
+        "completedMessage": "Boost package completed.",
+        "title": "How was your experience?",
+        "subtitle": "Please send us your review.",
+        "satisfactionLabel": "Satisfaction level",
+        "ratingTerrible": "Terrible",
+        "ratingDissatisfied": "Dissatisfied",
+        "ratingAverage": "Average",
+        "ratingGood": "Good",
+        "ratingExcellent": "Excellent",
+        "placeholder": "Your review...",
+        "submitBtn": "Submit Review"
+      },
+      "Reviewed": {
+        "title": "You have reviewed",
+        "deleteConfirm": "Are you sure you want to delete this review? This action cannot be undone."
+      }
+    },
+    "ReportReasons": {
+      "NOT_RESPONDING": "Partner is not responding to order requests",
+      "OVERCHARGING": "Partner is charging more than the agreed price",
+      "SLOW_DELIVERY": "Partner is delivering boost services slower than promised",
+      "LOW_QUALITY": "Partner is providing low-quality boost services",
+      "FRAUD": "Partner is involved in fraudulent activities",
+      "TERMS_VIOLATION": "Partner is violating the terms of service"
     }
   },
   "SettingsPage": {
@@ -566,6 +644,18 @@
         "New Messages": "Send New Messages Notification",
         "New Boost Created": "Send New Order Notification"
       }
+    },
+    "Information": {
+      "IntroductionWidget": {
+        "title": "Your Introduction",
+        "empty": "You haven't added an introduction yet. Click 'Edit' to get started.",
+        "editBtn": "Edit"
+      },
+      "SocialMediaWidget": {
+        "title": "Social Media Links",
+        "empty": "No social links added yet.",
+        "addBtn": "Add Link"
+      }
     }
   },
   "CheckoutPage": {
@@ -589,11 +679,13 @@
   "Input": {
     "label": {
       "Email Address": "Email Address",
+      "Email or Username": "Email or Username",
       "Password": "Password",
       "Username": "Username",
       "Email": "Email",
       "Current Password": "Current Password",
-      "New Password": "New Password"
+      "New Password": "New Password",
+      "Confirm your password": "Confirm your password"
     },
     "Errors": {
       "label": {
@@ -621,6 +713,331 @@
     "label": {
       "Type": "Type",
       "Remove": "Remove"
+    }
+  },
+  "BillReturnPage": {
+    "helmet": {
+      "success": "Payment Successful",
+      "failure": "Payment Failed"
+    },
+    "statusCard": {
+      "title": {
+        "success": "Payment Successful",
+        "failure": "Payment Failed"
+      },
+      "message": {
+        "success": "Your transaction has been completed successfully.",
+        "failure": "Your transaction could not be processed."
+      }
+    },
+    "receipt": {
+      "orderInfo": "Order Information",
+      "transactionId": "Transaction ID",
+      "bank": "Bank",
+      "cardType": "Card Type",
+      "paymentTime": "Payment Time",
+      "totalAmount": "Total Amount"
+    },
+    "pdf": {
+      "title": "RECEIPT",
+      "transactionLabel": "Transaction #",
+      "dateLabel": "Date:",
+      "orderInfo": "Order Information",
+      "bank": "Bank",
+      "cardType": "Card Type",
+      "refId": "Reference ID",
+      "totalAmount": "Total Amount",
+      "statusLabel": "Status:",
+      "status": {
+        "success": "Successful",
+        "failed": "Failed"
+      },
+      "thankYou": "Thank you for your business!",
+      "fileName": "receipt"
+    }
+  },
+  "FollowPartnersPage": {
+    "helmet": "My Following Partners",
+    "title": "Following Partners",
+    "subtitle": "A list of all the partners you are following.",
+    "searchPlaceholder": "Search in your followed partners...",
+    "Card": {
+      "verifiedTooltip": "Verified Partner",
+      "online": "Online",
+      "offline": "Offline",
+      "rating": "Rating",
+      "followers": "Followers",
+      "unfollowBtn": "Unfollow"
+    },
+    "emptyState": {
+      "searchTitle": "No Partners Found",
+      "noFollowTitle": "You Haven't Followed Any Partners Yet",
+      "searchSubtitle": "We couldn't find any partners matching your search. Try a different name.",
+      "noFollowSubtitle": "Start exploring and follow partners to see them here. They will help you on your journey!",
+      "exploreBtn": "Explore Partners"
+    },
+    "SupportsPage": {
+      "helmet": "My Support Tickets",
+      "title": "My Support Tickets",
+      "subtitle": "Track status and chat with admins about your issues.",
+      "myTickets": "My Tickets",
+      "ticketTitle": "Ticket: {{title}}",
+      "statusLabel": "Status",
+      "pendingReview": "This ticket is pending review by an admin.",
+      "conversationClosed": "This conversation has been closed.",
+      "canChatWhenAdminReviews": "You can chat once an admin reviews your ticket.",
+      "selectTicket": "Select a ticket to see details.",
+      "noTickets": "You have no support tickets.",
+      "errorLoading": "Failed to load your support tickets.",
+      "aPartner": "a partner",
+      "aUser": "a user",
+      "TicketItem": {
+        "myReportTitle": "My Report: {{title}}",
+        "investigationTitle": "Investigation about you",
+        "myReportSubtitle": "You reported {{username}}",
+        "investigationSubtitle": "{{username}} reported you",
+        "statusPENDING": "Pending",
+        "statusINPROGRESS": "In Progress",
+        "statusRESOLVED": "Resolved"
+      }
+    }
+  },
+  "PartnerPage": {
+    "verifiedTooltip": "Verified Partner",
+    "online": "Online",
+    "offline": "Offline",
+    "followBtn": "Follow",
+    "unfollowBtn": "Unfollow",
+    "statsTitle": "Stats",
+    "followers": "Followers",
+    "hoursBoosted": "Hours Boosted",
+    "completionRate": "Completion Rate",
+    "contactTitle": "Contact via",
+    "introductionTitle": "Introduction",
+    "reviewsTitle": "Reviews ({{count}})",
+    "noReviews": "No reviews yet."
+  },
+  "PartnersPage": {
+    "helmet": "Our Partners · CS2Boost",
+    "title": "Our Partners",
+    "filtersTitle": "Filters",
+    "searchPlaceholder": "Search by name...",
+    "onlinePartnersBtn": "Online Partners",
+    "ratingFilter": "Rating",
+    "completionFilter": "Completion",
+    "resultsFound": "{{count}} results found",
+    "errorLoading": "Could not fetch partners. Please try again.",
+    "Card": {
+      "viewProfileTooltip": "View profile of",
+      "verifiedTooltip": "Verified Partner",
+      "online": "Online",
+      "noBio": "This partner hasn't added a bio yet.",
+      "rating": "Rating",
+      "completion": "Completion",
+      "reviews": "Reviews",
+      "followers": "Followers",
+      "viewProfileBtn": "View Profile"
+    }
+  },
+  "IncomePage": {
+    "helmet": "Income · CS2Boost",
+    "title": "My Income",
+    "subtitle": "Track your earnings and request payouts.",
+    "requestPayoutBtn": "Request Payout",
+    "minimumBalanceTooltip": "Minimum balance of 50,000 VND required",
+    "StatCards": {
+      "availableBalance": "Available Balance",
+      "potentialRevenue": "Potential Revenue (Escrow)",
+      "pendingPayouts": "Pending Payouts",
+      "totalEarnings": "Total Lifetime Earnings"
+    },
+    "Chart": {
+      "title": "Financial Overview",
+      "label": "Amount (VND)",
+      "availableBalance": "Available Balance",
+      "potentialRevenue": "Potential Revenue",
+      "pendingPayouts": "Pending Payouts"
+    },
+    "RecentTransactions": {
+      "title": "Recent Transactions",
+      "headerDescription": "Description",
+      "headerDate": "Date",
+      "headerType": "Type",
+      "headerAmount": "Amount",
+      "emptyTitle": "No Recent Transactions",
+      "emptySubtitle": "Your latest financial activities will appear here.",
+      "viewMore": "View More"
+    },
+    "PayoutModal": {
+      "title": "Request Payout",
+      "balanceInfo": "Your current available balance is {{balance}}.",
+      "amountLabel": "Amount to withdraw",
+      "amountPlaceholder": "e.g., 500000",
+      "submitBtn": "Submit Request",
+      "errorRequired": "Amount is required.",
+      "errorMax": "Amount cannot exceed your balance.",
+      "errorMin": "Minimum payout amount is {{amount}}."
+    }
+  },
+  "DashboardPage": {
+    "helmet": "Dashboard · Admin Panel",
+    "title": "Dashboard",
+    "subtitle": "Welcome back, Admin! Here's a summary of your platform's activity.",
+    "kpiError": "Could not load KPI statistics.",
+    "chartError": "Could not load revenue chart.",
+    "transactionsError": "Could not load recent transactions.",
+    "StatCards": {
+      "grossRevenue": "Gross Revenue (30 days)",
+      "netProfit": "Net Profit (30 days)",
+      "totalPayouts": "Total Payouts (30 days)",
+      "pendingPayouts": "Pending Payouts"
+    },
+    "Chart": {
+      "title": "Revenue Trend (Last 30 Days)",
+      "label": "Daily Revenue"
+    },
+    "RecentTransactions": {
+      "title": "Recent Transactions",
+      "empty": "No recent transactions.",
+      "viewAllBtn": "View All Transactions"
+    }
+  },
+  "ManageBoostPage": {
+    "helmet": "Manage Boost · CS2Boost Admin",
+    "title": "Manage Boost Pricing",
+    "subtitle": "Adjust rate multipliers and unit prices for each game mode.",
+    "tabs": {
+      "premier": "Premier",
+      "wingman": "Wingman",
+      "levelFarming": "Level Farming"
+    },
+    "errorLoading": "Error loading data. Please refresh the page.",
+    "noConfig": "No configuration data found.",
+    "basePriceTitle": "Base Price Setting",
+    "basePriceSubtitle": "This unit price is applied globally across all regions.",
+    "LevelFarming": {
+      "title": "Base Price Setting",
+      "subtitle": "Set the base price per 1000 XP."
+    },
+    "Table": {
+      "start": "Start",
+      "end": "End",
+      "rate": "Rate (x)",
+      "costForTier": "Cost for Tier",
+      "rank": "Rank",
+      "costPerWin": "Cost per Win"
+    }
+  },
+  "ManageReportsPage": {
+    "helmet": "Manage Reports · CS2Boost",
+    "title": "Manage User Reports",
+    "subtitle": "Handle reports and mediate conversations.",
+    "inboxTitle": "Inbox",
+    "newLabel": "New",
+    "searchPlaceholder": "Search by sender...",
+    "errorLoading": "Error loading reports.",
+    "reportedLabel": "reported",
+    "acceptBtn": "Accept Report",
+    "resolveBtn": "Close & Resolve",
+    "resolvedStatus": "Resolved",
+    "chatWithClientTab": "Chat with Client ({{username}})",
+    "chatWithPartnerTab": "Chat with Partner ({{username}})",
+    "noDescription": "No description provided.",
+    "conversationNotAvailable": "Conversation not available.",
+    "selectReport": "Select a report to view details.",
+    "resolveConfirm": "Are you sure you want to close this report? This action cannot be undone.",
+    "InboxItem": {
+      "titleLabel": "Title",
+      "noDescription": "Click to see details",
+      "statusPENDING": "Pending",
+      "statusINPROGRESS": "In Progress",
+      "statusRESOLVED": "Resolved",
+      "statusREJECT": "Rejected"
+    }
+  },
+  "UserDetailsPage": {
+    "helmet": "User: {{username}} · Admin Panel",
+    "title": "User Details",
+    "subtitle": "Manage and view details for {{username}}.",
+    "errorLoading": "Failed to load user data. The user may not exist.",
+    "tabs": {
+      "orders": "Orders",
+      "transactions": "Transactions",
+      "settings": "Settings"
+    },
+    "ProfileCard": {
+      "userInfoTitle": "User Info",
+      "fullName": "Full Name",
+      "status": "Status",
+      "active": "Active",
+      "banned": "Banned",
+      "joined": "Joined",
+      "partnerStatsTitle": "Partner Stats",
+      "rating": "Rating",
+      "reviews_one": "{{count}} review",
+      "reviews_other": "{{count}} reviews",
+      "completion": "Completion",
+      "followers": "Followers"
+    },
+    "OrdersTable": {
+      "loading": "Loading orders...",
+      "empty": "This user has no orders."
+    },
+    "TransactionsTable": {
+      "loading": "Loading transactions...",
+      "empty": "This user has no transactions."
+    },
+    "SettingsPanel": {
+      "title": "Account Status Control",
+      "activeSubtitle": "This user is currently active. Banning will lock their account.",
+      "bannedSubtitle": "This user is currently banned. Reason: {{reason}}",
+      "banBtn": "Ban User",
+      "unbanBtn": "Unban User",
+      "banConfirmTitle": "Ban User: {{username}}",
+      "unbanConfirmTitle": "Confirm Unban",
+      "banConfirmDesc": "Please provide a clear reason for banning this user.",
+      "unbanConfirmDesc": "Are you sure you want to unban {{username}}?",
+      "reasonPlaceholder": "Reason for banning..."
+    }
+  },
+  "ManageRevenuePage": {
+    "helmet": "Manage Revenue · Admin Panel",
+    "title": "Manage Revenue",
+    "subtitle": "Track, filter, and manage all financial activities on the platform.",
+    "kpiError": "Could not load KPI statistics.",
+    "searchPlaceholder": "Search by user...",
+    "StatCards": {
+      "grossRevenue": "Gross Revenue (30 days)",
+      "netProfit": "Net Profit (30 days)",
+      "totalPayouts": "Total Payouts (30 days)",
+      "pendingPayouts": "Pending Payouts"
+    },
+    "TransactionTable": {
+      "title": "All Transactions",
+      "error": "Could not load transactions.",
+      "empty": "No transactions found for the current filters."
+    },
+    "PayoutRequests": {
+      "title": "Pending Payouts ({{count}})",
+      "error": "Error loading requests.",
+      "empty": "No pending requests.",
+      "declineBtn": "Decline",
+      "approveBtn": "Approve"
+    }
+  },
+  "AdminSettingsPage": {
+    "helmet": "My Settings · Admin Panel",
+    "title": "My Account Settings",
+    "subtitle": "Manage your personal information and security settings.",
+    "loading": "Loading admin data...",
+    "ProfileCard": {
+      "title": "Profile Information",
+      "subtitle": "Update your personal details here."
+    },
+    "PasswordCard": {
+      "title": "Change Password",
+      "subtitle": "Update your password to keep your account secure.",
+      "updateBtn": "Update Password"
     }
   }
 }

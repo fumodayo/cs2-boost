@@ -1,8 +1,8 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import React from "react";
-import { Button } from "../shared";
 import { HiXMark } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import { Button } from "../shared/Button";
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -19,7 +19,6 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
       <DialogPrimitive.Content
-        // onPointerDownOutside={(e) => e.preventDefault()}
         className="data-[state=open]:animate-modal-show data-[state=closed]:animate-modal-close scroll-sm fixed top-1/2 z-40 mx-auto min-h-fit w-full -translate-y-1/2 rounded-xl text-left shadow-xl outline-none ring-1 ring-border transition-all focus:outline-none sm:left-1/2 sm:max-w-4xl sm:-translate-x-1/2"
         {...props}
         ref={forwardRef}

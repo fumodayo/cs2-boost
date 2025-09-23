@@ -3,16 +3,13 @@ type IRateLevelFarming = {
   endExp: number;
 };
 
-const rateLevelFarming = ({ beginExp, endExp }: IRateLevelFarming) => {
+const calculateLevelFarmingCost = ({ beginExp, endExp }: IRateLevelFarming) => {
   let totalEXP = 0;
 
-  // EXP cho mỗi trận đấu
   const EXPPerMatch = 60;
 
-  // Thời gian tối đa cho mỗi trận
   const timePerMatch = 0.5;
 
-  // Tỉ lệ bonus EXP theo số EXP đã cày trong 1 tuần
   const approximateGainedEXP = [
     { start: 0, end: 4499, bonus: 4 },
     { start: 4500, end: 7499, bonus: 2 },
@@ -21,20 +18,19 @@ const rateLevelFarming = ({ beginExp, endExp }: IRateLevelFarming) => {
   ];
 
   for (const range of approximateGainedEXP) {
-    // Kiểm tra nếu khoảng EXP cần cày nằm trong khoảng hiện tại
     if (beginExp <= range.end && endExp >= range.start) {
-      const effectiveBegin = Math.max(beginExp, range.start); // Điểm bắt đầu của khoảng hiện tại
-      const effectiveEnd = Math.min(endExp, range.end); // Điểm kết thúc của khoảng hiện tại
+      const effectiveBegin = Math.max(beginExp, range.start);
+      const effectiveEnd = Math.min(endExp, range.end);
 
       const EXPInRange =
-        (effectiveEnd - effectiveBegin + 1) * (range.bonus + 1); // Tính EXP trong khoảng này
+        (effectiveEnd - effectiveBegin + 1) * (range.bonus + 1);
 
-      totalEXP += EXPInRange; // Cộng dồn EXP từ các khoảng
+      totalEXP += EXPInRange;
     }
   }
 
-  // Tính tổng thời gian dựa trên số trận và thời gian mỗi trận
-  return Math.round(totalEXP / EXPPerMatch) * timePerMatch;
+  const totalTime = Math.round(totalEXP / EXPPerMatch) * timePerMatch;
+  return totalTime > 0 ? totalTime : -1;
 };
 
-export default rateLevelFarming;
+export default calculateLevelFarmingCost;

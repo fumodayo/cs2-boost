@@ -17,7 +17,7 @@ const list = [
     label: "Information",
   },
   {
-    path: "/settings/notifications",
+    path: "/settings/push-notifications",
     icon: BiSolidBellRing,
     label: "Notifications",
   },

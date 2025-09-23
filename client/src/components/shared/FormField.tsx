@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   FieldErrors,
   FieldValues,
+  Path,
   RegisterOptions,
   UseFormRegister,
 } from "react-hook-form";
@@ -9,20 +10,21 @@ import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import cn from "~/libs/utils";
 
-interface IFormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  id: string;
+interface IFormFieldProps<T extends FieldValues>
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  id: Path<T>;
   label?: string;
   placeholder?: string;
   errorMessage?: string;
   className?: string;
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<T>;
   required?: boolean;
   noteText?: string;
-  rules?: RegisterOptions;
-  errors: FieldErrors;
+  rules?: RegisterOptions<T>;
+  errors: FieldErrors<T>;
 }
 
-const FormField = ({
+const FormField = <T extends FieldValues>({
   id,
   label,
   placeholder,
@@ -36,14 +38,21 @@ const FormField = ({
   maxLength,
   minLength,
   noteText,
-  onChange,
+  onChange: onChangeFromProps,
   ...props
-}: IFormFieldProps) => {
+}: IFormFieldProps<T>) => {
   const { t } = useTranslation();
   const error = errors[id];
   const [hideError, setHideError] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => setShowPassword((show) => !show);
+
+  const { onChange: rhfOnChange, ...restOfRegister } = register(id, {
+    required,
+    ...rules,
+    maxLength,
+    minLength,
+  });
 
   useEffect(() => {
     if (error || errorMessage) {
@@ -66,12 +75,7 @@ const FormField = ({
       )}
       <div className="relative">
         <input
-          {...register(id, {
-            required,
-            ...rules,
-            maxLength: maxLength,
-            minLength: minLength,
-          })}
+          {...restOfRegister}
           className={cn(
             "flex w-full rounded-md border border-input bg-card-alt px-3 py-1.5 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             className,
@@ -83,8 +87,9 @@ const FormField = ({
             type === "password" ? (showPassword ? "text" : "password") : type
           }
           onChange={(e) => {
+            rhfOnChange(e);
             setHideError(true);
-            onChange?.(e);
+            onChangeFromProps?.(e);
           }}
           {...props}
         />

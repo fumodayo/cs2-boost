@@ -1,59 +1,48 @@
-import { Heading } from "../GameModePage/components";
-import { FaCartShopping } from "react-icons/fa6";
 import {
-  DataTable,
   Helmet,
-  Pagination,
   PlusButton,
   ResetButton,
   Search,
   ViewButton,
 } from "~/components/shared";
-import { useEffect, useState } from "react";
-import { useToggleColumns } from "~/hooks/useToggleColumns";
+import { Heading } from "../GameModePage/components";
+import { FaCartShopping } from "react-icons/fa6";
 import { ordersHeaders } from "~/constants/headers";
-import { IOrderProps } from "~/types";
-import { axiosAuth } from "~/axiosAuth";
-import { useSearchParams } from "react-router-dom";
 import { filterOrderStatus, filterOrderType } from "~/constants/order";
+import { BoostsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { useDataTable } from "~/hooks/useDataTable";
+import { orderService } from "~/services/order.service";
+import { IOrder, IPaginatedResponse } from "~/types";
 
 const OrdersPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [orders, setOrders] = useState<IOrderProps[]>([]);
-  const [totalOrders, setTotalOrders] = useState<number>(0);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [filterStatus, setFilterStatus] = useState<string[]>([]);
-  const [filterType, setFilterType] = useState<string[]>([]);
+  const {
+    data: ordersData,
+    error,
+    isLoading,
+    filters,
+    setFilter,
+    handleReset,
+    isAnyFilterActive,
+    selectedColumns,
+    visibleHeaders,
+    toggleColumn,
+  } = useDataTable<IPaginatedResponse<IOrder>>({
+    swrKey: "/order/get-orders",
+    fetcher: orderService.getMyOrders,
+    initialFilters: {
+      search: "",
+      "filter-status": [],
+      "filter-type": [],
+    },
+    columnConfig: {
+      key: "orders-headers",
+      headers: ordersHeaders,
+    },
+    socketEvent: "statusOrderChange",
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axiosAuth.get(
-          `/order/get-orders?${searchParams}`,
-        );
-        const { orders, total } = data;
-        setOrders(orders);
-        setTotalOrders(total);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, [searchParams]);
-
-  const { selectedColumns, visibleHeaders, toggleColumn } = useToggleColumns(
-    "orders-headers",
-    ordersHeaders,
-  );
-
-  const handleReset = () => {
-    const params = new URLSearchParams();
-    params.delete("filter-type");
-    params.delete("filter-status");
-    setSearchParams(params);
-    setSearchTerm("");
-    setFilterStatus([]);
-    setFilterType([]);
-  };
+  const ordersFromAPI = ordersData?.data || [];
+  const paginationFromAPI = ordersData?.pagination;
 
   return (
     <>
@@ -64,52 +53,54 @@ const OrdersPage = () => {
           title="My Orders"
           subtitle="List of all your products and services."
         />
-        <main>
-          <div className="mt-8">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-1 flex-wrap items-center gap-2">
-                  {/* SEARCH */}
-                  <Search
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
+        <main className="mt-8">
+          <div className="space-y-4">
+            <DataTableLayout
+              filterBar={
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-1 flex-wrap items-center gap-2">
+                    <Search
+                      value={filters.search as string}
+                      onChangeValue={(val) => setFilter("search", val)}
+                    />
+                    <PlusButton
+                      name="status"
+                      lists={filterOrderStatus}
+                      selectValues={filters["filter-status"] as string[]}
+                      setSelectValues={(val) =>
+                        setFilter("filter-status", val as string[])
+                      }
+                    />
+                    <PlusButton
+                      name="type"
+                      lists={filterOrderType}
+                      selectValues={filters["filter-type"] as string[]}
+                      setSelectValues={(val) =>
+                        setFilter("filter-type", val as string[])
+                      }
+                    />
+                    {isAnyFilterActive && <ResetButton onReset={handleReset} />}
+                  </div>
+                  <ViewButton
+                    headers={ordersHeaders}
+                    toggleColumn={toggleColumn}
+                    selectedColumns={selectedColumns}
                   />
-                  <PlusButton
-                    name="status"
-                    lists={filterOrderStatus}
-                    selectValues={filterStatus}
-                    setSelectValues={setFilterStatus}
-                  />
-                  <PlusButton
-                    name="type"
-                    lists={filterOrderType}
-                    selectValues={filterType}
-                    setSelectValues={setFilterType}
-                  />
-                  {(searchTerm ||
-                    filterStatus.length > 0 ||
-                    filterType.length > 0) && (
-                    <ResetButton onReset={handleReset} />
-                  )}
                 </div>
-                {/* VIEW LIST */}
-                <ViewButton
-                  headers={ordersHeaders}
+              }
+              isLoading={isLoading}
+              error={error}
+              data={ordersFromAPI}
+              pagination={paginationFromAPI}
+            >
+              {(data) => (
+                <BoostsTable
+                  headers={visibleHeaders}
                   toggleColumn={toggleColumn}
-                  selectedColumns={selectedColumns}
+                  boosts={data}
                 />
-              </div>
-
-              {/* DATA LIST */}
-              <DataTable
-                headers={visibleHeaders}
-                toggleColumn={toggleColumn}
-                boosts={orders}
-              />
-
-              {/* PAGINATION */}
-              <Pagination total={totalOrders} />
-            </div>
+              )}
+            </DataTableLayout>
           </div>
         </main>
       </div>

@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import Select, { StylesConfig } from "react-select";
-import { ICurrentUserProps, IThemeProps } from "~/types";
 import { AppContext } from "../context/AppContext";
 import Chip from "./Chip";
 import { useSocketContext } from "~/hooks/useSocketContext";
+import { ITheme, IUser } from "~/types";
 
-const customStyles = (theme: IThemeProps): StylesConfig<ICurrentUserProps> => ({
+const customStyles = (theme: ITheme): StylesConfig<IUser> => ({
   control: (base) => ({
     ...base,
     backgroundColor: theme === "dark" ? "#13151a" : "#fff",
@@ -41,7 +41,7 @@ const customStyles = (theme: IThemeProps): StylesConfig<ICurrentUserProps> => ({
   }),
 });
 
-const SelectItem = (partner: ICurrentUserProps) => {
+const SelectItem = (partner: IUser) => {
   const { profile_picture, user_id, username, _id } = partner;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(_id as string);
@@ -81,9 +81,7 @@ const SelectItem = (partner: ICurrentUserProps) => {
 const MultiSelect = ({
   options,
   ...props
-}: { options: ICurrentUserProps[] } & React.ComponentProps<
-  typeof Select<ICurrentUserProps>
->) => {
+}: { options: IUser[] } & React.ComponentProps<typeof Select<IUser>>) => {
   const { theme } = useContext(AppContext);
 
   return (

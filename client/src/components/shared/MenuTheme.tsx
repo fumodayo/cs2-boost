@@ -27,7 +27,7 @@ const MenuTheme = () => {
         className="w-48"
       >
         <div className="px-2 py-1.5 text-sm font-medium">Change Theme</div>
-        <button
+        <Button
           onClick={() => setTheme("dark")}
           className={cn(
             theme === "dark" && "bg-accent",
@@ -36,8 +36,8 @@ const MenuTheme = () => {
         >
           <i className="mr-2.5 h-4 w-4 rounded-full bg-[#181A20] ring-1 ring-foreground/20" />
           Dark Mode
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setTheme("light")}
           className={cn(
             theme === "light" && "bg-accent",
@@ -46,7 +46,7 @@ const MenuTheme = () => {
         >
           <i className="mr-2.5 h-4 w-4 rounded-full bg-[#F5F7FA] ring-1 ring-foreground/20" />
           Light Mode
-        </button>
+        </Button>
       </PopoverContent>
     </Popover>
   );

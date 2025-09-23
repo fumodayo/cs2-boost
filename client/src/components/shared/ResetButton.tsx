@@ -11,7 +11,7 @@ const ResetButton = ({ onReset }: IResetButtonProps) => {
 
   return (
     <Button
-      color="transparent"
+      variant="transparent"
       className="h-8 rounded-md px-2 py-1.5 text-xs font-medium lg:px-3"
       onClick={onReset}
     >

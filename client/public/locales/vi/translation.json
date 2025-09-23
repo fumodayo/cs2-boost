@@ -9,6 +9,10 @@
     "Coming Soon": "Sắp ra mắt",
     "Join Discord": "Tham gia Discord",
     "Go Back": "Trở về",
+    "Button": {
+      "ViewMyOrders": "Xem đơn hàng",
+      "DownloadReceipt": "Tải biên lai"
+    },
     "Services": {
       "Dashboard": "Trang chủ",
       "Boosting": "Cày thuê",
@@ -20,7 +24,8 @@
       "Orders": "Đơn của bạn",
       "Wallet": "Ví của bạn",
       "Settings": "Cài đặt",
-      "Follow Partners": "Theo dõi Partners"
+      "Follow Partners": "Theo dõi Partners",
+      "Supports": "Hỗ trợ"
     },
     "Server": {
       "Africa": "Châu Phi",
@@ -315,6 +320,7 @@
     "subtitle1": "Nhập mã 6 chữ số được gửi tới email của bạn.",
     "subtitle2": "Không nhận được mã?",
     "subtitle3": "Nhấp vào đây để gửi lại.",
+    "subtitle4": "Gửi lại trong ",
     "btn": "Đăng nhập"
   },
   "RegisterModal": {
@@ -327,6 +333,14 @@
     "description2": "Điều khoản dịch vụ",
     "description3": "Chính sách bảo mật",
     "btn3": "Tạo ngay"
+  },
+  "ForgotPasswordModal": {
+    "title": "Nhập email của bạn",
+    "subtitle": "Chúng tôi sẽ gửi một mã số otp đặt lại mật khẩu đến email của bạn."
+  },
+  "ResetPasswordModal": {
+    "title": "Thay đổi mật khẩu của bạn",
+    "subtitle": "Nhập mật khẩu mới bên dưới để thay đổi mật khẩu"
   },
   "NewGamePage": {
     "title": "sắp ra mắt",
@@ -346,7 +360,17 @@
       "My Orders": "Đơn hàng của bạn",
       "Pending Boosts List": "Đơn hàng đang chờ",
       "Progress Boosts List": "Đơn hàng đang làm",
-      "Income": "Doanh thu"
+      "Income": "Doanh thu",
+      "Following Partners": "Partner đang theo dõi",
+      "My Support Tickets": "Hỗ trợ",
+      "My Income": "Thu nhập của tôi",
+      "Dashboard": "Bảng điều khiển",
+      "Manage Orders": "Quản lý đơn hàng",
+      "Manage Users": "Quản lý người dùng",
+      "Manage Boost": "Quản lý Boost",
+      "Manage User Reports": "Quản lý báo cáo người dùng",
+      "Manage Revenue": "Quản lý doanh thu",
+      "My Account Settings": "Cài đặt tài khoản của tôi"
     },
     "subtitle": {
       "Get The Best CS2 Classic Experience!": "Đón nhận trải nghiệm Boost CS2 tốt nhất!",
@@ -357,7 +381,17 @@
       "List of all your products and services.": "Xem tất cả gói boost mà bạn đã đặt.",
       "List of all pending boosts.": "Xem tất cả các đơn hàng đang chờ booster nhận đơn.",
       "List of all progress boosts.": "Xem tất cả các đơn hàng mà bạn đang cày.",
-      "View and update your income.": "Xem và cài đặt doanh thu của bạn."
+      "View and update your income.": "Xem và cài đặt doanh thu của bạn.",
+      "A list of all the partners you are following.": "Danh sách partner bạn đang theo dõi.",
+      "Track status and chat with admins about your issues.": "Theo dõi trạng thái và trao đổi với quản trị viên về vấn đề của bạn.",
+      "Track your earnings and request payouts.": "Theo dõi thu nhập và yêu cầu thanh toán.",
+      "Welcome back, Admin! Here's a summary of your platform's activity.": "Chào mừng trở lại, Quản trị viên! Đây là bản tóm tắt hoạt động của nền tảng.",
+      "Manage all orders across the platform.": "Quản lý tất cả đơn hàng trên toàn nền tảng.",
+      "List of all registered users in the system.": "Danh sách tất cả người dùng đã đăng ký trong hệ thống.",
+      "Adjust rate multipliers for each region": "Điều chỉnh hệ số giá cho từng khu vực",
+      "Handle reports and mediate conversations.": "Xử lý báo cáo và điều phối cuộc trò chuyện.",
+      "Track, filter, and manage all financial activities on the platform.": "Theo dõi, lọc và quản lý tất cả hoạt động tài chính trên nền tảng.",
+      "Manage your personal information and security settings.": "Quản lý thông tin cá nhân và cài đặt bảo mật của bạn."
     }
   },
   "GameModePage": {
@@ -437,24 +471,32 @@
     }
   },
   "BillCard": {
-    "header": "Thanh toán",
-    "title": "Hãy chọn khu vực hiện tại của bạn!",
-    "subtitle": "Thêm các tùy chọn bổ sung mà bạn thích",
-    "description": "Không sử dụng VPN khi thanh toán.",
-    "price": "Tổng giá",
-    "time1": "Thời gian hoàn thành",
-    "time2": "Giờ",
-    "options": {
-      "Stream": "Live Stream",
-      "Play with Partner (Duo)": "Chơi với Partner (2 người)"
+    "header": "Tóm tắt đơn hàng",
+    "title": "Bắt đầu bằng cách chọn máy chủ!",
+    "label": {
+      "Total Price": "Tổng giá",
+      "Extra Options": "Tùy chọn bổ sung",
+      "My XP": "XP của tôi",
+      "Desired XP": "XP mong muốn",
+      "My Rating": "Xếp hạng của tôi",
+      "Desired Rating": "Xếp hạng mong muốn",
+      "My Rank": "Cấp bậc của tôi",
+      "Desired Rank": "Cấp bậc mong muốn",
+      "Live Stream": "Phát trực tiếp",
+      "Estimated time": "Thời gian ước tính",
+      "hours": "giờ",
+      "Using a VPN is prohibited when making a purchase.": "Cấm sử dụng VPN khi thực hiện mua hàng."
     },
-    "btn": "Mua Ngay"
+    "options": {
+      "Live Stream": "Phát trực tiếp",
+      "Play with Partner": "Chơi cùng partner"
+    }
   },
   "DataTable": {
     "label": {
       "No results": "Hãy đặt hàng để hiển thị nhé.",
-      "Asc": "Tăng",
-      "Desc": "Giảm",
+      "Asc": "Tăng dần",
+      "Desc": "Giảm dần",
       "Hide": "Ẩn"
     },
     "header": {
@@ -468,6 +510,12 @@
       "order id": "mã đơn hàng",
       "amount": "đơn giá",
       "last updated": "cập nhật lúc",
+      "assign partner": "Partner được chỉ định",
+      "user": "Người dùng",
+      "role": "phân quyền",
+      "created at": "tạo ra vào",
+      "actions": "hành động",
+      "type": "loại",
       "": ""
     },
     "actions": {
@@ -511,7 +559,7 @@
     },
     "Btn": {
       "label": {
-        "Reset": "Tạo"
+        "Reset": "Tạo lại"
       }
     }
   },
@@ -533,6 +581,33 @@
         "title": "Thông tin tài khoản",
         "btn": "Sửa thông tin"
       }
+    },
+    "ReviewWidget": {
+      "Send": {
+        "completedMessage": "Gói boost đã hoàn thành.",
+        "title": "Trải nghiệm của bạn thế nào?",
+        "subtitle": "Vui lòng gửi đánh giá của bạn cho chúng tôi.",
+        "satisfactionLabel": "Mức độ hài lòng",
+        "ratingTerrible": "Rất tệ",
+        "ratingDissatisfied": "Không hài lòng",
+        "ratingAverage": "Bình thường",
+        "ratingGood": "Tốt",
+        "ratingExcellent": "Tuyệt vời",
+        "placeholder": "Viết đánh giá của bạn...",
+        "submitBtn": "Gửi đánh giá"
+      },
+      "Reviewed": {
+        "title": "Bạn đã đánh giá",
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa đánh giá này không? Hành động này không thể hoàn tác."
+      }
+    },
+    "ReportReasons": {
+      "NOT_RESPONDING": "Partner không phản hồi yêu cầu đơn hàng",
+      "OVERCHARGING": "Partner tính phí cao hơn giá đã thỏa thuận",
+      "SLOW_DELIVERY": "Partner giao dịch vụ boost chậm hơn đã hứa",
+      "LOW_QUALITY": "Partner cung cấp dịch vụ boost chất lượng thấp",
+      "FRAUD": "Partner có liên quan đến các hoạt động gian lận",
+      "TERMS_VIOLATION": "Partner đang vi phạm điều khoản dịch vụ"
     }
   },
   "SettingsPage": {
@@ -569,6 +644,18 @@
         "New Messages": "Gửi thông báo khi có tin nhắn mới",
         "New Boost Created": "Gửi thông báo khi có boost mới được tạo"
       }
+    },
+    "Information": {
+      "IntroductionWidget": {
+        "title": "Giới thiệu bản thân",
+        "empty": "Bạn chưa thêm phần giới thiệu. Nhấn 'Chỉnh sửa' để bắt đầu.",
+        "editBtn": "Chỉnh sửa"
+      },
+      "SocialMediaWidget": {
+        "title": "Liên kết mạng xã hội",
+        "empty": "Chưa có liên kết mạng xã hội nào được thêm.",
+        "addBtn": "Thêm liên kết"
+      }
     }
   },
   "CheckoutPage": {
@@ -592,11 +679,13 @@
   "Input": {
     "label": {
       "Email Address": "Địa chỉ Email",
+      "Email or Username": "Địa chỉ email hoặc tên người dùng",
       "Password": "Mật khẩu",
       "Username": "Tên người dùng",
       "Email": "Địa chỉ email",
       "Current Password": "Mật khẩu hiện tại",
-      "New Password": "Mật khẩu mới"
+      "New Password": "Mật khẩu mới",
+      "Confirm your password": "Nhập lại mật khẩu mới"
     },
     "Errors": {
       "label": {
@@ -624,6 +713,330 @@
     "label": {
       "Type": "Type",
       "Remove": "Remove"
+    }
+  },
+  "BillReturnPage": {
+    "helmet": {
+      "success": "Thanh toán thành công",
+      "failure": "Thanh toán thất bại"
+    },
+    "statusCard": {
+      "title": {
+        "success": "Thanh toán thành công",
+        "failure": "Thanh toán thất bại"
+      },
+      "message": {
+        "success": "Giao dịch của bạn đã được hoàn tất thành công.",
+        "failure": "Không thể xử lý giao dịch của bạn."
+      }
+    },
+    "receipt": {
+      "orderInfo": "Thông tin đơn hàng",
+      "transactionId": "Mã giao dịch",
+      "bank": "Ngân hàng",
+      "cardType": "Loại thẻ",
+      "paymentTime": "Thời gian thanh toán",
+      "totalAmount": "Tổng số tiền"
+    },
+    "pdf": {
+      "title": "BIÊN LAI",
+      "transactionLabel": "Giao dịch #",
+      "dateLabel": "Ngày:",
+      "orderInfo": "Thông tin đơn hàng",
+      "bank": "Ngân hàng",
+      "cardType": "Loại thẻ",
+      "refId": "Mã tham chiếu",
+      "totalAmount": "Tổng số tiền",
+      "statusLabel": "Trạng thái:",
+      "status": {
+        "success": "Thành công",
+        "failed": "Thất bại"
+      },
+      "thankYou": "Cảm ơn quý khách đã sử dụng dịch vụ!",
+      "fileName": "bien_lai"
+    }
+  },
+  "FollowPartnersPage": {
+    "helmet": "Partner đang theo dõi",
+    "title": "Partner đang theo dõi",
+    "subtitle": "Danh sách tất cả các partner bạn đang theo dõi.",
+    "searchPlaceholder": "Tìm trong danh sách đã theo dõi...",
+    "Card": {
+      "verifiedTooltip": "Partner đã xác thực",
+      "online": "Đang hoạt động",
+      "offline": "Ngoại tuyến",
+      "rating": "Đánh giá",
+      "followers": "Người theo dõi",
+      "unfollowBtn": "Bỏ theo dõi"
+    },
+    "emptyState": {
+      "searchTitle": "Không tìm thấy Partner",
+      "noFollowTitle": "Bạn chưa theo dõi Partner nào",
+      "searchSubtitle": "Chúng tôi không tìm thấy partner nào khớp với tìm kiếm của bạn. Hãy thử một tên khác.",
+      "noFollowSubtitle": "Hãy bắt đầu khám phá và theo dõi các partner để thấy họ ở đây. Họ sẽ giúp bạn trên hành trình của mình!",
+      "exploreBtn": "Khám phá Partner"
+    }
+  },
+  "SupportsPage": {
+    "helmet": "Hỗ trợ của tôi",
+    "title": "Các ticket hỗ trợ",
+    "subtitle": "Theo dõi trạng thái và trò chuyện với quản trị viên về các vấn đề của bạn.",
+    "myTickets": "Ticket của tôi",
+    "ticketTitle": "Ticket: {{title}}",
+    "statusLabel": "Trạng thái",
+    "pendingReview": "Ticket này đang chờ quản trị viên xem xét.",
+    "conversationClosed": "Cuộc trò chuyện này đã được đóng.",
+    "canChatWhenAdminReviews": "Bạn có thể trò chuyện sau khi quản trị viên xem xét ticket.",
+    "selectTicket": "Chọn một ticket để xem chi tiết.",
+    "noTickets": "Bạn không có ticket hỗ trợ nào.",
+    "errorLoading": "Không thể tải các ticket hỗ trợ của bạn.",
+    "aPartner": "một partner",
+    "aUser": "một người dùng",
+    "TicketItem": {
+      "myReportTitle": "Báo cáo của tôi: {{title}}",
+      "investigationTitle": "Điều tra về bạn",
+      "myReportSubtitle": "Bạn đã báo cáo {{username}}",
+      "investigationSubtitle": "{{username}} đã báo cáo bạn",
+      "statusPENDING": "Đang chờ",
+      "statusINPROGRESS": "Đang xử lý",
+      "statusRESOLVED": "Đã giải quyết"
+    }
+  },
+  "PartnerPage": {
+    "verifiedTooltip": "Partner đã xác thực",
+    "online": "Đang hoạt động",
+    "offline": "Ngoại tuyến",
+    "followBtn": "Theo dõi",
+    "unfollowBtn": "Bỏ theo dõi",
+    "statsTitle": "Thống kê",
+    "followers": "Người theo dõi",
+    "hoursBoosted": "Giờ đã cày",
+    "completionRate": "Tỷ lệ hoàn thành",
+    "contactTitle": "Liên hệ qua",
+    "introductionTitle": "Giới thiệu",
+    "reviewsTitle": "Đánh giá ({{count}})",
+    "noReviews": "Chưa có đánh giá nào."
+  },
+  "PartnersPage": {
+    "helmet": "Danh sách Partner · CS2Boost",
+    "title": "Các Partner của chúng tôi",
+    "filtersTitle": "Bộ lọc",
+    "searchPlaceholder": "Tìm theo tên...",
+    "onlinePartnersBtn": "Partner đang hoạt động",
+    "ratingFilter": "Đánh giá",
+    "completionFilter": "Hoàn thành",
+    "resultsFound": "Tìm thấy {{count}} kết quả",
+    "errorLoading": "Không thể tải danh sách partner. Vui lòng thử lại.",
+    "Card": {
+      "viewProfileTooltip": "Xem hồ sơ của",
+      "verifiedTooltip": "Partner đã xác thực",
+      "online": "Đang hoạt động",
+      "noBio": "Partner này chưa thêm tiểu sử.",
+      "rating": "Đánh giá",
+      "completion": "Hoàn thành",
+      "reviews": "Đánh giá",
+      "followers": "Theo dõi",
+      "viewProfileBtn": "Xem hồ sơ"
+    }
+  },
+  "IncomePage": {
+    "helmet": "Thu nhập · CS2Boost",
+    "title": "Thu nhập của tôi",
+    "subtitle": "Theo dõi thu nhập và yêu cầu rút tiền.",
+    "requestPayoutBtn": "Yêu cầu rút tiền",
+    "minimumBalanceTooltip": "Yêu cầu số dư tối thiểu 50,000đ",
+    "StatCards": {
+      "availableBalance": "Số dư khả dụng",
+      "potentialRevenue": "Doanh thu tiềm năng (Tạm giữ)",
+      "pendingPayouts": "Đang chờ rút",
+      "totalEarnings": "Tổng thu nhập"
+    },
+    "Chart": {
+      "title": "Tổng quan tài chính",
+      "label": "Số tiền (VND)",
+      "availableBalance": "Số dư khả dụng",
+      "potentialRevenue": "Doanh thu tiềm năng",
+      "pendingPayouts": "Đang chờ rút"
+    },
+    "RecentTransactions": {
+      "title": "Giao dịch gần đây",
+      "headerDescription": "Mô tả",
+      "headerDate": "Ngày",
+      "headerType": "Loại",
+      "headerAmount": "Số tiền",
+      "emptyTitle": "Không có giao dịch gần đây",
+      "emptySubtitle": "Các hoạt động tài chính mới nhất của bạn sẽ xuất hiện ở đây.",
+      "viewMore": "Xem thêm"
+    },
+    "PayoutModal": {
+      "title": "Yêu cầu rút tiền",
+      "balanceInfo": "Số dư khả dụng hiện tại của bạn là {{balance}}.",
+      "amountLabel": "Số tiền cần rút",
+      "amountPlaceholder": "Ví dụ: 500000",
+      "submitBtn": "Gửi yêu cầu",
+      "errorRequired": "Số tiền là bắt buộc.",
+      "errorMax": "Số tiền không thể vượt quá số dư của bạn.",
+      "errorMin": "Số tiền rút tối thiểu là {{amount}}."
+    }
+  },
+  "DashboardPage": {
+    "helmet": "Bảng điều khiển · Trang quản trị",
+    "title": "Bảng điều khiển",
+    "subtitle": "Chào mừng trở lại, Admin! Dưới đây là tóm tắt hoạt động của nền tảng.",
+    "kpiError": "Không thể tải các chỉ số KPI.",
+    "chartError": "Không thể tải biểu đồ doanh thu.",
+    "transactionsError": "Không thể tải các giao dịch gần đây.",
+    "StatCards": {
+      "grossRevenue": "Tổng doanh thu (30 ngày)",
+      "netProfit": "Lợi nhuận ròng (30 ngày)",
+      "totalPayouts": "Tổng thanh toán (30 ngày)",
+      "pendingPayouts": "Thanh toán đang chờ"
+    },
+    "Chart": {
+      "title": "Xu hướng doanh thu (30 ngày qua)",
+      "label": "Doanh thu hàng ngày"
+    },
+    "RecentTransactions": {
+      "title": "Giao dịch gần đây",
+      "empty": "Không có giao dịch gần đây.",
+      "viewAllBtn": "Xem tất cả giao dịch"
+    }
+  },
+  "ManageBoostPage": {
+    "helmet": "Quản lý Boost · CS2Boost Admin",
+    "title": "Quản lý giá Boost",
+    "subtitle": "Điều chỉnh hệ số và đơn giá cho từng chế độ chơi.",
+    "tabs": {
+      "premier": "Premier",
+      "wingman": "Wingman",
+      "levelFarming": "Cày Cấp"
+    },
+    "errorLoading": "Lỗi tải dữ liệu. Vui lòng làm mới trang.",
+    "noConfig": "Không tìm thấy dữ liệu cấu hình.",
+    "basePriceTitle": "Cài đặt giá cơ bản",
+    "basePriceSubtitle": "Đơn giá này được áp dụng chung cho tất cả các khu vực.",
+    "LevelFarming": {
+      "title": "Cài đặt giá cơ bản",
+      "subtitle": "Đặt giá cơ bản cho mỗi 1000 XP."
+    },
+    "Table": {
+      "start": "Bắt đầu",
+      "end": "Kết thúc",
+      "rate": "Hệ số (x)",
+      "costForTier": "Giá mỗi bậc",
+      "rank": "Hạng",
+      "costPerWin": "Giá mỗi trận thắng"
+    }
+  },
+  "ManageReportsPage": {
+    "helmet": "Quản lý Báo cáo · CS2Boost",
+    "title": "Quản lý Báo cáo Người dùng",
+    "subtitle": "Xử lý các báo cáo và hoà giải các cuộc trò chuyện.",
+    "inboxTitle": "Hộp thư đến",
+    "newLabel": "Mới",
+    "searchPlaceholder": "Tìm theo người gửi...",
+    "errorLoading": "Lỗi khi tải báo cáo.",
+    "reportedLabel": "đã báo cáo",
+    "acceptBtn": "Chấp nhận Báo cáo",
+    "resolveBtn": "Đóng & Giải quyết",
+    "resolvedStatus": "Đã giải quyết",
+    "chatWithClientTab": "Chat với Khách hàng ({{username}})",
+    "chatWithPartnerTab": "Chat với Partner ({{username}})",
+    "noDescription": "Không có mô tả nào được cung cấp.",
+    "conversationNotAvailable": "Cuộc trò chuyện không có sẵn.",
+    "selectReport": "Chọn một báo cáo để xem chi tiết.",
+    "resolveConfirm": "Bạn có chắc chắn muốn đóng báo cáo này không? Hành động này không thể hoàn tác.",
+    "InboxItem": {
+      "titleLabel": "Tiêu đề",
+      "noDescription": "Nhấp để xem chi tiết",
+      "statusPENDING": "Đang chờ",
+      "statusINPROGRESS": "Đang xử lý",
+      "statusRESOLVED": "Đã giải quyết",
+      "statusREJECT": "Bị từ chối"
+    }
+  },
+  "UserDetailsPage": {
+    "helmet": "Người dùng: {{username}} · Trang quản trị",
+    "title": "Chi tiết người dùng",
+    "subtitle": "Quản lý và xem chi tiết cho {{username}}.",
+    "errorLoading": "Không thể tải dữ liệu người dùng. Người dùng có thể không tồn tại.",
+    "tabs": {
+      "orders": "Đơn hàng",
+      "transactions": "Giao dịch",
+      "settings": "Cài đặt"
+    },
+    "ProfileCard": {
+      "userInfoTitle": "Thông tin người dùng",
+      "fullName": "Họ và tên",
+      "status": "Trạng thái",
+      "active": "Hoạt động",
+      "banned": "Bị cấm",
+      "joined": "Tham gia",
+      "partnerStatsTitle": "Thống kê Partner",
+      "rating": "Đánh giá",
+      "reviews": "{{count}} đánh giá",
+      "completion": "Hoàn thành",
+      "followers": "Theo dõi"
+    },
+    "OrdersTable": {
+      "loading": "Đang tải đơn hàng...",
+      "empty": "Người dùng này không có đơn hàng nào."
+    },
+    "TransactionsTable": {
+      "loading": "Đang tải giao dịch...",
+      "empty": "Người dùng này không có giao dịch nào."
+    },
+    "SettingsPanel": {
+      "title": "Kiểm soát trạng thái tài khoản",
+      "activeSubtitle": "Người dùng này hiện đang hoạt động. Cấm sẽ khóa tài khoản của họ.",
+      "bannedSubtitle": "Người dùng này hiện đang bị cấm. Lý do: {{reason}}",
+      "banBtn": "Cấm người dùng",
+      "unbanBtn": "Bỏ cấm",
+      "banConfirmTitle": "Cấm người dùng: {{username}}",
+      "unbanConfirmTitle": "Xác nhận bỏ cấm",
+      "banConfirmDesc": "Vui lòng cung cấp lý do rõ ràng để cấm người dùng này.",
+      "unbanConfirmDesc": "Bạn có chắc chắn muốn bỏ cấm cho {{username}} không?",
+      "reasonPlaceholder": "Lý do cấm..."
+    }
+  },
+  "ManageRevenuePage": {
+    "helmet": "Quản lý Doanh thu · Trang quản trị",
+    "title": "Quản lý Doanh thu",
+    "subtitle": "Theo dõi, lọc và quản lý mọi hoạt động tài chính trên nền tảng.",
+    "kpiError": "Không thể tải các chỉ số KPI.",
+    "searchPlaceholder": "Tìm theo người dùng...",
+    "StatCards": {
+      "grossRevenue": "Tổng doanh thu (30 ngày)",
+      "netProfit": "Lợi nhuận ròng (30 ngày)",
+      "totalPayouts": "Tổng thanh toán (30 ngày)",
+      "pendingPayouts": "Thanh toán đang chờ"
+    },
+    "TransactionTable": {
+      "title": "Tất cả giao dịch",
+      "error": "Không thể tải các giao dịch.",
+      "empty": "Không tìm thấy giao dịch nào với bộ lọc hiện tại."
+    },
+    "PayoutRequests": {
+      "title": "Yêu cầu rút tiền ({{count}})",
+      "error": "Lỗi khi tải yêu cầu.",
+      "empty": "Không có yêu cầu nào đang chờ.",
+      "declineBtn": "Từ chối",
+      "approveBtn": "Chấp thuận"
+    }
+  },
+  "AdminSettingsPage": {
+    "helmet": "Cài đặt của tôi · Trang quản trị",
+    "title": "Cài đặt tài khoản",
+    "subtitle": "Quản lý thông tin cá nhân và cài đặt bảo mật của bạn.",
+    "loading": "Đang tải dữ liệu admin...",
+    "ProfileCard": {
+      "title": "Thông tin hồ sơ",
+      "subtitle": "Cập nhật thông tin cá nhân của bạn tại đây."
+    },
+    "PasswordCard": {
+      "title": "Thay đổi mật khẩu",
+      "subtitle": "Cập nhật mật khẩu để giữ an toàn cho tài khoản của bạn.",
+      "updateBtn": "Cập nhật mật khẩu"
     }
   }
 }

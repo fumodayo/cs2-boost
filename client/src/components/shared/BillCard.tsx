@@ -1,39 +1,40 @@
+import { useContext, useMemo, useState } from "react";
 import { GoClockFill } from "react-icons/go";
-import { RxGlobe } from "react-icons/rx";
+import { FiGlobe } from "react-icons/fi";
+import { IconType } from "react-icons";
+
 import Switch from "../@radix-ui/Switch";
-import { Button } from "./Button";
-import { useLocation, useNavigate } from "react-router-dom";
 import Chip from "./Chip";
 import { formatMoney } from "~/utils";
-import { gameMode, gameServer } from "~/constants/mode";
-import { useContext, useMemo, useState } from "react";
-import { IconType } from "react-icons";
-import { listOfRanks } from "~/constants/games";
-import { useTranslation } from "react-i18next";
+import { IExtraOption } from "~/types";
 import { AppContext } from "../context/AppContext";
-import { useExchangeMoney } from "~/hooks/useExchangeMoney";
-import { useSelector } from "react-redux";
-import { RootState } from "~/redux/store";
-import { axiosAuth } from "~/axiosAuth";
-import toast from "react-hot-toast";
+import cn from "~/libs/utils";
+import Spinner from "./Spinner";
+import { Button } from "./Button";
+import useExchangeRate from "~/hooks/useExchangeMoney";
+import { useTranslation } from "react-i18next";
 
-const options = [
-  {
-    name: "Stream",
-    label: "15%",
-    value: 0.15,
-  },
-  {
-    name: "Play with Partner (Duo)",
-    label: "10%",
-    value: 0.1,
-  },
-];
-
-interface IOptionProps {
-  name: string;
+interface DisplayItem {
   label: string;
-  value: number;
+  value: string | number;
+  imageUrl?: string;
+}
+
+interface IBillCardProps {
+  modeIcon: IconType;
+  modeLabel: string;
+  serverLabel?: string;
+  serverIcon?: IconType;
+  displayItems: {
+    begin: DisplayItem;
+    end: DisplayItem;
+  };
+  baseCost: number;
+  totalTime?: number;
+  extraOptions: IExtraOption[];
+  isCheckoutDisabled: boolean;
+  onCheckout: (selectedOptions: IExtraOption[], finalCost: number) => void;
+  isLoading?: boolean;
 }
 
 const Option = ({
@@ -41,272 +42,213 @@ const Option = ({
   label,
   isChecked,
   onToggle,
-}: IOptionProps & { isChecked: boolean; onToggle: () => void }) => {
-  const { t } = useTranslation();
-
+}: IExtraOption & { isChecked: boolean; onToggle: () => void }) => {
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <div className="flex items-center justify-between gap-1">
-        <label className="text-sm font-semibold capitalize">
-          {t(`BillCard.options.${name}`)}
-        </label>
+    <div className="flex items-center justify-between py-2">
+      <div className="flex items-center gap-2">
+        <label className="font-medium text-foreground">{name}</label>
         <Chip>+ {label}</Chip>
       </div>
-      <div className="flex items-center justify-between">
-        <Switch checked={isChecked} onCheckedChange={onToggle} />
-      </div>
+      <Switch checked={isChecked} onCheckedChange={onToggle} />
     </div>
   );
 };
 
-const Mode = ({ icon: Icon, label }: { icon: IconType; label: string }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="mx-1 my-2 flex items-center space-x-2">
-      <Icon className="text-blue-600" size={20} />
-      <span className="whitespace-nowrap rounded-md bg-accent px-3 py-1 text-sm text-muted-foreground">
-        {t(`Globals.GameMode.${label}`)}
-      </span>
-    </div>
-  );
-};
-
-const ModeServer = ({
-  icon: Icon,
-  label,
-}: {
-  icon: IconType;
-  label: string;
+const BillCard: React.FC<IBillCardProps> = ({
+  baseCost,
+  totalTime,
+  displayItems,
+  modeIcon: ModeIcon,
+  modeLabel,
+  serverIcon: ServerIcon,
+  serverLabel,
+  extraOptions,
+  isCheckoutDisabled,
+  onCheckout,
+  isLoading,
 }) => {
   const { t } = useTranslation();
-  return (
-    <div className="mx-1 my-2 flex items-center space-x-2">
-      <Icon className="text-blue-600" size={20} />
-      <span className="whitespace-nowrap rounded-md bg-accent px-3 py-1 text-sm text-muted-foreground">
-        {t(`Globals.Server.${label}`)}
-      </span>
-    </div>
-  );
-};
+  const { currency } = useContext(AppContext);
+  const [selectedOptions, setSelectedOptions] = useState<IExtraOption[]>([]);
+  const vndToUsdRate = useExchangeRate("vnd", "usd");
 
-interface IBillCardProps {
-  beginText?: string;
-  endText?: string;
-  beginExp?: number;
-  endExp?: number;
-  beginRating?: number;
-  endRating?: number;
-  beginRank?: string;
-  endRank?: string;
-  cost?: number;
-  totalTime?: number;
-  server?: string;
-}
-
-const BillCard = ({
-  cost,
-  totalTime,
-  beginText,
-  endText,
-  beginExp,
-  endExp,
-  beginRating,
-  endRating,
-  beginRank,
-  endRank,
-  server,
-}: IBillCardProps) => {
-  const { t } = useTranslation();
-  const navigator = useNavigate();
-  const { currency, toggleLoginModal } = useContext(AppContext);
-  const { currentUser } = useSelector((state: RootState) => state.user);
-  const [loading, setLoading] = useState(false);
-
-  const { pathname } = useLocation();
-  const mode = gameMode.find((game) => game.path === pathname);
-
-  // Tìm kiếm server trong server list
-  const currentServer = gameServer.find((game) => game.value === server);
-
-  // Tìm kiếm rank trong rank list
-  const currentBeginRank = listOfRanks.find((rank) => rank.value === beginRank);
-  const currentEndRank = listOfRanks.find((rank) => rank.value === endRank);
-
-  const [optionList, setOptionList] = useState<IOptionProps[]>([]);
-
-  // Nếu toggle on switch nào thì option sẽ được thêm vào option list và ngược lại
-  const handleToggle = (option: IOptionProps) => {
-    setOptionList((prev) =>
+  const handleToggle = (option: IExtraOption) => {
+    setSelectedOptions((prev) =>
       prev.some((item) => item.name === option.name)
         ? prev.filter((item) => item.name !== option.name)
         : [...prev, option],
     );
   };
+  const finalCostInVND = useMemo(() => {
+    const optionsCost = selectedOptions.reduce(
+      (acc, option) => acc + baseCost * option.value,
+      0,
+    );
+    return Math.round((baseCost + optionsCost) / 1000) * 1000;
+  }, [baseCost, selectedOptions]);
 
-  // Tổng số tiền (cost + bonus cost) theo option list
-  const totalCost = useMemo(() => {
-    if (cost) {
-      const bonusCost = optionList.reduce(
-        (acc, option) => acc + cost * option.value,
-        0,
-      );
-      // Làm tròn đến hàng 1000
-      return Math.round((cost + bonusCost) / 1000) * 1000;
+  const convertedTotalCostForDisplay = useMemo(() => {
+    if (currency === "usd" && vndToUsdRate) {
+      return finalCostInVND * vndToUsdRate;
     }
-    return 0;
-  }, [cost, optionList]);
+    return finalCostInVND;
+  }, [finalCostInVND, currency, vndToUsdRate]);
 
-  const exchangeMoney = useExchangeMoney(totalCost);
-
-  const handleCreateOrder = async () => {
-    if (!currentUser) {
-      toggleLoginModal();
-    } else {
-      try {
-        setLoading(true);
-        const newOrder = {
-          price: totalCost,
-          options: optionList,
-          totalTime,
-          begin_exp: beginExp,
-          end_exp: endExp,
-          begin_rating: beginRating,
-          end_rating: endRating,
-          begin_rank: currentBeginRank?.name,
-          end_rank: currentEndRank?.name,
-          server: currentServer?.label ?? "global",
-          title: `${mode?.label} (${currentBeginRank?.name || ""}${beginExp ?? ""}${beginRating ?? ""} → ${currentEndRank?.name || ""}${endExp ?? ""}${endRating ?? ""}) - ${currentServer?.label ?? "global"}`,
-          type: mode?.label.toLowerCase().replace(" ", "_"),
-        };
-
-        const { data } = await axiosAuth.post(
-          `/order/create-order/${currentUser?._id}`,
-          newOrder,
-        );
-
-        if (data.success) {
-          const { order_id } = data;
-          navigator(`/checkout/${order_id}`);
-        } else {
-          toast.error("Order failed");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (e) {
-        toast.error("Order failed");
-      } finally {
-        setLoading(false);
-      }
-    }
+  const handleCheckoutClick = () => {
+    onCheckout(selectedOptions, finalCostInVND);
   };
+  const hasSelectedServer = !!serverLabel;
 
   return (
-    <div className="gap-5 lg:col-span-2 xl:col-span-2">
-      <div className="w-full max-w-[540px] rounded-lg bg-card p-6 shadow">
-        <p className="text-center text-lg font-semibold text-foreground">
+    <aside className="lg:col-span-2 xl:col-span-2">
+      <div className="sticky top-24 w-full max-w-[540px] rounded-xl border border-border bg-card p-6 shadow-sm">
+        <h3 className="text-center text-xl font-bold text-foreground">
           {t("BillCard.header")}
-        </p>
-        {server ? (
-          <div className="-mx-6 my-4 bg-accent py-3 text-center text-muted-foreground">
-            <div className="flex justify-center">
-              <span className="mx-1 font-bold text-foreground md:mx-4">
-                {t(`Globals.label.${beginText}`)}
-              </span>
-              <p className="w-4">{beginExp}</p>
-              <p className="w-4">{beginRating}</p>
-              {currentBeginRank && (
-                <img
-                  className="h-full w-14"
-                  src={`/assets/games/counter-strike-2/wingman/${currentBeginRank.image}.png`}
-                  alt={currentBeginRank.name}
-                />
-              )}
-              <span className="ml-8">{"->"}</span>
-              <span className="mx-1 font-bold text-foreground md:mx-4">
-                {t(`Globals.label.${endText}`)}
-              </span>
-              <p className="w-4">{endExp}</p>
-              <p className="w-4">{endRating}</p>
-              {currentEndRank && (
-                <img
-                  className="h-full w-14"
-                  src={`/assets/games/counter-strike-2/wingman/${currentEndRank.image}.png`}
-                  alt={currentEndRank.name}
-                />
-              )}
-            </div>
-          </div>
-        ) : (
-          <p className="my-8 text-center text-warning">{t("BillCard.title")}</p>
-        )}
+        </h3>
 
-        {/* OPTIONS */}
-        {server && (
-          <div className="my-4 max-w-lg rounded-lg bg-card">
-            <h4 className="mb-8 text-center text-sm text-muted-foreground">
-              {t("BillCard.subtitle")}
-            </h4>
-            {options.map((option) => (
-              <Option
-                key={option.name}
-                {...option}
-                isChecked={optionList.some((item) => item.name === option.name)}
-                onToggle={() => handleToggle(option)}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* TOTAL TIME */}
-        {server && totalTime && totalTime > 0 ? (
-          <div className="-mx-6 mb-4 flex items-center justify-center bg-accent py-3 text-center text-sm font-bold text-muted-foreground">
-            <GoClockFill className="mr-2" size={18} /> {t("BillCard.time1")}:
-            <span className="font-bold">
-              ~{" "}
-              {totalTime && (totalTime <= 60 ? 1 : Math.floor(totalTime / 60))}{" "}
-              {t("BillCard.time2")}
-            </span>
-          </div>
-        ) : (
-          ""
-        )}
-
-        {/* MODES */}
-        {mode && server && (
-          <div className="my-8 flex flex-wrap gap-2">
-            <Mode {...mode} />
-            {currentServer && <ModeServer {...currentServer} />}
-          </div>
-        )}
-
-        {/* TOTAL COST */}
-        <div className="mt-6 flex items-end justify-between">
-          <p className="text-lg text-muted-foreground">
-            {t("BillCard.price")}:
-          </p>
-          {exchangeMoney && exchangeMoney > 0 ? (
-            <div className="flex flex-row items-end gap-2">
-              <span className="bg-gradient-to-l from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold tracking-tight text-transparent">
-                {formatMoney(exchangeMoney, currency)}
+        {!hasSelectedServer ? (
+          <div className="mt-4 flex flex-col items-center justify-center text-center">
+            <p className="my-8 font-semibold text-yellow-500">
+              {t("BillCard.title")}
+            </p>
+            <div className="w-full border-t border-border pt-4">
+              <p className="text-lg font-semibold text-foreground">
+                {t("BillCard.label.Total Price")}:
+              </p>
+              <span className="text-4xl font-bold tracking-tight text-muted-foreground">
+                {formatMoney(0, currency)}
               </span>
             </div>
-          ) : (
-            ""
+            <Button
+              disabled={true}
+              size="lg"
+              className="text-md mt-4 w-full font-semibold"
+            >
+              {t("BillCard.btn")} →
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div
+              className={cn(
+                "-mx-6 my-4 rounded-lg bg-accent p-4 transition-opacity duration-300",
+                isCheckoutDisabled ? "opacity-50" : "opacity-100",
+              )}
+            >
+              <div className="flex items-center justify-around text-center">
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    {t(
+                      `BillCard.label.${displayItems.begin.label}` as const,
+                      displayItems.begin.label,
+                    )}
+                  </span>
+                  {displayItems.begin.imageUrl ? (
+                    <img
+                      className="h-10 w-auto"
+                      src={displayItems.begin.imageUrl}
+                      alt={String(displayItems.begin.value)}
+                    />
+                  ) : (
+                    <p className="text-2xl font-bold text-foreground">
+                      {displayItems.begin.value}
+                    </p>
+                  )}
+                </div>
+                <span className="text-xl font-light text-muted-foreground">
+                  →
+                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    {t(
+                      `BillCard.label.${displayItems.end.label}` as const,
+                      displayItems.end.label,
+                    )}
+                  </span>
+                  {displayItems.end.imageUrl ? (
+                    <img
+                      className="h-10 w-auto"
+                      src={String(displayItems.end.imageUrl)}
+                      alt={String(displayItems.end.value)}
+                    />
+                  ) : (
+                    <p className="text-2xl font-bold text-foreground">
+                      {displayItems.end.value}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="my-4 rounded-lg border-y border-border py-2">
+              <h4 className="mb-2 text-center text-sm font-semibold text-muted-foreground">
+                {t("BillCard.label.Extra Options")}
+              </h4>
+              {extraOptions.map((option) => (
+                <Option
+                  key={option.name}
+                  {...option}
+                  name={t(
+                    `BillCard.options.${option.name}` as const,
+                    option.name,
+                  )}
+                  isChecked={selectedOptions.some(
+                    (item) => item.name === option.name,
+                  )}
+                  onToggle={() => handleToggle(option)}
+                />
+              ))}
+            </div>
+            {totalTime && totalTime > 0 && (
+              <div className="mb-4 flex items-center justify-center rounded-md bg-accent p-2 text-center text-sm font-semibold text-muted-foreground">
+                <GoClockFill className="mr-2" />{" "}
+                {t("BillCard.label.Estimated time")}:
+                <span className="ml-1 text-foreground">
+                  ~ {totalTime <= 60 ? 1 : Math.floor(totalTime / 60)}{" "}
+                  {t("BillCard.label.hours")}
+                </span>
+              </div>
+            )}
+            <div className="my-4 flex flex-wrap items-center justify-center gap-2">
+              <div className="flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-sm font-medium text-muted-foreground">
+                <ModeIcon className="text-primary" /> <span>{modeLabel}</span>
+              </div>
+              {ServerIcon && serverLabel && (
+                <div className="flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-sm font-medium text-muted-foreground">
+                  <ServerIcon className="text-primary" />{" "}
+                  <span>{serverLabel}</span>
+                </div>
+              )}
+            </div>
+            <div className="mt-6 flex items-end justify-between border-t border-border pt-4">
+              <p className="text-lg font-semibold text-foreground">
+                {t("BillCard.label.Total Price")}:
+              </p>
+              <span className="text-4xl font-bold tracking-tight text-foreground">
+                {currency === "usd" && vndToUsdRate === undefined ? (
+                  <Spinner size="sm" />
+                ) : (
+                  formatMoney(convertedTotalCostForDisplay, currency)
+                )}
+              </span>
+            </div>
+            <Button
+              disabled={isCheckoutDisabled || isLoading}
+              size="lg"
+              className="text-md mt-4 w-full font-semibold"
+              onClick={handleCheckoutClick}
+            >
+              {isLoading ? <Spinner /> : `${t("BillCard.btn")} →`}
+            </Button>
+          </>
+        )}
+        <div className="mt-4 flex items-center justify-center gap-2 text-center text-xs font-semibold text-muted-foreground">
+          <FiGlobe />
+          {t(
+            "BillCard.label.Using a VPN is prohibited when making a purchase.",
           )}
         </div>
-        <Button
-          disabled={!server || loading || totalCost <= 0}
-          variant="primary"
-          className="text-md mt-4 w-full rounded-md py-2 font-semibold text-primary-foreground hover:!bg-blue-700"
-          onClick={handleCreateOrder}
-        >
-          {t("BillCard.btn")} →
-        </Button>
-        <div className="mt-4 flex items-center justify-center text-center text-sm font-semibold text-muted-foreground">
-          <RxGlobe className="mr-1" />
-          {t("BillCard.description")}
-        </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

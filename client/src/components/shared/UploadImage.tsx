@@ -1,5 +1,5 @@
 import { CiCirclePlus } from "react-icons/ci";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import MoonLoader from "react-spinners/MoonLoader";
 import cn from "~/libs/utils";
@@ -23,7 +23,7 @@ const UploadImage = ({ onChangeImage }: IUploadImageProps) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleUploadImage = async (file: File) => {
+  const handleUploadImage = useCallback(async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
 
@@ -44,7 +44,7 @@ const UploadImage = ({ onChangeImage }: IUploadImageProps) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const onDrop = (acceptFiles: File[], rejectFiles: FileRejection[]) => {
     if (rejectFiles.length > 0) {
@@ -63,8 +63,10 @@ const UploadImage = ({ onChangeImage }: IUploadImageProps) => {
   };
 
   useEffect(() => {
-    onChangeImage(avatarUrl);
-  }, [avatarUrl]);
+    if (typeof onChangeImage === "function") {
+      onChangeImage(avatarUrl);
+    }
+  }, [avatarUrl, onChangeImage]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,

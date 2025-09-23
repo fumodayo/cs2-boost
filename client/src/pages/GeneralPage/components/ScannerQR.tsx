@@ -38,7 +38,6 @@ const scannerTranslator = () => {
     },
     { original: "Scanner paused", traduccion: "Máy quét đã tạm dừng" },
 
-    // Html5QrcodeScannerStrings
     { original: "Scanning", traduccion: "Đang quét" },
     { original: "Idle", traduccion: "Đang chờ" },
     { original: "Error", traduccion: "Lỗi" },
@@ -91,26 +90,20 @@ const scannerTranslator = () => {
     { original: "Loading image...", traduccion: "Đang tải hình ảnh..." },
     { original: "Camera based scan", traduccion: "Quét bằng camera" },
     { original: "Fule based scan", traduccion: "Quét từ tệp" },
-
-    // LibraryInfoStrings
     { original: "Powered by ", traduccion: "Được cung cấp bởi " },
     { original: "Report issues", traduccion: "Báo cáo vấn đề" },
-
-    // Others
     {
       original: "NotAllowedError: Permission denied",
       traduccion: "Lỗi: Quyền bị từ chối để truy cập camera",
     },
   ];
 
-  // Hàm dịch đoạn văn bản
   const traducirTexto = (texto: string | null) => {
     if (!texto) return texto;
     const traduccion = traducciones.find((t) => t.original === texto.trim());
     return traduccion ? traduccion.traduccion : texto;
   };
 
-  // Hàm dịch các node text trong DOM
   const traducirNodosDeTexto = (nodo: Node) => {
     if (nodo.nodeType === Node.TEXT_NODE) {
       nodo.textContent = traducirTexto(nodo.textContent);
@@ -119,7 +112,6 @@ const scannerTranslator = () => {
     }
   };
 
-  // Quan sát sự thay đổi trong DOM
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === "childList") {
@@ -131,7 +123,6 @@ const scannerTranslator = () => {
   const config = { childList: true, subtree: true };
   observer.observe(document.body, config);
 
-  // Dịch nội dung ban đầu
   traducirNodosDeTexto(document.body);
 };
 
@@ -150,9 +141,9 @@ const ScannerQR = ({ onScanSuccess }: IScannerQRProps) => {
 
     const success = (result: string) => {
       if (isScanning) {
-        scanner.clear().catch((error) => console.warn(error)); // Handle promise rejection for clear
-        onScanSuccess(result); // Truyền kết quả về component cha
-        isScanning = false; // Stop further scanning
+        scanner.clear().catch((error) => console.warn(error));
+        onScanSuccess(result);
+        isScanning = false;
       }
     };
 
@@ -162,11 +153,10 @@ const ScannerQR = ({ onScanSuccess }: IScannerQRProps) => {
 
     scanner.render(success, error);
 
-    // Dịch các đoạn text sau khi giao diện render
     scannerTranslator();
 
     return () => {
-      scanner.clear().catch((error) => console.warn(error)); // Clean up when component unmounts
+      scanner.clear().catch((error) => console.warn(error));
     };
   }, [onScanSuccess]);
 

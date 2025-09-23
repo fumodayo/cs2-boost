@@ -4,7 +4,7 @@ import { listOfRanks } from "~/constants/games";
 import { listOfStatus } from "~/constants/order";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa6";
-import { IOrderProps } from "~/types";
+import { IOrder } from "~/types";
 import { formatMoney } from "~/utils";
 import { v4 as uuidv4 } from "uuid";
 
@@ -92,7 +92,7 @@ const renderWidgetBoosItem = (key: string, value: string | number) => {
   }
 };
 
-const WidgetList = (order: IOrderProps) => {
+const WidgetList = (order: IOrder) => {
   const { t } = useTranslation();
 
   return (

@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { IUserProps } from '../types';
-import { IP_STATUS } from '../constants';
-import User from '../models/user.model';
+import { IP_STATUS, ROLE } from '../constants';
+import User, { IUser } from '../models/user.model';
 import {
     generateAccessToken,
     generatePassword,
@@ -14,60 +12,43 @@ import {
 import { uploadToCloudinary } from '../utils/uploadToCloudinary';
 import { errorHandler } from '../utils/error';
 import { sendEmail } from '../utils/sendEmail';
+import handleTokenRefreshLogic from '../helpers/token.helper';
 
 /**
- * @route POST /api/auth/refresh-token
- * @access Public
- * @description Mỗi lần thực hiện một request có sử dụng đến quyền access của client thì sẽ gọi hàm này
- * Dùng để tạo mới token và xác thực lại (ip location, user id)
+ * @desc    Làm mới access token bằng refresh token.
+ *          Nếu không có refresh token, hệ thống sẽ cập nhật trạng thái offline cho IP tương ứng.
+ * @route   POST /api/auth/refresh-token
+ * @access  Public
  */
 const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
-    const { refresh_token } = req.cookies;
-    const { id, ip } = req.body;
-
-    if (!refresh_token) {
-        const existUser = await User.findById(id);
-        if (!existUser) return next(errorHandler(404, 'User not found'));
-
-        existUser.ip_addresses.forEach((log) => {
-            if (log.ip_location === ip) {
-                log.status = IP_STATUS.OFFLINE;
-            }
-        });
-
-        await existUser.save();
-        return next(errorHandler(401, 'Unauthorized'));
-    }
-
     try {
-        const decodedToken = jwt.verify(
-            refresh_token,
-            process.env.REFRESH_TOKEN_SECRET as string,
-        ) as JwtPayload;
+        const { refresh_token } = req.cookies;
+        const { id, ip_location } = req.body;
 
-        if (!decodedToken) {
-            return next(errorHandler(400, 'Access token is not valid'));
-        }
-
-        const existUser = await User.findById(decodedToken.id);
-
-        if (!existUser) {
+        // Nếu không có refresh token, coi như người dùng đã đăng xuất từ IP này
+        if (!refresh_token) {
+            const user = await User.findById(id);
+            if (user) {
+                const ipLog = user.ip_addresses.find((log) => log.ip_location === ip_location);
+                if (ipLog) {
+                    ipLog.status = IP_STATUS.OFFLINE;
+                    await user.save();
+                }
+            }
             return next(errorHandler(401, 'Unauthorized'));
         }
 
-        generateAccessToken(res, existUser.toObject() as IUserProps);
-
-        res.status(201).json('Created Access Token Successfully');
+        await handleTokenRefreshLogic(req, res, false);
     } catch (e) {
-        console.log(e);
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/register
- * @access Public
- * @description Tạo mới tài khoản
+ * @desc    Đăng ký một tài khoản người dùng mới bằng email và mật khẩu.
+ *          Hệ thống sẽ tự động tạo username và user_id.
+ * @route   POST /api/auth/register
+ * @access  Public
  */
 const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -88,66 +69,67 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
             ip_addresses: [{ ip_location, country, device }],
         });
 
-        const userObj = (await newUser.save()).toObject() as IUserProps;
+        const savedUser = await newUser.save();
 
-        const { password: _, ...safeUser } = userObj;
+        const { password: _, ...safeUser } = savedUser.toObject();
 
-        generateAccessToken(res, userObj);
-        generateRefreshToken(res, userObj);
+        generateAccessToken(res, savedUser);
+        generateRefreshToken(res, savedUser);
 
-        res.status(200).json(safeUser);
+        res.status(201).json({ success: true, message: 'Register is completed', data: safeUser });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/login
- * @access Public
- * @description Đăng nhập
+ * @desc    Đăng nhập vào hệ thống bằng username/email và mật khẩu.
+ *          Cập nhật trạng thái online cho IP của người dùng.
+ * @route   POST /api/auth/login
+ * @access  Public
  */
 const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email_address, password, ip_location, country, device } = req.body;
+        const { identifier, password, ip_location, country, device } = req.body;
 
         if (!ip_location || !country || !device)
             return next(errorHandler(400, 'Please turn off your VPN'));
 
         const existUser = await User.findOne({
-            email_address,
+            $or: [{ email_address: identifier }, { username: identifier }],
         });
 
         if (!existUser || !bcryptjs.compareSync(password, existUser.password))
             return next(errorHandler(400, 'Wrong email address or password'));
 
-        let isNewIP = true;
+        if (existUser.role.includes(ROLE.ADMIN)) {
+            return next(errorHandler(403, 'Admin accounts cannot log in here.'));
+        }
 
-        existUser.ip_addresses.forEach((log) => {
-            if (log.ip_location === ip_location) {
-                isNewIP = false;
-                log.status = IP_STATUS.ONLINE;
-            }
-        });
+        const ipLog = existUser.ip_addresses.find((log) => log.ip_location === ip_location);
+        if (ipLog) {
+            ipLog.status = IP_STATUS.ONLINE;
+        } else {
+            existUser.ip_addresses.push({ ip_location, country, device, status: IP_STATUS.ONLINE });
+        }
+        const savedUser = await existUser.save();
 
-        if (isNewIP) existUser.ip_addresses.push({ ip_location, country, device });
+        const { password: _, ...safeUser } = savedUser.toObject();
 
-        const userObj = (await existUser.save()).toObject() as IUserProps;
+        generateAccessToken(res, savedUser);
+        generateRefreshToken(res, savedUser);
 
-        const { password: _, ...safeUser } = userObj;
-
-        generateAccessToken(res, userObj);
-        generateRefreshToken(res, userObj);
-
-        res.status(200).json(safeUser);
+        res.status(200).json({ success: true, message: 'Login is successfully.', data: safeUser });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/auth-with-gmail
- * @access Public
- * @description Tạo tài khoản và đăng nhập bằng tài khoản gmail
+ * @desc    Đăng nhập hoặc đăng ký thông qua tài khoản Google.
+ *          Nếu người dùng chưa tồn tại, hệ thống sẽ tạo tài khoản mới và gửi mật khẩu ngẫu nhiên qua email.
+ * @route   POST /api/auth/google
+ * @access  Public
  */
 const authWithGmail = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -159,12 +141,11 @@ const authWithGmail = async (req: Request, res: Response, next: NextFunction) =>
         let uploadedProfilePicture = profile_picture;
         if (profile_picture) {
             uploadedProfilePicture = await uploadToCloudinary(profile_picture);
-            console.log('up_image', uploadedProfilePicture);
         }
 
         let user = await User.findOne({ email_address });
 
-        const updateIP = (user: IUserProps) => {
+        if (user) {
             const exists = user.ip_addresses.some((log) => log.ip_location === ip_location);
             if (!exists) {
                 user.ip_addresses.push({ ip_location, country, device, status: IP_STATUS.ONLINE });
@@ -173,12 +154,8 @@ const authWithGmail = async (req: Request, res: Response, next: NextFunction) =>
                     if (log.ip_location === ip_location) log.status = IP_STATUS.ONLINE;
                 });
             }
-        };
 
-        if (user) {
-            updateIP(user.toObject() as IUserProps);
             if (uploadedProfilePicture) user.profile_picture = uploadedProfilePicture;
-
             await user.save();
         } else {
             const newPassword = generatePassword();
@@ -211,26 +188,27 @@ const authWithGmail = async (req: Request, res: Response, next: NextFunction) =>
             await user.save();
         }
 
-        const userObj = user.toObject() as IUserProps;
-
+        const userObj = user.toObject();
         const { password, ...safeUser } = userObj;
         generateAccessToken(res, userObj);
         generateRefreshToken(res, userObj);
 
-        return res.status(200).json(safeUser);
+        res.status(200).json({ success: true, message: 'Login is successfully.', data: safeUser });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/forgot-password
- * @access Public
- * @description Tạo mới mã OTP có thời hạn gửi về email để xác thực tài khoản
+ * @desc    Gửi mã OTP để đặt lại mật khẩu về email của người dùng.
+ *          OTP có hiệu lực trong 1 giờ.
+ * @route   POST /api/auth/forgot-password
+ * @access  Public
  */
 const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email_address } = req.body;
+
         const existUser = await User.findOne({ email_address });
         if (!existUser) return next(errorHandler(404, 'User not found'));
 
@@ -241,34 +219,29 @@ const forgotPassword = async (req: Request, res: Response, next: NextFunction) =
 
         await sendEmail({
             to: email_address,
-            subject: 'Password Reset Notification',
-            html: `
-                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2 style="color: #4CAF50;">Password Reset Successful</h2>
-                <p>Dear ${existUser.username || 'User'},</p>
-                <p>Your password has been successfully reset. Here is your new password:</p>
-                <p style="font-size: 18px; font-weight: bold; color: #555;">${otp}</p>
-                <p>We recommend you log in and change this password to something more secure.</p>
-                <p>Thank you,</p>
-                <p><strong>CS2Boost Support Team</strong></p>
-                </div>
-            `,
+            subject: 'Yêu cầu đặt lại mật khẩu',
+            html: `<p>Mã OTP của bạn là: <strong>${otp}</strong>. Mã này sẽ hết hạn trong 1 giờ.</p>`,
         });
 
-        res.status(200).json({ success: true });
+        res.status(200).json({
+            success: true,
+            message: 'An OTP code has been sent to your email.',
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/auth-with-otp
- * @access Public
- * @description Xác nhận mã OTP
+ * @desc    Xác thực mã OTP mà người dùng cung cấp.
+ *          Sau khi xác thực thành công, mã OTP sẽ bị vô hiệu hóa.
+ * @route   POST /api/auth/verify-otp
+ * @access  Public
  */
-const authWithOtp = async (req: Request, res: Response, next: NextFunction) => {
+const verifyOtp = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { otp } = req.body;
+
         const existUser = await User.findOne({
             otp: otp,
             otp_expiry: { $gt: Date.now() },
@@ -289,49 +262,69 @@ const authWithOtp = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
- * @route POST /api/auth/reset-password
- * @access Public
- * @description Tạo mới mật khẩu cho tài khoản
+ * @desc    Đặt lại mật khẩu cho người dùng bằng mật khẩu mới.
+ *          Thường được gọi sau khi đã xác thực OTP thành công.
+ * @route   POST /api/auth/reset-password
+ * @access  Public
  */
 const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email_address, new_password, ip_location, country, device } = req.body;
+
         if (!ip_location || !country || !device)
             return next(errorHandler(400, 'Please turn off your VPN'));
 
-        const existUser = await User.findOne({ email_address });
-        if (!existUser) return next(errorHandler(404, 'User not found'));
+        const existUser = await User.findOne({
+            email_address,
+        });
+
+        if (!existUser) return next(errorHandler(400, 'Invalid or expired OTP'));
 
         const existingIP = existUser.ip_addresses.find((log) => log.ip_location === ip_location);
-
         if (existingIP) {
             existingIP.status = IP_STATUS.ONLINE;
         } else {
-            existUser.ip_addresses.push({ ip_location, country, device });
+            existUser.ip_addresses.push({
+                ip_location,
+                country,
+                device,
+                status: IP_STATUS.ONLINE,
+            });
         }
 
         existUser.password = new_password;
+        existUser.otp = null;
+        existUser.otp_expiry = null;
 
-        const { password, ...safeUser } = (await existUser.save()).toObject() as IUserProps;
+        const updatedUserDocument = await existUser.save();
 
-        generateAccessToken(res, safeUser);
-        generateRefreshToken(res, safeUser);
+        const userForToken = updatedUserDocument.toObject({ versionKey: false });
 
-        res.status(200).json(safeUser);
+        generateAccessToken(res, userForToken);
+        generateRefreshToken(res, userForToken);
+
+        const { password, ...safeUser } = userForToken;
+
+        res.status(200).json({
+            success: true,
+            message: 'Password was reset successfully.',
+            data: safeUser,
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/auth/signout
- * @access Public
- * @description
- * Đăng xuất tài khoản, đồng thời xóa cookie access_token và refresh_token
+ * @desc    Đăng xuất tài khoản người dùng.
+ *          Cập nhật trạng thái IP thành offline và xóa cookies.
+ * @route   POST /api/auth/signout
+ * @access  Private
  */
 const signout = async (req: Request, res: Response, next: NextFunction) => {
-    const { ip_location, id } = req.body;
     try {
+        const { ip_location, id } = req.body;
+
         const existUser = await User.findById(id);
         if (!existUser) return next(errorHandler(404, 'User not found'));
 
@@ -345,7 +338,76 @@ const signout = async (req: Request, res: Response, next: NextFunction) => {
         res.clearCookie('access_token')
             .clearCookie('refresh_token')
             .status(200)
-            .json('Signout success');
+            .json({ success: true, message: 'Signout success' });
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * @desc    Admin đăng ký một tài khoản mới.
+ *          Có thể chỉ định vai trò cho tài khoản này.
+ * @route   POST /api/auth/admin/register
+ * @access  Private (Admin)
+ */
+const registerWithAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { username, email_address, password, role } = req.body;
+
+        const newUser = new User({
+            username: username,
+            user_id: generateUserId(),
+            email_address: email_address,
+            password,
+            role,
+        });
+
+        await newUser.save();
+        const savedUser = await newUser.save();
+        const { password: _, ...safeUser } = savedUser.toObject();
+
+        res.status(201).json({
+            success: true,
+            message: 'Account created successfully.',
+            data: safeUser,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * @description Đăng nhập với tài khoản Admin.
+ * @route POST /api/auth/admin/login
+ * @access Private
+ */
+const loginWithAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { username, password } = req.body;
+
+        const existUser = await User.findOne({
+            username,
+            role: ROLE.ADMIN,
+        });
+
+        if (!existUser) {
+            return next(errorHandler(400, 'Wrong email address or password'));
+        }
+
+        const validPassword = bcryptjs.compareSync(password, existUser.password);
+
+        if (!validPassword) {
+            return next(errorHandler(400, 'Wrong email address or password'));
+        }
+
+        const userObj = (await existUser.save()).toObject() as IUser;
+        const { password: hashPassword, ...safeUser } = userObj;
+        generateAccessToken(res, userObj);
+        generateRefreshToken(res, userObj);
+
+        return res
+            .status(200)
+            .json({ success: true, message: 'Admin login successful.', data: safeUser });
     } catch (e) {
         next(e);
     }
@@ -357,7 +419,9 @@ export {
     login,
     authWithGmail,
     forgotPassword,
-    authWithOtp,
+    verifyOtp,
     resetPassword,
     signout,
+    registerWithAdmin,
+    loginWithAdmin,
 };

@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { SliderProps } from "rc-slider";
-import "rc-slider/assets/index.css";
-import "rc-tooltip/assets/bootstrap_white.css";
 import { Popover, PopoverContent, PopoverTrigger } from "../@radix-ui/Popover";
 import { Button } from "./Button";
-import Slider from "rc-slider";
 import { useSearchParams } from "react-router-dom";
+import * as Slider from "@radix-ui/react-slider";
 
-interface RangeFilterButtonProps extends Omit<SliderProps, "onChange"> {
+interface RangeFilterProps {
   min: number;
   max: number;
   step?: number;
@@ -16,23 +13,16 @@ interface RangeFilterButtonProps extends Omit<SliderProps, "onChange"> {
   type: string;
 }
 
-const RangeFilterButton: React.FC<RangeFilterButtonProps> = ({
+const RangeFilter: React.FC<RangeFilterProps> = ({
   min,
   max,
   step = 1,
   defaultValue,
   label = "Filter",
   type,
-  ...restProps
 }) => {
   const [range, setRange] = useState<[number, number]>(defaultValue);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleSliderChange = (value: number | number[]) => {
-    if (Array.isArray(value)) {
-      setRange([value[0], value[1]]);
-    }
-  };
 
   const marks: {
     [key: number]: { style: React.CSSProperties; label: string };
@@ -40,9 +30,9 @@ const RangeFilterButton: React.FC<RangeFilterButtonProps> = ({
   for (let i = min; i <= max; i += step) {
     marks[i] = {
       style: {
-        fontSize: "14px", // Điều chỉnh kích thước chữ
-        fontWeight: "bold", // In đậm chữ
-        color: "#ffffff", // Màu chữ
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: "#ffffff",
       },
       label: `${i}`,
     };
@@ -51,27 +41,23 @@ const RangeFilterButton: React.FC<RangeFilterButtonProps> = ({
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
 
-    // Kiểm tra nếu range đã có trên URL
     const existingMin = params.get(`${type}-min`);
     const existingMax = params.get(`${type}-max`);
 
-    // Nếu giá trị mới giống giá trị cũ thì không cập nhật
     if (existingMin === String(range[0]) && existingMax === String(range[1])) {
       return;
     }
 
-    // Xóa params cũ trước khi thêm mới
     params.delete(`${type}-min`);
     params.delete(`${type}-max`);
 
-    // Nếu giá trị mặc định không thay đổi, không thêm params
     if (range[0] !== defaultValue[0] || range[1] !== defaultValue[1]) {
       params.append(`${type}-min`, String(range[0]));
       params.append(`${type}-max`, String(range[1]));
     }
 
-    setSearchParams(params);
-  }, [range]);
+    setSearchParams(params, { replace: true });
+  }, [range, searchParams, setSearchParams, type, defaultValue]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -80,47 +66,68 @@ const RangeFilterButton: React.FC<RangeFilterButtonProps> = ({
     const maxParam = params.get(`${type}-max`);
 
     if (minParam && maxParam) {
-      setRange([Number(minParam), Number(maxParam)]);
+      const newRange: [number, number] = [Number(minParam), Number(maxParam)];
+      if (newRange[0] !== range[0] || newRange[1] !== range[1]) {
+        setRange(newRange);
+      }
     } else {
-      // Nếu không có params, reset về defaultValue
-      setRange(defaultValue);
+      if (range[0] !== defaultValue[0] || range[1] !== defaultValue[1]) {
+        setRange(defaultValue);
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, type, defaultValue, range]);
 
   return (
     <Popover>
       <PopoverTrigger>
         <Button
-          color="transparent"
+          variant="transparent"
           className="h-8 rounded-md border border-dashed border-input px-3 text-xs font-medium shadow-sm"
         >
           {label} ⭐ {range[0]} - {range[1]}
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        side="bottom"
+        sideOffset={8}
         align="start"
-        sideOffset={10}
-        className="w-[350px] rounded-md bg-popover p-4 text-popover-foreground"
+        className="z-50 w-64 rounded-xl border bg-popover p-6 text-popover-foreground shadow-lg"
       >
-        <div className="flex flex-col space-y-2 px-2 pb-6">
-          <h1 className="text-sm">{label}</h1>
-          <hr className="w-full border-foreground opacity-10" />
-          <Slider
-            range
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Set {label} Range</h4>
+            <p className="text-sm text-muted-foreground">
+              Adjust the slider to filter partners.
+            </p>
+          </div>
+          <Slider.Root
+            className="relative flex h-5 w-full touch-none select-none items-center"
+            value={range}
+            onValueChange={(newValue) => setRange(newValue as [number, number])}
             min={min}
             max={max}
-            value={range}
             step={step}
-            defaultValue={defaultValue}
-            onChange={handleSliderChange}
-            marks={marks}
-            {...restProps}
-          />
+            minStepsBetweenThumbs={0}
+          >
+            <Slider.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
+              <Slider.Range className="absolute h-full rounded-full bg-primary" />
+            </Slider.Track>
+            <Slider.Thumb
+              aria-label="Min value"
+              className="block h-5 w-5 cursor-pointer rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+            <Slider.Thumb
+              aria-label="Max value"
+              className="block h-5 w-5 cursor-pointer rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+          </Slider.Root>
+          <div className="flex justify-between text-sm font-semibold text-foreground">
+            <span>{range[0]}</span>
+            <span>{range[1]}</span>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
   );
 };
 
-export default RangeFilterButton;
+export default RangeFilter;

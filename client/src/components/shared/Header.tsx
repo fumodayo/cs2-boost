@@ -11,10 +11,11 @@ import MenuLanguage from "./MenuLanguage";
 import { Link, useLocation } from "react-router-dom";
 import Avatar from "./Avatar";
 import { useTranslation } from "react-i18next";
-import MenuNotifications from "./MenuNotifications";
 import { RootState } from "~/redux/store";
 import { useSelector } from "react-redux";
 import { useSocketContext } from "~/hooks/useSocketContext";
+import { ROLE } from "~/types/constants";
+import { MenuNotifications } from "./Notification";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -82,7 +83,7 @@ const Header = () => {
             <div className={cn("hidden items-center gap-x-3", "lg:flex")}>
               <MenuLanguage />
 
-              {currentUser ? (
+              {currentUser?.role.includes(ROLE.CLIENT) ? (
                 <>
                   <Link to="/orders">
                     <Button
@@ -103,7 +104,7 @@ const Header = () => {
               )}
             </div>
             <div className="relative ml-3 flow-root">
-              {currentUser ? (
+              {currentUser?.role.includes(ROLE.CLIENT) ? (
                 <Avatar />
               ) : (
                 <Button

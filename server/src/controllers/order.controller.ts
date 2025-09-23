@@ -1,65 +1,62 @@
 import { Request, Response, NextFunction } from 'express';
 import Order from '../models/order.model';
 import { errorHandler } from '../utils/error';
-import { AuthRequest, INotification } from '../types';
-import { NOTIFY_TYPE, ORDER_STATUS, ROLE } from '../constants';
-import { buildQueryOrderOptions, orderPopulates } from '../utils/queryHelpers';
+import {
+    CONVERSATION_STATUS,
+    NOTIFY_TYPE,
+    ORDER_STATUS,
+    ROLE,
+    TRANSACTION_TYPE,
+} from '../constants';
 import { generateUserId } from '../utils/generate';
 import Notification from '../models/notification.model';
-import Receipt from '../models/receipt.model';
-import { getReceiverSocketID, io } from '../socket/socket';
-import { sendNotification } from '../socket/events';
 import Conversation from '../models/conversation.model';
 import { createNotification, emitNotification, emitOrderStatusChange } from '../helpers';
 import Account from '../models/account.model';
+import { AuthRequest } from '../interfaces';
+import mongoose from 'mongoose';
+import Wallet from '../models/wallet.model';
+import Transaction from '../models/transaction.model';
+import User from '../models/user.model';
+import { buildQueryOrderOptions, orderPopulates } from '../helpers/order.helper';
+import { notificationService } from '../services/notification.service';
+import { pushService } from '../services/push.service';
 
 /**
- * @route GET /api/order/get-order-by-id/:id
- * @access Private (User)
- * @description Trả về thông tin chi tiết của một đơn hàng theo boost ID (mã đơn).
- *              Gồm thông tin tài khoản, dịch vụ, trạng thái đơn hàng, lịch sử cập nhật.
- *              Dùng khi người dùng click vào một đơn để xem chi tiết.
+ * @desc    Lấy chi tiết một đơn hàng bằng `boostId`.
+ * @route   GET /api/orders/:boostId
+ * @access  Private
  */
 const getOrderById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const order = await Order.findOne({ boost_id: req.params.id }).populate([
-            { path: 'user', select: '-password' },
-            { path: 'partner', select: '-password' },
-            { path: 'assign_partner', select: '-password' },
-            { path: 'conversation' },
-            { path: 'account' },
-            {
-                path: 'review',
-                populate: { path: 'sender', select: 'username profile_picture' },
-            },
-        ]);
+        const boostId = req.params.boostId;
+        const order = await Order.findOne({ boost_id: boostId }).populate(orderPopulates);
 
         if (!order) return next(errorHandler(404, 'Order not found'));
 
-        res.status(200).json(order);
+        res.status(200).json({ success: true, data: order });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route GET /api/order/get-orders
- * @access Private (User)
- * @description Lấy tất cả các đơn hàng mà người dùng hiện tại đã tạo.
- *              Dùng để hiển thị lịch sử mua hàng, trạng thái các đơn (đang xử lý, đã hoàn tất, đã hủy, v.v).
- *              Token xác thực được dùng để xác định user đang đăng nhập.
+ * @desc    Lấy danh sách đơn hàng của người dùng đang đăng nhập.
+ * @route   GET /api/orders/my-orders
+ * @access  Private (User)
  */
-const getOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const userid = req.user.id;
-    const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
-        'boost_id',
-        'type',
-        'status',
-        'title',
-    ]);
-
+const getMyOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const query = { user: userid, ...filters };
+        const { id: user_id } = req.user;
+
+        const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
+            'boost_id',
+            'type',
+            'status',
+            'title',
+        ]);
+
+        const query = { user: user_id, ...filters };
 
         const [total, orders] = await Promise.all([
             Order.countDocuments(query),
@@ -70,37 +67,31 @@ const getOrders = async (req: AuthRequest, res: Response, next: NextFunction) =>
                 .populate(orderPopulates),
         ]);
 
-        if (!orders.length) {
-            return next(errorHandler(404, 'Orders not found'));
-        }
-
-        res.status(200).json({ orders, total });
+        res.status(200).json({
+            success: true,
+            data: orders,
+            pagination: { total, page, perPage, totalPages: Math.ceil(total / perPage) },
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route GET /api/order/get-pending-orders
- * @access Private (Partner)
- * @description Trả về danh sách các đơn hàng đang chờ được partner tiếp nhận.
- *              Dành riêng cho partner để lựa chọn các đơn muốn thực hiện.
+ * @desc    Partner lấy danh sách đơn hàng đang chờ nhận.
+ * @route   GET /api/order/pending
+ * @access  Private (Partner)
  */
 const getPendingOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { role, id: user_id } = req.user;
-
-    if (!role.includes(ROLE.PARTNER)) {
-        return next(errorHandler(402, 'You do not have permission to do that'));
-    }
-
-    const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
-        'boost_id',
-        'type',
-        'status',
-        'title',
-    ]);
-
     try {
+        const { id: user_id } = req.user;
+
+        const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
+            'boost_id',
+            'type',
+            'status',
+            'title',
+        ]);
         const query = {
             $and: [
                 { $nor: [{ user: user_id }] },
@@ -123,37 +114,31 @@ const getPendingOrders = async (req: AuthRequest, res: Response, next: NextFunct
                 .populate(orderPopulates),
         ]);
 
-        if (!orders.length) {
-            return next(errorHandler(404, 'Orders not found'));
-        }
-
-        res.status(200).json({ orders, total });
+        res.status(200).json({
+            success: true,
+            data: orders,
+            pagination: { total, page, perPage, totalPages: Math.ceil(total / perPage) },
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route GET /api/order/get-progress-orders
- * @access Private (Partner)
- * @description Trả về danh sách đơn hàng đang được partner thực hiện.
- *              Bao gồm các đơn đã nhận nhưng chưa hoàn thành.
+ * @desc    Partner lấy danh sách đơn hàng đang thực hiện.
+ * @route   GET /api/orders/in-progress
+ * @access  Private (Partner)
  */
 const getProgressOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { role, id: user_id } = req.user;
-
-    if (!role.includes(ROLE.PARTNER)) {
-        return next(errorHandler(402, 'You do not have permission to do that'));
-    }
-
-    const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
-        'boost_id',
-        'type',
-        'status',
-        'title',
-    ]);
-
     try {
+        const { id: user_id } = req.user;
+
+        const { filters, sort, page, perPage } = buildQueryOrderOptions(req.query, [
+            'boost_id',
+            'type',
+            'status',
+            'title',
+        ]);
         const query = {
             partner: user_id,
             ...filters,
@@ -168,121 +153,83 @@ const getProgressOrders = async (req: AuthRequest, res: Response, next: NextFunc
                 .populate(orderPopulates),
         ]);
 
-        if (!orders.length) {
-            return next(errorHandler(404, 'Orders not found'));
-        }
-
-        res.status(200).json({ orders, total });
+        res.status(200).json({
+            success: true,
+            data: orders,
+            pagination: { total, page, perPage, totalPages: Math.ceil(total / perPage) },
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/order/create-order/:id
- * @access Private (User)
- * @description Tạo một đơn hàng mới dựa trên ID dịch vụ (service id).
- *              Người dùng cung cấp các thông tin cấu hình dịch vụ, hệ thống sẽ lưu và khởi tạo đơn.
+ * @desc    Người dùng tạo một đơn hàng mới.
+ * @route   POST /api/orders
+ * @access  Private (User)
  */
 const createOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const userid = req.user.id;
-        if (userid !== req.params.id)
-            return next(errorHandler(401, 'You can order only your account'));
+        const { id: user_id } = req.user;
 
-        const order = new Order({
+        const newOrder = new Order({
             boost_id: generateUserId(),
-            user: userid,
+            user: user_id,
             ...req.body,
         });
+        await newOrder.save();
 
-        await order.save();
-
-        res.status(201).json({ success: true, order_id: order.boost_id });
-    } catch (e) {
-        next(e);
-    }
-};
-
-/**
- * @route POST /api/order/payment-order/:customer_id/:order_id
- * @access Private (User)
- * @description Tiến hành thanh toán cho đơn hàng cụ thể.
- *              Dùng customer_id để xác định người thanh toán và order_id để xác định đơn cần thanh toán.
- *              Hệ thống kiểm tra số dư, trạng thái đơn và thực hiện thanh toán.
- */
-const paymentOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    try {
-        const userid = req.user.id;
-        const { customer_id, order_id } = req.params;
-        const { payment_method, price, assign_partner } = req.body;
-
-        if (userid !== customer_id) {
-            return next(errorHandler(401, 'You can payment only your account'));
-        }
-
-        const order = await Order.findOne({ boost_id: order_id });
-        if (!order) return next(errorHandler(404, 'Order not found'));
-
-        if (assign_partner) {
-            order.status = ORDER_STATUS.WAITING;
-            order.assign_partner = assign_partner;
-
-            await new Notification({
-                sender: userid,
-                receiver: assign_partner,
-                boost_id: order.boost_id,
-                content: 'wants you to accept order.',
-                type: NOTIFY_TYPE.BOOST,
-            } as INotification).save();
-
-            //socket.emit to assign_partner
-            const receiver_socket_id = getReceiverSocketID(assign_partner);
-            if (receiver_socket_id) io.to(receiver_socket_id).emit('newNotify');
-        } else {
-            order.status = ORDER_STATUS.IN_ACTIVE;
-
-            await Notification.deleteOne({ type: NOTIFY_TYPE.NEW_ORDER });
-
-            await new Notification({
-                boost_id: order.boost_id,
-                content: 'New order created!',
-                type: NOTIFY_TYPE.NEW_ORDER,
-            }).save();
-
-            // socket.emit to partners
-            io.in('partners').emit('newNotify');
-        }
-
-        await order.save();
-
-        const receipt = new Receipt({
-            receipt_id: generateUserId(),
-            payment_method,
-            price,
-            user: userid,
-            order: order._id,
+        res.status(201).json({
+            success: true,
+            message: 'Order created successfully.',
+            data: newOrder.boost_id,
         });
-
-        await receipt.save();
-
-        res.status(201).json({ success: true, message: 'Receipt created successfully' });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/order/refuse-order/:id
- * @access Private (User)
- * @description Người dùng từ chối đơn hàng trước khi đơn được partner nhận.
- *              Sau khi từ chối, đơn hàng có thể được xóa hoặc đưa về trạng thái "từ chối".
+ * @desc    Người dùng gán một Partner cụ thể cho đơn hàng.
+ * @route   POST /api/orders/:boostId/assign
+ * @access  Private (User)
+ */
+const assignPartner = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const { boostId } = req.params;
+        const { partnerId } = req.body;
+        const { id: userId } = req.user;
+
+        const order = await Order.findOneAndUpdate(
+            { boost_id: boostId, user: userId },
+            { assign_partner: partnerId },
+            { new: true },
+        );
+        if (!order) {
+            return next(errorHandler(404, 'Order not found.'));
+        }
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Partner successfully assigned to the order.',
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * @desc    Người dùng và assign partner từ chối order được gán.
+ * @route   POST /api/orders/:boostId/refuse
+ * @access  Private (User)
  */
 const refuseOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const userId = req.user.id;
-    const boostId = req.params.id;
     try {
-        const order = await Order.findOne({ boostId });
+        const { id: userId } = req.user;
+        const { boostId } = req.params;
+
+        const order = await Order.findOne({ boost_id: boostId });
         if (!order) return next(errorHandler(404, 'Order not found'));
         if (!order.user) return next(errorHandler(400, 'Order missing user field'));
 
@@ -291,25 +238,41 @@ const refuseOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
             ? order.assign_partner?.toString()
             : order.user.toString();
 
-        await new Notification({
-            sender: userId,
-            receiver: receiverId,
-            boost_id: order.boost_id,
-            content: `had refuse ${order.title}`,
-            type: NOTIFY_TYPE.BOOST,
-        }).save();
-
-        // SOCKET - notify receiver
         if (receiverId) {
-            sendNotification(receiverId);
+            await notificationService.createAndNotify({
+                sender: userId,
+                receiver: receiverId,
+                boost_id: order.boost_id,
+                content: `had refuse ${order.title}`,
+                type: NOTIFY_TYPE.BOOST,
+            });
+
+            const sender = await User.findById(userId).select('username');
+            const payload = {
+                title: 'Order assignment refused',
+                body: `${sender?.username || 'A user'} has refused the assignment for order: "${order.title}"`,
+                url: `/boosts/${order.boost_id}`,
+            };
+            await pushService.triggerPushNotification(receiverId, 'updated_order', payload);
+        }
+
+        const partners = await User.find({ role: ROLE.PARTNER }).select('_id');
+        const partnerIds = partners.map((p) => p._id.toString());
+
+        if (partnerIds.length > 0) {
+            const payload = {
+                title: 'New Order Available!',
+                body: `A new order "${order.title}" is ready to be taken.`,
+                url: '/pending-boosts',
+            };
+            await pushService.triggerPushNotificationToMany(partnerIds, 'new_order', payload);
         }
 
         order.assign_partner = null;
         order.status = ORDER_STATUS.IN_ACTIVE;
         await order.save();
 
-        // SOCKET - broadcast status change
-        io.emit('statusOrderChange');
+        emitOrderStatusChange();
 
         res.status(201).json({ success: true, message: 'Success refuse order' });
     } catch (e) {
@@ -318,83 +281,223 @@ const refuseOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
 };
 
 /**
- * @route POST /api/order/accept-order/:id
- * @access Private (Partner)
- * @description Partner tiếp nhận đơn hàng để bắt đầu thực hiện boost.
- *              Đơn hàng sẽ chuyển sang trạng thái "in progress".
+ * @desc    Partner chấp nhận một đơn hàng.
+ * @route   POST /api/orders/:boostId/accept
+ * @access  Private (Partner)
  */
 const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: partner_id, role } = req.user;
-    const { id: boost_id } = req.params;
-    try {
-        if (!role?.includes(ROLE.PARTNER))
-            return next(errorHandler(403, 'You do not have permission to perform this action'));
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-        const order = await Order.findOne({ boost_id }).populate('user');
+    try {
+        const { boostId } = req.params;
+        const { id: partner_id } = req.user;
+
+        const order = await Order.findOne({ boost_id: boostId }).session(session);
         if (!order) return next(errorHandler(404, 'Order not found'));
+        if (order.status !== ORDER_STATUS.IN_ACTIVE && order.status !== ORDER_STATUS.WAITING) {
+            throw errorHandler(400, 'This order is not available to be accepted.');
+        }
         if (order.partner) return next(errorHandler(409, 'Order already has a partner assigned'));
 
+        // Cập nhật chỉ số của Partner
+        const partnerUser = await User.findById(partner_id).session(session);
+        if (!partnerUser) {
+            throw errorHandler(404, 'Partner account not found');
+        }
+        partnerUser.total_orders_taken += 1;
+
+        if (partnerUser.total_orders_taken > 0) {
+            partnerUser.total_completion_rate =
+                (partnerUser.total_orders_completed / partnerUser.total_orders_taken) * 100;
+        } else {
+            partnerUser.total_completion_rate = 100;
+        }
+        await partnerUser.save({ session });
+
         order.assign_partner = null;
+
+        const potentialEarning = order.price * 0.8;
+        const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
+        if (!partnerWallet) throw errorHandler(404, `Wallet for partner ${partner_id} not found.`);
+
+        partnerWallet.escrow_balance += potentialEarning;
+        await partnerWallet.save({ session });
 
         const conversation = await new Conversation({
             participants: [order.user, partner_id],
             messages: [],
-        }).save();
+        }).save({ session });
 
         Object.assign(order, {
             partner: partner_id,
             status: ORDER_STATUS.IN_PROGRESS,
             conversation: conversation._id,
         });
-        await order.save();
+        await order.save({ session });
 
-        await createNotification({
-            sender: partner_id,
-            receiver: order.user?._id?.toString(),
-            boost_id,
-            content: `Has accepted ${order.title}`,
-            type: NOTIFY_TYPE.BOOST,
-        });
+        if (order.user) {
+            await notificationService.createAndNotify({
+                sender: partner_id,
+                receiver: order.user.toString(),
+                boost_id: boostId,
+                content: `has accepted your order: ${order.title}`,
+                type: NOTIFY_TYPE.BOOST,
+            });
+        }
 
-        if (order?.user?._id) {
-            emitNotification(order.user._id.toString());
+        await session.commitTransaction();
+
+        if (order.user) {
+            const partner = await User.findById(partner_id).select('username');
+            const payload = {
+                title: 'Your order has been accepted!',
+                body: `${partner?.username || 'A partner'} has accepted your order: "${order.title}"`,
+                url: `/orders/boosts/${order.boost_id}`,
+            };
+            await pushService.triggerPushNotification(
+                order.user.toString(),
+                'updated_order',
+                payload,
+            );
+        }
+
+        if (order?.user) {
+            emitNotification(order.user.toString());
         }
         emitOrderStatusChange();
 
         res.status(200).json({ success: true, message: 'Order accepted successfully' });
     } catch (e) {
+        await session.abortTransaction();
         next(e);
+    } finally {
+        session.endSession();
     }
 };
 
 /**
- * @route POST /api/order/completed-order/:id
- * @access Private (Partner)
- * @description Đánh dấu đơn hàng là đã hoàn tất sau khi thực hiện xong dịch vụ.
- *              Thường đi kèm với cập nhật trạng thái, hình ảnh hoàn thành, v.v.
+ * @desc    Partner đánh dấu đơn hàng đã hoàn thành.
+ * @route   POST /api/orders/:boostId/complete
+ * @access  Private (Partner)
  */
 const completedOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: partner_id, role } = req.user;
-    const { id: boost_id } = req.params;
-    try {
-        if (!role.includes(ROLE.PARTNER))
-            return next(errorHandler(403, 'You do not have permission to perform this action'));
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-        const order = await Order.findOne({ boost_id }).populate('user');
+    try {
+        const { id: partner_id } = req.user;
+        const { boostId } = req.params;
+
+        const order = await Order.findOne({ boost_id: boostId }).session(session).populate('user');
         if (!order) return next(errorHandler(404, 'Order not found'));
-        if (order.partner?.toString() !== partner_id)
+        if (order.partner?.toString() !== partner_id) {
             return next(errorHandler(403, 'Not allowed to complete this order'));
+        }
+        if (order.status !== ORDER_STATUS.IN_PROGRESS) {
+            throw errorHandler(400, 'Order is not in progress.');
+        }
+
+        const partnerUser = await User.findById(partner_id).session(session);
+        if (!partnerUser) {
+            throw errorHandler(404, 'Partner account not found');
+        }
+        partnerUser.total_orders_completed += 1;
+
+        if (order.total_time && order.total_time > 0) {
+            const timeInHours = Math.round((order.total_time / 60) * 100) / 100;
+            partnerUser.total_working_time += timeInHours;
+        }
+        if (partnerUser.total_orders_taken > 0) {
+            const completionRate =
+                (partnerUser.total_orders_completed / partnerUser.total_orders_taken) * 100;
+            partnerUser.total_completion_rate = Math.round(completionRate * 100) / 100;
+        }
+        await partnerUser.save({ session });
+
+        const partnerEarning = order.price * 0.8;
+        const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
+        if (!partnerWallet) throw errorHandler(404, `Wallet not found for partner ${partner_id}`);
+        if (partnerWallet.escrow_balance < partnerEarning) {
+            throw errorHandler(409, `Escrow balance is inconsistent.`);
+        }
+
+        partnerWallet.escrow_balance -= partnerEarning;
+        partnerWallet.total_earnings += partnerEarning;
+
+        let earningAfterDebt = partnerEarning;
+        if (partnerWallet.debt > 0) {
+            // Nếu có nợ
+            const debtToPay = Math.min(partnerWallet.debt, partnerEarning); // Số nợ sẽ trả là số nhỏ hơn giữa nợ và thu nhập
+            partnerWallet.debt -= debtToPay; // Trừ nợ
+            earningAfterDebt -= debtToPay; // Số tiền thực nhận sau khi trả nợ
+        }
+
+        // Cộng số tiền thực nhận vào số dư
+        partnerWallet.balance += earningAfterDebt;
+        await partnerWallet.save({ session });
+
+        await Transaction.create(
+            [
+                {
+                    user: partner_id,
+                    type: TRANSACTION_TYPE.PARTNER_COMMISSION,
+                    amount: partnerEarning,
+                    description: `Commission from completed order ${order.boost_id}. An amount may have been used to offset debt.`,
+                    related_order: order._id,
+                },
+            ],
+            { session },
+        );
+
+        await Transaction.create(
+            [
+                {
+                    user: order.user,
+                    type: TRANSACTION_TYPE.SALE,
+                    amount: order.price,
+                    description: `Payment for order ${order.boost_id}`,
+                    related_order: order._id,
+                },
+            ],
+            { session },
+        );
 
         order.status = ORDER_STATUS.COMPLETED;
-        await order.save();
+        await order.save({ session });
 
-        await createNotification({
-            sender: partner_id,
-            receiver: order.user?._id?.toString(),
-            boost_id,
-            content: `Has completed order ${order.title}`,
-            type: NOTIFY_TYPE.BOOST,
-        });
+        if (order.conversation) {
+            await Conversation.findByIdAndUpdate(
+                order.conversation,
+                { status: CONVERSATION_STATUS.CLOSED },
+                { session },
+            );
+        }
+
+        if (order.user?._id) {
+            await notificationService.createAndNotify({
+                sender: partner_id,
+                receiver: order.user._id.toString(),
+                boost_id: boostId,
+                content: `Has completed order ${order.title}`,
+                type: NOTIFY_TYPE.BOOST,
+            });
+        }
+
+        await session.commitTransaction();
+
+        if (order.user?._id) {
+            const payload = {
+                title: 'Your order is complete!',
+                body: `Your order "${order.title}" has been successfully completed.`,
+                url: `/orders/boosts/${order.boost_id}`,
+            };
+            await pushService.triggerPushNotification(
+                order.user._id.toString(),
+                'updated_order',
+                payload,
+            );
+        }
 
         if (order?.user?._id) {
             emitNotification(order.user._id.toString());
@@ -403,80 +506,189 @@ const completedOrder = async (req: AuthRequest, res: Response, next: NextFunctio
 
         res.status(200).json({ success: true, message: 'Order accepted successfully' });
     } catch (e) {
+        await session.abortTransaction();
         next(e);
+    } finally {
+        session.endSession();
     }
 };
 
 /**
- * @route POST /api/order/cancel-order/:id
- * @access Private (Partner)
- * @description Partner hủy đơn hàng đang thực hiện (ví dụ: không thể hoàn thành, có vấn đề tài khoản, v.v).
- *              Đơn hàng sẽ chuyển về trạng thái hủy và có thể được khôi phục.
+ * @desc    Partner hủy một đơn hàng đang thực hiện.
+ * @route   POST /api/orders/:boostId/cancel
+ * @access  Private (Partner)
  */
 const cancelOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: partner_id, role } = req.user;
-    const { id: boost_id } = req.params;
-    try {
-        if (!role.includes(ROLE.PARTNER))
-            return next(errorHandler(403, 'You do not have permission to perform this action'));
+    const { id: partner_id } = req.user;
+    const { boostId } = req.params;
 
-        const order = await Order.findOne({ boost_id }).populate('user');
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const order = await Order.findOne({ boost_id: boostId }).populate('user');
         if (!order) return next(errorHandler(404, 'Order not found'));
         if (order.partner?.toString() !== partner_id)
             return next(errorHandler(403, 'Not allowed to cancel this order'));
+        if (order.status !== ORDER_STATUS.IN_PROGRESS) {
+            throw errorHandler(400, 'Only in-progress orders can be cancelled by a partner.');
+        }
+
+        const escrowedAmount = order.price * 0.8;
+        const penaltyAmount = order.price * 0.05;
+
+        const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
+        if (!partnerWallet) throw errorHandler(404, `Wallet not found for partner ${partner_id}`);
+
+        if (partnerWallet.escrow_balance < escrowedAmount) {
+            throw errorHandler(409, 'Escrow balance is inconsistent. Please contact support.');
+        }
+
+        partnerWallet.escrow_balance -= escrowedAmount;
+        let penaltyPaid = 0;
+
+        if (partnerWallet.balance >= penaltyAmount) {
+            partnerWallet.balance -= penaltyAmount;
+            penaltyPaid = penaltyAmount;
+        } else {
+            penaltyPaid = penaltyAmount;
+            const remainingPenalty = penaltyAmount - partnerWallet.balance;
+            partnerWallet.balance = 0;
+            partnerWallet.debt += remainingPenalty;
+        }
+        await partnerWallet.save({ session });
+
+        await Transaction.create(
+            [
+                {
+                    user: partner_id,
+                    type: TRANSACTION_TYPE.PENALTY,
+                    amount: -penaltyPaid,
+                    description: `Penalty for cancelling order ${order.boost_id}. Outstanding debt may apply.`,
+                    related_order: order._id,
+                },
+            ],
+            { session },
+        );
 
         order.status = ORDER_STATUS.CANCEL;
-        await order.save();
 
-        await createNotification({
-            sender: partner_id,
-            receiver: order.user?._id?.toString(),
-            boost_id,
-            content: `Has cancelled order ${order.title}`,
-            type: NOTIFY_TYPE.BOOST,
-        });
+        await order.save({ session });
+
+        if (order.conversation) {
+            await Conversation.findByIdAndUpdate(
+                order.conversation,
+                { status: CONVERSATION_STATUS.CLOSED },
+                { session },
+            );
+        }
+
+        if (order.user?._id) {
+            await notificationService.createAndNotify({
+                sender: partner_id,
+                receiver: order.user._id.toString(),
+                boost_id: boostId,
+                content: `has cancelled order ${order.title}. It is now available again.`,
+                type: NOTIFY_TYPE.BOOST,
+            });
+        }
+
+        await session.commitTransaction();
+
+        if (order.user?._id) {
+            const partner = await User.findById(partner_id).select('username');
+            const payload = {
+                title: 'An order has been cancelled',
+                body: `${partner?.username || 'A partner'} has cancelled the order: "${order.title}". It is now available again.`,
+                url: `/orders/boosts/${order.boost_id}`,
+            };
+            await pushService.triggerPushNotification(
+                order.user._id.toString(),
+                'updated_order',
+                payload,
+            );
+        }
 
         if (order?.user?._id) {
             emitNotification(order.user._id.toString());
         }
         emitOrderStatusChange();
 
-        res.status(201).json({ success: true, message: 'Order cancelled successfully.' });
+        res.status(201).json({
+            success: true,
+            message:
+                'Order cancelled successfully. A penalty has been applied or recorded as debt.',
+        });
     } catch (e) {
+        await session.abortTransaction();
         next(e);
+    } finally {
+        session.endSession();
     }
 };
 
 /**
- * @route POST /api/order/renew-order/:id
- * @access Private (User)
- * @description Gia hạn một đơn hàng cũ (đã hoàn tất hoặc hủy) để sử dụng lại dịch vụ đó.
- *              Có thể dùng lại thông tin tài khoản cũ, hoặc sửa đổi trước khi tiếp tục.
+ * @desc    Người dùng gia hạn một đơn hàng đã hoàn thành.
+ * @route   POST /api/orders/:boostId/renew
+ * @access  Private (User)
  */
 const renewOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: user_id } = req.user;
-    const { id: boost_id } = req.params;
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const order = await Order.findOne({ boost_id });
-        if (!order) return next(errorHandler(404, 'Order not found'));
-        if (order.user?.toString() !== user_id || order.status !== ORDER_STATUS.COMPLETED)
+        const { id: user_id } = req.user;
+        const { boostId } = req.params;
+
+        const originalOrder = await Order.findOne({ boost_id: boostId }).session(session);
+        if (!originalOrder) return next(errorHandler(404, 'Order not found'));
+        if (
+            originalOrder.user?.toString() !== user_id ||
+            originalOrder.status !== ORDER_STATUS.COMPLETED
+        )
             return next(errorHandler(403, 'Not allowed to renew this order'));
 
+        if (originalOrder.retryCount > 0) {
+            return next(errorHandler(400, 'This order has already been renewed.'));
+        }
+
+        const orderData = {
+            title: originalOrder.title,
+            type: originalOrder.type,
+            server: originalOrder.server,
+            price: originalOrder.price,
+            game: originalOrder.game,
+            begin_rating: originalOrder.begin_rating,
+            end_rating: originalOrder.end_rating,
+            begin_rank: originalOrder.begin_rank,
+            end_rank: originalOrder.end_rank,
+            begin_exp: originalOrder.begin_exp,
+            end_exp: originalOrder.end_exp,
+            total_time: originalOrder.total_time,
+            options: originalOrder.options,
+            account: originalOrder.account, // Giữ lại thông tin tài khoản đã liên kết
+        };
+
         const newOrder = new Order({
-            ...order.toObject(),
-            _id: undefined,
+            ...orderData,
             boost_id: generateUserId(),
             user: user_id,
+            status: ORDER_STATUS.PENDING,
+            retryCount: 0,
         });
 
         await newOrder.save();
-        order.retryCount += 1;
-        await order.save();
+        originalOrder.retryCount += 1;
+        await originalOrder.save({ session });
+
+        await session.commitTransaction();
+
+        emitOrderStatusChange();
 
         res.status(201).json({
             success: true,
             message: 'Order renewed successfully',
-            boost_id: newOrder.boost_id,
+            data: newOrder.boost_id,
         });
     } catch (e) {
         next(e);
@@ -484,66 +696,107 @@ const renewOrder = async (req: AuthRequest, res: Response, next: NextFunction) =
 };
 
 /**
- * @route POST /api/order/recovery-order/:id
- * @access Private (User)
- * @description Khôi phục một đơn hàng đã bị hủy để tiếp tục xử lý.
- *              Thường áp dụng khi người dùng vô tình hủy đơn hoặc thay đổi ý định.
+ * @desc    Người dùng khôi phục một đơn hàng đã hủy.
+ * @route   POST /api/orders/:boostId/recover
+ * @access  Private (User)
  */
 const recoveryOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: user_id } = req.user;
-    const { id: boost_id } = req.params;
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const order = await Order.findOne({ boost_id });
-        if (!order) return next(errorHandler(404, 'Order not found'));
-        if (order.user?.toString() !== user_id || order.status !== ORDER_STATUS.CANCEL)
+        const { id: user_id } = req.user;
+        const { boostId } = req.params;
+
+        const originalOrder = await Order.findOne({ boost_id: boostId }).session(session);
+        if (!originalOrder) return next(errorHandler(404, 'Ordper not found'));
+        if (
+            originalOrder.user?.toString() !== user_id ||
+            originalOrder.status !== ORDER_STATUS.CANCEL
+        )
             return next(errorHandler(403, 'Not allowed to recover this order'));
+        if (originalOrder.retryCount > 0) {
+            throw errorHandler(400, 'This order has already been recovered or renewed.');
+        }
+
+        const orderData = {
+            title: originalOrder.title,
+            type: originalOrder.type,
+            server: originalOrder.server,
+            price: originalOrder.price,
+            game: originalOrder.game,
+            begin_rating: originalOrder.begin_rating,
+            end_rating: originalOrder.end_rating,
+            begin_rank: originalOrder.begin_rank,
+            end_rank: originalOrder.end_rank,
+            begin_exp: originalOrder.begin_exp,
+            end_exp: originalOrder.end_exp,
+            total_time: originalOrder.total_time,
+            options: originalOrder.options,
+            account: originalOrder.account,
+        };
 
         const newOrder = new Order({
-            ...order.toObject(),
-            _id: undefined,
+            ...orderData,
             boost_id: generateUserId(),
             user: user_id,
             status: ORDER_STATUS.IN_ACTIVE,
         });
 
         await newOrder.save();
-        order.retryCount += 1;
-        await order.save();
+        originalOrder.retryCount += 1;
+        await originalOrder.save({ session });
 
-        const existNotify = await Notification.findOne({ type: NOTIFY_TYPE.NEW_ORDER });
-        if (existNotify) await existNotify.deleteOne();
-
+        await Notification.deleteOne({ type: NOTIFY_TYPE.NEW_ORDER }).session(session);
         await createNotification({
             boost_id: newOrder.boost_id,
             content: 'New order created!',
             type: NOTIFY_TYPE.NEW_ORDER,
         });
 
-        io.in('partners').emit('newNotify');
+        await session.commitTransaction();
+
+        const partners = await User.find({ role: ROLE.PARTNER }).select('_id');
+        const partnerIds = partners.map((p) => p._id.toString());
+
+        if (partnerIds.length > 0) {
+            const payload = {
+                title: 'Recovered Order Available!',
+                body: `An order "${newOrder.title}" has been recovered and is now available.`,
+                url: '/pending-boosts',
+            };
+            await pushService.triggerPushNotificationToMany(partnerIds, 'new_order', payload);
+        }
+
+        notificationService.broadcastNewOrder(newOrder);
         emitOrderStatusChange();
 
-        res.status(201).json({ success: true, order_id: newOrder.boost_id });
+        res.status(201).json({
+            success: true,
+            message: 'Order has been restored',
+            data: newOrder.boost_id,
+        });
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route DELETE /api/order/delete-order/:id
- * @access Private (User)
- * @description Xóa hoàn toàn một đơn hàng khỏi hệ thống (chỉ khi chưa thanh toán hoặc chưa xử lý).
- *              Dùng để dọn dẹp đơn hàng nháp hoặc sai thông tin.
+ * @desc    Người dùng xóa một đơn hàng.
+ * @route   DELETE /api/orders/:boostId
+ * @access  Private (User)
  */
 const deleteOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const { id: boost_id } = req.params;
-    const { id: user_id } = req.user;
     try {
-        const order = await Order.findOne({ boost_id });
-        if (!order) return next(errorHandler(404, 'Order not found'));
-        if (order.user?.toString() !== user_id)
-            return next(errorHandler(403, 'Not authorized to delete this order'));
+        const { boostId } = req.params;
+        const { id: userId } = req.user;
 
-        await Order.deleteOne({ boost_id });
+        const order = await Order.findOne({ boost_id: boostId });
+        if (!order) return next(errorHandler(404, 'Order not found'));
+        if (order.user?.toString() !== userId)
+            return next(errorHandler(403, 'Not orized to delete this order'));
+
+        await Order.deleteOne({ boost_id: boostId });
 
         res.status(200).json({ success: true, message: 'Order deleted successfully' });
     } catch (e) {
@@ -552,75 +805,81 @@ const deleteOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
 };
 
 /**
- * @route POST /api/order/add-account/:id
- * @access Private (User)
- * @description Thêm thông tin tài khoản game cần boost vào đơn hàng tương ứng.
- *              Thường được gọi sau khi tạo đơn nhưng trước khi partner tiếp nhận.
+ * @desc    Người dùng thêm thông tin tài khoản game vào đơn hàng.
+ * @route   POST /api/orders/:boostId/account
+ * @access  Private (User)
  */
-const addAccount = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const user_id = req.user?.id;
-    const boost_id = req.params.id;
-    const { login, password, backup_code } = req.body;
+const addAccountToOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const account = new Account({ user_id, login, password, backup_code });
-        await account.save();
+        const { boostId } = req.params;
+        const { id: userId } = req.user;
+        const { login, password, backup_code } = req.body;
+
+        const newAccount = new Account({ user_id: userId, login, password, backup_code });
+        await newAccount.save();
 
         const updatedOrder = await Order.findOneAndUpdate(
-            { boost_id },
-            { $set: { account: account._id } },
-            { new: true },
+            { boost_id: boostId },
+            { $set: { account: newAccount._id } },
         );
 
         if (!updatedOrder) {
             return next(errorHandler(400, 'Failed to link account to order'));
         }
 
-        res.status(201).json({ success: true, message: 'Account created and linked successfully' });
-        await account.save();
+        res.status(201).json({
+            success: true,
+            message: 'Account created and linked successfully',
+            data: newAccount,
+        });
+        await newAccount.save();
     } catch (e) {
         next(e);
     }
 };
 
 /**
- * @route POST /api/order/edit-account/:id
- * @access Private (User)
- * @description Chỉnh sửa thông tin tài khoản đã cung cấp trong đơn hàng.
- *              Có thể dùng khi người dùng muốn đổi mật khẩu hoặc sai thông tin lúc đầu.
+ * @desc    Người dùng chỉnh sửa thông tin tài khoản game đã liên kết.
+ * @route   PATCH /api/orders/accounts/:accountId
+ * @access  Private (User)
  */
-const editAccount = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const account_id = req.params.id;
-    const user_id = req.user?.id;
-    const { login, password, backup_code } = req.body;
+const editAccountOnOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const account = await Account.findById(account_id);
+        const { accountId } = req.params;
+        const { id: userId } = req.user;
+        const { login, password, backup_code } = req.body;
+
+        const account = await Account.findById(accountId);
 
         if (!account) {
             return next(errorHandler(404, 'Account not found'));
         }
 
-        if (account.user_id.toString() !== user_id) {
-            return next(errorHandler(401, 'You are not authorized to edit this account'));
+        if (account.user_id.toString() !== userId) {
+            return next(errorHandler(401, 'You are not orized to edit this account'));
         }
 
         Object.assign(account, { login, password, backup_code });
         await account.save();
+        const updatedAccount = await account.save();
 
-        res.status(200).json({ success: true, message: 'Account updated successfully' });
+        res.status(200).json({
+            success: true,
+            message: 'Account updated successfully',
+            data: updatedAccount,
+        });
     } catch (e) {
         next(e);
     }
 };
 
-
-
 export {
-    getOrders,
+    getMyOrders,
     getPendingOrders,
     getProgressOrders,
     getOrderById,
     createOrder,
-    paymentOrder,
+    assignPartner,
     refuseOrder,
     acceptOrder,
     completedOrder,
@@ -628,6 +887,6 @@ export {
     renewOrder,
     recoveryOrder,
     deleteOrder,
-    addAccount,
-    editAccount,
+    addAccountToOrder,
+    editAccountOnOrder,
 };

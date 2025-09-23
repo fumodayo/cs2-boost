@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICurrentUserProps } from "~/types";
+import { IUser } from "~/types";
 
 interface CounterState {
   theme: string;
-  currentUser: ICurrentUserProps | null;
+  currentUser: IUser | null;
   loading?: boolean;
   error: string | null;
 }
@@ -23,7 +23,7 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    authSuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
+    authSuccess: (state, action: PayloadAction<IUser>) => {
       state.currentUser = action.payload;
       state.loading = false;
       state.error = null;
@@ -36,7 +36,7 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    updateSuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
+    updateSuccess: (state, action: PayloadAction<IUser>) => {
       state.currentUser = action.payload;
       state.loading = false;
       state.error = null;
@@ -49,7 +49,7 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    verifySuccess: (state, action: PayloadAction<ICurrentUserProps>) => {
+    verifySuccess: (state, action: PayloadAction<IUser>) => {
       state.currentUser = action.payload;
       state.loading = false;
       state.error = null;

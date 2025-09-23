@@ -4,8 +4,8 @@ import { GiSamuraiHelmet } from "react-icons/gi";
 import { IoRocketSharp } from "react-icons/io5";
 import cn from "~/libs/utils";
 import { AppContext } from "~/components/context/AppContext";
-import { Button } from "~/components/shared";
 import { useTranslation } from "react-i18next";
+import { Button } from "~/components/shared/Button";
 
 const services = [
   {

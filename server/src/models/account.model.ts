@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Environment variables with fallback validation
 const secretKey = process.env.ENCRYPTION_KEY;
 const algorithm = process.env.ALGORITHM_KEY;
 const ivHex = process.env.ENCRYPTION_IV;

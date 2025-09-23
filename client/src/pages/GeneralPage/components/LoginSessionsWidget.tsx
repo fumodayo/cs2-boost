@@ -2,17 +2,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaMobileAlt, FaTabletAlt } from "react-icons/fa";
 import { FaDesktop, FaEye, FaXmark } from "react-icons/fa6";
-import { Button, Chip, Widget } from "~/components/shared";
+import { Chip, Widget } from "~/components/shared";
 import { IconDotBig } from "~/icons";
-import { ICurrentUserProps } from "~/types";
 import { formatDistanceDate } from "~/utils";
-import { v4 as uuidv4 } from "uuid";
+import { IUser } from "~/types";
+import { Button } from "~/components/shared/Button";
+import { IP_STATUS } from "~/types/constants";
 
-const LoginSessionsWidget = ({
-  currentUser,
-}: {
-  currentUser: ICurrentUserProps;
-}) => {
+const LoginSessionsWidget = ({ currentUser }: { currentUser: IUser }) => {
   const { t, i18n } = useTranslation();
   const [isShowIPLocation, setIsShowIPLocation] = useState(false);
 
@@ -46,7 +43,7 @@ const LoginSessionsWidget = ({
             currentUser.ip_addresses.map(
               ({ ip_location, device, country, updatedAt, status }) => (
                 <li
-                  key={uuidv4()}
+                  key={`${ip_location}-${updatedAt}`}
                   className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 leading-6 sm:px-0"
                 >
                   <div className="flex min-w-[150px] flex-1 items-center">
@@ -67,7 +64,7 @@ const LoginSessionsWidget = ({
                     <div className="ml-4 flex min-w-0 flex-1 flex-col">
                       <span className="font-display truncate font-medium">
                         {t(`Globals.User.ip_address.device.${device}`)}
-                        {status === "online" ? (
+                        {status === IP_STATUS.ONLINE ? (
                           <Chip>
                             <IconDotBig />
                             <span className="flex-1 shrink-0 truncate">
@@ -87,7 +84,8 @@ const LoginSessionsWidget = ({
                         {country}
                         <span className="text-muted-foreground">·</span>
 
-                        {formatDistanceDate(updatedAt, i18n.language)}
+                        {updatedAt &&
+                          formatDistanceDate(updatedAt, i18n.language)}
                       </span>
                     </div>
                   </div>

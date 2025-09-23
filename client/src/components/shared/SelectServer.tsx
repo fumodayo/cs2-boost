@@ -7,7 +7,6 @@ import { Button } from "./Button";
 import cn from "~/libs/utils";
 import { gameServer } from "~/constants/mode";
 import { useTranslation } from "react-i18next";
-import { v4 as uuidv4 } from "uuid";
 
 interface ISelectServerProps {
   server?: string;
@@ -18,14 +17,17 @@ const SelectServer = ({ server, setServer }: ISelectServerProps) => {
   const { t } = useTranslation();
   const swiperRef = useRef<SwiperCore>();
 
-  // Khi component mount, tìm index của server hiện tại
   useEffect(() => {
-    if (swiperRef.current && server) {
-      const idx = gameServer.findIndex((i) => i.value === server);
-      if (idx !== -1) {
-        swiperRef.current.slideTo(idx);
+    const timer = setTimeout(() => {
+      if (swiperRef.current && server) {
+        const idx = gameServer.findIndex((i) => i.value === server);
+        if (idx !== -1) {
+          swiperRef.current.slideTo(idx, 300);
+        }
       }
-    }
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [server]);
 
   return (
@@ -63,13 +65,20 @@ const SelectServer = ({ server, setServer }: ISelectServerProps) => {
         scrollbar={{ draggable: true }}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
       >
-        {gameServer.map(({ label, value }) => (
-          <SwiperSlide key={uuidv4()}>
-            <button
+        {gameServer.map(({ label, value }, idx) => (
+          <SwiperSlide key={idx}>
+            <Button
               onClick={() => setServer(value)}
               className="h-32 w-24 rounded-lg bg-accent text-foreground md:h-40 md:w-56"
             >
-              <div className="px-2">
+              <div
+                className={cn(
+                  "group relative h-40 w-full overflow-hidden rounded-lg border-2 bg-accent p-3 text-center transition-all duration-300 ease-in-out focus:outline-none",
+                  server === value
+                    ? "scale-102 border-primary shadow-lg shadow-primary/10"
+                    : "hover:scale-102 border-transparent hover:border-primary/50",
+                )}
+              >
                 <img
                   className="h-20 w-full object-contain md:h-28"
                   src={`/assets/games/counter-strike-2/servers/${value}${server === value ? "-selected" : ""}.png`}
@@ -86,7 +95,7 @@ const SelectServer = ({ server, setServer }: ISelectServerProps) => {
                   {t(`Globals.Server.${label}`)}
                 </p>
               </div>
-            </button>
+            </Button>
           </SwiperSlide>
         ))}
       </Swiper>

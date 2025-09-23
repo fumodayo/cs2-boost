@@ -1,149 +1,211 @@
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import useSWR from "swr";
+import { FiSliders, FiUsers, FiWifi } from "react-icons/fi";
 import {
-  Button,
+  ErrorDisplay,
   Footer,
   Header,
   Helmet,
-  RangeFilter,
-  ResetButton,
-  Search,
 } from "~/components/shared";
-import cn from "~/libs/utils";
+import { RangeFilter, ResetButton, Search } from "~/components/shared";
 import { Card } from "./components";
-import { useEffect, useState } from "react";
-import { ICurrentUserProps } from "~/types";
-import { axiosInstance } from "~/axiosAuth";
-import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "~/hooks/useDebounce";
 import { useSocketContext } from "~/hooks/useSocketContext";
-import { RootState } from "~/redux/store";
+import { Button } from "~/components/shared/Button";
+import { IUser } from "~/types";
+import { useTranslation } from "react-i18next";
+import { userService } from "~/services/user.service";
 import { useSelector } from "react-redux";
+import { RootState } from "~/redux/store";
+import { Pagination } from "~/components/shared/DataTable/partials";
 
 const PartnersPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterOnline, setFilterOnline] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [partners, setPartners] = useState<ICurrentUserProps[]>([]);
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { onlinePartners } = useSocketContext();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const { data } = await axiosInstance.post(
-          `/user/get-partners?${searchParams}`,
-          {
-            user_id: currentUser?._id,
-          },
-        );
-        setPartners(data);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [searchParams]);
+  const { onlinePartners } = useSocketContext();
 
-  console.log(isLoading);
+  const [localSearchTerm, setLocalSearchTerm] = useState(
+    searchParams.get("q") || "",
+  );
+  const debouncedSearchTerm = useDebounce(localSearchTerm, 500);
+
+  const [filterOnline, setFilterOnline] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (debouncedSearchTerm) {
+      params.set("q", debouncedSearchTerm);
+    } else {
+      params.delete("q");
+    }
+    params.delete("page");
+    setSearchParams(params, { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm, setSearchParams]);
+
+  const apiParams = useMemo(() => {
+    const params = Object.fromEntries(searchParams);
+    if (currentUser?._id) {
+      params.partner_id = currentUser._id;
+    }
+    return params;
+  }, [searchParams, currentUser]);
+
+  const swrKey = useMemo(() => {
+    const queryString = new URLSearchParams(
+      apiParams as Record<string, string>,
+    ).toString();
+    return `/user/get-partners?${queryString}`;
+  }, [apiParams]);
+
+  const {
+    data: partnersData,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(swrKey, () => userService.getPartners(apiParams), {
+    keepPreviousData: true,
+  });
+
+  const partnersFromAPI = partnersData?.data;
+  const paginationFromAPI = partnersData?.pagination;
+
+  const filteredPartners = useMemo(() => {
+    if (!partnersFromAPI) return [];
+    if (!filterOnline) return partnersFromAPI;
+
+    return partnersFromAPI.filter((partner: IUser) =>
+      onlinePartners.includes(partner._id as string),
+    );
+  }, [partnersFromAPI, filterOnline, onlinePartners]);
 
   const handleReset = () => {
-    const params = new URLSearchParams();
-    params.delete("rate-min");
-    params.delete("rate-max");
-    params.delete("star-min");
-    params.delete("star-max");
-    setSearchParams(params);
-    setSearchTerm("");
+    setSearchParams({}, { replace: true });
+    setLocalSearchTerm("");
+    setFilterOnline(false);
   };
-
-  const filteredPartners = partners.filter(
-    (partner) => !filterOnline || onlinePartners.includes(partner._id ?? ""),
-  );
 
   return (
     <>
-      <Helmet title="Partners List · CS2Boost" />
-      <div>
-        {/* HEADER */}
-        <Header />
-        <main>
-          <div
-            className={cn(
-              "ml-10 space-y-20",
-              "sm:space-y-40 lg:mt-20 lg:space-y-52",
-            )}
-          >
-            <div
-              className={cn(
-                "relative mx-auto max-w-7xl px-2 py-6",
-                "sm:px-2 lg:px-8",
-              )}
-            >
-              <div className="pb-4">
-                <h1 className="text-3xl font-bold">Danh sách người hỗ trợ</h1>
+      <Helmet title="Partners · CS2Boost" />
+      <Header />
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          {/* CỘT FILTER (ASIDE) */}
+          <aside className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6 rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="flex items-center gap-3 border-b border-border pb-4">
+                <FiSliders className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold text-foreground">
+                  {t("PartnersPage.filtersTitle")}
+                </h2>
               </div>
-              <div className="space-y-4">
-                <div className="flex flex-wrap space-x-2">
-                  {/* SEARCH */}
-                  <Search
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                  />
 
-                  <Button
-                    variant={filterOnline ? "primary" : "transparent"}
-                    className={cn(
-                      !filterOnline && "border border-dashed border-input",
-                      "h-8 rounded-md px-3 text-xs font-medium shadow-sm",
-                    )}
-                    onClick={() => setFilterOnline((prevState) => !prevState)}
-                  >
-                    Online
-                  </Button>
+              <Search
+                type="none"
+                value={localSearchTerm}
+                onChangeValue={setLocalSearchTerm}
+              />
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant={filterOnline ? "primary" : "outline"}
+                  onClick={() => setFilterOnline((prev) => !prev)}
+                  className="w-full gap-2 py-2"
+                >
+                  <FiWifi size={14} /> {t("PartnersPage.onlinePartnersBtn")}
+                </Button>
 
-                  {/* FILTERS */}
-                  <RangeFilter
-                    min={0}
-                    max={5}
-                    step={1}
-                    defaultValue={[0, 5]}
-                    label="Filter Stars"
-                    type="star"
-                  />
+                <RangeFilter
+                  min={0}
+                  max={5}
+                  step={0.5}
+                  defaultValue={[0, 5]}
+                  label={t("PartnersPage.ratingFilter")}
+                  type="star"
+                />
+                <RangeFilter
+                  min={0}
+                  max={100}
+                  step={5}
+                  defaultValue={[0, 100]}
+                  label={t("PartnersPage.completionFilter")}
+                  type="rate"
+                />
 
-                  <RangeFilter
-                    min={0}
-                    max={100}
-                    step={10}
-                    defaultValue={[0, 100]}
-                    label="Filter Rating"
-                    type="rate"
-                  />
-
-                  {(searchTerm.length > 0 || searchParams.size > 0) && (
+                {(searchParams.size > 0 || filterOnline) && (
+                  <div>
                     <ResetButton onReset={handleReset} />
-                  )}
-                </div>
-
-                <div className="flex flex-wrap">
-                  {filteredPartners.length > 0 ? (
-                    filteredPartners.map((partner, idx) => (
-                      <Card key={idx} {...partner} />
-                    ))
-                  ) : (
-                    <div className="flex h-96 w-full items-center justify-center px-2.5 py-2.5">
-                      No results
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </main>
-        {/* FOOTER */}
-        <Footer />
-      </div>
+          </aside>
+
+          {/* CỘT KẾT QUẢ (SECTION) */}
+          <section className="lg:col-span-3">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <FiUsers className="h-6 w-6 text-muted-foreground" />
+                <h1 className="text-3xl font-bold text-foreground">
+                  {t("PartnersPage.title")}
+                </h1>
+              </div>
+              <span className="font-semibold text-muted-foreground">
+                {t("PartnersPage.resultsFound", {
+                  count: filteredPartners.length,
+                })}
+              </span>
+            </div>
+
+            {isLoading && !partnersFromAPI && (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-64 animate-pulse rounded-xl bg-card"
+                  ></div>
+                ))}
+              </div>
+            )}
+
+            {error && (
+              <ErrorDisplay
+                message="Could not fetch partners. Please try again."
+                onRetry={mutate}
+              />
+            )}
+
+            {!isLoading &&
+              !error &&
+              (filteredPartners.length > 0 ? (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    {filteredPartners.map((partner: IUser) => (
+                      <Card key={partner._id} {...partner} />
+                    ))}
+                  </div>
+                  {paginationFromAPI && paginationFromAPI.totalPages > 0 && (
+                    <Pagination pagination={paginationFromAPI} />
+                  )}
+                </div>
+              ) : (
+                <div className="flex h-96 flex-col items-center justify-center rounded-lg bg-card text-muted-foreground">
+                  <FiUsers className="h-16 w-16" />
+                  <p className="mt-4 text-lg font-semibold">
+                    {t("PartnersPage.emptyState.title")}
+                  </p>
+                  <p className="mt-1 text-sm">
+                    {t("PartnersPage.emptyState.subtitle")}
+                  </p>
+                </div>
+              ))}
+          </section>
+        </div>
+      </main>
+      <Footer />
     </>
   );
 };

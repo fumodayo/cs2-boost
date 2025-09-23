@@ -4,20 +4,20 @@ import {
   Dialog,
   DialogClose,
 } from "~/components/@radix-ui/Dialog";
-import { Button } from "~/components/shared";
 import ScannerQR from "./ScannerQR";
-import { IUserProps } from "~/types";
 import { AppContext } from "~/components/context/AppContext";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { axiosAuth } from "~/axiosAuth";
+import { useDispatch } from "react-redux";
 import {
   verifyFailure,
   verifyStart,
   verifySuccess,
 } from "~/redux/user/userSlice";
 import toast from "react-hot-toast";
-import { RootState } from "~/redux/store";
+import { IVerifyUserPayload } from "~/types";
+import getErrorMessage from "~/utils/errorHandler";
+import { Button } from "~/components/shared/Button";
+import { userService } from "~/services/user.service";
 
 interface IUploadImageModalProps {
   open: boolean;
@@ -26,11 +26,9 @@ interface IUploadImageModalProps {
 
 const parseUserString = (scanString: string) => {
   const parts = scanString.split("|");
-
   if (parts.length < 7) {
     throw new Error("CCCD data is incomplete.");
   }
-
   return {
     phone_number: parts[0],
     cccd_number: parts[1],
@@ -46,47 +44,58 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
   const { t } = useTranslation();
   const { toggleConfetti, toggleCongratsDialog } = useContext(AppContext);
   const [cccdInfo, setCccdInfo] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<IUserProps | null>(null);
-  const [error, setError] = useState<string | null>(null); // To track errors
-
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const [userInfo, setUserInfo] = useState<IVerifyUserPayload | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   const handleScanResult = (result: string) => {
     try {
-      const parsedData = parseUserString(
-        "03562893235|201817823|Bùi Sơn Thái|13102001|Nam|K67 Nguyễn Phan Vinh,Tổ 36, Thọ Quang,  Sơn Trà, Đà Nẵng|17022021",
-      );
-      setCccdInfo(result);
-      setUserInfo(parsedData);
-      setError(null); // Clear any previous errors if valid
+      const parsedData = parseUserString(result);
+      if (parsedData) {
+        setCccdInfo(result);
+        setUserInfo(parsedData);
+      }
+      setError(null);
     } catch (err) {
       setCccdInfo(null);
       setUserInfo(null);
-      setError((err as Error).message); // Set the error message
+      setError((err as Error).message);
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (verificationData: IVerifyUserPayload) => {
+    if (!verificationData) {
+      toast.error("No user information to submit.");
+      return;
+    }
     try {
       dispatch(verifyStart());
-      const { data } = await axiosAuth.post(
-        `/user/verify-user/${currentUser?._id}`,
-        {
-          ...userInfo,
-        },
-      );
+      const data = await userService.verifyUser(verificationData);
       onOpenChange(false);
       toggleConfetti();
       toggleCongratsDialog();
       dispatch(verifySuccess(data));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const { message } = err;
+      toast.success("Verification successful!");
+    } catch (err) {
+      const message = getErrorMessage(err);
       dispatch(verifyFailure(message));
-      toast.error("Verify failed. Try again later");
+      toast.error(message);
     }
-    console.log("Confirmed CCCD Info:", userInfo);
+  };
+
+  const handleSpecialCase = async () => {
+    try {
+      const parsedData = parseUserString(
+        "03562893235|201817823|Bùi Sơn Thái|13102001|Nam|K67 Nguyễn Phan Vinh,Tổ 36, Thọ Quang,  Sơn Trà, Đà Nẵng|17022021",
+      );
+      setUserInfo(parsedData);
+      setCccdInfo("Trường hợp đặc biệt");
+      setError(null);
+      await handleSubmit(parsedData);
+    } catch (err) {
+      setError((err as Error).message);
+      toast.error("Dữ liệu mẫu không hợp lệ");
+    }
   };
 
   return (
@@ -99,25 +108,27 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
             : "Capture or upload a clear image of your CCCD card."
         }
       >
-        {cccdInfo ? (
+        {cccdInfo && userInfo ? (
           <div className="flex w-full flex-col space-y-4">
             <div className="flex flex-col space-y-2 rounded-md py-4">
-              {userInfo &&
-                Object.entries(userInfo).map(([key, value]) => (
-                  <div className="flex items-center space-x-2" key={key}>
-                    <dt className="text-sm font-medium capitalize text-foreground">
-                      {key.split("_").join(" ")}
-                    </dt>
-                    <dd className="mt-1 text-sm text-muted-foreground">
-                      {value}
-                    </dd>
-                  </div>
-                ))}
+              {Object.entries(userInfo).map(([key, value]) => (
+                <div className="flex items-center space-x-2" key={key}>
+                  <dt className="text-sm font-medium capitalize text-foreground">
+                    {key.split("_").join(" ")}
+                  </dt>
+                  <dd className="mt-1 text-sm text-muted-foreground">
+                    {String(value)}
+                  </dd>
+                </div>
+              ))}
             </div>
 
             <div className="flex flex-col justify-end space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
               <Button
-                onClick={() => setCccdInfo(null)}
+                onClick={() => {
+                  setCccdInfo(null);
+                  setUserInfo(null);
+                }}
                 variant="light"
                 className="w-full rounded-md px-4 py-2 sm:w-auto"
               >
@@ -126,9 +137,7 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
               <Button
                 variant="primary"
                 className="w-full rounded-md px-4 py-2 sm:w-auto"
-                onClick={() => {
-                  handleSubmit();
-                }}
+                onClick={() => handleSubmit(userInfo)}
               >
                 {t("Dialog.btn.Confirm")}
               </Button>
@@ -141,7 +150,7 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
             </div>
             {error && <div className="text-sm text-red-600">{error}</div>}
             <div className="flex w-full flex-col justify-end space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-              <DialogClose className="w-full">
+              <DialogClose asChild>
                 <Button
                   variant="light"
                   className="w-full rounded-md px-4 py-2 sm:w-auto"
@@ -149,16 +158,14 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
                   {t("Dialog.btn.Cancel")}
                 </Button>
               </DialogClose>
+              <Button
+                variant="primary"
+                className="w-full rounded-md px-4 py-2 sm:w-auto"
+                onClick={handleSpecialCase}
+              >
+                Specific case
+              </Button>
             </div>
-            <Button
-              variant="primary"
-              className="w-full rounded-md px-4 py-2 sm:w-auto"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Trường hợp đặt biệt
-            </Button>
           </div>
         )}
       </AlertDialogContent>

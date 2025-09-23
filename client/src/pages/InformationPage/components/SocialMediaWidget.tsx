@@ -1,199 +1,215 @@
-import { useEffect, useState } from "react";
-import { FaCheck, FaTrashAlt } from "react-icons/fa";
-import { MdClose } from "react-icons/md";
-import { Button, Input, Select, Widget } from "~/components/shared";
+import { useEffect, useMemo, useState } from "react";
+import { FaCheck, FaTrashAlt, FaTimes } from "react-icons/fa";
+import { HiPlus } from "react-icons/hi";
+import { Input, Select, Spinner, Widget } from "~/components/shared";
 import { v4 as uuidv4 } from "uuid";
 import { SOCIAL_MEDIA } from "~/constants/user";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   updatedStart,
   updateFailure,
   updateSuccess,
 } from "~/redux/user/userSlice";
-import { axiosAuth } from "~/axiosAuth";
 import toast from "react-hot-toast";
-import { ICurrentUserProps, ISocialLinkProps } from "~/types";
+import { RootState } from "~/redux/store";
+import getErrorMessage from "~/utils/errorHandler";
+import { ISocialLink, IUser } from "~/types";
+import { Button } from "~/components/shared/Button";
+import { useTranslation } from "react-i18next";
+import { userService } from "~/services/user.service";
 
-interface ISocialMediaLink extends ISocialLinkProps {
-  isValid?: boolean;
+interface IEditingSocialLink extends ISocialLink {
+  id: string;
+  isValid: boolean;
 }
 
-const SocialMediaWidget = ({
-  currentUser,
-}: {
-  currentUser?: ICurrentUserProps;
-}) => {
-  const [socialLinks, setSocialLinks] = useState<ISocialMediaLink[]>([]);
+const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { loading } = useSelector((state: RootState) => state.user);
 
-  const { social_links = [] } = currentUser || {};
+  const initialLinks = useMemo(
+    () =>
+      (currentUser.social_links || []).map((link) => ({
+        ...link,
+        id: link._id || uuidv4(),
+        isValid: true,
+      })),
+    [currentUser.social_links],
+  );
+
+  const [socialLinks, setSocialLinks] =
+    useState<IEditingSocialLink[]>(initialLinks);
 
   useEffect(() => {
-    setSocialLinks(
-      social_links.length > 0
-        ? social_links.map((link) => ({
-            ...link,
-            isValid: validateLink(link.type, link.link),
-          }))
-        : [{ id: uuidv4(), type: "facebook", link: "", isValid: false }],
-    );
-  }, [social_links]);
+    setSocialLinks(initialLinks);
+  }, [initialLinks]);
 
-  // Kiểm tra link hợp lệ dựa trên type
-  const validateLink = (type: string, link: string) => {
+  const validateLink = (type: string, link: string): boolean => {
+    if (!link.trim()) return false;
     const social = SOCIAL_MEDIA.find((s) => s.value === type);
     return social ? social.regex.test(link.trim()) : false;
   };
 
-  // Cập nhật link & kiểm tra hợp lệ ngay lập tức
-  const updateSocialLink = (
+  const handleLinkChange = (
     id: string,
-    field: keyof ISocialMediaLink,
+    field: "type" | "link",
     value: string,
   ) => {
     setSocialLinks((prev) =>
-      prev.map((link) =>
-        link.id === id
-          ? {
-              ...link,
-              [field]: value,
-              isValid: validateLink(
-                field === "type" ? value : link.type,
-                field === "link" ? value : link.link,
-              ),
-            }
-          : link,
-      ),
+      prev.map((item) => {
+        if (item.id === id) {
+          const updatedItem = { ...item, [field]: value };
+          return {
+            ...updatedItem,
+            isValid: validateLink(updatedItem.type, updatedItem.link),
+          };
+        }
+        return item;
+      }),
     );
   };
 
-  // Xóa social link
+  const addSocialLink = () => {
+    setSocialLinks((prev) => [
+      ...prev,
+      { id: uuidv4(), type: "facebook", link: "", isValid: false },
+    ]);
+  };
+
   const removeSocialLink = (id: string) => {
-    setSocialLinks((prev) => {
-      const updatedLinks = prev.filter((link) => link.id !== id);
-      return updatedLinks.length > 0
-        ? updatedLinks
-        : [{ id: uuidv4(), type: "facebook", link: "", isValid: false }];
-    });
+    setSocialLinks((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Lọc ra các link hợp lệ & không trùng lặp
-  const validateAndCleanLinks = () => {
-    const uniqueLinks = new Set();
-    return socialLinks.filter(({ link, isValid }) => {
-      if (!isValid) return false;
-      if (uniqueLinks.has(link)) return false;
-      uniqueLinks.add(link);
-      return true;
-    });
+  const handleCancel = () => {
+    setSocialLinks(initialLinks);
   };
 
-  // Lưu link
   const handleSave = async () => {
-    const cleanedData = validateAndCleanLinks();
-    setSocialLinks(cleanedData.length > 0 ? cleanedData : []);
+    const validLinks = socialLinks
+      .filter((item) => item.isValid)
+      .map(({ type, link }) => ({ type, link }));
+
+    dispatch(updatedStart());
     try {
-      dispatch(updatedStart());
-      const { data } = await axiosAuth.post(
-        `/user/update/${currentUser?._id}`,
-        {
-          social_links: cleanedData,
-        },
-      );
-      console.log({ data });
+      const data = await userService.updateUser({
+        social_links: validLinks,
+      });
       dispatch(updateSuccess(data));
-      toast.success("Edit Successfully");
+      toast.success("Social links updated successfully!");
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "An unknown error occurred";
+      const message = getErrorMessage(err);
       dispatch(updateFailure(message));
+      toast.error(message);
     }
   };
 
-  // Hủy bỏ thay đổi
-  const handleCancel = () => {
-    setSocialLinks(
-      social_links.length > 0
-        ? social_links.map((link) => ({
-            ...link,
-            isValid: validateLink(link.type, link.link),
-          }))
-        : [{ id: uuidv4(), type: "facebook", link: "", isValid: false }],
-    );
-  };
+  const hasChanges = useMemo(
+    () => JSON.stringify(initialLinks) !== JSON.stringify(socialLinks),
+    [initialLinks, socialLinks],
+  );
 
   return (
     <Widget>
-      <Widget.Header>Social Media</Widget.Header>
+      <Widget.Header>
+        {t("SettingsPage.Information.SocialMediaWidget.title")}
+      </Widget.Header>
       <Widget.Content>
-        <div className="space-y-3 rounded-md p-4">
-          {socialLinks.map(({ id, type, link, isValid }) => (
-            <div key={id} className="flex items-center space-x-2">
-              <Input
-                type="text"
-                value={link}
-                onChange={(e) => updateSocialLink(id, "link", e.target.value)}
-                placeholder="Enter social media link..."
-                className={`border ${
-                  link && !isValid ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              <Select
-                value={type}
-                className="flex w-full rounded-md border border-input bg-card-alt px-3 py-1.5 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                onChange={(e) =>
-                  updateSocialLink(
-                    id,
-                    "type",
-                    e.target.value as ISocialMediaLink["type"],
-                  )
+        <div className="mb-4 space-y-4">
+          {socialLinks.length > 0 ? (
+            socialLinks.map((item) => (
+              <div
+                key={item.id}
+                className="grid grid-cols-12 items-center gap-2"
+              >
+                <div className="relative col-span-7">
+                  <Input
+                    type="text"
+                    value={item.link}
+                    onChange={(e) =>
+                      handleLinkChange(item.id, "link", e.target.value)
+                    }
+                    placeholder="https://facebook.com/your-username"
+                    className={`pr-8 ${item.link && !item.isValid ? "border-danger focus:border-danger focus:ring-danger" : ""}`}
+                  />
+                  {item.link && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                      {item.isValid ? (
+                        <FaCheck className="h-4 w-4 text-success" />
+                      ) : (
+                        <FaTimes className="h-4 w-4 text-danger" />
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="col-span-4">
+                  <Select
+                    value={item.type}
+                    onChange={(e) =>
+                      handleLinkChange(item.id, "type", e.target.value)
+                    }
+                  >
+                    {SOCIAL_MEDIA.map(({ label, value }) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="col-span-1">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-muted-foreground hover:bg-danger/10 hover:text-danger"
+                    onClick={() => removeSocialLink(item.id)}
+                  >
+                    <FaTrashAlt className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              {t("SettingsPage.Information.SocialMediaWidget.empty")}
+            </p>
+          )}
+
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={addSocialLink}
+            className="w-full"
+          >
+            <HiPlus className="mr-2 h-4 w-4" />
+            {t("SettingsPage.Information.SocialMediaWidget.addBtn")}
+          </Button>
+
+          {hasChanges && (
+            <div className="flex justify-end space-x-2 border-t border-border pt-4">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={handleCancel}
+                disabled={loading}
+              >
+                {t("Dialog.btn.Cancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleSave}
+                disabled={
+                  loading || socialLinks.some((l) => l.link && !l.isValid)
                 }
               >
-                {SOCIAL_MEDIA.map(({ label, value }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
-              <Button
-                className="rounded-md bg-danger-light px-3 py-1.5 text-xs text-white hover:bg-danger-light-hover"
-                onClick={() => removeSocialLink(id)}
-              >
-                <FaTrashAlt size={18} />
+                {loading ? (
+                  <Spinner size="sm" className="mr-2" />
+                ) : (
+                  <FaCheck className="mr-2 h-4 w-4" />
+                )}
+                {t("Dialog.btn.Save Changes")}
               </Button>
             </div>
-          ))}
-          <Button
-            variant="primary"
-            onClick={() =>
-              setSocialLinks([
-                ...socialLinks,
-                { id: uuidv4(), type: "facebook", link: "", isValid: false },
-              ])
-            }
-            className="w-full rounded-md px-4 py-2 text-sm"
-          >
-            + Add a social link
-          </Button>
-          <div className="flex space-x-2">
-            <Button
-              disabled={!socialLinks.some((l) => l.isValid)}
-              variant="primary"
-              onClick={handleSave}
-              className="rounded-md px-4 py-2 text-sm"
-            >
-              <FaCheck size={18} className="mr-1" />
-              Save
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={handleCancel}
-              className="rounded-md px-4 py-2 text-sm"
-            >
-              <MdClose size={18} className="mr-1" />
-              Cancel
-            </Button>
-          </div>
+          )}
         </div>
       </Widget.Content>
     </Widget>

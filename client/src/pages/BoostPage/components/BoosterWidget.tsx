@@ -8,16 +8,16 @@ import {
   DialogContent,
   DialogTrigger,
 } from "~/components/@radix-ui/Dialog";
-import { Button, TextArea, Widget } from "~/components/shared";
+import { TextArea, Widget } from "~/components/shared";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import cn from "~/libs/utils";
-import { ICurrentUserProps } from "~/types";
+import { ISendReportPayload, IUser } from "~/types";
 import DialogSuccessReport from "./DialogSuccessReport";
 import { reasonReports } from "~/constants/report";
-import { axiosAuth } from "~/axiosAuth";
 import toast from "react-hot-toast";
-import { RootState } from "~/redux/store";
-import { useSelector } from "react-redux";
+import { Button } from "~/components/shared/Button";
+import { reportService } from "~/services/report.service";
+import useSWRMutation from "swr/mutation";
 
 const BlankBoosterWidget = () => {
   const { t } = useTranslation();
@@ -39,13 +39,11 @@ const BlankBoosterWidget = () => {
   );
 };
 
-const FoundBoosterWidget = (partner: ICurrentUserProps) => {
+const FoundBoosterWidget = (partner: IUser) => {
   const { t } = useTranslation();
   const { username, profile_picture, _id } = partner;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(_id as string);
-  const [loading, setLoading] = useState(false);
-  const { currentUser } = useSelector((state: RootState) => state.user);
 
   const [reason, setReason] = useState<{
     title?: string;
@@ -55,34 +53,44 @@ const FoundBoosterWidget = (partner: ICurrentUserProps) => {
   const [isOpenDialogReport, setOpenDialogReport] = useState(false);
   const [isOpenDialogSubmit, setOpenDialogSubmit] = useState(false);
 
+  const { trigger, isMutating } = useSWRMutation(
+    "/api/report/send",
+    (_, { arg }: { arg: ISendReportPayload }) => reportService.sendReport(arg),
+  );
+
   const handleOption = (option: string) => {
     setReason({ title: option });
     if (reason?.title === option) {
       setReason(null);
     }
   };
-
   const handleSendReport = async () => {
+    if (!reason || !reason.title || !reason.description) {
+      toast.error("Please select a reason for the report.");
+      return;
+    }
     try {
-      setLoading(true);
-      const { data } = await axiosAuth.post(`/report/send`, {
-        customer_id: currentUser?._id,
-        partner_id: partner._id,
-        ...reason,
-      });
+      const { title, description } = reason;
+      const payload = {
+        reportedUserId: partner._id,
+        title: title,
+        description: description,
+      };
+      const data = await trigger(payload);
       if (data.success) {
         setOpenDialogReport(false);
         setOpenDialogSubmit(true);
       }
     } catch (e) {
       console.error(e);
-      toast.error("Fail Review");
-    } finally {
-      setLoading(false);
+      toast.error("Failed to send report. Please try again.");
     }
   };
 
-  console.log({ reason });
+  const translatedReasonReports = reasonReports.map((reason) => ({
+    ...reason,
+    description: t(`Boost.ReportReasons.${reason.value}`),
+  }));
 
   return (
     <>
@@ -143,65 +151,83 @@ const FoundBoosterWidget = (partner: ICurrentUserProps) => {
                       Report
                     </Button>
                   </DialogTrigger>
+
                   <DialogContent>
                     <div className="relative max-h-[calc(100svh-150px)] overflow-y-auto">
                       <div className="sticky -top-7 -mt-10 h-10 w-full bg-gradient-to-b from-card" />
-                      <div className="w-full overflow-hidden rounded-xl bg-card px-5 py-7">
+                      <div className="w-full rounded-xl bg-card px-6 py-8">
+                        {/* Header */}
                         <Link
-                          className="flex items-center gap-x-3 truncate"
-                          to="/partner/buff163"
+                          to={`/partner/${username}`}
+                          className="mb-4 flex items-center gap-3"
                         >
                           <img
-                            className="size-8 rounded ring-1 ring-border/50"
                             src={partner.profile_picture}
                             alt="logo"
+                            className="size-9 rounded-full border border-border/60"
                           />
-                          <h2 className="font-display truncate text-xl font-bold tracking-tight text-foreground">
+                          <h2 className="font-display truncate text-lg font-semibold text-foreground">
                             {partner.username}
                           </h2>
                         </Link>
-                        <hr className="mb-4 mt-4 w-full border-foreground opacity-10" />
-                        <h3 className="mb-5">
+
+                        <hr className="my-4 border-border opacity-20" />
+
+                        {/* Title */}
+                        <h3 className="mb-6 text-base font-medium text-muted-foreground">
                           Please tell us why you're reporting this person
                         </h3>
-                        <div className="flex flex-col space-y-3">
-                          {reasonReports.map(({ value, description }, idx) => (
-                            <div key={idx}>
-                              <div
-                                className="flex w-full cursor-pointer items-center gap-6 overflow-hidden rounded-xl bg-card p-4 text-foreground shadow-lg ring-1 ring-inset ring-border transition-all hover:bg-accent/50 dark:bg-[#151926]/60 dark:hover:bg-[#212435]/60"
-                                onClick={() => handleOption(value as string)}
-                              >
-                                {description}
-                              </div>
-                              {reason?.title === value && (
-                                <div className="relative mt-3 w-full rounded-md border border-card-surface bg-accent p-4 text-white">
-                                  <div className="absolute -top-2 left-4 h-0 w-0 border-x-8 border-b-8 border-x-transparent border-b-gray-500" />
-                                  <div className="border-x-7 border-b-7 absolute -top-[6px] left-4 h-0 w-0 border-x-transparent border-b-gray-700" />
 
-                                  <TextArea
-                                    placeholder="Please provide more information"
-                                    rows={5}
-                                    onChange={(e) =>
-                                      setReason((state) => ({
-                                        ...state,
-                                        description: e.target.value,
-                                      }))
-                                    }
-                                  />
-                                  <div className="flex items-end justify-end pt-2">
-                                    <Button
-                                      disabled={loading}
-                                      variant="primary"
-                                      className="rounded-md px-4 py-2 text-sm"
-                                      onClick={handleSendReport}
-                                    >
-                                      Submit
-                                    </Button>
+                        {/* Reasons */}
+                        <div className="flex flex-col space-y-4">
+                          {translatedReasonReports.map(
+                            ({ value, description }, idx) => (
+                              <div key={idx} className="w-full">
+                                <Button
+                                  onClick={() => handleOption(value)}
+                                  className={`w-full rounded-lg px-5 py-4 text-left text-sm transition-all duration-150 ${
+                                    reason?.title === value
+                                      ? "border border-primary bg-accent/30 font-semibold text-foreground"
+                                      : "border border-transparent bg-muted text-muted-foreground hover:bg-muted/70"
+                                  }`}
+                                >
+                                  {description}
+                                </Button>
+
+                                {/* Description Input */}
+                                {reason?.title === value && (
+                                  <div className="relative mt-3 w-full rounded-lg border border-border bg-muted/40 p-4">
+                                    <div className="absolute -top-2 left-6 h-0 w-0 border-x-8 border-b-8 border-x-transparent border-b-muted/40" />
+                                    <div className="border-x-7 border-b-7 absolute -top-[6px] left-6 h-0 w-0 border-x-transparent border-b-border" />
+
+                                    <TextArea
+                                      rows={4}
+                                      placeholder="Please provide more information"
+                                      className="w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground"
+                                      onChange={(e) =>
+                                        setReason((state) => ({
+                                          ...state,
+                                          description: e.target.value,
+                                        }))
+                                      }
+                                    />
+                                    <div className="flex justify-end pt-3">
+                                      <Button
+                                        disabled={
+                                          isMutating || !reason.description
+                                        }
+                                        variant="primary"
+                                        className="px-5 py-2 text-sm font-medium"
+                                        onClick={handleSendReport}
+                                      >
+                                        Submit
+                                      </Button>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                                )}
+                              </div>
+                            ),
+                          )}
                         </div>
                       </div>
                     </div>
@@ -224,8 +250,8 @@ const BoosterWidget = ({
   partner,
   assign_partner,
 }: {
-  partner?: ICurrentUserProps;
-  assign_partner?: ICurrentUserProps;
+  partner?: IUser;
+  assign_partner?: IUser;
 }) => {
   const mergedPartner = partner || assign_partner;
 
