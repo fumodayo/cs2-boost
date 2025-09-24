@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "server",
   "scripts": {
-    "dev": "npx nodemon"
+    "dev": "npx nodemon",
+    "build": "npx tsc",
+    "start": "node dist/main.js"
   },
   "author": "fumodayo",
   "license": "MIT",
