@@ -41,5 +41,6 @@ export { default as Spinner } from "./Spinner";
 export { default as ErrorDisplay } from "./ErrorDisplay";
 export { default as SkeletonLoader } from "./SkeletonLoader";
 export { default as SegmentedControl } from "./SegmentedControl";
+export { default as BotChatWidget } from "./Modal/BotChatWidget";
 export * from "./Notification";
 export * from "./Button";

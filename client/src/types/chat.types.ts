@@ -11,6 +11,17 @@ export interface IMessage {
   updatedAt: string;
 }
 
+export interface IBotMessage {
+  _id: string;
+  conversation_id: string;
+  role: "user" | "model";
+  text: string;
+  imageUrl?: string;
+  filePreview?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IConversation {
   _id: string;
   participants: string[] | IUser[];

@@ -17,6 +17,7 @@ import revenueRouter from './routes/revenue.route';
 import payoutRouter from './routes/payout.route';
 import pushRouter from './routes/push.route';
 import notificationRouter from './routes/notification.route';
+import botChatRouter from './routes/botchat.route';
 import dotenv from 'dotenv';
 import { connectToMongoDB } from './database/connectToMongoDB';
 import { app, server } from './socket/socket';
@@ -70,6 +71,7 @@ app.use('/api/v1/revenue', revenueRouter);
 app.use('/api/v1/payout', payoutRouter);
 app.use('/api/v1/push', pushRouter);
 app.use('/api/v1/notification', notificationRouter);
+app.use('/api/v1/bot-chat', botChatRouter);
 
 app.get('/', (req, res) => {
     res.json('Server is running');

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import io, { Socket } from "socket.io-client";
 import { RootState } from "~/redux/store";
@@ -17,13 +17,19 @@ export const SocketContextProvider = ({ children }: IContextProviderProps) => {
 
   const VITE_SERVER_URL = "http://localhost:5040";
 
+  const connectionId = useMemo(() => {
+    return currentUser?._id || localStorage.getItem("guestChatId");
+  }, [currentUser]);
+
   useEffect(() => {
-    if (currentUser) {
-      const newSocket = io(VITE_SERVER_URL, {
+    let newSocket: Socket | undefined;
+
+    if (connectionId) {
+      newSocket = io(VITE_SERVER_URL, {
         transports: ["websocket", "polling"],
         withCredentials: true,
         query: {
-          user_id: currentUser._id,
+          user_id: connectionId,
         },
       });
 
@@ -38,7 +44,7 @@ export const SocketContextProvider = ({ children }: IContextProviderProps) => {
       });
 
       return () => {
-        newSocket.close();
+        newSocket?.close();
       };
     } else {
       if (socket) {
@@ -47,7 +53,7 @@ export const SocketContextProvider = ({ children }: IContextProviderProps) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [connectionId]);
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers, onlinePartners }}>

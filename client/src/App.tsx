@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
+  BotChatWidget,
   CongratsDialog,
   ForgotPasswordModal,
   LoginModal,
@@ -30,13 +31,13 @@ const App = () => {
         <InputOtpModal />
         <ResetPasswordModal />
         <CongratsDialog />
+        <BotChatWidget />
         <Routes>
           <Route>{DefaultRoutes()}</Route>
           <Route>{UserRoutes()}</Route>
           <Route>{AdminRoutes()}</Route>
           <Route>{ComingRoutes()}</Route>
         </Routes>
-
         <SpeedInsights />
       </Suspense>
     </BrowserRouter>
