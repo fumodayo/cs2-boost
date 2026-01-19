@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+﻿import { Schema, model, Document, Types } from 'mongoose';
 import { NOTIFY_TYPE } from '../constants';
 
 export interface INotification extends Document {
@@ -6,6 +6,10 @@ export interface INotification extends Document {
     receiver?: Types.ObjectId;
 
     boost_id?: string;
+    report_id?: string;
+
+    title?: string;
+    image?: string;
 
     content: string;
 
@@ -27,6 +31,15 @@ const notifySchema = new Schema<INotification>(
             ref: 'User',
         },
         boost_id: {
+            type: String,
+        },
+        report_id: {
+            type: String,
+        },
+        title: {
+            type: String,
+        },
+        image: {
             type: String,
         },
         content: {

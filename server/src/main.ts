@@ -1,4 +1,4 @@
-import express, { NextFunction } from 'express';
+﻿import express, { NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import authRoute from './routes/auth.route';
 import vnpayRoute from './routes/vnpay.route';
@@ -18,14 +18,18 @@ import payoutRouter from './routes/payout.route';
 import pushRouter from './routes/push.route';
 import notificationRouter from './routes/notification.route';
 import botChatRouter from './routes/botchat.route';
+import liveChatRouter from './routes/liveChat.route';
 import dotenv from 'dotenv';
 import { connectToMongoDB } from './database/connectToMongoDB';
 import { app, server } from './socket/socket';
 import cors from 'cors';
 import webpush from 'web-push';
+import { initCCCDExpirationJob } from './jobs/cccdExpirationJob';
 
 dotenv.config();
 connectToMongoDB();
+
+initCCCDExpirationJob();
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -72,6 +76,7 @@ app.use('/api/v1/payout', payoutRouter);
 app.use('/api/v1/push', pushRouter);
 app.use('/api/v1/notification', notificationRouter);
 app.use('/api/v1/bot-chat', botChatRouter);
+app.use('/api/v1/live-chat', liveChatRouter);
 
 app.get('/', (req, res) => {
     res.json('Server is running');

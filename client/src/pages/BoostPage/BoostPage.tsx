@@ -1,4 +1,4 @@
-import { FaArrowLeft } from "react-icons/fa6";
+﻿import { FaArrowLeft } from "react-icons/fa6";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect } from "react";
@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import useSWR from "swr";
 import toast from "react-hot-toast";
 
-import { Helmet, Spinner, ErrorDisplay } from "~/components/shared";
+import { Helmet, Spinner, ErrorDisplay } from "~/components/ui";
 import {
   AccountWidget,
   BoosterWidget,
@@ -17,14 +17,14 @@ import {
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { orderService } from "~/services/order.service";
 import { RootState } from "~/redux/store";
-import { IUser } from "~/types";
 import { ORDER_STATUS } from "~/constants/order";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { isUserObject } from "~/utils/typeGuards";
 import { ROLE } from "~/types/constants";
 
 const BoostPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["boost_page", "common"]);
+
   const navigate = useNavigate();
   const { id: boost_id } = useParams<{ id: string }>();
   const { currentUser } = useSelector((state: RootState) => state.user);
@@ -42,14 +42,14 @@ const BoostPage = () => {
 
   useEffect(() => {
     const handleStatusChange = () => {
-      toast.success("Order status has been updated!");
+      toast.success(t("common:toasts.order_status_updated"));
       mutate();
     };
     socket?.on("statusOrderChange", handleStatusChange);
     return () => {
       socket?.off("statusOrderChange", handleStatusChange);
     };
-  }, [socket, mutate]);
+  }, [socket, mutate, t]);
 
   const isAccessAllowed = useCallback(() => {
     if (!order || !currentUser) return false;
@@ -87,10 +87,10 @@ const BoostPage = () => {
 
   useEffect(() => {
     if (!isLoading && order && !isAccessAllowed()) {
-      toast.error("You do not have permission to view this page.");
+      toast.error(t("boost_page:errors.access_denied"));
       navigate("/orders");
     }
-  }, [isLoading, order, isAccessAllowed, navigate, currentUser]);
+  }, [isLoading, order, isAccessAllowed, navigate, currentUser, t]);
 
   if (isLoading) {
     return (
@@ -103,7 +103,7 @@ const BoostPage = () => {
   if (error || !order) {
     return (
       <ErrorDisplay
-        message="Failed to load order details. Please try again."
+        message={t("boost_page:errors.load_failed")}
         onRetry={mutate}
       />
     );
@@ -115,7 +115,7 @@ const BoostPage = () => {
 
   return (
     <>
-      <Helmet title={order.title} />
+      <Helmet isTranslate title={order.title} />
       <main className="col-span-1 px-2 lg:col-span-1">
         <Link
           to={".."}
@@ -129,7 +129,7 @@ const BoostPage = () => {
             className="mb-4 flex w-fit rounded-md px-2 py-1.5 text-xs"
           >
             <FaArrowLeft className="mr-2" />
-            {t("Globals.Go Back")}
+            {t("common:go_back")}
           </Button>
         </Link>
         <Header {...order} />
@@ -137,8 +137,9 @@ const BoostPage = () => {
           <div className="mx-auto grid grid-cols-1 grid-rows-1 items-start gap-y-5 xl:mx-0 xl:grid-cols-3 xl:gap-x-5">
             <div className="column-grid columns-1 space-y-4 md:columns-2 xl:col-start-3 xl:row-end-1 xl:columns-1 xl:space-y-6">
               <BoosterWidget
-                partner={order.partner as IUser}
-                assign_partner={order.assign_partner as IUser}
+                partner={order.partner}
+                assign_partner={order.assign_partner}
+                orderId={order._id}
               />
               <AccountWidget />
               {order.status === ORDER_STATUS.COMPLETED && (

@@ -1,0 +1,18 @@
+{
+    "user_tooltip": {
+        "joined": "Đã tham gia",
+        "view_profile": "Xem hồ sơ",
+        "role": "Vai trò",
+        "client_role": "Khách hàng",
+        "admin_role": "Quản trị viên",
+        "partner_stats": {
+            "verified": "Đã xác minh",
+            "yes": "Có",
+            "no": "Không",
+            "rating": "Đánh giá",
+            "reviews": "đánh giá",
+            "completion_rate": "Tỷ lệ hoàn thành",
+            "followers": "Người theo dõi"
+        }
+    }
+}

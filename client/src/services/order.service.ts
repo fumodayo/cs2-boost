@@ -1,4 +1,5 @@
-import { axiosPrivate } from "~/axiosAuth";
+﻿import { axiosPrivate } from "~/axiosAuth";
+import axios from "axios";
 import {
   IOrder,
   IAccountPayload,
@@ -9,7 +10,10 @@ import {
   IAccount,
   IArrayDataSuccessResponse,
 } from "~/types";
-
+export interface ICommissionRates {
+  partnerCommissionRate: number;
+  cancellationPenaltyRate: number;
+}
 /**
  * @description Lấy danh sách các đơn hàng của người dùng đang đăng nhập.
  * @route   GET /api/order/my-orders
@@ -22,7 +26,6 @@ const getMyOrders = async (
   const { data } = await axiosPrivate.get("/order/my-orders", { params });
   return data;
 };
-
 /**
  * @description Lấy thông tin chi tiết của một đơn hàng bằng `boostId`.
  * @route   GET /api/order/:boostId
@@ -33,7 +36,6 @@ const getOrderById = async (boostId: string): Promise<IOrder> => {
   const { data } = await axiosPrivate.get(`/order/${boostId}`);
   return data.data;
 };
-
 /**
  * @description Người dùng tạo một đơn hàng mới.
  * @route   POST /api/orders
@@ -46,7 +48,6 @@ const createOrder = async (
   const { data } = await axiosPrivate.post(`/order`, payload);
   return data;
 };
-
 /**
  * @description Người dùng xóa một đơn hàng (nếu được phép).
  * @route   DELETE /api/order/:boostId
@@ -57,7 +58,6 @@ const deleteOrder = async (boostId: string): Promise<ISuccessResponse> => {
   const { data } = await axiosPrivate.delete(`/order/${boostId}`);
   return data;
 };
-
 /**
  * @description Người dùng gán một Partner cụ thể cho đơn hàng của mình.
  * @route   POST /api/order/:boostId/assign
@@ -72,7 +72,6 @@ const assignPartner = async (
   const { data } = await axiosPrivate.post(`/order/${boostId}/assign`, payload);
   return data;
 };
-
 /**
  * @description Người dùng từ chối Partner đã được gán cho đơn hàng.
  * @route   POST /api/order/:boostId/refuse
@@ -83,7 +82,6 @@ const refuseOrder = async (boostId: string): Promise<ISuccessResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/refuse`);
   return data;
 };
-
 /**
  * @description Người dùng gia hạn một đơn hàng đã hoàn thành.
  * @route   POST /api/order/:boostId/renew
@@ -94,7 +92,6 @@ const renewOrder = async (boostId: string): Promise<IDirectResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/renew`);
   return data;
 };
-
 /**
  * @description Người dùng khôi phục một đơn hàng đã bị hủy.
  * @route   POST /api/order/:boostId/recover
@@ -105,7 +102,6 @@ const recoveryOrder = async (boostId: string): Promise<IDirectResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/recover`);
   return data.data;
 };
-
 /**
  * @description Người dùng thêm thông tin tài khoản game vào một đơn hàng.
  * @route   POST /api/order/:boostId/account
@@ -123,7 +119,6 @@ const addAccountToOrder = async (
   );
   return data;
 };
-
 /**
  * @description Người dùng chỉnh sửa thông tin tài khoản game đã liên kết với đơn hàng.
  * @route   PATCH /api/order/accounts/:accountId
@@ -141,7 +136,6 @@ const editAccountOnOrder = async (
   );
   return data;
 };
-
 /**
  * @description (Partner) Lấy danh sách các đơn hàng đang chờ nhận.
  * @route   GET /api/order/pending
@@ -154,7 +148,6 @@ const getPendingOrders = async (
   const { data } = await axiosPrivate.get("/order/pending", { params });
   return data;
 };
-
 /**
  * @description (Partner) Lấy danh sách các đơn hàng đang được thực hiện.
  * @route   GET /api/order/in-progress
@@ -167,7 +160,6 @@ const getProgressOrders = async (
   const { data } = await axiosPrivate.get("/order/in-progress", { params });
   return data;
 };
-
 /**
  * @description (Partner) Chấp nhận một đơn hàng để bắt đầu thực hiện.
  * @route   POST /api/order/:boostId/accept
@@ -178,7 +170,6 @@ const acceptOrder = async (boostId: string): Promise<ISuccessResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/accept`);
   return data;
 };
-
 /**
  * @description (Partner) Đánh dấu một đơn hàng là đã hoàn thành.
  * @route   POST /api/order/:boostId/complete
@@ -189,7 +180,6 @@ const completeOrder = async (boostId: string): Promise<ISuccessResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/complete`);
   return data;
 };
-
 /**
  * @description (Partner) Hủy một đơn hàng đang thực hiện.
  * @route   POST /api/order/:boostId/cancel
@@ -200,9 +190,34 @@ const cancelOrder = async (boostId: string): Promise<ISuccessResponse> => {
   const { data } = await axiosPrivate.post(`/order/${boostId}/cancel`);
   return data;
 };
-
+/**
+ * @description Lấy tỷ lệ hoa hồng hiện tại từ hệ thống.
+ * @route   GET /api/utility/commission-rates
+ * @returns {Promise<ICommissionRates>} - Tỷ lệ hoa hồng partner và phí phạt hủy đơn.
+ */
+const getCommissionRates = async (): Promise<ICommissionRates> => {
+  const { data } = await axios.get(
+    `${import.meta.env.VITE_API_URL}/utility/commission-rates`,
+  );
+  return data.data;
+};
+/**
+ * @description Complete a free order using 100% discount promo code.
+ * @route   POST /api/order/:boostId/complete-free
+ * @param   {string} boostId - ID of the order (boost_id).
+ * @param   {string} promoCode - The promo code that provides 100% discount.
+ * @returns {Promise<ISuccessResponse>} - Success or failure response.
+ */
+const completeFreeOrder = async (
+  boostId: string,
+  promoCode: string,
+): Promise<ISuccessResponse> => {
+  const { data } = await axiosPrivate.post(`/order/${boostId}/complete-free`, {
+    promoCode,
+  });
+  return data;
+};
 export const orderService = {
-  // User & General
   getMyOrders,
   getOrderById,
   createOrder,
@@ -211,13 +226,13 @@ export const orderService = {
   refuseOrder,
   renewOrder,
   recoveryOrder,
-  // Account on Order
   addAccountToOrder,
   editAccountOnOrder,
-  // Partner
   getPendingOrders,
   getProgressOrders,
   acceptOrder,
   completeOrder,
   cancelOrder,
+  getCommissionRates,
+  completeFreeOrder,
 };

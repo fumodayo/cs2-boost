@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+﻿import { NextFunction, Request, Response } from 'express';
 import { errorHandler } from '../utils/error';
 import { BuildPaymentUrl, dateFormat, parseDate, VerifyReturnUrl, VNPay } from 'vnpay';
 import dotenv from 'dotenv';
@@ -11,6 +11,8 @@ import { AuthRequest } from '../interfaces';
 import User from '../models/user.model';
 import { pushService } from '../services/push.service';
 import { notificationService } from '../services/notification.service';
+import EmailTemplate from '../models/emailTemplate.model';
+import { sendEmail } from '../utils/sendEmail';
 
 dotenv.config();
 
@@ -56,7 +58,7 @@ const createPaymentUrl = async (req: Request, res: Response, next: NextFunction)
             vnp_Locale: langSelect,
             vnp_CreateDate: dateFormat(new Date()),
             vnp_ExpireDate: dateFormat(tomorrow),
-            // vnp_BankCode: '123',
+
         };
 
         const paymentUrl = vnpay.buildPaymentUrl(data);
@@ -123,6 +125,7 @@ const getBillReturn = async (req: AuthRequest, res: Response, next: NextFunction
                         } else {
                             order.status = ORDER_STATUS.IN_ACTIVE;
 
+                            await notificationService.createPendingOrderNotification(order);
                             notificationService.broadcastNewOrder(order);
 
                             const partners = await User.find({ role: ROLE.PARTNER }).select('_id');
@@ -146,6 +149,54 @@ const getBillReturn = async (req: AuthRequest, res: Response, next: NextFunction
                         await session.commitTransaction();
 
                         notificationService.broadcastOrderStatusChange();
+
+                        try {
+                            const user =
+                                await User.findById(user_id).select('username email_address');
+                            const emailTemplate = await EmailTemplate.findOne({
+                                name: 'payment_success',
+                                is_active: true,
+                            });
+
+                            if (user?.email_address && emailTemplate) {
+                                const formatMoney = (amount: number) => {
+                                    return new Intl.NumberFormat('vi-VN', {
+                                        style: 'currency',
+                                        currency: 'VND',
+                                    }).format(amount);
+                                };
+
+                                const variables: Record<string, string> = {
+                                    username: user.username || 'Customer',
+                                    orderTitle: order.title || 'Boost Order',
+                                    orderAmount: formatMoney(order.price),
+                                    transactionId: result.vnp_TransactionNo?.toString() || 'N/A',
+                                    paymentDate: formattedPayDate,
+                                    boostId: order.boost_id || 'N/A',
+                                };
+
+                                let htmlContent = emailTemplate.html_content;
+                                let subject = emailTemplate.subject;
+
+                                Object.entries(variables).forEach(([key, value]) => {
+                                    const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
+                                    htmlContent = htmlContent.replace(regex, value);
+                                    subject = subject.replace(regex, value);
+                                });
+
+                                await sendEmail({
+                                    to: user.email_address,
+                                    subject,
+                                    html: htmlContent,
+                                });
+                                console.log(
+                                    `✓ Payment success email sent to ${user.email_address}`,
+                                );
+                            }
+                        } catch (emailError) {
+
+                            console.error('Failed to send payment success email:', emailError);
+                        }
                     } catch (error) {
                         await session.abortTransaction();
                         return next(error);

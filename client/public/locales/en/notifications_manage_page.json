@@ -1,0 +1,23 @@
+{
+    "title": "Notifications Management",
+    "subtitle": "Create and manage announcements for all users",
+    "create_announcement": "Create Announcement",
+    "image_url": "Image URL (Banner)",
+    "image_placeholder": "https://example.com/banner.jpg",
+    "title_field": "Title",
+    "title_placeholder": "Announcement title...",
+    "description_field": "Description",
+    "description_placeholder": "Announcement content...",
+    "add_to_list": "Add to List",
+    "adding": "Adding...",
+    "announcements_list": "Announcements List",
+    "no_announcements": "No announcements yet",
+    "broadcast": "Broadcast",
+    "delete": "Delete",
+    "toasts": {
+        "created": "Announcement created!",
+        "deleted": "Announcement deleted!",
+        "broadcasted": "Notification sent to all users!",
+        "title_content_required": "Title and content are required"
+    }
+}

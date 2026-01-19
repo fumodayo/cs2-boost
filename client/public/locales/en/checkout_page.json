@@ -1,0 +1,45 @@
+{
+    "sr_only": {
+        "checkout": "Checkout",
+        "order_summary": "Order summary"
+    },
+    "amount_due": "Amount due",
+    "total": "Total",
+    "pay_now": "Pay Now",
+    "demo_notice": "Since this is a demo product, you can find the bank account for testing payments <1>here</1>.",
+    "payment": {
+        "pay_with": "Pay with",
+        "methods": {
+            "vn_pay": {
+                "title": "VN Pay",
+                "subtitle": "Prepaid card for online payments."
+            },
+            "stripe": {
+                "title": "Debit/Credit cards (Stripe)",
+                "subtitle": "Alternative cards payment method."
+            },
+            "zalo_pay": {
+                "title": "Zalo Pay",
+                "subtitle": "Prepaid card for online payments."
+            }
+        }
+    },
+    "booster_request": {
+        "selected_booster": "Selected Booster",
+        "cancel": "Cancel",
+        "request_booster_btn": "Request a specific Booster",
+        "request_booster_title": "Request Booster",
+        "looking_for_booster": "Looking for a specific booster?",
+        "status": {
+            "online": "Online",
+            "offline": "Offline"
+        }
+    },
+    "errors": {
+        "no_order": "The order you are looking for does not exist or could not be loaded.",
+        "create_payment_url_failed": "Could not create payment URL. Please try again.",
+        "checkout_failed": "Something went wrong during checkout.",
+        "load_partners_failed": "Could not load partners."
+    },
+    "free_order_success": "Your order has been placed successfully!"
+}

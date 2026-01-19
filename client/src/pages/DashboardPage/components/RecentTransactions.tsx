@@ -1,9 +1,9 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom";
 import { FaExchangeAlt } from "react-icons/fa";
 import { ITransaction } from "~/types";
 import { formatMoney, formatDistanceDate } from "~/utils";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { isUserObject } from "~/utils/typeGuards";
 
@@ -19,14 +19,14 @@ const transactionTypeClasses: Record<string, string> = {
 const RecentTransactions: React.FC<{ transactions: ITransaction[] }> = ({
   transactions,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("dashboard_page");
 
   return (
     <div className="rounded-xl border border-border bg-card shadow-sm">
       <div className="flex items-center justify-between border-b border-border p-4">
         <h3 className="flex items-center text-lg font-semibold text-foreground">
           <FaExchangeAlt className="mr-3 text-primary" />
-          {t("DashboardPage.RecentTransactions.title")}
+          {t("recent_transactions.title")}
         </h3>
       </div>
       <div className="divide-y divide-border">
@@ -66,21 +66,23 @@ const RecentTransactions: React.FC<{ transactions: ITransaction[] }> = ({
                 <p
                   className={`text-xs font-semibold capitalize ${transactionTypeClasses[tx.type] || "text-muted-foreground"}`}
                 >
-                  {tx.type.replace("_", " ").toLowerCase()}
+                  {t(`recent_transactions.types.${tx.type}`, {
+                    defaultValue: tx.type,
+                  })}
                 </p>
               </div>
             </div>
           ))
         ) : (
           <p className="p-8 text-center text-sm text-muted-foreground">
-            {t("DashboardPage.RecentTransactions.empty")}
+            {t("recent_transactions.empty")}
           </p>
         )}
       </div>
       <div className="border-t border-border p-4 text-center">
         <Link to="/admin/manage-revenue">
           <Button variant="link">
-            {t("DashboardPage.RecentTransactions.viewAllBtn")}
+            {t("recent_transactions.view_all_btn")}
           </Button>
         </Link>
       </div>

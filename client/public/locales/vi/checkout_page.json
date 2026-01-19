@@ -1,0 +1,45 @@
+{
+    "sr_only": {
+        "checkout": "Thanh toán",
+        "order_summary": "Tóm tắt đơn hàng"
+    },
+    "amount_due": "Số tiền cần thanh toán",
+    "total": "Tổng cộng",
+    "pay_now": "Thanh toán ngay",
+    "demo_notice": "Vì đây là sản phẩm demo, bạn có thể tìm thấy tài khoản ngân hàng để thử nghiệm thanh toán <1>tại đây</1>.",
+    "payment": {
+        "pay_with": "Thanh toán bằng",
+        "methods": {
+            "vn_pay": {
+                "title": "VN Pay",
+                "subtitle": "Thẻ trả trước cho thanh toán trực tuyến."
+            },
+            "stripe": {
+                "title": "Thẻ ghi nợ/tín dụng (Stripe)",
+                "subtitle": "Phương thức thanh toán bằng thẻ thay thế."
+            },
+            "zalo_pay": {
+                "title": "Zalo Pay",
+                "subtitle": "Thẻ trả trước cho thanh toán trực tuyến."
+            }
+        }
+    },
+    "booster_request": {
+        "selected_booster": "Booster đã chọn",
+        "cancel": "Hủy",
+        "request_booster_btn": "Yêu cầu một Booster cụ thể",
+        "request_booster_title": "Yêu cầu Booster",
+        "looking_for_booster": "Bạn đang tìm kiếm một booster cụ thể?",
+        "status": {
+            "online": "Trực tuyến",
+            "offline": "Ngoại tuyến"
+        }
+    },
+    "errors": {
+        "no_order": "Đơn hàng bạn đang tìm kiếm không tồn tại hoặc không thể tải được.",
+        "create_payment_url_failed": "Không thể tạo URL thanh toán. Vui lòng thử lại.",
+        "checkout_failed": "Đã xảy ra lỗi trong quá trình thanh toán.",
+        "load_partners_failed": "Không thể tải danh sách đối tác."
+    },
+    "free_order_success": "Đơn hàng của bạn đã được xử lý thành công!"
+}

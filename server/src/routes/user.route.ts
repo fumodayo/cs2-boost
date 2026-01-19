@@ -1,6 +1,7 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import {
     changePassword,
+    deleteAccount,
     followPartner,
     getPartnerByUsername,
     getPartners,
@@ -29,6 +30,7 @@ router.get('/:id', getUserById as RequestHandler);
 router.use(protect as RequestHandler);
 
 router.patch('/me', updateUser as RequestHandler);
+router.delete('/me', deleteAccount as RequestHandler);
 router.post('/me/change-password', changePassword as RequestHandler);
 router.post('/me/verify', verifyUser as RequestHandler);
 

@@ -1,4 +1,4 @@
-import * as SwitchPrimitive from "@radix-ui/react-switch";
+﻿import * as SwitchPrimitive from "@radix-ui/react-switch";
 
 const Switch = (props: SwitchPrimitive.SwitchProps) => (
   <SwitchPrimitive.Root

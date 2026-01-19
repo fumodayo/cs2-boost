@@ -1,0 +1,38 @@
+{
+    "title": "Mẫu Email",
+    "subtitle": "Quản lý và tùy chỉnh các mẫu email được gửi cho người dùng",
+    "available_templates": "Mẫu có sẵn",
+    "select_template": "Chọn một mẫu để chỉnh sửa",
+    "subject": "Tiêu đề",
+    "html_content": "Nội dung HTML",
+    "available_variables": "Biến có sẵn",
+    "preview": "Xem trước",
+    "save_changes": "Lưu thay đổi",
+    "saving": "Đang lưu...",
+    "email_preview": "Xem trước Email",
+    "send_announcement_email": "Gửi Email Thông báo",
+    "send_dialog": {
+        "title": "Gửi Email Thông báo",
+        "description": "Điều này sẽ gửi email thông báo đến tất cả người dùng client (không bao gồm admin hoặc partner).",
+        "image_url": "URL Hình ảnh (tùy chọn)",
+        "image_placeholder": "https://example.com/banner.jpg",
+        "title_field": "Tiêu đề",
+        "title_placeholder": "Tiêu đề thông báo...",
+        "content_field": "Nội dung",
+        "content_placeholder": "Nội dung thông báo...",
+        "send_button": "Gửi Email cho tất cả Client",
+        "sending": "Đang gửi..."
+    },
+    "template_names": {
+        "welcome": "Email Chào mừng (Google OAuth)",
+        "forgot_password": "Quên mật khẩu (OTP)",
+        "announcement": "Thông báo (Broadcast)",
+        "password_reset_by_admin": "Đặt lại mật khẩu (Admin)",
+        "payment_success": "Thanh toán thành công"
+    },
+    "toasts": {
+        "template_updated": "Cập nhật mẫu thành công!",
+        "email_sent": "Gửi email thông báo thành công!",
+        "title_content_required": "Tiêu đề và nội dung là bắt buộc"
+    }
+}

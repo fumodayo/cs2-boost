@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import { protect, authorize } from '../middlewares/auth.middleware';
 import { ROLE } from '../constants';
 import {
@@ -11,14 +11,12 @@ import {
 const router = express.Router();
 router.use(protect as RequestHandler);
 
-// Partner
 router.post(
     '/request',
     authorize(ROLE.PARTNER) as RequestHandler,
     createPayoutRequest as RequestHandler,
 );
 
-// Admin
 router.get('/', authorize(ROLE.ADMIN) as RequestHandler, getPayouts as RequestHandler);
 router.post(
     '/:payoutId/approve',

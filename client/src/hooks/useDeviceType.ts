@@ -1,21 +1,28 @@
-import { useEffect, useState } from "react";
-import { getLocalStorage, setLocalStorage } from "~/utils/localStorage";
+﻿import { useEffect, useState } from "react";
+import { setLocalStorage } from "~/utils/localStorage";
 
 const useDeviceType = () => {
-  const [device, setDevice] = useState("");
+  const [device, setDevice] = useState("Desktop");
 
   useEffect(() => {
     function handleDeviceDetection() {
+      const width = window.innerWidth;
       const userAgent = navigator.userAgent.toLowerCase();
-      const isMobile = /iphone|ipad|ipod|android|windows phone/g.test(
+
+      const isMobileDevice = /iphone|ipad|ipod|android|windows phone/g.test(
         userAgent,
       );
-      const isTablet =
-        /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
 
-      if (isMobile) setDevice("Mobile");
-      else if (isTablet) setDevice("Tablet");
-      else setDevice("Desktop");
+      if (width < 768 || isMobileDevice) {
+        setDevice("Mobile");
+        setLocalStorage("device", "Mobile");
+      } else if (width < 1024) {
+        setDevice("Tablet");
+        setLocalStorage("device", "Tablet");
+      } else {
+        setDevice("Desktop");
+        setLocalStorage("device", "Desktop");
+      }
     }
 
     handleDeviceDetection();
@@ -24,8 +31,12 @@ const useDeviceType = () => {
     return () => window.removeEventListener("resize", handleDeviceDetection);
   }, []);
 
-  /* prints 'Mobile', 'Tablet' or 'Desktop' depending on device. */
-  if (!getLocalStorage("device", "")) setLocalStorage("device", device);
+  return {
+    device,
+    isMobile: device === "Mobile",
+    isTablet: device === "Tablet",
+    isDesktop: device === "Desktop",
+  };
 };
 
 export default useDeviceType;

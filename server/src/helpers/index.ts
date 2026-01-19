@@ -1,4 +1,4 @@
-import Notification from '../models/notification.model';
+﻿import Notification from '../models/notification.model';
 import { getReceiverSocketID, io } from '../socket/socket';
 
 const emitNotification = (receiverId: string, event = 'newNotify') => {

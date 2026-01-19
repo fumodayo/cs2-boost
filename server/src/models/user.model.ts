@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
+﻿import mongoose, { Schema, Types } from 'mongoose';
 import { ROLE, IP_STATUS } from '../constants';
 import bcryptjs from 'bcryptjs';
 import Wallet from './wallet.model';
@@ -37,9 +37,10 @@ export interface IUser extends Document {
     _id: Types.ObjectId;
     username: string;
     email_address: string;
-    password: string; // Password luôn là string sau khi hash
+    password: string; 
     user_id: string;
     profile_picture: string;
+    banner_picture?: string;
     role: string[];
     is_verified: boolean;
     address?: string;
@@ -62,11 +63,16 @@ export interface IUser extends Document {
     following: Types.ObjectId[];
     followers_count: number;
     ip_addresses: (IIPAddressProps & { _id?: Types.ObjectId })[];
+    token_version: number;
     otp?: string | null;
     otp_expiry?: number | null;
     is_banned: boolean;
     ban_reason: string | null;
     ban_expires_at: Date | null;
+    partner_request_status?: 'none' | 'pending' | 'approved' | 'rejected';
+    cccd_warning_sent?: boolean;
+    is_deleted: boolean;
+    deleted_at: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -82,10 +88,10 @@ const userSchema = new mongoose.Schema<IUser>(
             default:
                 'https://res.cloudinary.com/du93troxt/image/upload/v1714744499/avatar_qyersf.jpg',
         },
+        banner_picture: { type: String },
         user_id: { type: String, required: true, unique: true },
         role: { type: [String], enum: ROLE, default: [ROLE.CLIENT] },
 
-        // VERIFY
         is_verified: { type: Boolean, required: true, default: false },
         address: { type: String },
         cccd_number: { type: String },
@@ -96,7 +102,6 @@ const userSchema = new mongoose.Schema<IUser>(
         phone_number: { type: String },
         full_name: { type: String },
 
-        // DETAILS
         total_followers: { type: Number, required: true, default: 0 },
         total_working_time: { type: Number, required: true, default: 0 },
         total_completion_rate: { type: Number, required: true, default: 100 },
@@ -104,22 +109,31 @@ const userSchema = new mongoose.Schema<IUser>(
         total_orders_taken: { type: Number, required: true, default: 0 },
         total_rating: { type: Number, required: true, default: 0 },
         total_reviews: { type: Number, required: true, default: 0 },
-        // reviews: [],
+
         social_links: [socialLinkSchema],
         details: { type: String },
 
         following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         followers_count: { type: Number, default: 0 },
 
-        // BAN/ UNBAN
         is_banned: { type: Boolean, default: false },
         ban_reason: { type: String, default: null },
         ban_expires_at: { type: Date, default: null },
 
-        // IP ADDRESSES
-        ip_addresses: [IPAddressSchema],
+        partner_request_status: {
+            type: String,
+            enum: ['none', 'pending', 'approved', 'rejected'],
+            default: 'none',
+        },
 
-        // FORGOT_PASSWORD
+        cccd_warning_sent: { type: Boolean, default: false },
+
+        is_deleted: { type: Boolean, default: false },
+        deleted_at: { type: Date, default: null },
+
+        ip_addresses: [IPAddressSchema],
+        token_version: { type: Number, default: 0 },
+
         otp: {
             type: String,
         },
@@ -145,9 +159,13 @@ userSchema.post('save', async function (doc, next) {
 
     if (isNewUser) {
         try {
-            await Wallet.create({
-                owner: doc._id,
-            });
+
+            const existingWallet = await Wallet.findOne({ owner: doc._id });
+            if (!existingWallet) {
+                await Wallet.create({
+                    owner: doc._id,
+                });
+            }
         } catch (error) {
             console.error('Failed to create initial wallet for user:', error);
         }

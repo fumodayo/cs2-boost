@@ -1,9 +1,8 @@
-import type { IUser } from "./user.types";
+﻿import type { IUser } from "./user.types";
 import type { IConversation } from "./chat.types";
 import type { IReview } from "./meta.types";
 import { ORDER_STATUS, ORDER_TYPES, ObjectValues } from "./constants";
 import { AxiosResponse } from "axios";
-
 export interface IAccount {
   _id: string;
   user_id: string;
@@ -14,7 +13,6 @@ export interface IAccount {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface IStatusHistory {
   status: ObjectValues<typeof ORDER_STATUS>;
   date: string;
@@ -24,13 +22,11 @@ export interface IStatusHistory {
   previous_partner?: string | IUser;
   new_partner?: string | IUser;
 }
-
 export interface IExtraOption {
   name: string;
   label: string;
   value: number;
 }
-
 export interface IOrder {
   _id: string;
   title: string;
@@ -59,7 +55,6 @@ export interface IOrder {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface ICreateOrderPayload {
   title: string;
   type: ObjectValues<typeof ORDER_TYPES>;
@@ -75,32 +70,25 @@ export interface ICreateOrderPayload {
   end_exp?: number;
   total_time?: number;
 }
-
 export interface IAccountPayload {
   login: string;
   password: string;
   backup_code?: string;
 }
-
 export interface IReassignOrderPayload {
   partnerId: string;
 }
-
 export interface IPaymentOrderPayload {
   assign_partner?: string;
 }
-
 export interface IApiResponse {
   success: boolean;
   message?: string;
   data?: string | IOrder;
 }
-
 export interface IOrderRedirectResponse extends IApiResponse {
-  order_id: string; // Dùng cho create và recovery
-  boost_id: string; // Dùng cho renew
+  order_id: string; 
+  boost_id: string; 
 }
-
 export type OrderServiceResponse<T = IApiResponse> = Promise<AxiosResponse<T>>;
-
 export type OrderServicePayloadResponse<T = IApiResponse> = Promise<T>;

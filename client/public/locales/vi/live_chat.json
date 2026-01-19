@@ -1,0 +1,30 @@
+{
+    "title": "Hỗ Trợ Trực Tiếp",
+    "open_chat": "Mở chat hỗ trợ",
+    "close_chat": "Đóng chat",
+    "support_team": "Đội Hỗ Trợ",
+    "chat_created": "Đã tạo chat! Đang chờ hỗ trợ...",
+    "chat_closed": "Đã đóng chat thành công",
+    "status": {
+        "offline": "Bắt đầu cuộc trò chuyện với chúng tôi",
+        "waiting": "Đang chờ nhân viên hỗ trợ...",
+        "connected_with": "Đang kết nối với {{name}}"
+    },
+    "new_chat": {
+        "title": "Cần Hỗ Trợ?",
+        "description": "Bắt đầu cuộc trò chuyện với đội hỗ trợ của chúng tôi",
+        "subject_label": "Tiêu đề",
+        "subject_placeholder": "Bạn cần hỗ trợ về vấn đề gì?",
+        "message_label": "Tin nhắn",
+        "message_placeholder": "Mô tả vấn đề hoặc câu hỏi của bạn...",
+        "submit": "Bắt Đầu Chat"
+    },
+    "waiting_message": "Vui lòng đợi, nhân viên hỗ trợ sẽ kết nối với bạn ngay...",
+    "input_placeholder": "Nhập tin nhắn...",
+    "errors": {
+        "subject_and_message_required": "Vui lòng nhập cả tiêu đề và tin nhắn",
+        "create_failed": "Không thể tạo chat. Vui lòng thử lại.",
+        "send_failed": "Không thể gửi tin nhắn. Vui lòng thử lại.",
+        "close_failed": "Không thể đóng chat. Vui lòng thử lại."
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "title": "Quản lý giá Boost",
+    "subtitle": "Điều chỉnh hệ số tỷ lệ và đơn giá cho từng chế độ chơi.",
+    "tabs": {
+        "premier": "Premier",
+        "wingman": "Wingman",
+        "level_farming": "Cày cấp"
+    },
+    "base_price_title": "Cài đặt giá cơ bản",
+    "base_price_subtitle": "Đơn giá này được áp dụng toàn cầu cho tất cả các khu vực.",
+    "premier": {
+        "calculator_title": "Máy tính giá",
+        "calculator_subtitle": "Nhập rating để xem giá ước tính",
+        "select_region": "Chọn khu vực",
+        "from_rating": "Rating hiện tại",
+        "to_rating": "Rating mong muốn",
+        "estimated_price": "Giá ước tính",
+        "price_breakdown": "Chi tiết giá",
+        "points": "Điểm",
+        "price_per_point": "Giá/điểm"
+    },
+    "level_farming": {
+        "title": "Cài đặt giá cơ bản",
+        "subtitle": "Đặt giá cơ bản cho mỗi level.",
+        "formula_title": "Công thức tính giá",
+        "formula_subtitle": "Cách tính giá cho dịch vụ cày cấp",
+        "num_levels": "Số Level",
+        "total_price": "Tổng giá",
+        "example": "Ví dụ",
+        "calculator_title": "Máy tính giá",
+        "calculator_subtitle": "Nhập số level để xem giá tương ứng",
+        "input_levels": "Nhập số level",
+        "calculated_price": "Giá tính được",
+        "quick_reference": "Bảng giá tham khảo nhanh",
+        "table_levels": "Số Level",
+        "table_formula": "Công thức",
+        "table_price": "Giá"
+    },
+    "wingman": {
+        "formula_title": "Công thức tính giá Wingman",
+        "formula_description": "Giá mỗi rank = Đơn giá cơ bản × Hệ số. Thay đổi đơn giá để cập nhật tất cả.",
+        "rate": "Hệ số",
+        "calculator_title": "Máy tính giá",
+        "calculator_subtitle": "Chọn rank để xem giá ước tính",
+        "select_region": "Chọn khu vực",
+        "from_rank": "Từ rank",
+        "to_rank": "Đến rank",
+        "estimated_price": "Giá ước tính",
+        "price_breakdown": "Chi tiết giá"
+    },
+    "table": {
+        "start": "Bắt đầu",
+        "end": "Kết thúc",
+        "rate": "Tỷ lệ (x)",
+        "cost_for_tier": "Chi phí mỗi bậc",
+        "rank": "Hạng",
+        "cost_per_win": "Chi phí mỗi trận thắng"
+    },
+    "unsaved_changes": "Các thay đổi chưa được lưu",
+    "no_changes": "Không có thay đổi",
+    "errors": {
+        "load_data": "Lỗi tải dữ liệu. Vui lòng làm mới trang.",
+        "no_config": "Không tìm thấy dữ liệu cấu hình."
+    }
+}

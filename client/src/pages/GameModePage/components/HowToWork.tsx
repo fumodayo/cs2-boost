@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+﻿import { useTranslation } from "react-i18next";
 import {
   TbCircleNumber1Filled,
   TbCircleNumber2Filled,
@@ -6,23 +6,14 @@ import {
 } from "react-icons/tb";
 import { v4 as uuidv4 } from "uuid";
 
-const listSteps = [
-  {
-    icon: TbCircleNumber1Filled,
-    label: "Choose between Premier and Wingman services",
-  },
-  {
-    icon: TbCircleNumber2Filled,
-    label: "Pick the Boost service that fits your goals",
-  },
-  {
-    icon: TbCircleNumber3Filled,
-    label: "Make a secured payment & enjoy your Boost",
-  },
+const listStepsData = [
+  { key: "step1", icon: TbCircleNumber1Filled },
+  { key: "step2", icon: TbCircleNumber2Filled },
+  { key: "step3", icon: TbCircleNumber3Filled },
 ];
 
 const HowToWork = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("game_mode");
 
   return (
     <div className="col-span-4 my-4 flex w-full gap-8 lg:col-span-4 xl:col-span-5">
@@ -40,19 +31,19 @@ const HowToWork = () => {
             {/* TITLE */}
             <div className="pb-8">
               <h2 className="text-xl font-bold text-foreground">
-                {t("GameModePage.howtowork.title")}
+                {t("how_to_work.title")}
               </h2>
               <p className="text-muted-foreground">
-                {t("GameModePage.howtowork.subtitle")}
+                {t("how_to_work.subtitle")}
               </p>
             </div>
 
             {/* LIST */}
             <ul className="flex flex-col gap-6 space-y-2 text-muted-foreground">
-              {listSteps.map(({ icon: Icon, label }) => (
+              {listStepsData.map(({ key, icon: Icon }) => (
                 <li key={uuidv4()} className="flex items-center gap-2">
                   <Icon size={36} />
-                  <span>{t(`GameModePage.howtowork.label.${label}`)}</span>
+                  <span>{t(`how_to_work.steps.${key}`)}</span>
                 </li>
               ))}
             </ul>

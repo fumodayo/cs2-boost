@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext } from "react";
+﻿import { useEffect, useMemo, useState, useContext } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,12 @@ import toast from "react-hot-toast";
 import {
   BillCard,
   ErrorDisplay,
+  Heading,
   Helmet,
   SelectServer,
   SkeletonLoader,
-} from "~/components/shared";
-import { Heading } from "../GameModePage/components";
-import { ListDetail, Select as RangePoint } from "./components";
+} from "~/components/ui";
+import { ListDetail, Select } from "./components";
 import { AppContext } from "~/components/context/AppContext";
 import { getLocalStorage, setLocalStorage } from "~/utils/localStorage";
 import timeOfPremier from "~/utils/timeOfPremier";
@@ -61,7 +61,7 @@ const PremierPage = () => {
     setLocalStorage("premier-server", server);
   }, [server]);
 
-  const configData = useMemo(() => configSWR, [configSWR]);
+  const configData = configSWR;
 
   const totalCostOfPremier = useMemo(() => {
     if (!configData || !server) return 0;
@@ -127,31 +127,31 @@ const PremierPage = () => {
 
   return (
     <>
-      <Helmet title="CS2 Power Premier Boost" />
+      <Helmet title="premier_page" />
       <div>
         <Heading
           icon={PiUsersThreeDuotone}
-          title="Counter Strike 2 Premier"
-          subtitle="Maximize Your Rank In No Time!"
+          title="premier_page_title"
+          subtitle="premier_page_subtitle"
         />
         <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
           <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
             <SelectServer server={server} setServer={setServer} />
-            {server && <RangePoint range={range} setRange={setRange} />}
+            {server && <Select range={range} setRange={setRange} />}
             <ListDetail />
           </div>
           <BillCard
             modeIcon={PiUsersThreeDuotone}
-            modeLabel="Premier"
+            modeLabelKey="game_modes.level_farming"
+            serverLabelKey={server ? `server.${server}` : undefined}
             serverIcon={gameServer.find((s) => s.value === server)?.icon}
-            serverLabel={gameServer.find((s) => s.value === server)?.label}
             displayItems={{
               begin: {
-                label: "My Rating",
+                labelKey: "my_rating",
                 value: beginRating.toLocaleString(),
               },
               end: {
-                label: "Desired Rating",
+                labelKey: "desired_rating",
                 value: endRating.toLocaleString(),
               },
             }}

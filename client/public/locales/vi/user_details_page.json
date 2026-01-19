@@ -1,0 +1,53 @@
+{
+    "title": "Chi tiết người dùng",
+    "subtitle": "Đang xem hồ sơ và hoạt động của {{username}}",
+    "tabs": {
+        "orders": "Đơn hàng",
+        "transactions": "Giao dịch",
+        "settings": "Cài đặt"
+    },
+    "profile_card": {
+        "user_info_title": "Thông tin người dùng",
+        "full_name": "Họ và tên",
+        "status": "Trạng thái",
+        "banned": "Bị cấm",
+        "active": "Hoạt động",
+        "joined": "Ngày tham gia",
+        "partner_stats_title": "Thống kê đối tác",
+        "rating": "Đánh giá",
+        "reviews": "{{count}} đánh giá",
+        "completion": "Tỷ lệ hoàn thành",
+        "followers": "Người theo dõi"
+    },
+    "settings_panel": {
+        "title": "Vùng nguy hiểm",
+        "banned_subtitle": "Người dùng này hiện đang bị cấm. Lý do: {{reason}}",
+        "active_subtitle": "Người dùng này hiện đang hoạt động. Sử dụng nút bên dưới để cấm họ.",
+        "ban_btn": "Cấm người dùng",
+        "unban_btn": "Bỏ cấm người dùng",
+        "ban_confirm_title": "Cấm {{username}}?",
+        "ban_confirm_desc": "Điều này sẽ ngăn người dùng truy cập vào nền tảng. Vui lòng cung cấp lý do.",
+        "unban_confirm_title": "Bỏ cấm người dùng?",
+        "unban_confirm_desc": "Điều này sẽ khôi phục quyền truy cập của {{username}} vào nền tảng.",
+        "reason_label": "Lý do cấm",
+        "reason_placeholder": "Lý do...",
+        "ban_reason_required": "Vui lòng cung cấp lý do.",
+        "ban_success": "Đã cấm người dùng thành công.",
+        "unban_success": "Đã bỏ cấm người dùng thành công.",
+        "email_title": "Thay đổi Email",
+        "email_subtitle": "Cập nhật địa chỉ email của người dùng.",
+        "new_email_label": "Địa chỉ Email mới",
+        "update_email_btn": "Cập nhật Email",
+        "email_no_change": "Vui lòng nhập địa chỉ email khác.",
+        "email_success": "Cập nhật email thành công.",
+        "password_title": "Đặt lại mật khẩu",
+        "password_subtitle": "Đặt mật khẩu mới cho người dùng này.",
+        "new_password_label": "Mật khẩu mới",
+        "confirm_password_label": "Xác nhận mật khẩu",
+        "update_password_btn": "Cập nhật mật khẩu",
+        "password_required": "Vui lòng nhập mật khẩu mới.",
+        "password_mismatch": "Mật khẩu không khớp.",
+        "password_too_short": "Mật khẩu phải có ít nhất 6 ký tự.",
+        "password_success": "Cập nhật mật khẩu thành công."
+    }
+}

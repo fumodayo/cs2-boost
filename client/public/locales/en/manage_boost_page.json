@@ -1,0 +1,65 @@
+{
+    "title": "Manage Boost Pricing",
+    "subtitle": "Adjust rate multipliers and unit prices for each game mode.",
+    "tabs": {
+        "premier": "Premier",
+        "wingman": "Wingman",
+        "level_farming": "Level Farming"
+    },
+    "base_price_title": "Base Price Setting",
+    "base_price_subtitle": "This unit price is applied globally across all regions.",
+    "premier": {
+        "calculator_title": "Price Calculator",
+        "calculator_subtitle": "Enter rating to see estimated price",
+        "select_region": "Select Region",
+        "from_rating": "From Rating",
+        "to_rating": "To Rating",
+        "estimated_price": "Estimated Price",
+        "price_breakdown": "Price Breakdown",
+        "points": "Points",
+        "price_per_point": "Price/Point"
+    },
+    "level_farming": {
+        "title": "Base Price Setting",
+        "subtitle": "Set the base price per level.",
+        "formula_title": "Pricing Formula",
+        "formula_subtitle": "How the price is calculated for level farming",
+        "num_levels": "Number of Levels",
+        "total_price": "Total Price",
+        "example": "Example",
+        "calculator_title": "Price Calculator",
+        "calculator_subtitle": "Enter the number of levels to see the price",
+        "input_levels": "Enter number of levels",
+        "calculated_price": "Calculated Price",
+        "quick_reference": "Quick Reference Table",
+        "table_levels": "Levels",
+        "table_formula": "Formula",
+        "table_price": "Price"
+    },
+    "wingman": {
+        "formula_title": "Wingman Pricing Formula",
+        "formula_description": "Price per rank = Base unit price × Rate multiplier. Adjust base price to update all.",
+        "rate": "Rate",
+        "calculator_title": "Price Calculator",
+        "calculator_subtitle": "Select ranks to see estimated price",
+        "select_region": "Select Region",
+        "from_rank": "From Rank",
+        "to_rank": "To Rank",
+        "estimated_price": "Estimated Price",
+        "price_breakdown": "Price Breakdown"
+    },
+    "table": {
+        "start": "Start",
+        "end": "End",
+        "rate": "Rate (x)",
+        "cost_for_tier": "Cost for Tier",
+        "rank": "Rank",
+        "cost_per_win": "Cost per Win"
+    },
+    "unsaved_changes": "Unsaved changes",
+    "no_changes": "No changes",
+    "errors": {
+        "load_data": "Error loading data. Please refresh the page.",
+        "no_config": "No configuration data found."
+    }
+}

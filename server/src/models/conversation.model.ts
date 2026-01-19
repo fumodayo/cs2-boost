@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 import { CONVERSATION_STATUS } from '../constants';
 
 const conversationSchema = new mongoose.Schema(

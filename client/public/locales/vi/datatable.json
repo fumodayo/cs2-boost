@@ -1,0 +1,105 @@
+{
+    "labels": {
+        "no_results": "Không có kết quả.",
+        "unassigned": "Chưa được chỉ định",
+        "not_applicable": "Không áp dụng"
+    },
+    "headers": {
+        "id": "ID",
+        "price": "Giá",
+        "order": "Đơn hàng",
+        "status": "Trạng thái",
+        "transaction_id": "ID Giao dịch",
+        "payment_method": "Phương thức thanh toán",
+        "amount": "Số tiền",
+        "last_updated": "Cập nhật lần cuối",
+        "customer": "Khách hàng",
+        "assign_partner": "Đối tác được chỉ định",
+        "partner": "Đối tác",
+        "actions": "Hành động",
+        "type": "Loại",
+        "user": "Người dùng",
+        "role": "Vai trò",
+        "created_at": "Ngày tạo",
+        "full_name": "Họ và Tên",
+        "cccd_number": "Số CCCD"
+    },
+    "actions": {
+        "pay_now": "Thanh toán ngay",
+        "accept_order": "Chấp nhận đơn hàng",
+        "refuse": "Từ chối",
+        "completed": "Hoàn thành",
+        "cancel": "Hủy",
+        "renew_order": "Gia hạn đơn hàng",
+        "recovery_order": "Khôi phục đơn hàng"
+    },
+    "filters": {
+        "search_placeholder": "Tìm kiếm...",
+        "selected": "đã chọn",
+        "no_results_found": "Không tìm thấy kết quả.",
+        "labels": {
+            "status": "Trạng thái",
+            "type": "Loại",
+            "reset": "Đặt lại",
+            "pending": "Đang chờ",
+            "waiting": "Đang chờ",
+            "in_progress": "Đang tiến hành",
+            "completed": "Đã hoàn thành",
+            "cancel": "Đã hủy",
+            "in_active": "Không hoạt động",
+            "wingman": "Wingman",
+            "premier": "Premier",
+            "level_farming": "Cày cấp",
+            "role": "Vai trò",
+            "client": "Khách hàng",
+            "partner": "Đối tác",
+            "admin": "Quản trị viên",
+            "banned": "Bị cấm",
+            "active": "Hoạt động",
+            "sale": "Bán hàng",
+            "payout": "Thanh toán",
+            "commission": "Hoa hồng Đối tác",
+            "penalty": "Phạt",
+            "fee": "Phí",
+            "refund": "Hoàn tiền",
+            "not_responding": "Không phản hồi",
+            "overcharging": "Tính phí quá cao",
+            "slow_delivery": "Giao hàng chậm",
+            "low_quality": "Chất lượng thấp",
+            "fraud": "Lừa đảo",
+            "terms_violation": "Vi phạm điều khoản",
+            "resolved": "Đã giải quyết",
+            "reject": "Đã từ chối",
+            "approved": "Đã duyệt"
+        }
+    },
+    "sort": {
+        "asc": "Tăng dần",
+        "desc": "Giảm dần",
+        "hide": "Ẩn"
+    },
+    "view_button": {
+        "view": "Xem",
+        "toggle_columns": "Chuyển đổi cột"
+    },
+    "pagination": {
+        "rows_per_page": "Số hàng mỗi trang",
+        "page_info_simple": "Trang {{currentPage}} của {{maxPage}}",
+        "page_info_full": "{{total}} hàng - Trang {{currentPage}} của {{maxPage}}"
+    },
+    "tooltip": {
+        "view_boost": "Xem Boost",
+        "boost_suffix": "Boost"
+    },
+    "order_statuses": {
+        "pending": "Chờ thanh toán",
+        "waiting": "Chờ Booster",
+        "in_active": "Chờ Booster",
+        "in_progress": "Boost đang tiến hành",
+        "cancel": "Boost đã bị hủy",
+        "completed": "Boost đã hoàn thành"
+    },
+    "errors": {
+        "load_data_failed": "Tải dữ liệu thất bại. Vui lòng thử lại."
+    }
+}

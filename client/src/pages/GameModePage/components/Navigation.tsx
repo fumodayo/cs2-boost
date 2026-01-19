@@ -1,16 +1,13 @@
-import { useTranslation } from "react-i18next";
+﻿import { useTranslation } from "react-i18next";
 import { FaChevronLeft } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IconSlash } from "~/icons";
 import cn from "~/libs/utils";
-
 const Navigation = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, secondQuery, lastQuery] = pathname.split("/");
-
   return (
     <div className="max-w-screen-lg pb-2">
       <nav className="sm:hidden">
@@ -23,7 +20,7 @@ const Navigation = () => {
           }}
         >
           <FaChevronLeft className="mr-1" />
-          {t("Globals.Back")}
+          {t("go_back")}
         </Link>
       </nav>
       <nav className="hidden sm:flex">
@@ -33,7 +30,7 @@ const Navigation = () => {
               to="/"
               className="text-xs font-medium text-muted-foreground hover:text-foreground"
             >
-              {t("Globals.Home")}
+              {t("home")}
             </Link>
           </li>
           <li className="flex items-center">
@@ -66,5 +63,4 @@ const Navigation = () => {
     </div>
   );
 };
-
 export default Navigation;

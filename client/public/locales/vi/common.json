@@ -1,0 +1,606 @@
+{
+    "currency": "VND",
+    "back": "Quay lại",
+    "home": "Trang chủ",
+    "coming_soon": "Sắp ra mắt",
+    "go_back": "Quay lại",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save_changes": "Lưu thay đổi",
+    "continue": "Tiếp tục",
+    "view": "Xem",
+    "edit": "Chỉnh sửa",
+    "remove": "Xóa",
+    "search": "Tìm kiếm",
+    "search_by_sender": "Tìm theo người gửi...",
+    "reset": "Đặt lại",
+    "pay_now": "Thanh toán ngay",
+    "no_results": "Không có kết quả.",
+    "processing": "Đang xử lý...",
+    "uploading": "Đang tải lên...",
+    "drop_image_hint": "Kéo thả hoặc nhấp để tải lên",
+    "join_discord": "Tham gia Discord",
+    "languages": {
+        "en": "Tiếng Anh",
+        "vi": "Tiếng Việt"
+    },
+    "currencies": {
+        "usd": "Đô la Mỹ",
+        "vnd": "Đồng Việt Nam"
+    },
+    "buttons": {
+        "select_game": "Chọn game",
+        "sign_up_today": "Đăng ký ngay hôm nay",
+        "join_discord": "Tham gia Discord",
+        "lets_chat": "Hãy trò chuyện",
+        "my_orders": "Đơn hàng của tôi",
+        "log_in": "Đăng nhập",
+        "continue": "Tiếp tục",
+        "view_my_orders": "Xem đơn hàng của tôi",
+        "download_receipt": "Tải biên lai",
+        "login_with_google": "Đăng nhập với Google",
+        "signup_with_google": "Đăng ký với Google",
+        "checkout": "Thanh toán",
+        "cancel": "Hủy",
+        "confirm": "Xác nhận",
+        "save_changes": "Lưu thay đổi",
+        "back": "Quay lại",
+        "change_password": "Đổi mật khẩu",
+        "close": "Đóng",
+        "creating": "Đang tạo...",
+        "save": "Lưu",
+        "reset": "Đặt lại",
+        "delete_account": "Xóa Tài Khoản",
+        "deleting": "Đang xóa..."
+    },
+    "helmet": {
+        "not_found_page": "Không tìm thấy trang · CS2Boost",
+        "new_game_page": "Mua Dịch vụ {{gameTitle}}",
+        "landing_page": "CS2Boost · Nền tảng cho Game thủ",
+        "game_mode_page": "Boosting, Huấn luyện & Tài khoản Counter Strike 2",
+        "level_farming_page": "Dịch vụ Cày Level CS2 · CS2Boost",
+        "premier_page": "Dịch vụ Boost Premier CS2 · CS2Boost",
+        "wingman_page": "Dịch vụ Boost Wingman CS2 · CS2Boost",
+        "checkout_page": "Thanh toán · {{boostTitle}}",
+        "payment_page_successful": "Thanh toán thành công",
+        "payment_page_failed": "Thanh toán thất bại",
+        "orders_page": "Danh sách Đơn hàng · CS2Boost",
+        "wallet_page": "Ví của tôi · CS2Boost",
+        "pending_boosts_page": "Danh sách Boost đang chờ · CS2Boost",
+        "progress_boosts_page": "Danh sách Boost đang tiến hành · CS2Boost",
+        "admin_login_page": "Đăng nhập Admin · Bảng điều khiển Admin",
+        "admin_settings_page": "Cài đặt của tôi · Bảng điều khiển Admin",
+        "dashboard_page": "Bảng điều khiển · Bảng điều khiển Admin",
+        "banned_page": "Tài khoản bị cấm · CS2Boost",
+        "follow_partners_page": "Các đối tác đang theo dõi",
+        "income_page": "Thu nhập · CS2Boost",
+        "manage_boost_page": "Quản lý Boost · CS2Boost",
+        "manage_orders_page": "Quản lý Đơn hàng · CS2Boost",
+        "manage_reports_page": "Quản lý Báo cáo · CS2Boost",
+        "manage_revenue_page": "Quản lý Doanh thu · CS2Boost",
+        "manage_users_page": "Quản lý Người dùng · CS2Boost",
+        "notifications_page": "Thông báo · CS2Boost",
+        "general_page": "Cài đặt chung",
+        "push_settings_page": "Cài đặt thông báo đẩy",
+        "supports_page": "Hỗ trợ của tôi · CS2Boost",
+        "partners_page": "Đối tác · CS2Boost",
+        "commission_page": "Cài đặt hoa hồng · Quản trị",
+        "promo_codes_page": "Mã Khuyến Mãi · Quản trị"
+    },
+    "navigation": {
+        "dashboard": "Bảng điều khiển",
+        "boosting": "Boosting",
+        "accounts": "Tài khoản",
+        "items": "Vật phẩm",
+        "pending_boosts": "Boost đang chờ",
+        "progress_boosts": "Boost đang tiến hành",
+        "income": "Thu nhập",
+        "orders": "Đơn hàng",
+        "wallet": "Ví",
+        "settings": "Cài đặt",
+        "follow_partners": "Theo dõi đối tác",
+        "supports": "Hỗ trợ"
+    },
+    "sidebar": {
+        "main": "CHÍNH",
+        "dashboard": "Bảng điều khiển",
+        "manage": "QUẢN LÝ",
+        "manage_orders": "Quản lý đơn hàng",
+        "manage_users": "Quản lý người dùng",
+        "partner_requests": "Yêu cầu Partner",
+        "manage_boost": "Quản lý Boost",
+        "promo_codes": "Mã Khuyến Mãi",
+        "manage_reports": "Quản lý báo cáo",
+        "live_chats": "Trò chuyện trực tiếp",
+        "manage_revenue": "Quản lý doanh thu",
+        "commission": "Cài đặt hoa hồng",
+        "notifications": "Thông báo",
+        "email_templates": "Mẫu Email",
+        "user": "NGƯỜI DÙNG",
+        "settings": "Cài đặt",
+        "admin_mode": "Chế độ Admin",
+        "change_language": "Đổi ngôn ngữ",
+        "change_theme": "Đổi giao diện",
+        "logout": "Đăng xuất"
+    },
+    "headings": {
+        "titles": {
+            "game_mode_page_title": "Dịch vụ Boost CS2 Classic",
+            "level_farming_page_title": "Tăng cấp Counter Strike 2",
+            "premier_page_title": "Counter Strike 2 Premier",
+            "wingman_page_title": "Counter Strike 2 Wingman",
+            "orders_page_title": "Đơn hàng của tôi",
+            "wallet_page_title": "Ví của tôi",
+            "pending_boosts_page_title": "Danh sách Boost đang chờ",
+            "progress_boosts_page_title": "Danh sách tất cả các boost đang chờ.",
+            "notifications_page_title": "Danh sách tất cả thông báo.",
+            "follow_partners_page_title": "Các đối tác đang theo dõi",
+            "general_page_title": "Cài đặt của tôi",
+            "supports_page_title": "Phiếu hỗ trợ của tôi",
+            "income_page_title": "Thu Nhập",
+            "dashboard_page_title": "Bảng điều khiển",
+            "manage_users_page_title": "Quản lý người dùng",
+            "manage_orders_page_title": "Quản lý đơn hàng",
+            "manage_boost_page_title": "Quản lý Boost",
+            "manage_reports_page_title": "Quản lý báo cáo người dùng",
+            "manage_revenue_page_title": "Quản lý doanh thu",
+            "admin_settings_page_title": "Cài đặt tài khoản của tôi",
+            "commission_page_title": "Cài đặt hoa hồng",
+            "page_title": "Mã Khuyến Mãi"
+        },
+        "subtitles": {
+            "game_mode_page_subtitle": "Trải nghiệm CS2 Classic tốt nhất!",
+            "level_farming_page_subtitle": "Tối đa hóa cấp độ của bạn trong nháy mắt!",
+            "premier_page_subtitle": "Tối đa hóa Rating của bạn trong nháy mắt!",
+            "wingman_page_subtitle": "Tối đa hóa Hạng của bạn trong nháy mắt!",
+            "orders_page_subtitle": "Danh sách tất cả sản phẩm và dịch vụ của bạn.",
+            "wallet_page_subtitle": "Danh sách tất cả các khoản thanh toán và giao dịch của bạn.",
+            "pending_boosts_page_subtitle": "Danh sách Boost đang tiến hành",
+            "progress_boosts_page_subtitle": "Danh sách tất cả các boost đang tiến hành.",
+            "notifications_page_subtitle": "Nhật ký tất cả các cảnh báo liên quan đến tài khoản và đơn hàng của bạn.",
+            "follow_partners_page_subtitle": "Danh sách tất cả các đối tác bạn đang theo dõi.",
+            "general_page_subtitle": "Xem và cập nhật cài đặt tài khoản của bạn.",
+            "supports_page_subtitle": "Theo dõi trạng thái và trò chuyện với quản trị viên về các vấn đề của bạn.",
+            "income_page_subtitle": "Theo dõi thu nhập và yêu cầu rút tiền của bạn.",
+            "dashboard_page_subtitle": "Chào mừng trở lại, Admin! Dưới đây là tóm tắt hoạt động trên nền tảng của bạn.",
+            "manage_users_page_subtitle": "Danh sách tất cả người dùng đã đăng ký trong hệ thống.",
+            "manage_orders_page_subtitle": "Quản lý tất cả đơn hàng trên toàn nền tảng.",
+            "manage_boost_page_subtitle": "Điều chỉnh hệ số giá cho từng khu vực",
+            "manage_reports_page_subtitle": "Xử lý báo cáo và hòa giải các cuộc trò chuyện.",
+            "manage_revenue_page_subtitle": "Theo dõi, lọc và quản lý tất cả các hoạt động tài chính trên nền tảng.",
+            "admin_settings_page_subtitle": "Quản lý thông tin cá nhân và cài đặt bảo mật của bạn.",
+            "commission_page_subtitle": "Cấu hình tỷ lệ hoa hồng cho Partner và phí phạt khi hủy đơn.",
+            "page_subtitle": "Quản lý mã khuyến mãi và giảm giá"
+        }
+    },
+    "labels": {
+        "my_exp": "XP của tôi",
+        "desired_exp": "XP mong muốn",
+        "my_rating": "Rating của tôi",
+        "desired_rating": "Rating mong muốn",
+        "my_rank": "Hạng của tôi",
+        "desired_rank": "Hạng mong muốn"
+    },
+    "servers": {
+        "africa": "Châu Phi",
+        "asia": "Châu Á",
+        "australia": "Châu Úc",
+        "china": "Trung Quốc",
+        "europe": "Châu Âu",
+        "north_america": "Bắc Mỹ",
+        "south_america": "Nam Mỹ"
+    },
+    "select_server": {
+        "title": "Máy chủ",
+        "subtitle": "Chọn máy chủ bạn chơi"
+    },
+    "select_rank": {
+        "current_rank_title": "Hạng hiện tại",
+        "current_rank_subtitle": "Chọn hạng hiện tại của bạn.",
+        "desired_rank_title": "Hạng mong muốn",
+        "desired_rank_subtitle": "Chọn hạng mong muốn của bạn."
+    },
+    "bill_card": {
+        "header": "Tóm tắt đơn hàng",
+        "title_prompt": "Bắt đầu bằng cách chọn máy chủ!",
+        "total_price": "Tổng giá",
+        "extra_options_heading": "Tùy chọn thêm",
+        "estimated_time": "Thời gian ước tính",
+        "hours": "giờ",
+        "vpn_warning": "Việc sử dụng VPN bị cấm khi thực hiện mua hàng.",
+        "options": {
+            "live_stream": "Phát trực tiếp",
+            "play_with_partner": "Chơi cùng đối tác"
+        }
+    },
+    "game_modes": {
+        "services": "Dịch vụ",
+        "level_farming": "Cày cấp",
+        "premier": "Premier",
+        "wingman": "Wingman"
+    },
+    "trustpilot": {
+        "excellent": "Tuyệt vời",
+        "out_of": "trên",
+        "based_on_reviews": "Dựa trên {{count}} đánh giá"
+    },
+    "form": {
+        "email_or_username_label": "Email hoặc Tên người dùng",
+        "email_or_username_placeholder": "Nhập email hoặc tên người dùng của bạn",
+        "email_label": "Địa chỉ Email",
+        "email_placeholder": "Nhập địa chỉ email của bạn",
+        "password_label": "Mật khẩu",
+        "password_placeholder": "Nhập mật khẩu của bạn",
+        "username_label": "Tên người dùng",
+        "current_password_label": "Mật khẩu hiện tại",
+        "current_password_placeholder": "Nhập mật khẩu hiện tại của bạn",
+        "new_password_label": "Mật khẩu mới",
+        "new_password_placeholder": "Nhập mật khẩu mới của bạn",
+        "confirm_password_label": "Xác nhận mật khẩu mới",
+        "confirm_password_placeholder": "Xác nhận mật khẩu mới của bạn"
+    },
+    "menu_games": {
+        "select_game": "Chọn game",
+        "switch_game": "Đổi game"
+    },
+    "header": {
+        "active_partners": "Đối tác đang hoạt động"
+    },
+    "menu_language": {
+        "change_language": "Thay đổi ngôn ngữ",
+        "change_currency": "Thay đổi tiền tệ",
+        "sr_only": "Thay đổi ngôn ngữ và tiền tệ"
+    },
+    "menu_theme": {
+        "change_theme": "Thay đổi giao diện",
+        "dark_mode": "Chế độ tối",
+        "light_mode": "Chế độ sáng"
+    },
+    "services_menu": {
+        "dashboard": "Bảng điều khiển",
+        "boosting": "Boosting",
+        "accounts": "Tài khoản",
+        "items": "Vật phẩm",
+        "pending_boosts": "Boost đang chờ",
+        "progress_boosts": "Boost đang tiến hành",
+        "income": "Thu nhập",
+        "orders": "Đơn hàng",
+        "wallet": "Ví",
+        "settings": "Cài đặt",
+        "follow_partners": "Theo dõi đối tác",
+        "supports": "Hỗ trợ"
+    },
+    "server": {
+        "africa": "Châu Phi",
+        "asia": "Châu Á",
+        "australia": "Châu Úc",
+        "china": "Trung Quốc",
+        "europe": "Châu Âu",
+        "north_america": "Bắc Mỹ",
+        "south_america": "Nam Mỹ",
+        "AF": "Châu Phi",
+        "AS": "Châu Á",
+        "AU": "Châu Úc",
+        "CN": "Trung Quốc",
+        "EU": "Châu Âu",
+        "NA": "Bắc Mỹ",
+        "SA": "Nam Mỹ"
+    },
+    "game_mode": {
+        "services": "Dịch vụ",
+        "level_farming": "Cày cấp",
+        "premier": "Premier",
+        "wingman": "Wingman"
+    },
+    "footer": {
+        "title1": "Nền tảng Tất-cả-trong-một cho Game thủ",
+        "subtitle1": "Thay đổi cuộc sống của game thủ mỗi ngày, mỗi ván game.",
+        "title2": "Cần giúp đỡ?",
+        "subtitle2": "Chúng tôi ở đây để giúp bạn. Đội ngũ hỗ trợ chuyên nghiệp của chúng tôi luôn sẵn sàng phục vụ 24/7.",
+        "copyright": "Không bản quyền © {{year}} Global Gaming Services d.o.o.",
+        "clone_by": "Trang web được clone bởi: <strong>fumodayo</strong>",
+        "terms": "Điều Khoản Dịch Vụ",
+        "privacy": "Chính Sách Bảo Mật",
+        "refund": "Chính Sách Hoàn Tiền"
+    },
+    "socials": {
+        "discord": "Discord",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "x": "X (Twitter)",
+        "youtube": "Youtube",
+        "tiktok": "TikTok"
+    },
+    "avatar_menu": {
+        "user_id": "ID: {{userId}}",
+        "logout": "Đăng xuất"
+    },
+    "faq": {
+        "title": "Câu hỏi thường gặp về Boosting Counter Strike 2",
+        "questions": [
+            {
+                "key": "what_is_cs2_boost",
+                "question": "Counter Strike 2 Boost là gì?",
+                "answer": "Nếu bạn đang tìm cách nâng cao trải nghiệm chơi game trong Counter Strike 2 nhưng không có thời gian hoặc sự cống hiến để tự mình leo hạng, bạn có thể khám phá tùy chọn sử dụng dịch vụ boosting CS2. Dịch vụ này cho phép bạn thuê một người chơi có kỹ năng cao, người sẽ chơi thay bạn và giúp bạn đạt được thứ hạng mong muốn."
+            },
+            {
+                "key": "is_it_safe",
+                "question": "Boosting CS2 có an toàn không?",
+                "answer": "Khi phấn đấu để tiến bộ trong thế giới game, việc bảo vệ thành tích của bạn trở nên vô cùng quan trọng. Để đảm bảo một quá trình boost CS2 an toàn và kín đáo, chúng tôi chỉ tuyển dụng những booster xuất sắc và đáng tin cậy, mỗi người đều được trang bị VPN riêng tư cao cấp của chúng tôi. Phương pháp đã được thử nghiệm rộng rãi này đã chứng tỏ hiệu quả của nó trong vô số trò chơi, mang lại cho bạn sự an tâm và đảm bảo trải nghiệm không rủi ro khi sử dụng dịch vụ của chúng tôi."
+            },
+            {
+                "key": "steam_account_security",
+                "question": "Làm sao tôi có thể chắc chắn tài khoản Steam của mình sẽ không bị đánh cắp?",
+                "answer": "Sự kết hợp giữa thông tin đăng nhập độc nhất của bạn và sự bảo vệ từ Steam Guard khiến cho việc ai đó đánh cắp tài khoản của bạn gần như là không thể. Chúng tôi ưu tiên các biện pháp bảo mật cao nhất để đảm bảo sự an tâm của bạn và bảo vệ tài sản game quý giá của bạn."
+            },
+            {
+                "key": "how_does_it_work",
+                "question": "Boosting CS2 hoạt động như thế nào?",
+                "answer": "Boosting CS2 bao gồm việc thuê những người chơi chuyên nghiệp, họ sẽ chơi trên tài khoản của bạn để giúp bạn đạt được thứ hạng mong muốn. Họ sử dụng kỹ năng và kinh nghiệm của mình để thắng các trận đấu và nâng cao hiệu suất trong game của bạn."
+            },
+            {
+                "key": "duration",
+                "question": "Boosting CS2 mất bao lâu?",
+                "answer": "Thời gian boosting CS2 phụ thuộc vào nhiều yếu tố, bao gồm hạng hiện tại và hạng mong muốn của bạn. Thông thường, các booster của chúng tôi làm việc hiệu quả để hoàn thành quá trình boosting nhanh nhất có thể trong khi vẫn duy trì các tiêu chuẩn chất lượng cao nhất. Bạn có thể kiểm tra thời gian hoàn thành ước tính cho đơn hàng cụ thể của mình trong bảng điều khiển Khu vực thành viên của chúng tôi."
+            }
+        ]
+    },
+    "details": {
+        "title": "Thông tin",
+        "subtitle": {
+            "level_farming": "Tất cả các chi tiết quan trọng về Cày cấp của chúng tôi",
+            "premier": "Tất cả các chi tiết quan trọng về Premier Boost của chúng tôi",
+            "wingman": "Tất cả các chi tiết quan trọng về Wingman Boost của chúng tôi"
+        },
+        "tabs": {
+            "requirements": {
+                "heading": "Yêu cầu",
+                "items": {
+                    "have_prime": {
+                        "title": "Có Prime",
+                        "subtitle": "Chỉ những người chơi có prime mới có thể nhận quà hàng tuần"
+                    },
+                    "complete_first_ten_wins": {
+                        "title": "Hoàn thành 10 trận thắng đầu tiên",
+                        "subtitle": "Chúng tôi cần thứ hạng khởi đầu của bạn để boost một cách thuận tiện"
+                    }
+                }
+            },
+            "extra_options": {
+                "heading": "Tùy chọn thêm",
+                "items": {
+                    "live_stream": {
+                        "title": "Phát trực tiếp",
+                        "subtitle": "Xem booster của bạn chơi game trong thời gian thực"
+                    },
+                    "duo_play": {
+                        "title": "Chơi cùng Đối tác (Duo)",
+                        "subtitle": "Booster của bạn sẽ lập nhóm với bạn trong chế độ đôi"
+                    }
+                }
+            },
+            "faq": {
+                "heading": "FAQ"
+            }
+        }
+    },
+    "range_point": {
+        "level_farming_title": "Chọn Exp hiện tại và Exp mong muốn của bạn",
+        "premier_title": "Chọn Rating hiện tại và Rating mong muốn của bạn",
+        "note": "rating trên 20000 chỉ có sẵn dưới dạng dịch vụ có người lái"
+    },
+    "not_found_page": {
+        "title": "Không tìm thấy trang",
+        "subtitle": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm.",
+        "footer_contact": "Liên hệ 24/7",
+        "footer_status": "Trạng thái",
+        "footer_discord": "Discord"
+    },
+    "banned_page": {
+        "account_suspended": "Tài khoản bị đình chỉ",
+        "title": "Tài khoản của bạn đã bị cấm",
+        "subtitle": "Chúng tôi phát hiện hoạt động trên tài khoản của bạn vi phạm Điều khoản Dịch vụ của chúng tôi. Do đó, quyền truy cập của bạn vào nền tảng đã bị hạn chế.",
+        "reason_label": "Lý do bị cấm",
+        "footer_contact": "Liên hệ 24/7",
+        "footer_status": "Trạng thái",
+        "footer_discord": "Discord"
+    },
+    "sr_only": {
+        "counter_strike_2": "Counter Strike 2",
+        "open_user_menu": "Mở menu người dùng cho người dùng"
+    },
+    "toasts": {
+        "login_to_order": "Vui lòng đăng nhập để tạo đơn hàng.",
+        "order_created_success": "Tạo đơn hàng thành công!",
+        "order_created_failed": "Tạo đơn hàng thất bại.",
+        "followed": "Đã theo dõi {{username}}",
+        "unfollowed": "Đã bỏ theo dõi {{username}}",
+        "no_changes_to_save": "Không có thay đổi nào để lưu.",
+        "profile_updated_success": "Cập nhật hồ sơ thành công!",
+        "password_changed_success": "Thay đổi mật khẩu thành công",
+        "introduction_updated_success": "Cập nhật giới thiệu thành công!",
+        "social_links_updated_success": "Cập nhật liên kết mạng xã hội thành công!",
+        "no_user_info_to_submit": "Không có thông tin người dùng để gửi.",
+        "verification_successful": "Xác minh thành công!",
+        "partner_request_submitted": "Yêu cầu đã được gửi! Vui lòng chờ admin duyệt.",
+        "notifications_subscribed": "Đăng ký nhận thông báo thành công!",
+        "notifications_unsubscribed": "Hủy đăng ký nhận thông báo thành công.",
+        "order_status_updated": "Trạng thái đơn hàng đã được cập nhật!",
+        "add_account_success": "Thêm tài khoản thành công!",
+        "add_account_failed": "Thêm tài khoản thất bại.",
+        "edit_account_success": "Cập nhật tài khoản thành công!",
+        "edit_account_failed": "Cập nhật tài khoản thất bại.",
+        "review_sent": "Gửi đánh giá thành công!",
+        "review_deleted": "Xóa đánh giá thành công!",
+        "review_delete_failed": "Xóa đánh giá thất bại.",
+        "fill_at_least_one_field": "Vui lòng điền ít nhất một trường để cập nhật.",
+        "report_reason_required": "Vui lòng chọn lý do và cung cấp thêm thông tin cho báo cáo.",
+        "report_failed": "Gửi báo cáo thất bại. Vui lòng thử lại.",
+        "review_failed": "Gửi đánh giá thất bại.",
+        "support_chat_started": "Một quản trị viên đã mở cuộc trò chuyện hỗ trợ với bạn!",
+        "message_send_failed": "Không thể gửi tin nhắn. Thiếu ngữ cảnh cuộc trò chuyện.",
+        "payout_request_success": "Gửi yêu cầu rút tiền thành công!",
+        "payout_approved": "Thanh toán đã được phê duyệt!",
+        "payout_declined": "Thanh toán đã bị từ chối!",
+        "payout_approve_failed": "Phê duyệt thanh toán thất bại.",
+        "payout_decline_failed": "Từ chối thanh toán thất bại.",
+        "user_banned": "Người dùng {{username}} đã bị cấm.",
+        "user_unbanned": "Người dùng {{username}} đã được bỏ cấm.",
+        "user_created_success": "Tạo người dùng mới thành công!",
+        "creating": "Đang tạo {{item}}...",
+        "created_success": "{{item}} đã được tạo thành công!",
+        "created_error": "Tạo {{item}} thất bại.",
+        "fill_required_fields": "Vui lòng điền đầy đủ và chính xác tất cả các trường bắt buộc.",
+        "saving": "Đang lưu {{item}}...",
+        "save_success": "{{item}} đã được cập nhật thành công!",
+        "save_error": "Cập nhật {{item}} thất bại.",
+        "region_reset": "Khu vực đã được đặt lại.",
+        "new_report_from": "Báo cáo mới từ {{username}}",
+        "report_accepted": "Báo cáo được chấp nhận! Các cuộc trò chuyện hiện đã mở.",
+        "report_resolved": "Báo cáo đã được giải quyết.",
+        "report_rejected": "Báo cáo đã bị từ chối.",
+        "marked_all_as_read": "Đã đánh dấu tất cả là đã đọc!",
+        "mark_all_as_read_failed": "Không thể đánh dấu tất cả là đã đọc.",
+        "upload_error": "Tải ảnh lên thất bại."
+    },
+    "time": {
+        "just_now": "vừa xong",
+        "minutes_ago": "{{count}} phút trước",
+        "minutes_ago_plural": "{{count}} phút trước",
+        "hours_ago": "{{count}} giờ trước",
+        "hours_ago_plural": "{{count}} giờ trước",
+        "days_ago": "{{count}} ngày trước",
+        "days_ago_plural": "{{count}} ngày trước",
+        "weeks_ago": "{{count}} tuần trước",
+        "weeks_ago_plural": "{{count}} tuần trước",
+        "months_ago": "{{count}} tháng trước",
+        "months_ago_plural": "{{count}} tháng trước",
+        "years_ago": "{{count}} năm trước",
+        "years_ago_plural": "{{count}} năm trước"
+    },
+    "upload_image": {
+        "title": "Ảnh đại diện",
+        "subtitle": "Chọn hoặc kéo tối đa 1 tệp | PNG, JPEG, WEBP, GIF",
+        "labels": {
+            "type": "Loại",
+            "remove": "Xóa"
+        },
+        "errors": {
+            "upload_failed": "Tải ảnh lên thất bại",
+            "invalid_format": "Định dạng tệp không hợp lệ. Vui lòng chọn một tệp ảnh."
+        }
+    },
+    "upload_avatar": {
+        "title": "Tải lên\nAvatar",
+        "placeholder": "Avatar"
+    },
+    "upload_banner": {
+        "subtitle": "Kéo và thả hình ảnh tại đây hoặc nhấp để duyệt",
+        "dimensions_hint": "Kích thước banner khuyến nghị: 1920x330",
+        "upload_complete": "Tải lên hoàn tất",
+        "tap_to_undo": "nhấn để hoàn tác"
+    },
+    "ai_chat": {
+        "title": "Trợ lý AI",
+        "placeholder": "Nhập tin nhắn...",
+        "open_chat": "Mở chat AI",
+        "greeting": "Xin chào! Chọn một câu hỏi bên dưới hoặc nhập tin nhắn để được hỗ trợ.",
+        "hi_there": "Xin chào",
+        "how_can_we_help": "Chúng tôi có thể giúp gì cho bạn?",
+        "chat_with_us": "Chat với chúng tôi",
+        "ai_typing": "AI đang nhập",
+        "ai_agent": "Trợ lý AI",
+        "today": "Hôm nay",
+        "go_back": "Quay lại",
+        "open_options": "Mở tùy chọn",
+        "close_options": "Đóng tùy chọn",
+        "minimize": "Thu nhỏ",
+        "turn_off_notifications": "Tắt thông báo",
+        "turn_on_notifications": "Bật thông báo",
+        "other_questions": "Câu hỏi khác",
+        "suggested_questions": {
+            "is_legit": "CS2Boost có uy tín không?",
+            "how_to_sell": "Làm sao để bán?",
+            "account_terms": "Điều khoản sử dụng tài khoản",
+            "refund_policy": "Chính sách hoàn tiền & bảo hành",
+            "how_to_order": "Cách đặt đơn hàng?",
+            "payment_methods": "Phương thức thanh toán?",
+            "boost_duration": "Thời gian boost bao lâu?",
+            "account_security": "Tài khoản có an toàn không?",
+            "become_partner": "Làm sao để trở thành Partner?",
+            "contact_support": "Liên hệ hỗ trợ?"
+        },
+        "faq_answers": {
+            "is_legit": "CS2Boost là dịch vụ boost rank uy tín với hơn 5 năm kinh nghiệm. Chúng tôi có hàng nghìn đánh giá tích cực từ khách hàng và cam kết bảo mật tuyệt đối cho tài khoản của bạn. Đội ngũ booster chuyên nghiệp được tuyển chọn kỹ lưỡng.",
+            "how_to_sell": "Để trở thành người bán (Partner) trên CS2Boost:\n\n1. Đăng ký tài khoản và hoàn tất xác minh CCCD\n2. Gửi yêu cầu trở thành Partner\n3. Chờ Admin duyệt (thường trong 24h)\n4. Sau khi được duyệt, bạn có thể nhận đơn boost và kiếm tiền",
+            "account_terms": "Điều khoản sử dụng tài khoản:\n\n- Không chia sẻ tài khoản với người khác\n- Tài khoản cần có Prime để sử dụng dịch vụ\n- Không sử dụng hack/cheat trong khi boost\n- Chúng tôi sử dụng VPN để bảo vệ tài khoản",
+            "refund_policy": "Chính sách hoàn tiền:\n\n- Hoàn tiền 100% nếu chưa bắt đầu boost\n- Hoàn tiền theo tỷ lệ hoàn thành nếu đang boost\n- Bảo hành hạng trong 7 ngày sau khi hoàn thành\n- Liên hệ support để được hỗ trợ hoàn tiền",
+            "how_to_order": "Cách đặt đơn hàng:\n\n1. Chọn dịch vụ (Premier, Wingman, Cày cấp)\n2. Chọn server và rank hiện tại/mong muốn\n3. Thêm các tùy chọn bổ sung (nếu cần)\n4. Nhấn 'Thanh toán' và hoàn tất payment\n5. Cung cấp thông tin tài khoản Steam\n6. Booster sẽ bắt đầu trong vài phút",
+            "payment_methods": "Chúng tôi hỗ trợ các phương thức thanh toán:\n\n- VNPay (Thẻ ATM, Visa, MasterCard)\n- Ví điện tử (MoMo, ZaloPay)\n- Chuyển khoản ngân hàng\n- Ví CS2Boost (nạp trước)",
+            "boost_duration": "Thời gian boost phụ thuộc vào:\n\n- Khoảng cách rank (càng xa càng lâu)\n- Server và thời điểm queue\n- Tùy chọn bổ sung (Duo play chậm hơn)\n\nƯớc tính: 100-200 rating/ngày cho Premier",
+            "account_security": "Chúng tôi cam kết bảo mật tuyệt đối:\n\n- Sử dụng VPN riêng cho mỗi booster\n- Không lưu trữ mật khẩu sau khi boost\n- Steam Guard bảo vệ tài khoản\n- Booster được tuyển chọn và giám sát kỹ",
+            "become_partner": "Điều kiện trở thành Partner:\n\n1. Rank tối thiểu: Global Elite hoặc 20,000+ Premier\n2. Xác minh CCCD (để đảm bảo uy tín)\n3. Có thể online ít nhất 4h/ngày\n4. Cam kết tuân thủ quy định\n\nHoa hồng: 70-80% giá trị đơn hàng",
+            "contact_support": "Bạn có thể liên hệ hỗ trợ qua:\n\n- Chat trực tiếp trên website (24/7)\n- Discord: discord.gg/cs2boost\n- Email: support@cs2boost.com\n- Hotline: 1900-xxxx"
+        },
+        "faq_follow_ups": {
+            "is_legit": [
+                "how_to_order",
+                "account_security",
+                "refund_policy"
+            ],
+            "how_to_sell": [
+                "become_partner",
+                "payment_methods",
+                "contact_support"
+            ],
+            "account_terms": [
+                "account_security",
+                "refund_policy",
+                "contact_support"
+            ],
+            "refund_policy": [
+                "contact_support",
+                "how_to_order",
+                "account_terms"
+            ],
+            "how_to_order": [
+                "payment_methods",
+                "boost_duration",
+                "account_security"
+            ],
+            "payment_methods": [
+                "how_to_order",
+                "refund_policy",
+                "contact_support"
+            ],
+            "boost_duration": [
+                "how_to_order",
+                "account_security",
+                "refund_policy"
+            ],
+            "account_security": [
+                "account_terms",
+                "refund_policy",
+                "is_legit"
+            ],
+            "become_partner": [
+                "how_to_sell",
+                "payment_methods",
+                "contact_support"
+            ],
+            "contact_support": [
+                "refund_policy",
+                "account_terms",
+                "how_to_order"
+            ]
+        },
+        "tabs": {
+            "home": "Trang chủ",
+            "chat": "Chat"
+        }
+    },
+    "date_picker": {
+        "from_date": "Từ ngày",
+        "to_date": "Đến ngày"
+    }
+}

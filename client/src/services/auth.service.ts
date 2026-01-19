@@ -97,6 +97,16 @@ const signout = async (payload: ISignOutPayload): Promise<ISuccessResponse> => {
 };
 
 /**
+ * @description Đăng xuất khỏi tất cả thiết bị.
+ * @param id - Id người dùng.
+ * @returns {Promise<ISuccessResponse>} - Thông báo đăng xuất thành công.
+ */
+const signoutAll = async (id: string): Promise<ISuccessResponse> => {
+  const { data } = await axiosInstance.post("/auth/signout-all", { id });
+  return data;
+};
+
+/**
  * @description Admin tạo một tài khoản mới.
  * @param payload - Dữ liệu đăng ký và vai trò của tài khoản.
  * @returns {Promise<IUser>} - Đối tượng người dùng mới.
@@ -127,6 +137,7 @@ export const authService = {
   verifyOtp,
   resetPassword,
   signout,
+  signoutAll,
   registerWithAdmin,
   loginWithAdmin,
 };

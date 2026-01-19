@@ -1,0 +1,48 @@
+{
+    "page_title": "Thu Nhập",
+    "page_subtitle": "Theo dõi thu nhập và yêu cầu rút tiền của bạn.",
+    "loading_message": "Đang tải dữ liệu tài chính...",
+    "error_message": "Không thể tải thống kê. Vui lòng thử lại.",
+    "request_payout_btn": "Yêu Cầu Rút Tiền",
+    "minimum_balance_tooltip": "Cần số dư tối thiểu 50.000 VND để yêu cầu rút tiền.",
+    "stat_cards": {
+        "available_balance": "Số Dư Khả Dụng",
+        "potential_revenue": "Doanh Thu Tiềm Năng",
+        "pending_payouts": "Đang Chờ Rút",
+        "total_earnings": "Tổng Thu Nhập"
+    },
+    "chart": {
+        "title": "Tổng Quan Tài Chính",
+        "label": "Số tiền (VND)",
+        "available_balance": "Số Dư Khả Dụng",
+        "potential_revenue": "Doanh Thu Tiềm Năng",
+        "pending_payouts": "Đang Chờ Rút"
+    },
+    "recent_transactions": {
+        "title": "Giao Dịch Gần Đây",
+        "header_description": "Mô Tả",
+        "header_date": "Ngày",
+        "header_type": "Loại",
+        "header_amount": "Số Tiền",
+        "empty_title": "Chưa Có Giao Dịch",
+        "empty_subtitle": "Khi bạn hoàn thành đơn hàng, thu nhập sẽ xuất hiện ở đây.",
+        "view_more": "Xem Tất Cả Giao Dịch →",
+        "types": {
+            "commission": "Hoa Hồng",
+            "penalty": "Phạt",
+            "payout": "Rút Tiền"
+        }
+    },
+    "payout_modal": {
+        "title": "Yêu Cầu Rút Tiền",
+        "balance_info": "Số Dư Khả Dụng: {{balance}}",
+        "amount_label": "Số Tiền Rút",
+        "amount_placeholder": "Nhập số tiền muốn rút",
+        "submit_btn": "Gửi Yêu Cầu",
+        "validation": {
+            "amount_required": "Vui lòng nhập số tiền.",
+            "amount_exceed": "Số tiền không được vượt quá số dư.",
+            "minimum_amount": "Số tiền rút tối thiểu là 50.000 VND."
+        }
+    }
+}

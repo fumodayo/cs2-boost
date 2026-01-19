@@ -1,0 +1,63 @@
+{
+    "title": "Our Partners",
+    "hero": {
+        "badge": "Verified Partners Program",
+        "title_part1": "Level Up with Our",
+        "title_part2": "Trusted Partners",
+        "subtitle": "Unlock exclusive deals on hardware, verified boosting services, and premium tournament entries tailored for the CS2 community.",
+        "view_all_deals": "View All Deals",
+        "apply_partnership": "Apply for Partnership"
+    },
+    "breadcrumb": {
+        "home": "Home",
+        "partners": "Partners"
+    },
+    "filters_title": "Filters",
+    "filters_subtitle": "Refine by category",
+    "category": {
+        "all_partners": "All Partners",
+        "streamers": "Streamers",
+        "hardware": "Hardware",
+        "tournaments": "Tournaments",
+        "services": "Services"
+    },
+    "search_placeholder": "Search partners, codes...",
+    "online_partners_btn": "Online Partners",
+    "rating_filter": "Rating",
+    "completion_filter": "Completion",
+    "sort_by": "Sort By",
+    "sort_options": {
+        "popular": "Most Popular",
+        "rating": "Highest Rating",
+        "newest": "Newest"
+    },
+    "results_found": "{{count}} results found",
+    "error_loading": "Could not fetch partners. Please try again.",
+    "range_filter": {
+        "title": "Set {{label}} Range",
+        "subtitle": "Adjust the slider to filter partners.",
+        "aria_min_value": "Min value",
+        "aria_max_value": "Max value"
+    },
+    "card": {
+        "view_profile_tooltip": "View profile of {{username}}",
+        "verified_tooltip": "Verified Partner",
+        "verified": "Verified",
+        "online": "Online",
+        "partner_label": "Partner",
+        "no_bio": "This partner hasn't added a bio yet.",
+        "rating": "Rating",
+        "completion": "Completion",
+        "completion_short": "completed",
+        "reviews": "Reviews",
+        "followers": "Followers",
+        "followers_short": "followers",
+        "discount_label": "Discount Code",
+        "special_offer": "Special Offer",
+        "view_profile_btn": "View Profile"
+    },
+    "empty_state": {
+        "title": "No Partners Found",
+        "subtitle": "No partners matched your current filters. Try adjusting your search."
+    }
+}

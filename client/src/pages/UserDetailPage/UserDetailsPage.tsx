@@ -1,14 +1,14 @@
-import React from "react";
+﻿import React from "react";
 import { useParams, Link } from "react-router-dom";
 import useSWR from "swr";
-import { Helmet, Spinner, ErrorDisplay } from "~/components/shared";
+import { Helmet, Spinner, ErrorDisplay } from "~/components/ui";
 import {
   FaShoppingCart,
   FaCreditCard,
   FaCog,
   FaArrowLeft,
 } from "react-icons/fa";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import {
   UserOrdersTable,
@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { userService } from "~/services/user.service";
 
 const UserDetailsPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("user_details_page");
   const { userId } = useParams<{ userId: string }>();
 
   const {
@@ -57,11 +57,9 @@ const UserDetailsPage: React.FC = () => {
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              {t("UserDetailsPage.title")}
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
             <p className="text-muted-foreground">
-              {t("UserDetailsPage.subtitle", { username: userData.username })}
+              {t("subtitle", { username: userData.username })}
             </p>
           </div>
         </div>
@@ -73,33 +71,42 @@ const UserDetailsPage: React.FC = () => {
           </aside>
           <main className="lg:col-span-3">
             <Tabs defaultValue="orders" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="orders">
-                  <div className="flex items-center justify-center">
-                    <FaShoppingCart size={20} className="mr-2" />
-                    {t("UserDetailsPage.tabs.orders")}
+              <TabsList className="grid h-auto w-full grid-cols-3 gap-2 rounded-2xl bg-muted/50 p-1.5 text-muted-foreground">
+                <TabsTrigger
+                  value="orders"
+                  className="rounded-xl py-3 text-base font-medium transition-all hover:bg-background/50 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <FaShoppingCart size={20} />
+                    {t("tabs.orders")}
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="transactions">
-                  <div className="flex items-center justify-center">
-                    <FaCreditCard size={20} className="mr-2" />
-                    {t("UserDetailsPage.tabs.transactions")}
+                <TabsTrigger
+                  value="transactions"
+                  className="rounded-xl py-3 text-base font-medium transition-all hover:bg-background/50 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <FaCreditCard size={20} />
+                    {t("tabs.transactions")}
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="settings">
-                  <div className="flex items-center justify-center">
-                    <FaCog size={20} className="mr-2" />
-                    {t("UserDetailsPage.tabs.settings")}
+                <TabsTrigger
+                  value="settings"
+                  className="rounded-xl py-3 text-base font-medium transition-all hover:bg-background/50 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <FaCog size={20} />
+                    {t("tabs.settings")}
                   </div>
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="orders" className="mt-6">
+              <TabsContent value="orders" className="mt-8">
                 <UserOrdersTable userId={userId!} />
               </TabsContent>
-              <TabsContent value="transactions" className="mt-6">
+              <TabsContent value="transactions" className="mt-8">
                 <UserTransactionsTable userId={userId!} />
               </TabsContent>
-              <TabsContent value="settings" className="mt-6">
+              <TabsContent value="settings" className="mt-8">
                 <UserSettingsPanel
                   user={userData}
                   onActionSuccess={mutateUser}

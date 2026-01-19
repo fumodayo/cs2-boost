@@ -1,0 +1,24 @@
+{
+    "title": "My Notifications",
+    "subtitle": "View and manage all your notifications.",
+    "failed_to_load": "Failed to load notifications.",
+    "mark_all_as_read": "Mark all as read",
+    "tabs": {
+        "all": "All",
+        "unread": "Unread"
+    },
+    "empty_state": {
+        "all_caught_up": "You're all caught up!",
+        "no_unread": "No unread notifications.",
+        "no_notifications_yet": "There are no notifications yet."
+    },
+    "view_all": "View all notifications",
+    "date_groups": {
+        "today": "Today",
+        "yesterday": "Yesterday"
+    },
+    "menu": {
+        "title": "Notifications",
+        "unread_count": "Unread ({{count}})"
+    }
+}

@@ -122,6 +122,16 @@ const searchUsers = async (query: string): Promise<IUser[]> => {
   return data.data;
 };
 
+/**
+ * @description Người dùng tự xóa tài khoản của mình.
+ * @route   DELETE /api/users/me
+ * @returns {Promise<ISuccessResponse>} - Phản hồi thông báo thành công.
+ */
+const deleteAccount = async (): Promise<ISuccessResponse> => {
+  const { data } = await axiosPrivate.delete(`/users/me`);
+  return data;
+};
+
 export const userService = {
   getUserById,
   getPartners,
@@ -132,4 +142,5 @@ export const userService = {
   followPartner,
   unfollowPartner,
   searchUsers,
+  deleteAccount,
 };

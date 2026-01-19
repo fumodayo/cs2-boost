@@ -1,4 +1,4 @@
-import { Copy } from "~/components/shared";
+﻿import { Copy } from "~/components/ui";
 import { IOrder } from "~/types";
 import { formatMoney } from "~/utils";
 

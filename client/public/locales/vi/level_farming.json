@@ -1,0 +1,64 @@
+{
+    "boards": {
+        "earned_xp": {
+            "title": "XP kiếm được",
+            "subtitle": "Tất cả các chi tiết quan trọng về điểm kinh nghiệm của mỗi chế độ",
+            "table": {
+                "headers": [
+                    "Chế độ chơi",
+                    "Hệ số XP"
+                ],
+                "rows": [
+                    [
+                        "Arms Race",
+                        "1.0*điểm"
+                    ],
+                    [
+                        "Casual",
+                        "4.0*điểm"
+                    ],
+                    [
+                        "Competitive",
+                        "30*số vòng thắng"
+                    ],
+                    [
+                        "Deathmatch",
+                        "0.2*điểm"
+                    ],
+                    [
+                        "Wingman",
+                        "15*số vòng thắng"
+                    ]
+                ]
+            }
+        },
+        "xp_penalty": {
+            "title": "Phạt XP",
+            "subtitle": "Tất cả các chi tiết quan trọng về điểm kinh nghiệm",
+            "table": {
+                "headers": [
+                    "Xấp xỉ",
+                    "Hệ số thưởng XP"
+                ],
+                "rows": [
+                    [
+                        "Ít hơn 4,500 XP",
+                        "4.0 * XP đã nhận (1x XP kiếm được + 3x Thưởng XP hàng tuần)"
+                    ],
+                    [
+                        "Giữa 4,500 XP và 7,500 XP",
+                        "2.0 * XP đã nhận (1x XP kiếm được + 1x Thưởng XP hàng tuần)"
+                    ],
+                    [
+                        "Giữa 7,500 XP và 11,167 XP",
+                        "1.0 * XP đã nhận (1x XP kiếm được, không có Thưởng XP hàng tuần)"
+                    ],
+                    [
+                        "Lớn hơn 11,167 XP",
+                        "0.175 * XP đã nhận (0.175x XP kiếm được)"
+                    ]
+                ]
+            }
+        }
+    }
+}

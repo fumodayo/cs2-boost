@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom";
+﻿import { Outlet } from "react-router-dom";
 import {
   Banner,
   Footer,
   Header,
   SubHeader,
   SubSidebar,
-} from "~/components/shared";
+} from "~/components/ui";
 import { Navigation } from "~/pages/GameModePage/components";
 import NewStandard from "~/pages/HomePage/components/NewStandard";
 

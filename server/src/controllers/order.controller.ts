@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import Order from '../models/order.model';
 import { errorHandler } from '../utils/error';
 import {
@@ -21,6 +21,9 @@ import User from '../models/user.model';
 import { buildQueryOrderOptions, orderPopulates } from '../helpers/order.helper';
 import { notificationService } from '../services/notification.service';
 import { pushService } from '../services/push.service';
+import SystemSettings from '../models/systemSettings.model';
+import PromoCode from '../models/promoCode.model';
+import Receipt from '../models/receipt.model';
 
 /**
  * @desc    Lấy chi tiết một đơn hàng bằng `boostId`.
@@ -238,19 +241,21 @@ const refuseOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
             ? order.assign_partner?.toString()
             : order.user.toString();
 
+        const sender = await User.findById(userId).select('username');
+        const senderName = sender?.username || 'Partner';
+
         if (receiverId) {
             await notificationService.createAndNotify({
                 sender: userId,
                 receiver: receiverId,
                 boost_id: order.boost_id,
-                content: `had refuse ${order.title}`,
+                content: `${senderName} has refused the order: ${order.title}`,
                 type: NOTIFY_TYPE.BOOST,
             });
 
-            const sender = await User.findById(userId).select('username');
             const payload = {
                 title: 'Order assignment refused',
-                body: `${sender?.username || 'A user'} has refused the assignment for order: "${order.title}"`,
+                body: `${senderName} has refused the assignment for order: "${order.title}"`,
                 url: `/boosts/${order.boost_id}`,
             };
             await pushService.triggerPushNotification(receiverId, 'updated_order', payload);
@@ -271,6 +276,8 @@ const refuseOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
         order.assign_partner = null;
         order.status = ORDER_STATUS.IN_ACTIVE;
         await order.save();
+
+        await notificationService.createPendingOrderNotification(order);
 
         emitOrderStatusChange();
 
@@ -300,7 +307,6 @@ const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
         }
         if (order.partner) return next(errorHandler(409, 'Order already has a partner assigned'));
 
-        // Cập nhật chỉ số của Partner
         const partnerUser = await User.findById(partner_id).session(session);
         if (!partnerUser) {
             throw errorHandler(404, 'Partner account not found');
@@ -317,7 +323,9 @@ const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
 
         order.assign_partner = null;
 
-        const potentialEarning = order.price * 0.8;
+        const settings = await SystemSettings.findOne().session(session);
+        const commissionRate = settings?.partnerCommissionRate ?? 0.8;
+        const potentialEarning = order.price * commissionRate;
         const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
         if (!partnerWallet) throw errorHandler(404, `Wallet for partner ${partner_id} not found.`);
 
@@ -336,12 +344,15 @@ const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
         });
         await order.save({ session });
 
+        const partner = await User.findById(partner_id).select('username');
+        const partnerName = partner?.username || 'Partner';
+
         if (order.user) {
             await notificationService.createAndNotify({
                 sender: partner_id,
                 receiver: order.user.toString(),
                 boost_id: boostId,
-                content: `has accepted your order: ${order.title}`,
+                content: `${partnerName} has accepted your order: ${order.title}`,
                 type: NOTIFY_TYPE.BOOST,
             });
         }
@@ -349,10 +360,9 @@ const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
         await session.commitTransaction();
 
         if (order.user) {
-            const partner = await User.findById(partner_id).select('username');
             const payload = {
                 title: 'Your order has been accepted!',
-                body: `${partner?.username || 'A partner'} has accepted your order: "${order.title}"`,
+                body: `${partnerName} has accepted your order: "${order.title}"`,
                 url: `/orders/boosts/${order.boost_id}`,
             };
             await pushService.triggerPushNotification(
@@ -366,6 +376,8 @@ const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
             emitNotification(order.user.toString());
         }
         emitOrderStatusChange();
+
+        await notificationService.removePendingOrderNotificationIfEmpty();
 
         res.status(200).json({ success: true, message: 'Order accepted successfully' });
     } catch (e) {
@@ -415,7 +427,9 @@ const completedOrder = async (req: AuthRequest, res: Response, next: NextFunctio
         }
         await partnerUser.save({ session });
 
-        const partnerEarning = order.price * 0.8;
+        const settings = await SystemSettings.findOne().session(session);
+        const commissionRate = settings?.partnerCommissionRate ?? 0.8;
+        const partnerEarning = order.price * commissionRate;
         const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
         if (!partnerWallet) throw errorHandler(404, `Wallet not found for partner ${partner_id}`);
         if (partnerWallet.escrow_balance < partnerEarning) {
@@ -427,13 +441,12 @@ const completedOrder = async (req: AuthRequest, res: Response, next: NextFunctio
 
         let earningAfterDebt = partnerEarning;
         if (partnerWallet.debt > 0) {
-            // Nếu có nợ
-            const debtToPay = Math.min(partnerWallet.debt, partnerEarning); // Số nợ sẽ trả là số nhỏ hơn giữa nợ và thu nhập
-            partnerWallet.debt -= debtToPay; // Trừ nợ
-            earningAfterDebt -= debtToPay; // Số tiền thực nhận sau khi trả nợ
+
+            const debtToPay = Math.min(partnerWallet.debt, partnerEarning); 
+            partnerWallet.debt -= debtToPay; 
+            earningAfterDebt -= debtToPay; 
         }
 
-        // Cộng số tiền thực nhận vào số dư
         partnerWallet.balance += earningAfterDebt;
         await partnerWallet.save({ session });
 
@@ -474,12 +487,15 @@ const completedOrder = async (req: AuthRequest, res: Response, next: NextFunctio
             );
         }
 
+        const completedPartner = await User.findById(partner_id).select('username');
+        const completedPartnerName = completedPartner?.username || 'Partner';
+
         if (order.user?._id) {
             await notificationService.createAndNotify({
                 sender: partner_id,
                 receiver: order.user._id.toString(),
                 boost_id: boostId,
-                content: `Has completed order ${order.title}`,
+                content: `${completedPartnerName} has completed order: ${order.title}`,
                 type: NOTIFY_TYPE.BOOST,
             });
         }
@@ -534,8 +550,11 @@ const cancelOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
             throw errorHandler(400, 'Only in-progress orders can be cancelled by a partner.');
         }
 
-        const escrowedAmount = order.price * 0.8;
-        const penaltyAmount = order.price * 0.05;
+        const settings = await SystemSettings.findOne().session(session);
+        const commissionRate = settings?.partnerCommissionRate ?? 0.8;
+        const penaltyRate = settings?.cancellationPenaltyRate ?? 0.05;
+        const escrowedAmount = order.price * commissionRate;
+        const penaltyAmount = order.price * penaltyRate;
 
         const partnerWallet = await Wallet.findOne({ owner: partner_id }).session(session);
         if (!partnerWallet) throw errorHandler(404, `Wallet not found for partner ${partner_id}`);
@@ -583,12 +602,15 @@ const cancelOrder = async (req: AuthRequest, res: Response, next: NextFunction) 
             );
         }
 
+        const cancelPartner = await User.findById(partner_id).select('username');
+        const cancelPartnerName = cancelPartner?.username || 'Partner';
+
         if (order.user?._id) {
             await notificationService.createAndNotify({
                 sender: partner_id,
                 receiver: order.user._id.toString(),
                 boost_id: boostId,
-                content: `has cancelled order ${order.title}. It is now available again.`,
+                content: `${cancelPartnerName} has cancelled order: ${order.title}. It is now available again.`,
                 type: NOTIFY_TYPE.BOOST,
             });
         }
@@ -666,7 +688,7 @@ const renewOrder = async (req: AuthRequest, res: Response, next: NextFunction) =
             end_exp: originalOrder.end_exp,
             total_time: originalOrder.total_time,
             options: originalOrder.options,
-            account: originalOrder.account, // Giữ lại thông tin tài khoản đã liên kết
+            account: originalOrder.account, 
         };
 
         const newOrder = new Order({
@@ -873,6 +895,220 @@ const editAccountOnOrder = async (req: AuthRequest, res: Response, next: NextFun
     }
 };
 
+/**
+ * @desc    Validate a promo code and calculate discount.
+ * @route   POST /api/orders/validate-promo
+ * @access  Private
+ */
+const validatePromoCode = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { code, orderType, orderAmount } = req.body;
+
+        if (!code || !orderType || !orderAmount) {
+            return next(errorHandler(400, 'Code, orderType, and orderAmount are required.'));
+        }
+
+        const promoCode = await PromoCode.findOne({ code: code.toUpperCase() });
+
+        if (!promoCode) {
+            return res.status(404).json({
+                success: false,
+                message: 'Promo code not found.',
+            });
+        }
+
+        if (!promoCode.isActive) {
+            return res.status(400).json({
+                success: false,
+                message: 'Promo code is not active.',
+            });
+        }
+
+        const now = new Date();
+        if (now < promoCode.validFrom || now > promoCode.validUntil) {
+            return res.status(400).json({
+                success: false,
+                message: 'Promo code has expired or is not yet valid.',
+            });
+        }
+
+        if (promoCode.usageLimit > 0 && promoCode.usedCount >= promoCode.usageLimit) {
+            return res.status(400).json({
+                success: false,
+                message: 'Promo code usage limit has been reached.',
+            });
+        }
+
+        if (!promoCode.applicableOrderTypes.includes(orderType)) {
+            return res.status(400).json({
+                success: false,
+                message: `Promo code is not applicable for ${orderType} orders.`,
+            });
+        }
+
+        if (promoCode.minOrderAmount && orderAmount < promoCode.minOrderAmount) {
+            return res.status(400).json({
+                success: false,
+                message: `Minimum order amount is ${promoCode.minOrderAmount}.`,
+            });
+        }
+
+        let discountAmount = (orderAmount * promoCode.discountPercent) / 100;
+
+        if (promoCode.maxDiscount && promoCode.maxDiscount > 0) {
+            discountAmount = Math.min(discountAmount, promoCode.maxDiscount);
+        }
+
+        const finalPrice = orderAmount - discountAmount;
+
+        res.status(200).json({
+            success: true,
+            data: {
+                code: promoCode.code,
+                discountPercent: promoCode.discountPercent,
+                discountAmount,
+                originalPrice: orderAmount,
+                finalPrice,
+                maxDiscount: promoCode.maxDiscount,
+            },
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * @desc    Complete a free order (100% promo discount).
+ * @route   POST /api/order/:boostId/complete-free
+ * @access  Private
+ */
+const completeFreeOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const { boostId } = req.params;
+        const { promoCode: promoCodeStr } = req.body;
+        const userId = req.user.id;
+
+        const order = await Order.findOne({ boost_id: boostId }).session(session);
+        if (!order) {
+            await session.abortTransaction();
+            return next(errorHandler(404, 'Order not found'));
+        }
+
+        if (order.user?.toString() !== userId) {
+            await session.abortTransaction();
+            return next(errorHandler(403, 'You are not authorized to complete this order'));
+        }
+
+        if (order.status !== ORDER_STATUS.PENDING) {
+            await session.abortTransaction();
+            return next(errorHandler(400, 'Order is not in pending status'));
+        }
+
+        if (!promoCodeStr) {
+            await session.abortTransaction();
+            return next(errorHandler(400, 'Promo code is required for free orders'));
+        }
+
+        const promo = await PromoCode.findOne({ code: promoCodeStr.toUpperCase() }).session(
+            session,
+        );
+        if (!promo) {
+            await session.abortTransaction();
+            return next(errorHandler(404, 'Promo code not found'));
+        }
+
+        let discountAmount = (order.price * promo.discountPercent) / 100;
+        if (promo.maxDiscount && promo.maxDiscount > 0) {
+            discountAmount = Math.min(discountAmount, promo.maxDiscount);
+        }
+        const finalPrice = order.price - discountAmount;
+
+        if (finalPrice > 0) {
+            await session.abortTransaction();
+            return next(
+                errorHandler(400, 'This is not a free order. Please use the payment gateway.'),
+            );
+        }
+
+        const newReceipt = new Receipt({
+            receipt_id: generateUserId(),
+            payment_method: 'promo-code',
+            price: 0,
+            user: userId,
+            order: order._id,
+        });
+        await newReceipt.save({ session });
+
+        promo.usedCount += 1;
+        await promo.save({ session });
+
+        order.promoCode = promo.code;
+
+        if (order.assign_partner) {
+            order.status = ORDER_STATUS.WAITING;
+
+            await notificationService.createAndNotify({
+                sender: userId,
+                receiver: order.assign_partner.toString(),
+                boost_id: order.boost_id,
+                content: 'You have a new assigned order to confirm.',
+                type: NOTIFY_TYPE.BOOST,
+            });
+
+            const user = await User.findById(userId).select('username').session(session);
+            const payload = {
+                title: 'New Assigned Order!',
+                body: `User ${user?.username || ''} has completed a free order assigned to you: "${order.title}"`,
+                url: `/pending-boosts`,
+            };
+            await pushService.triggerPushNotification(
+                order.assign_partner.toString(),
+                'updated_order',
+                payload,
+            );
+        } else {
+            order.status = ORDER_STATUS.IN_ACTIVE;
+
+            notificationService.broadcastNewOrder(order);
+
+            const partners = await User.find({ role: ROLE.PARTNER }).select('_id').session(session);
+            const partnerIds = partners.map((p) => p._id.toString());
+
+            if (partnerIds.length > 0) {
+                const payload = {
+                    title: 'New Order Available!',
+                    body: `A new order "${order.title}" is ready to be taken.`,
+                    url: '/pending-boosts',
+                };
+                await pushService.triggerPushNotificationToMany(partnerIds, 'new_order', payload);
+            }
+        }
+
+        await order.save({ session });
+        await session.commitTransaction();
+
+        notificationService.broadcastOrderStatusChange();
+
+        res.status(200).json({
+            success: true,
+            message: 'Free order completed successfully',
+            data: {
+                boostId: order.boost_id,
+                promoCode: promo.code,
+                discountApplied: discountAmount,
+            },
+        });
+    } catch (e) {
+        await session.abortTransaction();
+        next(e);
+    } finally {
+        session.endSession();
+    }
+};
+
 export {
     getMyOrders,
     getPendingOrders,
@@ -889,4 +1125,6 @@ export {
     deleteOrder,
     addAccountToOrder,
     editAccountOnOrder,
+    validatePromoCode,
+    completeFreeOrder,
 };

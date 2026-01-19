@@ -1,39 +1,65 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaMobileAlt, FaTabletAlt } from "react-icons/fa";
-import { FaDesktop, FaEye, FaXmark } from "react-icons/fa6";
-import { Chip, Widget } from "~/components/shared";
+import { FaDesktop, FaEye, FaEyeSlash, FaXmark } from "react-icons/fa6";
+import { Chip, Widget } from "~/components/ui";
 import { IconDotBig } from "~/icons";
 import { formatDistanceDate } from "~/utils";
 import { IUser } from "~/types";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { IP_STATUS } from "~/types/constants";
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { authService } from "~/services/auth.service";
+import { signOut } from "~/redux/user/userSlice";
+import toast from "react-hot-toast";
+import PATH from "~/constants/path";
 const LoginSessionsWidget = ({ currentUser }: { currentUser: IUser }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("settings_page");
   const [isShowIPLocation, setIsShowIPLocation] = useState(false);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogoutAll = async () => {
+    try {
+      await authService.signoutAll(currentUser._id);
+      dispatch(signOut());
+      navigate(PATH.AUTH.LOGIN);
+      toast.success(t("login_sessions_widget.logout_all_success"));
+    } catch (_error) {
+      toast.error(t("login_sessions_widget.logout_all_error"));
+    }
+  };
   return (
     <Widget>
-      <Widget.Header>
+      <Widget.Header className="flex-col items-start gap-3 sm:flex-row sm:items-center">
         <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-          {t("Globals.User.ip_address.label.Login Sessions")}
+          {t("login_sessions_widget.title")}
         </h3>
-        <div className="ml-auto flex items-center gap-x-1.5">
+        <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
           <Button
             onClick={() => setIsShowIPLocation((isShow) => !isShow)}
             variant="light"
             className="rounded-md bg-secondary-light px-2 py-1.5 text-xs text-secondary-light-foreground hover:bg-secondary-light-hover focus:outline-secondary"
           >
-            <FaEye className="mr-2" />
-            {t("Globals.User.ip_address.label.Show IPs")}
+            {isShowIPLocation ? (
+              <>
+                <FaEyeSlash className="mr-2" />
+                {t("login_sessions_widget.hide_ips_btn")}
+              </>
+            ) : (
+              <>
+                <FaEye className="mr-2" />
+                {t("login_sessions_widget.show_ips_btn")}
+              </>
+            )}
           </Button>
           <Button
+            onClick={handleLogoutAll}
             variant="light"
             className="rounded-md bg-danger-light px-2 py-1.5 text-xs text-danger-light-foreground hover:bg-danger-light-hover focus:outline-danger"
           >
             <FaXmark className="mr-2" />
-            {t("Globals.User.ip_address.label.Logout All Devices")}
+            {t("login_sessions_widget.logout_all_btn")}
           </Button>
         </div>
       </Widget.Header>
@@ -59,23 +85,24 @@ const LoginSessionsWidget = ({ currentUser }: { currentUser: IUser }) => {
                         <FaTabletAlt size={22} className="text-foreground/90" />
                       )}
                     </div>
-
                     {/* CONTENT */}
                     <div className="ml-4 flex min-w-0 flex-1 flex-col">
                       <span className="font-display truncate font-medium">
-                        {t(`Globals.User.ip_address.device.${device}`)}
+                        {t(
+                          `login_sessions_widget.devices.${device.toLowerCase()}`,
+                        )}
                         {status === IP_STATUS.ONLINE ? (
                           <Chip>
                             <IconDotBig />
                             <span className="flex-1 shrink-0 truncate">
-                              Online
+                              {t("login_sessions_widget.status.online")}
                             </span>
                           </Chip>
                         ) : (
                           <Chip className="bg-danger-light text-danger-light-foreground ring-danger">
                             <IconDotBig />
                             <span className="flex-1 shrink-0 truncate">
-                              Offline
+                              {t("login_sessions_widget.status.offline")}
                             </span>
                           </Chip>
                         )}
@@ -83,13 +110,11 @@ const LoginSessionsWidget = ({ currentUser }: { currentUser: IUser }) => {
                       <span className="flex-shrink-0 items-center gap-x-1.5 truncate text-sm text-muted-foreground sm:flex">
                         {country}
                         <span className="text-muted-foreground">·</span>
-
                         {updatedAt &&
                           formatDistanceDate(updatedAt, i18n.language)}
                       </span>
                     </div>
                   </div>
-
                   {/* IP ADDRESS */}
                   <div className="flex flex-shrink-0 items-center gap-x-3">
                     {isShowIPLocation ? (
@@ -110,5 +135,4 @@ const LoginSessionsWidget = ({ currentUser }: { currentUser: IUser }) => {
     </Widget>
   );
 };
-
 export default LoginSessionsWidget;

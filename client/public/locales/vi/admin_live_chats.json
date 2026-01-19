@@ -1,0 +1,22 @@
+{
+    "admin_live_chats_title": "Live Chats",
+    "admin_live_chats_subtitle": "Quản lý cuộc trò chuyện hỗ trợ trực tiếp",
+    "active_chats": "Chats Đang Hoạt Động",
+    "no_chats": "Không có chat nào",
+    "select_chat": "Chọn một chat để xem",
+    "unknown_user": "Người dùng không xác định",
+    "status": {
+        "waiting": "Đang chờ",
+        "in_progress": "Đang xử lý"
+    },
+    "assign_to_me": "Nhận Chat",
+    "close": "Đóng",
+    "assigned_success": "Đã nhận chat thành công",
+    "assign_failed": "Không thể nhận chat",
+    "closed_success": "Đã đóng chat thành công",
+    "close_failed": "Không thể đóng chat",
+    "send_failed": "Không thể gửi tin nhắn",
+    "new_chat_notification": "Có cuộc chat hỗ trợ mới!",
+    "assign_to_chat": "Nhận chat này để trả lời",
+    "not_your_chat": "Chat này được gán cho admin khác"
+}

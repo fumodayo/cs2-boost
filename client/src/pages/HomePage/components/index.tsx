@@ -5,3 +5,4 @@ export { default as MarqueeComment } from "./MarqueeComment";
 export { default as QuantityClient } from "./QuantityClient";
 export { default as AskList } from "./AskList";
 export { default as Stepup } from "./Stepup";
+export { default as CS2News } from "./CS2News";

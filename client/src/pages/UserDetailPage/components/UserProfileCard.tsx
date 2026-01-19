@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { format } from "date-fns";
 import { IUser } from "~/types";
 import { ROLE } from "~/types/constants";
@@ -18,7 +18,7 @@ const StatItem = ({
 );
 
 const UserProfileCard: React.FC<{ user: IUser }> = ({ user }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("user_details_page");
   const isPartner = user.role.includes(ROLE.PARTNER);
 
   return (
@@ -47,22 +47,20 @@ const UserProfileCard: React.FC<{ user: IUser }> = ({ user }) => {
 
       <div className="my-6 space-y-3 border-y border-border py-4">
         <h3 className="mb-2 text-sm font-semibold uppercase text-muted-foreground">
-          {t("UserDetailsPage.ProfileCard.userInfoTitle")}
+          {t("profile_card.user_info_title")}
         </h3>
         <StatItem
-          label={t("UserDetailsPage.ProfileCard.fullName")}
+          label={t("profile_card.full_name")}
           value={user.full_name || "N/A"}
         />
         <StatItem
-          label={t("UserDetailsPage.ProfileCard.status")}
+          label={t("profile_card.status")}
           value={
-            user.is_banned
-              ? t("UserDetailsPage.ProfileCard.banned")
-              : t("UserDetailsPage.ProfileCard.active")
+            user.is_banned ? t("profile_card.banned") : t("profile_card.active")
           }
         />
         <StatItem
-          label={t("UserDetailsPage.ProfileCard.joined")}
+          label={t("profile_card.joined")}
           value={format(new Date(user.createdAt), "dd MMM, yyyy")}
         />
       </div>
@@ -70,18 +68,18 @@ const UserProfileCard: React.FC<{ user: IUser }> = ({ user }) => {
       {isPartner && (
         <div className="space-y-3">
           <h3 className="mb-2 text-sm font-semibold uppercase text-muted-foreground">
-            {t("UserDetailsPage.ProfileCard.partnerStatsTitle")}
+            {t("profile_card.partner_stats_title")}
           </h3>
           <StatItem
-            label={t("UserDetailsPage.ProfileCard.rating")}
-            value={`${user.total_rating.toFixed(1)} (${t("UserDetailsPage.ProfileCard.reviews", { count: user.total_reviews })})`}
+            label={t("profile_card.rating")}
+            value={`${user.total_rating.toFixed(1)} (${t("profile_card.reviews", { count: user.total_reviews })})`}
           />
           <StatItem
-            label={t("UserDetailsPage.ProfileCard.completion")}
+            label={t("profile_card.completion")}
             value={`${user.total_completion_rate}%`}
           />
           <StatItem
-            label={t("UserDetailsPage.ProfileCard.followers")}
+            label={t("profile_card.followers")}
             value={user.followers_count}
           />
         </div>

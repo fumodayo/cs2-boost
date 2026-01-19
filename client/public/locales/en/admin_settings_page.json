@@ -1,0 +1,30 @@
+{
+    "loading": "Loading admin data...",
+    "navigation": {
+        "general": "General",
+        "security": "Security",
+        "commission": "Commission"
+    },
+    "profile_card": {
+        "title": "Profile Information",
+        "subtitle": "Update your personal details here."
+    },
+    "password_card": {
+        "title": "Change Password",
+        "subtitle": "Update your password to keep your account secure.",
+        "update_btn": "Update Password"
+    },
+    "commission_card": {
+        "title": "Commission Settings",
+        "subtitle": "Configure commission rate between Website and Partner",
+        "partner_rate": "Partner's Share",
+        "website_rate": "Website's Share",
+        "penalty_rate": "Cancellation Penalty",
+        "penalty_if_cancel": "If Partner cancels",
+        "preview": "Preview",
+        "example": "Example with order {{amount}}",
+        "save_btn": "Save Changes",
+        "saved": "Settings saved successfully",
+        "warning": "New rates will only apply to orders accepted AFTER the update. Orders already taken by Partners will keep the old rates."
+    }
+}

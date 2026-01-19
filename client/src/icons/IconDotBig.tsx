@@ -1,4 +1,4 @@
-const IconDotBig = () => (
+﻿const IconDotBig = () => (
   <svg
     className="-ml-0.5 mr-1 h-2 w-2 shrink-0"
     fill="currentColor"

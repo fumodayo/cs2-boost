@@ -1,6 +1,7 @@
-import { Server } from 'socket.io';
+﻿import { Server } from 'socket.io';
 import http from 'http';
 import express from 'express';
+import mongoose from 'mongoose';
 import User from '../models/user.model';
 import { ROLE } from '../constants';
 
@@ -54,19 +55,25 @@ io.on('connection', async (socket) => {
     userSockets[userId] = socket.id;
     emitOnlineUsers();
 
-    try {
-        const user = await User.findById(userId).select('role');
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
 
-        if (!user) return;
-        if (user.role?.includes(ROLE.PARTNER)) {
-            partnerSockets[userId] = socket.id;
-            emitOnlinePartners();
+    if (isValidObjectId) {
+        try {
+            const user = await User.findById(userId).select('role');
+
+            if (user) {
+                if (user.role?.includes(ROLE.PARTNER)) {
+                    partnerSockets[userId] = socket.id;
+                    socket.join('partners'); 
+                    emitOnlinePartners();
+                }
+                if (user.role?.includes(ROLE.ADMIN)) {
+                    adminSockets[userId] = socket.id;
+                }
+            }
+        } catch (e) {
+            console.error('Failed to fetch user role on socket connection:', e);
         }
-        if (user.role?.includes(ROLE.ADMIN)) {
-            adminSockets[userId] = socket.id;
-        }
-    } catch (e) {
-        console.error('Failed to fetch user role on socket connection:', e);
     }
 
     socket.on('disconnect', () => {

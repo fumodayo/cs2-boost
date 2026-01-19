@@ -1,17 +1,19 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import useSWR from "swr";
 import { useSelector } from "react-redux";
-import { Widget, Spinner } from "~/components/shared";
+import { Widget, Spinner } from "~/components/ui";
 import Conversation from "./Conversation";
-import ChatInput from "~/components/shared/ChatInput/ChatInput";
+import ChatInput from "~/components/ui/ChatInput/ChatInput";
 import { IConversation, IOrder } from "~/types";
 import { RootState } from "~/redux/store";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { useChat } from "~/hooks/useChat";
 import { userService } from "~/services/user.service";
 import { CONVERSATION_STATUS } from "~/types/constants";
+import { useTranslation } from "react-i18next";
 
 const ChatWidget = (order: IOrder) => {
+  const { t } = useTranslation("boost_page");
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   const conversationData = order.conversation as IConversation;
@@ -34,11 +36,12 @@ const ChatWidget = (order: IOrder) => {
   const { onlineUsers } = useSocketContext();
   const isOnline = receiver_id ? onlineUsers.includes(receiver_id) : false;
 
-  const performSendMessage = async (message: string) => {
+  const performSendMessage = async (message: string, images?: string[]) => {
     if (!conversationData?._id) return;
 
     await handleSendMessage({
       message,
+      images,
       boost_id: order.boost_id,
     });
   };
@@ -47,7 +50,7 @@ const ChatWidget = (order: IOrder) => {
     return (
       <Widget>
         <div className="flex h-[300px] items-center justify-center p-4 text-center text-muted-foreground">
-          This order does not have a conversation yet.
+          {t("chat_widget.no_conversation")}
         </div>
       </Widget>
     );
@@ -77,7 +80,9 @@ const ChatWidget = (order: IOrder) => {
                       className={`h-2 w-2 rounded-full ${isOnline ? "bg-green-500" : "bg-gray-500"}`}
                     />
                     <p className="text-xs text-muted-foreground">
-                      {isOnline ? "Online" : "Offline"}
+                      {isOnline
+                        ? t("chat_widget.status.online")
+                        : t("chat_widget.status.offline")}
                     </p>
                   </div>
                 </div>
@@ -105,7 +110,7 @@ const ChatWidget = (order: IOrder) => {
             <ChatInput onSendMessage={performSendMessage} />
           ) : (
             <div className="text-center text-sm text-muted-foreground">
-              This conversation has been closed.
+              {t("chat_widget.closed_conversation")}
             </div>
           )}
         </div>

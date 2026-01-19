@@ -1,0 +1,64 @@
+{
+    "boards": {
+        "earned_xp": {
+            "title": "Earned XP",
+            "subtitle": "All important details about experience points of each mode",
+            "table": {
+                "headers": [
+                    "Game mode",
+                    "XP multiplier"
+                ],
+                "rows": [
+                    [
+                        "Arms Race",
+                        "1.0*score"
+                    ],
+                    [
+                        "Casual",
+                        "4.0*score"
+                    ],
+                    [
+                        "Competitive",
+                        "30*rounds won"
+                    ],
+                    [
+                        "Deathmatch",
+                        "0.2*score"
+                    ],
+                    [
+                        "Wingman",
+                        "15*rounds won"
+                    ]
+                ]
+            }
+        },
+        "xp_penalty": {
+            "title": "XP Penalty",
+            "subtitle": "All important details about experience points",
+            "table": {
+                "headers": [
+                    "Approximate",
+                    "Bonus XP multiplier"
+                ],
+                "rows": [
+                    [
+                        "Less than 4,500 XP",
+                        "4.0 * gained XP (1x Earned XP + 3x Weekly XP Bonus)"
+                    ],
+                    [
+                        "Between 4,500 XP and 7,500 XP",
+                        "2.0 * gained XP (1x Earned XP + 1x Weekly XP Bonus)"
+                    ],
+                    [
+                        "Between 7,500 XP and 11,167 XP",
+                        "1.0 * gained XP (1x Earned XP, No Weekly XP Bonus)"
+                    ],
+                    [
+                        "Greater than 11,167 XP",
+                        "0.175 * gained XP (0.175x Earned XP)"
+                    ]
+                ]
+            }
+        }
+    }
+}

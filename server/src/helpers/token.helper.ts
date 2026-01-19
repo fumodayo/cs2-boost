@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+﻿import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { errorHandler } from '../utils/error';
 import User from '../models/user.model';
@@ -29,6 +29,13 @@ async function handleTokenRefreshLogic(req: Request, res: Response, isAdminConte
     const existUser = await User.findById(decodedToken.id);
     if (!existUser) {
         throw errorHandler(401, 'User associated with token not found.');
+    }
+
+    if (
+        decodedToken.token_version !== undefined &&
+        decodedToken.token_version !== existUser.token_version
+    ) {
+        throw errorHandler(401, 'Token is invalid (user logged out from all devices).');
     }
 
     if (isAdminContext && !existUser.role.includes('admin')) {

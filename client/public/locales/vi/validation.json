@@ -1,0 +1,13 @@
+{
+    "invalid_email": "Vui lòng nhập một địa chỉ email hợp lệ",
+    "password_complexity": "Mật khẩu phải bao gồm ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt",
+    "field_required": "{{fieldName}} là bắt buộc.",
+    "wrong_credentials": "Sai email hoặc mật khẩu",
+    "passwords_do_not_match": "Mật khẩu không khớp.",
+    "turn_off_vpn": "Vui lòng tắt VPN của bạn",
+    "not_empty": "Không được để trống",
+    "required": "Trường này là bắt buộc",
+    "min_length": "Không được ngắn hơn {{count}} ký tự",
+    "max_length": "Không được dài hơn {{count}} ký tự",
+    "email_taken": "Địa chỉ email đã được sử dụng"
+}

@@ -1,4 +1,4 @@
-export interface QueryOrderOptions {
+﻿export interface QueryOrderOptions {
     filters: Record<string, any>;
     sort: string;
     page: number;

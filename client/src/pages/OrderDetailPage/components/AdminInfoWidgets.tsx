@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { FaUsers, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { Widget, Button } from "~/components/shared";
+import { Widget, Button } from "~/components/ui";
 import { IUser, IAccount, IReview } from "~/types";
-import { isUserObject } from "~/utils/typeGuards";
+import {
+  isUserObject,
+  isAccountObject,
+  isReviewObject,
+} from "~/utils/typeGuards";
 import { ReviewedWidget } from "~/pages/BoostPage/components/ReviewWidget";
 
-export const AdminUserWidget = ({ user }: { user?: IUser }) => {
+export const AdminUserWidget = ({ user }: { user?: IUser | string | null }) => {
   if (!user || !isUserObject(user)) return null;
 
   return (
@@ -39,19 +43,21 @@ export const AdminBoosterWidget = ({
   partner,
   assign_partner,
 }: {
-  partner?: IUser;
-  assign_partner?: IUser;
+  partner?: IUser | string | null;
+  assign_partner?: IUser | string | null;
   orderId: string;
   onUpdate: () => void;
 }) => {
-  const booster = partner || assign_partner;
+  const partnerUser = isUserObject(partner) ? partner : undefined;
+  const assignUser = isUserObject(assign_partner) ? assign_partner : undefined;
+  const booster = partnerUser || assignUser;
 
   return (
     <Widget>
       <Widget.BigHeader>
         <h3 className="font-display font-semibold">Booster Information</h3>
       </Widget.BigHeader>
-      {booster && isUserObject(booster) ? (
+      {booster ? (
         <div className="flex items-center space-x-4 p-4">
           <img
             src={booster.profile_picture}
@@ -85,8 +91,13 @@ export const AdminBoosterWidget = ({
   );
 };
 
-export const AdminAccountWidget = ({ account }: { account?: IAccount }) => {
-  const isAccountProvided = account && Object.keys(account).length > 0;
+export const AdminAccountWidget = ({
+  account,
+}: {
+  account?: IAccount | string | null;
+}) => {
+  const accountData = isAccountObject(account) ? account : undefined;
+  const isAccountProvided = accountData && Object.keys(accountData).length > 0;
 
   return (
     <Widget>
@@ -114,8 +125,14 @@ export const AdminAccountWidget = ({ account }: { account?: IAccount }) => {
   );
 };
 
-export const AdminReviewWidget = ({ review }: { review?: IReview }) => {
-  if (!review) {
+export const AdminReviewWidget = ({
+  review,
+}: {
+  review?: IReview | string | null;
+}) => {
+  const reviewData = isReviewObject(review) ? review : undefined;
+
+  if (!reviewData) {
     return (
       <Widget>
         <Widget.BigHeader>
@@ -127,5 +144,5 @@ export const AdminReviewWidget = ({ review }: { review?: IReview }) => {
       </Widget>
     );
   }
-  return <ReviewedWidget {...(review as IReview)} onUpdate={() => {}} />;
+  return <ReviewedWidget {...reviewData} onUpdate={() => {}} />;
 };

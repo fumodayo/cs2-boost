@@ -30,9 +30,11 @@ export interface IReport {
   sender: string | IUser;
   receiver: string | IUser;
   handler?: string | IUser | null;
+  order?: string | IOrder | null;
   title: (typeof VALID_REASONS)[number];
   description: string;
   status: ObjectValues<typeof REPORT_STATUS>;
+  resolution?: string | null;
   conversations: {
     client?: string | IConversation | null;
     partner?: string | IConversation | null;
@@ -47,6 +49,7 @@ export interface IDashboardStats {
     netProfit: number;
     totalPayouts: number;
     pendingPayouts: number;
+    pendingPayoutsCount: number;
   };
   descriptions: {
     grossRevenue: string;
@@ -66,6 +69,7 @@ export interface ISendReportPayload {
   reportedUserId: string;
   title: string;
   description?: string;
+  orderId?: string;
 }
 
 export type ReportStatus = (typeof REPORT_STATUS)[keyof typeof REPORT_STATUS];

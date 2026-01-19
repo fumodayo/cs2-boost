@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { orderService } from "~/services/order.service";
+import { orderService, ICommissionRates } from "~/services/order.service";
 import { IApiResponse, IOrder, OrderServicePayloadResponse } from "~/types";
 import { useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
@@ -11,10 +11,33 @@ import { isUserObject } from "~/utils/typeGuards";
 import getErrorMessage from "~/utils/errorHandler";
 
 const useOrderActions = (order: IOrder) => {
-  const { boost_id, status, user, assign_partner, partner, retryCount } = order;
+  const { boost_id, status, user, assign_partner, partner, retryCount, price } =
+    order;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: RootState) => state.user);
+
+  const [commissionRates, setCommissionRates] =
+    useState<ICommissionRates | null>(null);
+
+  const [showAcceptDialog, setShowAcceptDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const rates = await orderService.getCommissionRates();
+        setCommissionRates(rates);
+      } catch (error) {
+        console.error("Failed to fetch commission rates:", error);
+        setCommissionRates({
+          partnerCommissionRate: 0.8,
+          cancellationPenaltyRate: 0.05,
+        });
+      }
+    };
+    fetchRates();
+  }, []);
 
   const permissions = useMemo(() => {
     if (!currentUser) {
@@ -43,8 +66,7 @@ const useOrderActions = (order: IOrder) => {
         status === ORDER_STATUS.CANCEL && isOrderOwner && retryCount < 1,
       canDelete: status === ORDER_STATUS.PENDING && isOrderOwner,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, currentUser]);
+  }, [status, user, assign_partner, partner, retryCount, currentUser]);
 
   const handleApiCall = async <T extends IApiResponse>(
     apiCall: () => OrderServicePayloadResponse<T>,
@@ -79,12 +101,18 @@ const useOrderActions = (order: IOrder) => {
       "Order refused successfully",
     );
 
-  const handleAcceptOrder = () =>
+  const handleAcceptOrder = () => {
+    setShowAcceptDialog(true);
+  };
+
+  const confirmAcceptOrder = () => {
+    setShowAcceptDialog(false);
     handleApiCall(
       () => orderService.acceptOrder(boost_id),
       "Order accepted successfully",
       `/orders/boosts/${boost_id}`,
     );
+  };
 
   const handleCompletedOrder = () =>
     handleApiCall(
@@ -93,11 +121,17 @@ const useOrderActions = (order: IOrder) => {
       "/pending-boosts",
     );
 
-  const handleCancelOrder = () =>
+  const handleCancelOrder = () => {
+    setShowCancelDialog(true);
+  };
+
+  const confirmCancelOrder = () => {
+    setShowCancelDialog(false);
     handleApiCall(
       () => orderService.cancelOrder(boost_id),
       "Cancellation request sent successfully",
     );
+  };
 
   const handleRenewOrder = () =>
     handleApiCall(
@@ -120,6 +154,13 @@ const useOrderActions = (order: IOrder) => {
       "/orders",
     );
 
+  const partnerEarning = commissionRates
+    ? price * commissionRates.partnerCommissionRate
+    : price * 0.8;
+  const penaltyAmount = commissionRates
+    ? price * commissionRates.cancellationPenaltyRate
+    : price * 0.05;
+
   return {
     actions: {
       loading,
@@ -130,8 +171,22 @@ const useOrderActions = (order: IOrder) => {
       handleRecoveryOrder,
       handleRefuse,
       handleRenewOrder,
+      confirmAcceptOrder,
+      confirmCancelOrder,
     },
     permissions,
+    dialogs: {
+      showAcceptDialog,
+      setShowAcceptDialog,
+      showCancelDialog,
+      setShowCancelDialog,
+    },
+    commissionInfo: {
+      commissionRates,
+      partnerEarning,
+      penaltyAmount,
+      orderPrice: price,
+    },
   };
 };
 

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+﻿import { NextFunction, Request, Response } from 'express';
 import PremierRatesModel from '../models/premierRates.model';
 import WingmanRatesModel from '../models/wingmanRates.model';
 import { IRegionRates as IPremierRegionRates } from '../models/premierRates.model';

@@ -1,0 +1,152 @@
+{
+    "helmet_title": "{{boostTitle}}",
+    "errors": {
+        "no_id": "Không có ID Boost được cung cấp.",
+        "load_failed": "Không thể tải chi tiết đơn hàng. Vui lòng thử lại.",
+        "access_denied": "Bạn không có quyền xem trang này.",
+        "order_not_found": "Không tìm thấy đơn hàng."
+    },
+    "header": {
+        "complete_payment_btn": "Hoàn tất thanh toán",
+        "open_actions_menu_sr": "Mở menu hành động",
+        "boost_actions": "Hành động Boost",
+        "delete_boost": "Xóa Boost",
+        "accept_order_btn": "Chấp nhận Đơn hàng",
+        "refuse_btn": "Từ chối",
+        "complete_order_btn": "Hoàn thành Đơn hàng",
+        "cancel_order_btn": "Hủy Đơn hàng",
+        "renew_order_btn": "Gia hạn Đơn hàng",
+        "recovery_order_btn": "Khôi phục Đơn hàng"
+    },
+    "booster_widget": {
+        "title": "Thông tin Booster",
+        "blank": {
+            "title": "Không tìm thấy Booster",
+            "subtitle": "Khi đơn hàng của bạn được thanh toán, một booster sẽ được chỉ định cho đơn hàng của bạn."
+        },
+        "view_more_btn": "Xem thêm",
+        "report_btn": "Báo cáo",
+        "report_dialog": {
+            "title": "Vui lòng cho chúng tôi biết lý do bạn báo cáo người này",
+            "placeholder": "Vui lòng cung cấp thêm thông tin",
+            "submit_btn": "Gửi"
+        }
+    },
+    "account_widget": {
+        "blank": {
+            "title": "Chưa cung cấp thông tin đăng nhập",
+            "subtitle": "Nhấp vào nút bên dưới để thêm thông tin đăng nhập tài khoản của bạn.",
+            "add_logins_btn": "Thêm thông tin đăng nhập"
+        },
+        "edit": {
+            "title": "Thông tin đăng nhập",
+            "edit_login_btn": "Chỉnh sửa thông tin đăng nhập"
+        },
+        "dialog": {
+            "add_title": "Thêm thông tin đăng nhập tài khoản",
+            "edit_title": "Chỉnh sửa thông tin đăng nhập tài khoản",
+            "add_btn": "Thêm tài khoản",
+            "edit_btn": "Chỉnh sửa tài khoản",
+            "labels": {
+                "login": "Tên đăng nhập",
+                "password": "Mật khẩu",
+                "backup_code": "Mã dự phòng"
+            },
+            "placeholders": {
+                "login": "iamclearcs2",
+                "password": "••••••••••",
+                "backup_code": "mãdựphòngcủabạn",
+                "edit_password": "Nhập mật khẩu mới để thay đổi",
+                "edit_backup_code": "Nhập mã dự phòng mới để thay đổi"
+            },
+            "steam_guard_link": "Làm thế nào để tạo Mã dự phòng Steam Guard?",
+            "security_notice": "Thông tin đăng nhập của bạn được bảo mật bằng mã hóa tiên tiến và chỉ bạn và booster mới có thể nhìn thấy."
+        }
+    },
+    "review_widget": {
+        "send": {
+            "completed_message": "Gói boost đã hoàn thành.",
+            "title": "Trải nghiệm của bạn thế nào?",
+            "subtitle": "Vui lòng gửi đánh giá của bạn cho chúng tôi.",
+            "satisfaction_label": "Mức độ hài lòng",
+            "ratings": {
+                "terrible": "Rất tệ",
+                "dissatisfied": "Không hài lòng",
+                "average": "Trung bình",
+                "good": "Tốt",
+                "excellent": "Tuyệt vời"
+            },
+            "placeholder": "Đánh giá của bạn...",
+            "submit_btn": "Gửi đánh giá"
+        },
+        "reviewed": {
+            "title": "Bạn đã đánh giá",
+            "delete_confirm": "Bạn có chắc chắn muốn xóa đánh giá này không? Hành động này không thể hoàn tác."
+        }
+    },
+    "widget_list": {
+        "boost_data": "Dữ liệu Boost",
+        "boost_options": "Tùy chọn Boost",
+        "boost_information": "Thông tin Boost",
+        "yes": "Có",
+        "labels": {
+            "begin_rating": "Rating bắt đầu",
+            "end_rating": "Rating kết thúc",
+            "begin_exp": "Kinh nghiệm bắt đầu",
+            "end_exp": "Kinh nghiệm kết thúc",
+            "server": "Máy chủ",
+            "begin_rank": "Hạng bắt đầu",
+            "end_rank": "Hạng kết thúc",
+            "title": "Tiêu đề",
+            "boost_id": "ID Boost",
+            "status": "Trạng thái",
+            "game": "Trò chơi",
+            "type": "Loại",
+            "price": "Giá"
+        }
+    },
+    "chat_widget": {
+        "no_conversation": "Đơn hàng này chưa có cuộc trò chuyện nào.",
+        "closed_conversation": "Cuộc trò chuyện này đã được đóng.",
+        "status": {
+            "online": "Trực tuyến",
+            "offline": "Ngoại tuyến"
+        }
+    },
+    "chat_input": {
+        "placeholder": "Nói gì đó...",
+        "send_message_sr": "Gửi tin nhắn",
+        "max_images_error": "Bạn chỉ có thể đính kèm tối đa {{max}} ảnh",
+        "file_too_large": "File {{name}} quá lớn (tối đa {{max}})",
+        "invalid_file_type": "File {{name}} không phải là ảnh",
+        "upload_failed": "Tải ảnh thất bại. Vui lòng thử lại.",
+        "uploading": "Đang tải ảnh lên...",
+        "clear_all": "Xóa tất cả",
+        "images_count": "ảnh"
+    },
+    "report_reasons": {
+        "NOT_RESPONDING": "Đối tác không phản hồi yêu cầu đơn hàng",
+        "OVERCHARGING": "Đối tác tính phí cao hơn giá đã thỏa thuận",
+        "SLOW_DELIVERY": "Đối tác cung cấp dịch vụ boost chậm hơn đã hứa",
+        "LOW_QUALITY": "Đối tác cung cấp dịch vụ boost chất lượng thấp",
+        "FRAUD": "Đối tác có liên quan đến các hoạt động gian lận",
+        "TERMS_VIOLATION": "Đối tác vi phạm các điều khoản dịch vụ"
+    },
+    "report_success_dialog": {
+        "title": "Cảm ơn bạn đã gửi, hy vọng vấn đề sẽ sớm được giải quyết."
+    },
+    "dialogs": {
+        "accept_title": "Xác nhận nhận đơn hàng",
+        "accept_subtitle": "Bạn sắp nhận đơn hàng này. Vui lòng xem lại thông tin bên dưới.",
+        "order_value": "Giá trị đơn hàng",
+        "your_earning": "Bạn sẽ nhận được",
+        "cancel_btn": "Hủy bỏ",
+        "confirm_accept_btn": "Xác nhận nhận đơn",
+        "cancel_title": "Xác nhận hủy đơn hàng",
+        "cancel_subtitle": "Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này sẽ bị phạt.",
+        "penalty_amount": "Số tiền phạt",
+        "cancel_warning": "Việc hủy đơn hàng đang thực hiện sẽ ảnh hưởng đến uy tín của bạn và ví của bạn sẽ bị trừ số tiền phạt.",
+        "keep_order_btn": "Giữ đơn hàng",
+        "confirm_cancel_btn": "Xác nhận hủy đơn"
+    }
+}

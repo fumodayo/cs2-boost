@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import { getHistory, sendMessage } from '../controllers/botchat.controller';
 
 const router = express.Router();

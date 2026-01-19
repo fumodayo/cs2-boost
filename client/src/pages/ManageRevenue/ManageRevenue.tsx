@@ -1,14 +1,15 @@
-import React from "react";
+﻿import React, { useState } from "react";
 import useSWR from "swr";
 import {
+  DatePicker,
   Helmet,
   ErrorDisplay,
   PlusButton,
   ResetButton,
   Search,
   ViewButton,
-} from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+  Heading,
+} from "~/components/ui";
 import {
   FaFileInvoiceDollar,
   FaChartLine,
@@ -24,20 +25,20 @@ import { revenueService } from "~/services/revenue.service";
 import { filterTransactionType } from "~/constants/order";
 import { IPaginatedResponse, ITransaction } from "~/types";
 import { useDataTable } from "~/hooks/useDataTable";
-import {
-  DataTableLayout,
-  TransactionTable,
-} from "~/components/shared/DataTable";
-
+import { DataTableLayout, TransactionTable } from "~/components/ui/DataTable";
+import { TransactionSlidePanel } from "~/components/ui/SlidePanel";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 const ManageRevenuePage: React.FC = () => {
-  const { t } = useTranslation();
-
+  const { t } = useTranslation(["dashboard_page", "common"]);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<ITransaction | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const {
     data: statsData,
     error: statsError,
     isLoading: isLoadingStats,
   } = useSWR("/revenue/statistics", revenueService.getDashboardStatistics);
-
   const {
     data: payoutsData,
     error: payoutsError,
@@ -46,10 +47,8 @@ const ManageRevenuePage: React.FC = () => {
   } = useSWR("/payouts?status=PENDING", () =>
     payoutService.getPayouts({ status: "PENDING", page: 1, limit: 10 }),
   );
-
   const kpi = statsData?.kpi;
   const descriptions = statsData?.descriptions;
-
   const {
     data: transactionsData,
     error,
@@ -66,7 +65,9 @@ const ManageRevenuePage: React.FC = () => {
     fetcher: revenueService.getTransactions,
     initialFilters: {
       search: "",
-      "filter-type": [],
+      type: [],
+      startDate: "",
+      endDate: "",
     },
     columnConfig: {
       key: "manage-revenue-headers",
@@ -74,21 +75,47 @@ const ManageRevenuePage: React.FC = () => {
     },
     socketEvent: "statusOrderChange",
   });
-
   const transactionsFromAPI = transactionsData?.data || [];
   const paginationFromAPI = transactionsData?.pagination;
   const payoutsFromAPI = payoutsData?.data || [];
-
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    if (range) {
+      setFilter(
+        "startDate",
+        range.from ? format(range.from, "yyyy-MM-dd") : "",
+      );
+      setFilter("endDate", range.to ? format(range.to, "yyyy-MM-dd") : "");
+    } else {
+      setFilter("startDate", "");
+      setFilter("endDate", "");
+    }
+  };
+  const dateRangeValue: DateRange | undefined =
+    filters.startDate || filters.endDate
+      ? {
+          from: filters.startDate
+            ? new Date(filters.startDate as string)
+            : undefined,
+          to: filters.endDate ? new Date(filters.endDate as string) : undefined,
+        }
+      : undefined;
+  const handleTransactionClick = (transaction: ITransaction) => {
+    setSelectedTransaction(transaction);
+    setIsPanelOpen(true);
+  };
+  const handleClosePanel = () => {
+    setIsPanelOpen(false);
+    setSelectedTransaction(null);
+  };
   return (
     <>
-      <Helmet title="Manage Revenue · CS2Boost" />
+      <Helmet title="manage_revenue_page" />
       <div className="space-y-8 p-4 md:p-8">
         <Heading
           icon={FaFileInvoiceDollar}
-          title="Manage Revenue"
-          subtitle="Track, filter, and manage all financial activities on the platform."
+          title="manage_revenue_page_title"
+          subtitle="manage_revenue_page_subtitle"
         />
-
         {isLoadingStats && (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[...Array(4)].map((_, i) => (
@@ -105,28 +132,28 @@ const ManageRevenuePage: React.FC = () => {
         {kpi && descriptions && (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <FinancialKpiCard
-              title={t("ManageRevenuePage.StatCards.grossRevenue")}
+              title={t("stat_cards.gross_revenue")}
               value={formatMoney(kpi.grossRevenue, "vnd")}
               description={descriptions.grossRevenue}
               icon={FaChartLine}
               colorClass="text-green-500"
             />
             <FinancialKpiCard
-              title={t("ManageRevenuePage.StatCards.netProfit")}
+              title={t("stat_cards.net_profit")}
               value={formatMoney(kpi.netProfit, "vnd")}
               description={descriptions.netProfit}
               icon={FaPiggyBank}
               colorClass="text-blue-500"
             />
             <FinancialKpiCard
-              title={t("ManageRevenuePage.StatCards.totalPayouts")}
+              title={t("stat_cards.total_payouts")}
               value={formatMoney(kpi.totalPayouts, "vnd")}
               description={descriptions.totalPayouts}
               icon={FaMoneyBillWave}
               colorClass="text-yellow-500"
             />
             <FinancialKpiCard
-              title={t("ManageRevenuePage.StatCards.pendingPayouts")}
+              title={t("stat_cards.pending_payouts")}
               value={formatMoney(kpi.pendingPayouts, "vnd")}
               description={descriptions.pendingPayouts}
               icon={FaFileInvoiceDollar}
@@ -134,7 +161,6 @@ const ManageRevenuePage: React.FC = () => {
             />
           </div>
         )}
-
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <DataTableLayout
@@ -148,10 +174,14 @@ const ManageRevenuePage: React.FC = () => {
                     <PlusButton
                       name="type"
                       lists={filterTransactionType}
-                      selectValues={filters["filter-type"] as string[]}
+                      selectValues={filters["type"] as string[]}
                       setSelectValues={(val) =>
-                        setFilter("filter-type", val as string[])
+                        setFilter("type", val as string[])
                       }
+                    />
+                    <DatePicker
+                      value={dateRangeValue}
+                      onChange={handleDateRangeChange}
                     />
                     {isAnyFilterActive && <ResetButton onReset={handleReset} />}
                   </div>
@@ -174,6 +204,7 @@ const ManageRevenuePage: React.FC = () => {
                   data={data}
                   headers={visibleHeaders}
                   toggleColumn={toggleColumn}
+                  onTransactionClick={handleTransactionClick}
                 />
               )}
             </DataTableLayout>
@@ -188,8 +219,14 @@ const ManageRevenuePage: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Transaction Details Slide Panel */}
+      <TransactionSlidePanel
+        transaction={selectedTransaction}
+        isOpen={isPanelOpen}
+        onClose={handleClosePanel}
+        isAdmin={true}
+      />
     </>
   );
 };
-
 export default ManageRevenuePage;

@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import {
     acceptOrder,
     addAccountToOrder,
@@ -15,6 +15,8 @@ import {
     recoveryOrder,
     refuseOrder,
     renewOrder,
+    validatePromoCode,
+    completeFreeOrder,
 } from '../controllers/order.controller';
 import { authorize, protect } from '../middlewares/auth.middleware';
 import { ROLE } from '../constants';
@@ -30,18 +32,16 @@ router.get(
     getProgressOrders as RequestHandler,
 );
 
-// Route tạo mới
+router.post('/validate-promo', validatePromoCode as RequestHandler);
+
 router.post('/', createOrder as RequestHandler);
 
 router.get('/:boostId', getOrderById as RequestHandler);
 router.delete('/:boostId', deleteOrder as RequestHandler);
 
-
-// Account Management on Orders
 router.post('/:boostId/account', addAccountToOrder as RequestHandler);
 router.patch('/accounts/:accountId', editAccountOnOrder as RequestHandler);
 
-// Order Actions
 router.post('/:boostId/assign', assignPartner as RequestHandler);
 router.post('/:boostId/refuse', refuseOrder as RequestHandler);
 router.post('/:boostId/renew', renewOrder as RequestHandler);
@@ -61,5 +61,7 @@ router.post(
     authorize(ROLE.PARTNER) as RequestHandler,
     cancelOrder as RequestHandler,
 );
+
+router.post('/:boostId/complete-free', completeFreeOrder as RequestHandler);
 
 export default router;

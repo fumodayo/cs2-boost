@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+﻿import { IconType } from "react-icons";
 import { BiSupport } from "react-icons/bi";
 import { FaCog } from "react-icons/fa";
 import { FaCartShopping, FaMoneyBillTrendUp, FaWallet } from "react-icons/fa6";
@@ -9,7 +9,7 @@ import { RiUserHeartFill } from "react-icons/ri";
 export interface IListOfPath {
   path: string;
   icon: IconType;
-  label: string;
+  tabKey: string;
   isActive?: boolean;
 }
 
@@ -17,27 +17,27 @@ const listOfPathClient: IListOfPath[] = [
   {
     path: "/orders",
     icon: FaCartShopping,
-    label: "Orders",
+    tabKey: "orders",
   },
   {
     path: "/wallet",
     icon: FaWallet,
-    label: "Wallet",
+    tabKey: "wallet",
   },
   {
     path: "/settings",
     icon: FaCog,
-    label: "Settings",
+    tabKey: "settings",
   },
   {
     path: "/follow-partners",
     icon: RiUserHeartFill,
-    label: "Follow Partners",
+    tabKey: "follow_partners",
   },
   {
     path: "/supports",
     icon: BiSupport,
-    label: "Supports",
+    tabKey: "supports",
   },
 ];
 
@@ -45,42 +45,42 @@ const listOfPathPartner: IListOfPath[] = [
   {
     path: "/pending-boosts",
     icon: MdOutlinePendingActions,
-    label: "Pending Boosts",
+    tabKey: "pending_boosts",
   },
   {
     path: "/progress-boosts",
     icon: GiSamuraiHelmet,
-    label: "Progress Boosts",
+    tabKey: "progress_boosts",
   },
   {
     path: "/income",
     icon: FaMoneyBillTrendUp,
-    label: "Income",
+    tabKey: "income",
   },
   {
     path: "/orders",
     icon: FaCartShopping,
-    label: "Orders",
+    tabKey: "orders",
   },
   {
     path: "/wallet",
     icon: FaWallet,
-    label: "Wallet",
+    tabKey: "wallet",
   },
   {
     path: "/settings",
     icon: FaCog,
-    label: "Settings",
+    tabKey: "settings",
   },
   {
     path: "/follow-partners",
     icon: RiUserHeartFill,
-    label: "Follow Partners",
+    tabKey: "follow_partners",
   },
   {
     path: "/supports",
     icon: BiSupport,
-    label: "Supports",
+    tabKey: "supports",
   },
 ];
 

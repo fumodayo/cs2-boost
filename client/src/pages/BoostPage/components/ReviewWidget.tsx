@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Spinner, StarRating, TextArea, Widget } from "~/components/shared";
+﻿import { useState } from "react";
+import { Spinner, StarRating, TextArea, Widget } from "~/components/ui";
 import { IOrder, IReview, ISendReviewPayload, IUser } from "~/types";
 import { IoSend, IoTrash } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
 import toast from "react-hot-toast";
 import formatDate from "~/utils/formatDate";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import useSWRMutation from "swr/mutation";
 import getErrorMessage from "~/utils/errorHandler";
 import { useTranslation } from "react-i18next";
@@ -21,18 +21,15 @@ const SendReviewWidget: React.FC<SendReviewWidgetProps> = ({
   onUpdate,
   ...order
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["boost_page", "common"]);
   const { currentUser } = useSelector((state: RootState) => state.user);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
 
-  const ratingLabels = [
-    t("Boost.ReviewWidget.Send.ratingTerrible"),
-    t("Boost.ReviewWidget.Send.ratingDissatisfied"),
-    t("Boost.ReviewWidget.Send.ratingAverage"),
-    t("Boost.ReviewWidget.Send.ratingGood"),
-    t("Boost.ReviewWidget.Send.ratingExcellent"),
-  ];
+  const ratingLabels = t("review_widget.send.ratings", {
+    returnObjects: true,
+    ns: "boost_page",
+  }) as Record<string, string>;
   const { trigger, isMutating } = useSWRMutation(
     `/review/send`,
     (_, { arg }: { arg: ISendReviewPayload }) => reviewService.sendReview(arg),
@@ -47,10 +44,10 @@ const SendReviewWidget: React.FC<SendReviewWidgetProps> = ({
         content: review,
         rating,
       });
-      toast.success(t("Toast.reviewSent"));
+      toast.success(t("common:toasts.review_sent"));
       onUpdate();
     } catch (e) {
-      toast.error(getErrorMessage(e) || "review failed");
+      toast.error(getErrorMessage(e) || t("common:toasts.review_failed"));
     }
   };
 
@@ -58,24 +55,24 @@ const SendReviewWidget: React.FC<SendReviewWidgetProps> = ({
     <Widget>
       <div className="px-4 py-6 sm:px-6">
         <div className="flex flex-col items-center justify-center space-y-1">
-          <p>{t("Boost.ReviewWidget.Send.completedMessage")}</p>
+          <p>{t("review_widget.send.completed_message")}</p>
           <h2 className="text-base font-medium leading-6 text-foreground">
-            {t("Boost.ReviewWidget.Send.title")}
+            {t("review_widget.send.title")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {t("Boost.ReviewWidget.Send.subtitle")}
+            {t("review_widget.send.subtitle")}
           </p>
           <div className="xl:wrap flex flex-col items-center justify-center pb-2">
             <StarRating rating={rating} setRating={setRating} />
             {rating > 0 && (
               <p className="text-sm font-medium text-muted-foreground">
-                ({t("Boost.ReviewWidget.Send.satisfactionLabel")}:{" "}
+                ({t("review_widget.send.satisfaction_label")}:{" "}
                 {ratingLabels[rating - 1]})
               </p>
             )}
           </div>
           <TextArea
-            placeholder={t("Boost.ReviewWidget.Send.placeholder")}
+            placeholder={t("review_widget.send.placeholder")}
             onChange={(e) => setReview(e.target.value.trim())}
           />
         </div>
@@ -88,7 +85,7 @@ const SendReviewWidget: React.FC<SendReviewWidgetProps> = ({
           onClick={handleSendReview}
         >
           {isMutating ? <Spinner size="sm" /> : <IoSend />}
-          {t("Boost.ReviewWidget.Send.submitBtn")}
+          {t("review_widget.send.submit_btn")}
         </Button>
       </Widget.Footer>
     </Widget>
@@ -103,7 +100,7 @@ export const ReviewedWidget: React.FC<ReviewedWidgetProps> = ({
   onUpdate,
   ...review
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["boost_page", "common"]);
 
   const { trigger, isMutating } = useSWRMutation(
     `/review/delete/${review._id}`,
@@ -111,13 +108,15 @@ export const ReviewedWidget: React.FC<ReviewedWidgetProps> = ({
   );
 
   const handleDeleteReview = async () => {
-    if (!window.confirm(t("Boost.ReviewWidget.Reviewed.deleteConfirm"))) return;
+    if (!window.confirm(t("review_widget.reviewed.delete_confirm"))) return;
     try {
       await trigger();
-      toast.success(t("Toast.reviewDeleted"));
+      toast.success(t("common:toasts.review_deleted"));
       onUpdate();
     } catch (e) {
-      toast.error(getErrorMessage(e) || t("Toast.reviewDeleteFailed"));
+      toast.error(
+        getErrorMessage(e) || t("common:toasts.review_delete_failed"),
+      );
     }
   };
 
@@ -129,7 +128,7 @@ export const ReviewedWidget: React.FC<ReviewedWidgetProps> = ({
       <Widget.BigHeader>
         <div className="flex items-center justify-between">
           <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-            {t("Boost.ReviewWidget.Reviewed.title")}
+            {t("review_widget.reviewed.title")}
           </h3>
           <Button
             onClick={handleDeleteReview}

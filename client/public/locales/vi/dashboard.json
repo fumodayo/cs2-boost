@@ -1,0 +1,55 @@
+{
+    "heading": {
+        "my_settings": "Cài đặt của tôi",
+        "my_wallet": "Ví của tôi",
+        "my_orders": "Đơn hàng của tôi",
+        "pending_boosts": "Danh sách Boost đang chờ",
+        "progress_boosts": "Danh sách Boost đang tiến hành",
+        "my_income": "Thu nhập của tôi",
+        "following_partners": "Các đối tác đang theo dõi",
+        "my_support_tickets": "Phiếu hỗ trợ của tôi"
+    },
+    "subheading": {
+        "settings": "Xem và cập nhật cài đặt tài khoản của bạn.",
+        "wallet": "Danh sách tất cả các khoản thanh toán và giao dịch của bạn.",
+        "orders": "Danh sách tất cả sản phẩm và dịch vụ của bạn.",
+        "pending_boosts": "Danh sách tất cả các boost đang chờ.",
+        "progress_boosts": "Danh sách tất cả các boost đang tiến hành.",
+        "income": "Theo dõi thu nhập và yêu cầu thanh toán của bạn.",
+        "partners": "Danh sách tất cả các đối tác bạn đang theo dõi.",
+        "support": "Theo dõi trạng thái và trò chuyện với quản trị viên về các vấn đề của bạn."
+    },
+    "order": {
+        "label": {
+            "boost_id": "ID boost",
+            "server": "máy chủ",
+            "title": "tiêu đề",
+            "game": "trò chơi",
+            "price": "giá",
+            "type": "loại",
+            "status": "trạng thái"
+        },
+        "status": {
+            "waiting_for_payment": "Chờ thanh toán",
+            "waiting_for_booster": "Chờ Booster",
+            "in_progress": "Boost đang tiến hành",
+            "cancelled": "Boost đã bị hủy",
+            "completed": "Boost đã hoàn thành"
+        }
+    },
+    "datatable": {
+        "header": {
+            "id": "id",
+            "price": "giá",
+            "status": "trạng thái",
+            "created_at": "ngày tạo",
+            "actions": "hành động",
+            "type": "loại"
+        },
+        "actions": {
+            "accept_order": "Chấp nhận Đơn hàng",
+            "completed": "Hoàn thành",
+            "cancel": "Hủy"
+        }
+    }
+}

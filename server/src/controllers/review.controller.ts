@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+﻿import { Response, NextFunction } from 'express';
 import Order from '../models/order.model';
 import Review from '../models/review.model';
 import User from '../models/user.model';
@@ -15,7 +15,7 @@ import mongoose from 'mongoose';
 const getReviewsByUsername = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const { username } = req.params;
-        let { page = 1, perPage = 5 } = req.query;
+        let { page = 1, perPage = 5, rating } = req.query;
 
         page = parseInt(page as string);
         perPage = parseInt(perPage as string);
@@ -27,14 +27,32 @@ const getReviewsByUsername = async (req: AuthRequest, res: Response, next: NextF
         const user = await User.findOne({ username });
         if (!user) return next(errorHandler(401, 'User not found'));
 
-        const total = await Review.countDocuments({ receiver: user._id });
+        const filter: { receiver: typeof user._id; rating?: number } = { receiver: user._id };
+        if (rating && !isNaN(parseInt(rating as string))) {
+            filter.rating = parseInt(rating as string);
+        }
+
+        const total = await Review.countDocuments(filter);
         const totalPages = Math.ceil(total / perPage);
 
-        const reviews = await Review.find({ receiver: user._id })
+        const reviews = await Review.find(filter)
             .populate('sender')
             .sort({ createdAt: -1 })
             .skip((page - 1) * perPage)
             .limit(perPage);
+
+        const ratingStats = await Review.aggregate([
+            { $match: { receiver: user._id } },
+            { $group: { _id: '$rating', count: { $sum: 1 } } },
+            { $sort: { _id: -1 } },
+        ]);
+
+        const ratingCounts: { [key: number]: number } = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        ratingStats.forEach((stat: { _id: number; count: number }) => {
+            ratingCounts[stat._id] = stat.count;
+        });
+
+        const totalAll = await Review.countDocuments({ receiver: user._id });
 
         res.status(200).json({
             success: true,
@@ -45,6 +63,8 @@ const getReviewsByUsername = async (req: AuthRequest, res: Response, next: NextF
                 perPage,
                 totalPages: totalPages,
             },
+            ratingCounts,
+            totalAll,
         });
     } catch (e) {
         next(e);

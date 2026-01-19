@@ -1,0 +1,34 @@
+{
+    "my_tickets": "My Tickets",
+    "search_placeholder": "Search by username...",
+    "ticket_title": "Ticket: {{title}}",
+    "status_label": "Status",
+    "pending_review": "This ticket is pending review by an admin.",
+    "conversation_closed": "This conversation has been closed.",
+    "can_chat_when_admin_reviews": "You can chat once an admin reviews your ticket.",
+    "select_ticket": "Select a ticket to see details.",
+    "no_tickets": "You have no support tickets.",
+    "error_loading": "Failed to load your support tickets.",
+    "rejection_reason": "Reason: {{reason}}",
+    "no_reason_provided": "No reason provided",
+    "a_partner": "a partner",
+    "a_user": "a user",
+    "ticket_item": {
+        "my_report_title": "My Report: {{title}}",
+        "investigation_title": "Investigation about you: {{title}}",
+        "my_report_subtitle": "You reported {{username}}",
+        "investigation_subtitle": "{{username}} reported you",
+        "status_pending": "Pending",
+        "status_in_progress": "In Progress",
+        "status_resolved": "Resolved",
+        "status_reject": "Rejected"
+    },
+    "report_types": {
+        "not_responding": "Not Responding",
+        "overcharging": "Overcharging",
+        "slow_delivery": "Slow Delivery",
+        "low_quality": "Low Quality",
+        "fraud": "Fraud",
+        "terms_violation": "Terms Violation"
+    }
+}

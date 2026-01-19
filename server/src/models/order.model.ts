@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+﻿import mongoose, { Model } from 'mongoose';
 import { ORDER_STATUS, ORDER_TYPES } from '../constants';
 
 export interface IOrder extends Document {
@@ -33,6 +33,9 @@ export interface IOrder extends Document {
     account?: mongoose.Types.ObjectId;
     conversation?: mongoose.Types.ObjectId;
     review?: mongoose.Types.ObjectId;
+    promoCode?: string;
+    discountAmount?: number;
+    originalPrice?: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -124,6 +127,18 @@ const orderSchema = new mongoose.Schema(
         review: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Review',
+        },
+        promoCode: {
+            type: String,
+            default: null,
+        },
+        discountAmount: {
+            type: Number,
+            default: 0,
+        },
+        originalPrice: {
+            type: Number,
+            default: null,
         },
     },
     { timestamps: true },

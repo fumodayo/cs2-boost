@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import useSWR from "swr";
 import { getIpLocation } from "~/services/ip.service";
 import { IIpLocation } from "~/types";
@@ -12,7 +12,7 @@ const useStorageIPLocation = () => {
     return ip && country ? null : "/util/ip-location";
   };
 
-  const { error } = useSWR<IIpLocation>(getKey, getIpLocation, {
+  const { error, isLoading } = useSWR<IIpLocation>(getKey, getIpLocation, {
     onSuccess: (data) => {
       if (data?.ipAddress && data?.countryName) {
         setLocalStorage("ip_location", data.ipAddress);
@@ -32,6 +32,8 @@ const useStorageIPLocation = () => {
       );
     }
   }, [error]);
+
+  return { isLoading, error };
 };
 
 export default useStorageIPLocation;

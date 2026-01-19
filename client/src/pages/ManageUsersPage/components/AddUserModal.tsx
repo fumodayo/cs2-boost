@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import toast from "react-hot-toast";
 import {
   useForm,
@@ -9,16 +9,16 @@ import {
 import { useTranslation } from "react-i18next";
 import { Dialog, EditDialogContent } from "~/components/@radix-ui/Dialog";
 import { Label } from "@radix-ui/react-label";
-import { Button, RadioGroup, RadioGroupItem } from "~/components/shared/Button";
+import { Button, RadioGroup, RadioGroupItem } from "~/components/ui/Button";
 import { ROLE } from "~/types/constants";
 import { adminService } from "~/services/admin.service";
 import { IAddUserPayload } from "~/types";
 import useSWRMutation from "swr/mutation";
-import { FormField } from "~/components/shared";
+import { FormField } from "~/components/ui";
 
 const ALLOWED_ROLES = [
-  { id: ROLE.CLIENT, label: "Client" },
-  { id: ROLE.ADMIN, label: "Admin" },
+  { id: ROLE.CLIENT, key: "CLIENT" },
+  { id: ROLE.ADMIN, key: "ADMIN" },
 ];
 
 interface AddUserModalProps {
@@ -28,7 +28,7 @@ interface AddUserModalProps {
 }
 
 const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["manage_users_page", "common"]);
 
   const { trigger, isMutating } = useSWRMutation(
     "/admin/users",
@@ -67,26 +67,28 @@ const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
     };
 
     await toast.promise(trigger(payload), {
-      loading: t("Toast.creating", { item: "user" }),
+      loading: t("common:toasts.creating", { item: t("common:user") }),
       success: () => {
         onClose();
         onUserAdded();
-        return t("Toast.createdSuccess", { item: "User" });
+        return t("common:toasts.created_success", {
+          item: t("common:user_singular"),
+        });
       },
       error: (err) =>
         err.response?.data?.message ||
-        t("Toast.createdError", { item: "user" }),
+        t("common:toasts.created_error", { item: "user" }),
     });
   };
 
   const onFormError = (formErrors: FieldValues) => {
     console.error("VALIDATION ERRORS:", formErrors);
-    toast.error("Please fill in all required fields correctly.");
+    toast.error(t("common:toasts.fill_required_fields"));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <EditDialogContent title="addUser">
+      <EditDialogContent title={t("add_user_modal.title")}>
         <div className="flex h-full flex-col">
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <form
@@ -96,33 +98,33 @@ const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
               <div className="space-y-6">
                 <FormField
                   id="username"
-                  label="Username"
-                  placeholder="e.g. john.doe"
+                  label={t("add_user_modal.labels.username")}
+                  placeholder={t("add_user_modal.placeholders.username")}
                   register={register}
                   errors={errors}
                 />
 
                 <FormField
                   id="email_address"
-                  label="Email"
                   type="email"
-                  placeholder="e.g. user@example.com"
+                  label={t("add_user_modal.labels.email")}
+                  placeholder={t("add_user_modal.placeholders.email")}
                   register={register}
                   errors={errors}
                 />
 
                 <FormField
                   id="password"
-                  label="Password"
+                  label={t("add_user_modal.labels.password")}
+                  placeholder={t("add_user_modal.placeholders.password")}
+                  noteText={t("add_user_modal.notes.password")}
                   type="password"
-                  placeholder="Enter a strong password"
                   register={register}
                   errors={errors}
-                  noteText="Minimum 8 characters long."
                 />
 
                 <div>
-                  <Label>Role</Label>
+                  <Label>{t("add_user_modal.labels.role")}</Label>
                   <Controller
                     name="role"
                     control={control}
@@ -139,7 +141,7 @@ const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
                           >
                             <RadioGroupItem value={role.id} id={role.id} />
                             <Label htmlFor={role.id} className="font-normal">
-                              {role.label}
+                              {t(`add_user_modal.roles.${role.key}`)}
                             </Label>
                           </div>
                         ))}
@@ -164,7 +166,7 @@ const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
               onClick={onClose}
               disabled={isMutating}
             >
-              {t("Common.cancel", "Cancel")}
+              {t("common:buttons.cancel")}
             </Button>
             <Button
               size="sm"
@@ -174,8 +176,8 @@ const AddUserModal = ({ isOpen, onClose, onUserAdded }: AddUserModalProps) => {
               disabled={isMutating}
             >
               {isMutating
-                ? t("Common.creating", "Creating...")
-                : t("Common.createUser", "Create User")}
+                ? t("common:buttons.creating")
+                : t("add_user_modal.create_user_btn")}
             </Button>
           </div>
         </div>

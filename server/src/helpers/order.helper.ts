@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose';
+﻿import { FilterQuery } from 'mongoose';
 import { IOrder } from '../models/order.model';
 
 const orderPopulates = [
@@ -57,6 +57,26 @@ const buildQueryOrderOptions = (queryParams: any, searchFields: string[]) => {
             }
             return { [field]: searchRegex };
         });
+    }
+
+    if (queryParams.startDate || queryParams.endDate) {
+        const dateFilter: { $gte?: Date; $lte?: Date } = {};
+
+        if (queryParams.startDate) {
+            const startDate = new Date(queryParams.startDate);
+            startDate.setHours(0, 0, 0, 0);
+            dateFilter.$gte = startDate;
+        }
+
+        if (queryParams.endDate) {
+            const endDate = new Date(queryParams.endDate);
+            endDate.setHours(23, 59, 59, 999);
+            dateFilter.$lte = endDate;
+        }
+
+        if (Object.keys(dateFilter).length > 0) {
+            filters.createdAt = dateFilter;
+        }
     }
 
     return { filters, sort, page, perPage };

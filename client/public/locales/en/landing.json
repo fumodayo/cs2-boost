@@ -1,0 +1,150 @@
+{
+    "hero": {
+        "the": "The",
+        "all_in_one": "All-In-One",
+        "platform_for_gamers": "Platform for Gamers",
+        "description": {
+            "part1": "High-Quality Accounts",
+            "part2": "Premium Gaming Services",
+            "part3": "Expert Coaching"
+        },
+        "card": {
+            "new": "New",
+            "coming_soon": "Coming Soon"
+        }
+    },
+    "our_services": {
+        "heading": "Our Services",
+        "subheading": "Whether you're seeking top-tier boosting, expert coaching, or high-quality accounts, we've got you covered.",
+        "boosting": {
+            "title": "Boosting",
+            "subtitle": "Ranking up and progressing has never been easier and more stress-free.",
+            "label": "Rank Up Now"
+        },
+        "accounts": {
+            "title": "Accounts",
+            "subtitle": "Step up your game with our vast catalog of affordable, top-quality accounts.",
+            "label": "Browse Accounts"
+        },
+        "coaching": {
+            "title": "Coaching",
+            "subtitle": "Expert coaching by former C9 analysts, LCS players, and more.",
+            "label": "Get Coaching"
+        }
+    },
+    "step_by_step": {
+        "heading": "We Like To Keep It Fast And Easy",
+        "subheading": "Buying boosting, accounts and coaching has never been this easy. Just select your service, make a payment and enjoy!",
+        "select_service": {
+            "title": "Select Service",
+            "subtitle": "Select the game, service and customize your order"
+        },
+        "secure_payment": {
+            "title": "Secure Payment",
+            "subtitle": "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!"
+        },
+        "order_starts": {
+            "title": "Order Starts",
+            "subtitle": "Sit back, relax and enjoy - We will take care of everything for you"
+        },
+        "order_completed": {
+            "title": "Order Completed",
+            "subtitle": "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us"
+        }
+    },
+    "new_standard": {
+        "heading": "Gaming Services Just Got Better",
+        "subheading": "We are setting the new standard in the gaming industry.",
+        "support": {
+            "title": "Instant 24/7 Human Support",
+            "subtitle": "No bots, no ChatGPT – just humans."
+        },
+        "privacy": {
+            "title": "Full Privacy & Anonymity",
+            "subtitle": "Who are you? We don't know."
+        },
+        "cashback": {
+            "title": "3-6% Cashback on all purchases"
+        },
+        "payments": {
+            "title": "Secure & Instant Payments",
+            "subtitle": "Buy gaming services with PaysafeCard, Apple Pay, and more."
+        }
+    },
+    "marquee_comment": {
+        "heading": "More Than 97,000+ Gamers Trust Us"
+    },
+    "quantity_client": {
+        "heading": "CS2Boost in Numbers",
+        "subheading": "Our team has united the most experienced people in the gaming industry, from all over the world, with one mission:",
+        "quotes": "‟To truly change the life of every day gamers.”",
+        "gamers": {
+            "subtitle": "Gamers we Empowered",
+            "label": "Proudly serving a thriving community of passionate gamers worldwide."
+        },
+        "orders": {
+            "subtitle": "Orders Completed",
+            "label": "Boosting, Coaching, Accounts and we're just getting started."
+        },
+        "since": {
+            "subtitle": "Operating Since",
+            "label": "That's all it took us to revolutionize the game services industry."
+        },
+        "partners": {
+            "subtitle": "Partners",
+            "label": "The very best gamers stand ready to fulfill your orders."
+        }
+    },
+    "ask_list": {
+        "heading": "Frequently Asked Questions",
+        "subheading": "Got anymore questions? Feel free to contact us on Discord or Live Chat!",
+        "faq": [
+            {
+                "key": "what_is_cs2boost",
+                "question": "What is CS2Boost?",
+                "answer": "GameBoost is your all-in-one gaming solution for affordable Boosting, expert Coaching, and top-quality gaming accounts. We support popular games such as League of Legends, Valorant, Overwatch 2, LoL_Wild Rift, Teamfight Tactics, CS2, and World of Warcraft."
+            },
+            {
+                "key": "payment_methods",
+                "question": "What types of payment methods does CS2Boost accept?",
+                "answer": "CS2Boost accepts all major debit and credit cards, PayPal, PaySafeCard, Apple Pay, Google Pay, Direct Bank Transfer, and Skrill, providing you with a variety of payment options to choose from."
+            },
+            {
+                "key": "why_choose_cs2boost",
+                "question": "Why Should I Choose CS2Boost?",
+                "answer": "CS2Boost is the highest rated platform on TrustPilot, with a 5.0-star rating and up to 40% lower prices than the competition. Combined with 24/7 live support, this makes us the most affordable and trustworthy gaming services platform on the market."
+            },
+            {
+                "key": "how_to_leave_feedback",
+                "question": "How do I leave feedback or review for the services?",
+                "answer": "We highly value customer feedback so if you want to take a moment to leave us a review you can do it on Trustpilot and Discord. We really appreciate it."
+            },
+            {
+                "key": "discounts_and_promotions",
+                "question": "Does CS2Boost offer discounts or promotions for its services?",
+                "answer": "At CS2Boost, we offer discounts, promotions, and events with the chance to win amazing prizes. Feel free to contact our LiveChat for a discount code if you don't have one and follow our Discord for new events!"
+            },
+            {
+                "key": "more_questions",
+                "question": "I have more questions, where can I get more info?",
+                "answer": "We are here 24/7. Feel free to contact us on our Live Chat!"
+            }
+        ]
+    },
+    "stepup": {
+        "heading": "What are you waiting for?",
+        "subheading": "Step up your game now! Let our pros boost your level and guide you to the higher ranks you deserve."
+    },
+    "faq": {
+        "title": "FAQs About Counter Strike 2 Boosting",
+        "heading": "Frequently Asked Questions",
+        "subheading": "Got anymore questions? Feel free to contact us on Discord or Live Chat!"
+    },
+    "news": {
+        "badge": "Official Updates",
+        "title": "Latest CS2 News",
+        "subtitle": "Stay updated with official news and updates from Valve",
+        "read_more": "Read More",
+        "view_all": "View All News"
+    }
+}

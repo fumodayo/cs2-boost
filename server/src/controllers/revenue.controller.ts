@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import Transaction from '../models/transaction.model';
 import Payout from '../models/payout.model';
 import User from '../models/user.model';
@@ -84,17 +84,25 @@ const getRevenueChartData = async (req: Request, res: Response, next: NextFuncti
 
 /**
  * @desc    (Admin) Cung cấp các chỉ số thống kê tài chính quan trọng cho dashboard.
- *          Thống kê trong 30 ngày gần nhất.
+ *          Thống kê trong khoảng thời gian được chỉ định (mặc định 30 ngày, 0 = tất cả).
  * @route   GET /api/revenue/statistics
  * @access  Private (Admin)
  */
 const getDashboardStatistics = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const days = parseInt(req.query.days as string, 10) || 30;
+        const isAllTime = days > 1000;
+
+        const dateFilter: { $gte?: Date } = {};
+        if (!isAllTime) {
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - days);
+            startDate.setHours(0, 0, 0, 0);
+            dateFilter.$gte = startDate;
+        }
 
         const revenueAggregation = await Transaction.aggregate([
-            { $match: { createdAt: { $gte: thirtyDaysAgo } } },
+            { $match: isAllTime ? {} : { createdAt: dateFilter } },
             { $group: { _id: '$type', totalAmount: { $sum: '$amount' } } },
         ]);
 
@@ -114,6 +122,11 @@ const getDashboardStatistics = async (req: Request, res: Response, next: NextFun
         ]);
         const pendingData = pendingPayoutsAggregation[0] || { totalAmount: 0, count: 0 };
 
+        const timeDescription = isAllTime ? 'All time' : `In the last ${days} days`;
+        const payoutDescription = isAllTime
+            ? 'Paid to partners (all time)'
+            : `Paid to partners in ${days} days`;
+
         res.status(200).json({
             success: true,
             data: {
@@ -122,14 +135,15 @@ const getDashboardStatistics = async (req: Request, res: Response, next: NextFun
                     netProfit,
                     totalPayouts,
                     pendingPayouts: pendingData.totalAmount,
+                    pendingPayoutsCount: pendingData.count,
                 },
                 descriptions: {
-                    grossRevenue: 'In the last 30 days',
+                    grossRevenue: timeDescription,
                     netProfit:
                         grossRevenue > 0
                             ? `${((netProfit / grossRevenue) * 100).toFixed(1)}% profit margin`
                             : 'No revenue to calculate margin',
-                    totalPayouts: 'Paid to partners in 30 days',
+                    totalPayouts: payoutDescription,
                     pendingPayouts: `${pendingData.count} pending requests`,
                 },
             },
@@ -152,13 +166,33 @@ const getTransactions = async (req: Request, res: Response, next: NextFunction) 
         const skip = (page - 1) * perPage;
         const sort = (req.query.sort as string) || '-createdAt';
 
-        const { search, userId } = req.query;
+        const { search, userId, startDate, endDate } = req.query;
         const typeFilter = req.query.type;
 
         const filters: FilterQuery<any> = {};
 
         if (typeFilter) {
             filters.type = { $in: Array.isArray(typeFilter) ? typeFilter : [typeFilter] };
+        }
+
+        if (startDate || endDate) {
+            const dateFilter: { $gte?: Date; $lte?: Date } = {};
+
+            if (startDate) {
+                const start = new Date(startDate as string);
+                start.setHours(0, 0, 0, 0);
+                dateFilter.$gte = start;
+            }
+
+            if (endDate) {
+                const end = new Date(endDate as string);
+                end.setHours(23, 59, 59, 999);
+                dateFilter.$lte = end;
+            }
+
+            if (Object.keys(dateFilter).length > 0) {
+                filters.createdAt = dateFilter;
+            }
         }
 
         if (userId) {
@@ -183,7 +217,12 @@ const getTransactions = async (req: Request, res: Response, next: NextFunction) 
         }
 
         const [transactions, total] = await Promise.all([
-            Transaction.find(filters).populate('user').sort(sort).skip(skip).limit(perPage),
+            Transaction.find(filters)
+                .populate('user')
+                .populate('related_order', '_id boost_id title type status game')
+                .sort(sort)
+                .skip(skip)
+                .limit(perPage),
             Transaction.countDocuments(filters),
         ]);
 

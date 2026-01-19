@@ -1,0 +1,30 @@
+{
+    "title": "Live Support",
+    "open_chat": "Open live chat",
+    "close_chat": "Close chat",
+    "support_team": "Support Team",
+    "chat_created": "Chat started! Waiting for support...",
+    "chat_closed": "Chat closed successfully",
+    "status": {
+        "offline": "Start a conversation with us",
+        "waiting": "Waiting for available support...",
+        "connected_with": "Connected with {{name}}"
+    },
+    "new_chat": {
+        "title": "Need Help?",
+        "description": "Start a conversation with our support team",
+        "subject_label": "Subject",
+        "subject_placeholder": "What do you need help with?",
+        "message_label": "Message",
+        "message_placeholder": "Describe your issue or question...",
+        "submit": "Start Chat"
+    },
+    "waiting_message": "Please wait, a support agent will be with you shortly...",
+    "input_placeholder": "Type your message...",
+    "errors": {
+        "subject_and_message_required": "Please enter both subject and message",
+        "create_failed": "Failed to create chat. Please try again.",
+        "send_failed": "Failed to send message. Please try again.",
+        "close_failed": "Failed to close chat. Please try again."
+    }
+}

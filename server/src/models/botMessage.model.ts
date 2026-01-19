@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 
 const botMessageSchema = new mongoose.Schema(
     {
@@ -9,7 +9,7 @@ const botMessageSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ['user', 'model'], // model là AI
+            enum: ['user', 'model'], 
             required: true,
         },
         text: {

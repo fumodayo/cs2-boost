@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import { NOTIFY_TYPE } from '../constants';
 import Conversation from '../models/conversation.model';
 import Message from '../models/message.model';
-import { getReceiverSocketID, io } from '../socket/socket';
+import User from '../models/user.model';
+import { getReceiverSocketID, io, getAdminSocketIds } from '../socket/socket';
 import { errorHandler } from '../utils/error';
 import { AuthRequest } from '../interfaces';
 import { notificationService } from '../services/notification.service';
@@ -16,7 +17,7 @@ import Notification from '../models/notification.model';
  */
 const sendMessage = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const { message, boost_id } = req.body;
+        const { message, boost_id, report_id, images } = req.body;
         const { conversationId } = req.params;
         const { id: sender_id } = req.user;
 
@@ -28,22 +29,66 @@ const sendMessage = async (req: AuthRequest, res: Response, next: NextFunction) 
         );
         if (!receiver_id) return next(errorHandler(400, 'Receiver not found'));
 
+        const senderUser = await User.findById(sender_id).select('role username');
+
         await Notification.deleteMany({
-            boost_id: boost_id,
-            type: NOTIFY_TYPE.MESSAGE,
+            $or: [
+                { boost_id: boost_id, type: NOTIFY_TYPE.MESSAGE },
+                { report_id: report_id, type: NOTIFY_TYPE.REPORT_MESSAGE },
+                { report_id: report_id, type: NOTIFY_TYPE.NEW_REPORT_MESSAGE },
+            ],
         });
 
-        await notificationService.createAndNotify({
-            sender: sender_id,
-            receiver: receiver_id.toString(),
-            boost_id,
-            content: message,
-            type: NOTIFY_TYPE.MESSAGE,
-        });
+        if (report_id) {
+
+            await notificationService.createAndNotify({
+                sender: sender_id,
+                receiver: receiver_id.toString(),
+                report_id,
+                title: 'New Reply in Report',
+                content:
+                    message ||
+                    (images && images.length > 0 ? `Sent ${images.length} image(s)` : ''),
+                type: NOTIFY_TYPE.REPORT_MESSAGE,
+            });
+
+            if (senderUser && !senderUser.role.includes('admin')) {
+                const adminUsers = await User.find({ role: 'admin' }).select('_id');
+                const adminNotifications = adminUsers.map((admin: any) =>
+                    new Notification({
+                        receiver: admin._id,
+                        title: 'New Message in Report',
+                        content: `${senderUser.username || 'A user'} sent a message in a report conversation.`,
+                        report_id,
+                        type: NOTIFY_TYPE.NEW_REPORT_MESSAGE,
+                    }).save(),
+                );
+                await Promise.all(adminNotifications);
+
+                const adminSocketIds = getAdminSocketIds();
+                if (adminSocketIds.length > 0) {
+                    adminSocketIds.forEach((socketId: string) => {
+                        io.to(socketId).emit('new_report_message', { report_id, sender_id });
+                    });
+                }
+            }
+        } else {
+
+            await notificationService.createAndNotify({
+                sender: sender_id,
+                receiver: receiver_id.toString(),
+                boost_id,
+                content:
+                    message ||
+                    (images && images.length > 0 ? `Sent ${images.length} image(s)` : ''),
+                type: NOTIFY_TYPE.MESSAGE,
+            });
+        }
 
         const newMessage = new Message({
             sender: sender_id,
-            message,
+            message: message || '',
+            images: images || [],
             conversation_id: conversationId,
         });
         conversation.messages.push(newMessage._id);
@@ -75,7 +120,13 @@ const getMessages = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { conversationId } = req.params;
 
-        const conversation = await Conversation.findById(conversationId).populate('messages');
+        const conversation = await Conversation.findById(conversationId).populate({
+            path: 'messages',
+            populate: {
+                path: 'sender',
+                select: 'username profile_picture',
+            },
+        });
 
         if (!conversation) return next(errorHandler(404, 'Conversation not found'));
 

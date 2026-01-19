@@ -1,19 +1,21 @@
-import { FaUserShield } from "react-icons/fa6";
-import { Heading } from "../GameModePage/components";
+﻿import { FaUserShield } from "react-icons/fa6";
 import {
+  DatePicker,
+  Heading,
   Helmet,
   PlusButton,
   ResetButton,
   Search,
   ViewButton,
-} from "~/components/shared";
+} from "~/components/ui";
 import { adminOrdersHeaders } from "~/constants/headers";
 import { filterOrderStatus, filterOrderType } from "~/constants/order";
-import { BoostsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { BoostsTable, DataTableLayout } from "~/components/ui/DataTable";
 import { adminService } from "~/services/admin.service";
-import { IOrder, IPaginatedResponse } from "~/types"; //
+import { IOrder, IPaginatedResponse } from "~/types"; 
 import { useDataTable } from "~/hooks/useDataTable";
-
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 const ManageOrdersPage = () => {
   const {
     data: ordersData,
@@ -33,6 +35,8 @@ const ManageOrdersPage = () => {
       search: "",
       "filter-status": [],
       "filter-type": [],
+      startDate: "",
+      endDate: "",
     },
     columnConfig: {
       key: "admin-orders-headers",
@@ -40,18 +44,37 @@ const ManageOrdersPage = () => {
     },
     socketEvent: "statusOrderChange",
   });
-
   const ordersFromAPI = ordersData?.data;
   const paginationFromAPI = ordersData?.pagination;
-
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    if (range) {
+      setFilter(
+        "startDate",
+        range.from ? format(range.from, "yyyy-MM-dd") : "",
+      );
+      setFilter("endDate", range.to ? format(range.to, "yyyy-MM-dd") : "");
+    } else {
+      setFilter("startDate", "");
+      setFilter("endDate", "");
+    }
+  };
+  const dateRangeValue: DateRange | undefined =
+    filters.startDate || filters.endDate
+      ? {
+          from: filters.startDate
+            ? new Date(filters.startDate as string)
+            : undefined,
+          to: filters.endDate ? new Date(filters.endDate as string) : undefined,
+        }
+      : undefined;
   return (
     <>
-      <Helmet title="Orders List · CS2Boost" />
+      <Helmet title="manage_orders_page" />
       <div>
         <Heading
           icon={FaUserShield}
-          title="Manage Orders"
-          subtitle="Manage all orders across the platform."
+          title="manage_orders_page_title"
+          subtitle="manage_orders_page_subtitle"
         />
         <main>
           <div className="mt-8">
@@ -79,6 +102,10 @@ const ManageOrdersPage = () => {
                         setSelectValues={(val) =>
                           setFilter("filter-type", val as string[])
                         }
+                      />
+                      <DatePicker
+                        value={dateRangeValue}
+                        onChange={handleDateRangeChange}
                       />
                       {isAnyFilterActive && (
                         <ResetButton onReset={handleReset} />
@@ -112,5 +139,4 @@ const ManageOrdersPage = () => {
     </>
   );
 };
-
 export default ManageOrdersPage;

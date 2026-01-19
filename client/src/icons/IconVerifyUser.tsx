@@ -1,4 +1,4 @@
-const IconVerifyUser = () => (
+﻿const IconVerifyUser = () => (
   <svg
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
@@ -103,5 +103,4 @@ const IconVerifyUser = () => (
     ></rect>
   </svg>
 );
-
 export default IconVerifyUser;

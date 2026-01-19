@@ -1,4 +1,4 @@
-export { default as HomePage } from "./HomePage/HomePage";
+﻿export { default as HomePage } from "./HomePage/HomePage";
 export { default as NewGamePage } from "./NewGamePage/NewGamePage";
 export { default as NotFoundPage } from "./NotFoundPage/NotFoundPage";
 export { default as GameModePage } from "./GameModePage/GameModePage";
@@ -28,6 +28,11 @@ export { default as DashboardPage } from "./DashboardPage/DashboardPage";
 export { default as ManageUsersPage } from "./ManageUsersPage/ManageUsers";
 export { default as ManageOrdersPage } from "./ManageOrdersPage/ManageOrdersPage";
 export { default as AdminSettingsPage } from "./AdminSettingsPage/AdminSettingsPage";
+export {
+  AdminGeneralPage,
+  AdminSecurityPage,
+  AdminCommissionPage,
+} from "./AdminSettingsPage/pages";
 export { default as SupportsPage } from "./SupportsPage/SupportsPage";
 export { default as BillReturnPage } from "./BillReturnPage/BillReturnPage";
 export { default as ManageRevenue } from "./ManageRevenue/ManageRevenue";
@@ -35,3 +40,13 @@ export { default as BannedPage } from "./BannedPage/BannedPage";
 export { default as UserDetailPage } from "./UserDetailPage/UserDetailsPage";
 export { default as OrderDetailPage } from "./OrderDetailPage/OrderDetailPage";
 export { default as NotificationPage } from "./NotificationPage/NotificationPage";
+export { default as EmailTemplatesPage } from "./EmailTemplatesPage/EmailTemplatesPage";
+export { default as NotificationsManagePage } from "./NotificationsManagePage/NotificationsManagePage";
+export { default as ManagePartnerRequestsPage } from "./ManagePartnerRequestsPage/ManagePartnerRequestsPage";
+export { default as ManagePromoCodesPage } from "./ManagePromoCodesPage/ManagePromoCodesPage";
+export { default as LiveChatsPage } from "./LiveChatsPage/LiveChatsPage";
+export {
+  TermsOfServicePage,
+  PrivacyPolicyPage,
+  RefundPolicyPage,
+} from "./LegalPage";

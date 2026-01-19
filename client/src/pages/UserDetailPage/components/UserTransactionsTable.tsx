@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+﻿import React, { useCallback } from "react";
 import { useDataTable } from "~/hooks/useDataTable";
 import { revenueService } from "~/services/revenue.service";
 import { ITransaction, IPaginatedResponse } from "~/types";
@@ -7,11 +7,11 @@ import {
   PlusButton,
   ResetButton,
   ViewButton,
-} from "~/components/shared";
+} from "~/components/ui";
 import {
   DataTableLayout,
   TransactionTable,
-} from "~/components/shared/DataTable";
+} from "~/components/ui/DataTable";
 import { transactionsHeaders } from "~/constants/headers";
 import { filterTransactionType } from "~/constants/order";
 
@@ -46,7 +46,7 @@ const UserTransactionsTable: React.FC<UserTransactionsTableProps> = ({
     fetcher: fetcherWithUserId,
     initialFilters: {
       search: "",
-      "filter-type": [],
+      type: [],
     },
     columnConfig: {
       key: "user-transactions-headers",
@@ -70,10 +70,8 @@ const UserTransactionsTable: React.FC<UserTransactionsTableProps> = ({
               <PlusButton
                 name="type"
                 lists={filterTransactionType}
-                selectValues={filters["filter-type"] as string[]}
-                setSelectValues={(val) =>
-                  setFilter("filter-type", val as string[])
-                }
+                selectValues={filters["type"] as string[]}
+                setSelectValues={(val) => setFilter("type", val as string[])}
               />
               {isAnyFilterActive && <ResetButton onReset={handleReset} />}
             </div>

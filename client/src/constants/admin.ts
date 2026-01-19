@@ -1,55 +1,92 @@
-import { FaCog, FaUsers } from "react-icons/fa";
+﻿import {
+  FaCog,
+  FaUsers,
+  FaPercent,
+  FaUserCheck,
+  FaTicketAlt,
+} from "react-icons/fa";
 import { FaCartShopping, FaChartSimple } from "react-icons/fa6";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
-import { IoGrid } from "react-icons/io5";
+import { IoGrid, IoChatbubblesOutline } from "react-icons/io5";
 import { TbMessageReportFilled } from "react-icons/tb";
+import { FiMail, FiBell } from "react-icons/fi";
 
 const listOfServices = [
   {
-    title: "MAIN",
+    titleKey: "sidebar.main",
     items: [
       {
-        label: "Dashboard",
+        labelKey: "sidebar.dashboard",
         value: "/admin/dashboard",
         icon: IoGrid,
       },
     ],
   },
   {
-    title: "MANAGE",
+    titleKey: "sidebar.manage",
     items: [
       {
-        label: "Manage Orders",
+        labelKey: "sidebar.manage_orders",
         value: "/admin/manage-orders",
         icon: FaCartShopping,
       },
       {
-        label: "Manage Users",
+        labelKey: "sidebar.manage_users",
         value: "/admin/manage-users",
         icon: FaUsers,
       },
       {
-        label: "Manage Boost",
+        labelKey: "sidebar.partner_requests",
+        value: "/admin/partner-requests",
+        icon: FaUserCheck,
+      },
+      {
+        labelKey: "sidebar.manage_boost",
         value: "/admin/manage-boost",
         icon: HiMiniRocketLaunch,
       },
       {
-        label: "Manage Report",
+        labelKey: "sidebar.promo_codes",
+        value: "/admin/promo-codes",
+        icon: FaTicketAlt,
+      },
+      {
+        labelKey: "sidebar.manage_reports",
         value: "/admin/manage-reports",
         icon: TbMessageReportFilled,
       },
       {
-        label: "Manage Revenue",
+        labelKey: "sidebar.live_chats",
+        value: "/admin/live-chats",
+        icon: IoChatbubblesOutline,
+      },
+      {
+        labelKey: "sidebar.manage_revenue",
         value: "/admin/manage-revenue",
         icon: FaChartSimple,
+      },
+      {
+        labelKey: "sidebar.commission",
+        value: "/admin/commission",
+        icon: FaPercent,
+      },
+      {
+        labelKey: "sidebar.notifications",
+        value: "/admin/notifications",
+        icon: FiBell,
+      },
+      {
+        labelKey: "sidebar.email_templates",
+        value: "/admin/email-templates",
+        icon: FiMail,
       },
     ],
   },
   {
-    title: "USER",
+    titleKey: "sidebar.user",
     items: [
       {
-        label: "Settings",
+        labelKey: "sidebar.settings",
         value: "/admin/settings",
         icon: FaCog,
       },

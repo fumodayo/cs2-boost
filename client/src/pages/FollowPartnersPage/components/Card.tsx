@@ -1,15 +1,15 @@
-import React from "react";
+﻿import React from "react";
 import toast from "react-hot-toast";
 import useSWRMutation from "swr/mutation";
 import { FaCheckCircle, FaStar, FaUserMinus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { updateSuccess } from "~/redux/user/userSlice";
 import { IUser } from "~/types";
 import getErrorMessage from "~/utils/errorHandler";
 import { useSocketContext } from "~/hooks/useSocketContext";
-import { Spinner } from "~/components/shared";
+import { Spinner } from "~/components/ui";
 import { FaCircle } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { userService } from "~/services/user.service";
@@ -17,11 +17,11 @@ import { userService } from "~/services/user.service";
 const UNFOLLOW_KEY = (partnerId: string) => `/user/unfollow/${partnerId}`;
 
 const Card = (partner: IUser) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("follow_partners_page");
   const { _id, username, profile_picture, total_rating, followers_count } =
     partner;
   const { onlinePartners } = useSocketContext();
-  const isOnline = onlinePartners.includes(_id as string);
+  const isOnline = _id ? onlinePartners.includes(_id) : false;
   const dispatch = useDispatch();
 
   const { trigger, isMutating: isUnfollowing } = useSWRMutation(
@@ -34,7 +34,7 @@ const Card = (partner: IUser) => {
     try {
       const { data } = await trigger();
       dispatch(updateSuccess(data));
-      toast.success(`Unfollowed ${username}`);
+      toast.success(t("card.unfollowed_toast", { username }));
     } catch (err) {
       toast.error(getErrorMessage(err));
     }
@@ -63,16 +63,14 @@ const Card = (partner: IUser) => {
             {username}
             <FaCheckCircle
               className="text-sm text-blue-500"
-              title={t("FollowPartnersPage.Card.verifiedTooltip")}
+              title={t("card.verified_tooltip")}
             />
           </h3>
           <div
             className={`mt-1 flex items-center justify-center text-xs font-semibold ${isOnline ? "text-green-500" : "text-muted-foreground"}`}
           >
             <FaCircle size={8} className="mr-1.5" />
-            {isOnline
-              ? t("FollowPartnersPage.Card.online")
-              : t("FollowPartnersPage.Card.offline")}
+            {isOnline ? t("card.online") : t("card.offline")}
           </div>
           <div className="mt-4 flex justify-around border-t border-border pt-3 text-sm">
             <div className="text-center">
@@ -81,13 +79,13 @@ const Card = (partner: IUser) => {
                 {total_rating?.toFixed(1) || "N/A"}
               </p>
               <p className="text-xs text-muted-foreground">
-                {t("FollowPartnersPage.Card.rating")}
+                {t("card.rating")}
               </p>
             </div>
             <div className="text-center">
               <p className="font-bold text-foreground">{followers_count}</p>
               <p className="text-xs text-muted-foreground">
-                {t("FollowPartnersPage.Card.followers")}
+                {t("card.followers")}
               </p>
             </div>
           </div>
@@ -102,7 +100,7 @@ const Card = (partner: IUser) => {
           disabled={isUnfollowing}
         >
           {isUnfollowing ? <Spinner size="sm" /> : <FaUserMinus />}
-          {t("FollowPartnersPage.Card.unfollowBtn")}
+          {t("card.unfollow_btn")}
         </Button>
       </div>
     </div>

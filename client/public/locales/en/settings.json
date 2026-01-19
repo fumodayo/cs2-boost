@@ -1,0 +1,31 @@
+{
+  "navigation": {
+    "general": "General",
+    "notifications": "Notifications",
+    "information": "Information"
+  },
+  "user_widget": {
+    "title": "User Information",
+    "edit_profile": "Edit Profile",
+    "change_password": "Change Password"
+  },
+  "verification_widget": {
+    "title": "ID Verification",
+    "subtitle": "You can verify your identity here.",
+    "button": "Verify Identity"
+  },
+  "user_labels": {
+    "username": "username",
+    "user_id": "user id",
+    "email_address": "email address",
+    "phone_number": "phone number",
+    "full_name": "full name",
+    "language": "language"
+  },
+  "dialog": {
+    "edit_profile_title": "Edit Your Profile",
+    "change_password_title": "Change password",
+    "getting_started_title": "Getting started",
+    "contact_support_for_email": "Please contact support if you need to change your email."
+  }
+}

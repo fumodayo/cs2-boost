@@ -1,51 +1,52 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 import { useDebounce } from "./useDebounce";
 import { useToggleColumns } from "./useToggleColumns";
 import { useSocketContext } from "./useSocketContext";
 import { IDataListHeaders } from "~/constants/headers";
-
-interface DataTableConfig<T> {
+type FilterValue = string | string[];
+type FiltersState<T extends Record<string, FilterValue>> = T;
+interface DataTableConfig<TData, TFilters extends Record<string, FilterValue>> {
   swrKey: string;
-  fetcher: (params: URLSearchParams) => Promise<T>;
-  initialFilters: Record<string, string | string[]>;
+  fetcher: (params: URLSearchParams) => Promise<TData>;
+  initialFilters: TFilters;
   columnConfig: {
     key: string;
     headers: IDataListHeaders[];
   };
   socketEvent?: string;
 }
-
-export const useDataTable = <T>({
+export const useDataTable = <
+  TData,
+  TFilters extends Record<string, FilterValue> = Record<string, FilterValue>,
+>({
   swrKey,
   fetcher,
   initialFilters,
   columnConfig,
   socketEvent,
-}: DataTableConfig<T>) => {
+}: DataTableConfig<TData, TFilters>) => {
   const { socket } = useSocketContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const isInitialMount = useRef(true);
-
-  const [filters, setFilters] = useState(() => {
-    const newFilters: Record<string, string | string[]> = {};
+  const [filters, setFilters] = useState<FiltersState<TFilters>>(() => {
+    const newFilters = {} as TFilters;
     for (const key in initialFilters) {
       const valueFromUrl = searchParams.getAll(key);
       if (Array.isArray(initialFilters[key])) {
-        newFilters[key] = valueFromUrl.length > 0 ? valueFromUrl : [];
+        (newFilters as Record<string, FilterValue>)[key] =
+          valueFromUrl.length > 0 ? valueFromUrl : [];
       } else {
-        newFilters[key] = valueFromUrl[0] || "";
+        (newFilters as Record<string, FilterValue>)[key] =
+          valueFromUrl[0] || "";
       }
     }
     return newFilters;
   });
-
   const debouncedSearch = useDebounce((filters.search as string) || "", 500);
-
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-
     if ("search" in filters) {
       if (debouncedSearch) {
         params.set("search", debouncedSearch);
@@ -53,10 +54,8 @@ export const useDataTable = <T>({
         params.delete("search");
       }
     }
-
     for (const key in filters) {
       if (key === "search") continue;
-
       params.delete(key);
       const value = filters[key];
       if (Array.isArray(value)) {
@@ -65,7 +64,6 @@ export const useDataTable = <T>({
         params.set(key, value as string);
       }
     }
-
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
@@ -73,26 +71,20 @@ export const useDataTable = <T>({
       oldParams.delete("page");
       const newParams = new URLSearchParams(params);
       newParams.delete("page");
-
       if (oldParams.toString() !== newParams.toString()) {
         params.set("page", "1");
       }
     }
-
     setSearchParams(params, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, debouncedSearch, setSearchParams]);
-
   const setFilter = (key: string, value: string | string[]) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
-
   const { data, error, isLoading, mutate } = useSWR(
-    `${swrKey}?${searchParams.toString()}`,
+    `${swrKey}${swrKey.includes("?") ? "&" : "?"}${searchParams.toString()}`,
     () => fetcher(searchParams),
     { keepPreviousData: true },
   );
-
   useEffect(() => {
     if (!socket || !socketEvent) return;
     const handleEvent = () => mutate();
@@ -101,23 +93,18 @@ export const useDataTable = <T>({
       socket.off(socketEvent, handleEvent);
     };
   }, [socket, mutate, socketEvent]);
-
   const { selectedColumns, visibleHeaders, toggleColumn } = useToggleColumns(
     columnConfig.key,
     columnConfig.headers,
   );
-
   const handleReset = () => {
     setFilters(initialFilters);
     setSearchParams(new URLSearchParams(), { replace: true });
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isAnyFilterActive = Object.entries(filters).some(([_, value]) => {
     if (Array.isArray(value)) return value.length > 0;
     return !!value;
   });
-
   return {
     data,
     error,

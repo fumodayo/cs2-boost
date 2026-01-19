@@ -7,7 +7,7 @@ import { listOfGames } from "~/constants/games";
 import { useTranslation } from "react-i18next";
 
 const Hero = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["landing", "common"]);
   const [hoverGameCard, setHoverGameCard] = useState("honkai-star-rail");
 
   return (
@@ -81,7 +81,7 @@ const Hero = () => {
                 "sm:text-6xl",
               )}
             >
-              {t("Hero.The")}
+              {t("hero.the")}
               <span
                 className={cn(
                   "max-w-max bg-gradient-to-br from-[#a3dfff] via-[#6cb9ff] to-[#0185ff] bg-clip-text text-transparent",
@@ -89,9 +89,12 @@ const Hero = () => {
                 )}
               >
                 {" "}
-                {t("Hero.All-In-One")}
+                {t("hero.all_in_one")}
               </span>
-              <span> {t("Hero.Platform for Gamers")} </span>
+              <span>
+                <br />
+                {t("hero.platform_for_gamers")}
+              </span>
             </h1>
             <p
               className={cn(
@@ -99,11 +102,11 @@ const Hero = () => {
                 "sm:text-lg lg:text-xl",
               )}
             >
-              <span>{t("Hero.description.part1")}</span>
+              <span>{t("hero.description.part1")}</span>
               <span> ⸱ </span>
-              <span>{t("Hero.description.part2")}</span>
+              <span>{t("hero.description.part2")}</span>
               <span> ⸱ </span>
-              <span>{t("Hero.description.part3")}</span>
+              <span>{t("hero.description.part3")}</span>
             </p>
           </div>
         </div>
@@ -127,7 +130,7 @@ const Hero = () => {
                   <div className="game-card-image-wrapper relative overflow-clip">
                     {isNew && (
                       <div className="absolute right-1 top-1 z-10 flex transform rounded-md bg-danger px-2 py-1 text-center text-xs font-semibold text-danger-foreground ring-1 ring-danger-ring">
-                        <BsStars /> {t("Hero.card.New")}
+                        <BsStars /> {t("hero.card.new")}
                       </div>
                     )}
                     <img
@@ -159,7 +162,7 @@ const Hero = () => {
                     </p>
                   </div>
                   <div className="absolute bottom-1/2 left-0 right-0 z-10 mx-auto inline-flex w-fit items-center rounded-full bg-secondary/75 px-2 py-1 text-xs font-medium text-foreground opacity-100 ring-1 ring-inset ring-secondary">
-                    {t("Hero.card.Coming Soon")}
+                    {t("hero.card.coming_soon")}
                   </div>
                 </>
               )}

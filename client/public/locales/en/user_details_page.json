@@ -1,0 +1,53 @@
+{
+    "title": "User Details",
+    "subtitle": "Viewing profile and activity for {{username}}",
+    "tabs": {
+        "orders": "Orders",
+        "transactions": "Transactions",
+        "settings": "Settings"
+    },
+    "profile_card": {
+        "user_info_title": "User Information",
+        "full_name": "Full Name",
+        "status": "Status",
+        "banned": "Banned",
+        "active": "Active",
+        "joined": "Joined",
+        "partner_stats_title": "Partner Statistics",
+        "rating": "Rating",
+        "reviews": "{{count}} reviews",
+        "completion": "Completion Rate",
+        "followers": "Followers"
+    },
+    "settings_panel": {
+        "title": "Danger Zone",
+        "banned_subtitle": "This user is currently banned. Reason: {{reason}}",
+        "active_subtitle": "This user is currently active. Use the button below to ban them.",
+        "ban_btn": "Ban User",
+        "unban_btn": "Unban User",
+        "ban_confirm_title": "Ban {{username}}?",
+        "ban_confirm_desc": "This will prevent the user from accessing the platform. Please provide a reason.",
+        "unban_confirm_title": "Unban User?",
+        "unban_confirm_desc": "This will restore {{username}}'s access to the platform.",
+        "reason_label": "Ban Reason",
+        "reason_placeholder": "Reason...",
+        "ban_reason_required": "Please provide a reason.",
+        "ban_success": "User banned successfully.",
+        "unban_success": "User unbanned successfully.",
+        "email_title": "Change Email",
+        "email_subtitle": "Update the user's email address.",
+        "new_email_label": "New Email Address",
+        "update_email_btn": "Update Email",
+        "email_no_change": "Please enter a different email address.",
+        "email_success": "Email updated successfully.",
+        "password_title": "Reset Password",
+        "password_subtitle": "Set a new password for this user.",
+        "new_password_label": "New Password",
+        "confirm_password_label": "Confirm Password",
+        "update_password_btn": "Update Password",
+        "password_required": "Please enter a new password.",
+        "password_mismatch": "Passwords do not match.",
+        "password_too_short": "Password must be at least 6 characters.",
+        "password_success": "Password updated successfully."
+    }
+}

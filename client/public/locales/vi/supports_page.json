@@ -1,0 +1,34 @@
+{
+    "my_tickets": "Phiếu hỗ trợ của tôi",
+    "search_placeholder": "Tìm theo tên người dùng...",
+    "ticket_title": "Phiếu: {{title}}",
+    "status_label": "Trạng thái",
+    "pending_review": "Phiếu này đang chờ quản trị viên xem xét.",
+    "conversation_closed": "Cuộc trò chuyện này đã được đóng.",
+    "can_chat_when_admin_reviews": "Bạn có thể trò chuyện sau khi quản trị viên xem xét phiếu của bạn.",
+    "select_ticket": "Chọn một phiếu để xem chi tiết.",
+    "no_tickets": "Bạn không có phiếu hỗ trợ nào.",
+    "error_loading": "Không thể tải các phiếu hỗ trợ của bạn.",
+    "rejection_reason": "Lý do: {{reason}}",
+    "no_reason_provided": "Không có lý do",
+    "a_partner": "một đối tác",
+    "a_user": "một người dùng",
+    "ticket_item": {
+        "my_report_title": "Báo cáo của tôi: {{title}}",
+        "investigation_title": "Điều tra về bạn: {{title}}",
+        "my_report_subtitle": "Bạn đã báo cáo {{username}}",
+        "investigation_subtitle": "{{username}} đã báo cáo bạn",
+        "status_pending": "Đang chờ",
+        "status_in_progress": "Đang xử lý",
+        "status_resolved": "Đã giải quyết",
+        "status_reject": "Đã từ chối"
+    },
+    "report_types": {
+        "not_responding": "Không phản hồi",
+        "overcharging": "Tính phí cao hơn",
+        "slow_delivery": "Giao hàng chậm",
+        "low_quality": "Chất lượng kém",
+        "fraud": "Gian lận",
+        "terms_violation": "Vi phạm điều khoản"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "list_mode": {
+        "level_farming": {
+            "subtitle": "Cày cấp để nhận điểm kinh nghiệm và phần thưởng"
+        },
+        "premier": {
+            "subtitle": "Chế độ xếp hạng cạnh tranh với hệ thống Elo mới"
+        },
+        "wingman": {
+            "subtitle": "Chế độ 2v2 trên các bản đồ nhỏ hơn, tập trung vào chiến thuật và đồng đội"
+        }
+    },
+    "how_to_work": {
+        "title": "Dịch vụ Carry Premier và Wingman hoạt động như thế nào?",
+        "subtitle": "Cách nhanh nhất và dễ dàng nhất để có được trang bị, xếp hạng, danh hiệu và thành tích mong muốn",
+        "steps": {
+            "step1": "Chọn giữa dịch vụ Premier và Wingman",
+            "step2": "Chọn dịch vụ Boost phù hợp với mục tiêu của bạn",
+            "step3": "Thực hiện thanh toán an toàn và tận hưởng Boost của bạn"
+        }
+    }
+}

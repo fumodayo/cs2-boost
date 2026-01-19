@@ -1,11 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaUserFriends } from "react-icons/fa";
 import { FaClock, FaXmark } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import useSWR from "swr";
-import { Chip, MultiSelect, ErrorDisplay } from "~/components/shared";
-import { Button } from "~/components/shared/Button";
+import { Chip, MultiSelect, ErrorDisplay } from "~/components/ui";
+import { Button } from "~/components/ui/Button";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { RootState } from "~/redux/store";
 import { orderService } from "~/services/order.service";
@@ -17,12 +17,13 @@ const SelectedPartnerCard: React.FC<{
   isOnline: boolean;
   onCancel: () => void;
 }> = ({ partner, isOnline, onCancel }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("checkout_page");
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium text-foreground">
-          {t("CheckoutPage.label.Selected Booster")}
+          {t("booster_request.selected_booster")}
         </h3>
         <Button
           onClick={onCancel}
@@ -30,7 +31,7 @@ const SelectedPartnerCard: React.FC<{
           size="sm"
           className="gap-1.5 text-muted-foreground hover:text-danger"
         >
-          <FaXmark /> {t("CheckoutPage.label.Cancel")}
+          <FaXmark /> {t("booster_request.cancel")}
         </Button>
       </div>
       <div className="rounded-lg border border-border p-4 shadow-sm">
@@ -51,7 +52,10 @@ const SelectedPartnerCard: React.FC<{
             </div>
           </div>
           <Chip className="gap-1.5">
-            <FaClock /> {isOnline ? "Online" : "Offline"}
+            <FaClock />
+            {isOnline
+              ? t("booster_request.status.online")
+              : t("booster_request.status.offline")}
           </Chip>
         </div>
       </div>
@@ -67,7 +71,7 @@ const RequestBooster: React.FC<RequestBoosterProps> = ({
   orderId,
   initialAssignedPartner,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("checkout_page");
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { onlinePartners } = useSocketContext();
 
@@ -121,7 +125,9 @@ const RequestBooster: React.FC<RequestBoosterProps> = ({
     }
   };
 
-  const isOnline = onlinePartners.includes(selectedPartner?._id as string);
+  const isOnline = selectedPartner?._id
+    ? onlinePartners.includes(selectedPartner._id)
+    : false;
 
   return (
     <>
@@ -132,7 +138,7 @@ const RequestBooster: React.FC<RequestBoosterProps> = ({
           className="rounded-full px-6 py-3 text-sm sm:py-2.5"
         >
           <FaUserFriends size={18} className="mr-2" />
-          {t("CheckoutPage.label.Request a specific Booster")}
+          {t("booster_request.request_booster_btn")}
         </Button>
       ) : (
         <div className="w-full border-y border-border py-6">
@@ -145,13 +151,15 @@ const RequestBooster: React.FC<RequestBoosterProps> = ({
           ) : (
             <>
               <h3 className="text-lg font-medium text-foreground">
-                {t("CheckoutPage.label.Request Booster")}
+                {t("booster_request.request_booster_title")}
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                {t("CheckoutPage.label.Looking for a specific booster?")}
+                {t("booster_request.looking_for_booster")}
               </p>
               <div className="mt-4">
-                {error && <ErrorDisplay message="Could not load partners." />}
+                {error && (
+                  <ErrorDisplay message={t("errors.load_partners_failed")} />
+                )}
                 <MultiSelect
                   isLoading={isLoading || isAssigning}
                   options={partnersFromAPI}

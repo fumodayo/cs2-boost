@@ -1,0 +1,55 @@
+{
+    "heading": {
+        "my_settings": "My Settings",
+        "my_wallet": "My Wallet",
+        "my_orders": "My Orders",
+        "pending_boosts": "Pending Boosts List",
+        "progress_boosts": "Progress Boosts List",
+        "my_income": "My Income",
+        "following_partners": "Following Partners",
+        "my_support_tickets": "My Support Tickets"
+    },
+    "subheading": {
+        "settings": "View and update your account settings.",
+        "wallet": "List of all your payments and transactions.",
+        "orders": "List of all your products and services.",
+        "pending_boosts": "List of all pending boosts.",
+        "progress_boosts": "List of all progress boosts.",
+        "income": "Track your earnings and request payouts.",
+        "partners": "A list of all the partners you are following.",
+        "support": "Track status and chat with admins about your issues."
+    },
+    "order": {
+        "label": {
+            "boost_id": "boost id",
+            "server": "server",
+            "title": "title",
+            "game": "game",
+            "price": "price",
+            "type": "type",
+            "status": "status"
+        },
+        "status": {
+            "waiting_for_payment": "Waiting For Payment",
+            "waiting_for_booster": "Waiting For Booster",
+            "in_progress": "Boost in progress",
+            "cancelled": "Boost has been cancelled",
+            "completed": "Boost completed"
+        }
+    },
+    "datatable": {
+        "header": {
+            "id": "id",
+            "price": "price",
+            "status": "status",
+            "created_at": "created at",
+            "actions": "actions",
+            "type": "type"
+        },
+        "actions": {
+            "accept_order": "Accept Order",
+            "completed": "Completed",
+            "cancel": "Cancel"
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+﻿import { createContext } from "react";
 import { ITheme, ICurrency } from "~/types";
 
 export interface IAppContextTypeProps {
@@ -13,8 +13,8 @@ export interface IAppContextTypeProps {
   isOpenCongratsDialog: boolean;
   setTheme: React.Dispatch<React.SetStateAction<ITheme>>;
   setCurrency: React.Dispatch<React.SetStateAction<ICurrency>>;
-  toggleLoginModal: () => void;
-  toggleRegisterModal: () => void;
+  toggleLoginModal: (isOpen?: boolean) => void;
+  toggleRegisterModal: (isOpen?: boolean) => void;
   toggleInputOTPModal: () => void;
   toggleResetPasswordModal: () => void;
   toggleForgotModal: () => void;

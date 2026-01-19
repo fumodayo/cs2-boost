@@ -1,4 +1,4 @@
-const IconDot = () => (
+﻿const IconDot = () => (
   <svg
     viewBox="0 0 2 2"
     aria-hidden="true"

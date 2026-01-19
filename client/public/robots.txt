@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /checkout/
+Disallow: /orders/
+Disallow: /banned
+Disallow: /bill-return
+Disallow: /settings/
+Disallow: /wallet
+Disallow: /notification
+Disallow: /pending-boosts
+Disallow: /progress-boosts
+Disallow: /income
+Disallow: /supports
+Disallow: /follow-partners
+
+# Sitemap
+Sitemap: https://cs2boost.vn/sitemap.xml

@@ -1,4 +1,4 @@
-import IconTarget from "./IconTarget";
+﻿import IconTarget from "./IconTarget";
 import IconSuccessLight from "./IconSuccessLight";
 import IconDot from "./IconDot";
 import IconSwitch from "./IconSwitch";

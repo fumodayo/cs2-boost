@@ -25,6 +25,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src", "vite-env.d.ts"],
+  "include": ["src", "vite-env.d.ts", "src/react-i18next.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

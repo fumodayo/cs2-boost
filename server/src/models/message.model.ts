@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema(
     {
@@ -13,7 +13,14 @@ const messageSchema = new mongoose.Schema(
         },
         message: {
             type: String,
-            required: true,
+            required: function (this: { images?: string[] }) {
+
+                return !this.images || this.images.length === 0;
+            },
+        },
+        images: {
+            type: [String],
+            default: [],
         },
     },
     { timestamps: true },

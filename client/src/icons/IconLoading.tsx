@@ -1,4 +1,4 @@
-const IconLoading = () => (
+﻿const IconLoading = () => (
   <svg
     aria-hidden="true"
     className="inline h-6 w-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
@@ -16,5 +16,4 @@ const IconLoading = () => (
     />
   </svg>
 );
-
 export default IconLoading;

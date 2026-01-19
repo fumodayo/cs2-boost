@@ -24,10 +24,15 @@ const getRevenueChartData = async (
 /** @route GET /api/revenue/statistics */ /**
  * @description (Admin) Lấy các chỉ số thống kê chính cho dashboard.
  * @route   GET /api/revenue/statistics
+ * @param   {number} [days=30] - Số ngày cần lấy dữ liệu (0 = tất cả thời gian).
  * @returns {Promise<IDashboardStats>} - Đối tượng chứa các chỉ số KPI và mô tả.
  */
-const getDashboardStatistics = async (): Promise<IDashboardStats> => {
-  const { data } = await axiosPrivate.get("/revenue/statistics");
+const getDashboardStatistics = async (
+  days: number = 30,
+): Promise<IDashboardStats> => {
+  const { data } = await axiosPrivate.get("/revenue/statistics", {
+    params: { days },
+  });
   return data.data;
 };
 

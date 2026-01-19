@@ -1,4 +1,5 @@
-import { RangePoint } from "~/components/shared";
+﻿import { useTranslation } from "react-i18next";
+import { RangePoint } from "~/components/ui";
 
 const MarkOfPoint = ({ point, rank }: { point: string; rank: string }) => (
   <div className="py-2">
@@ -25,15 +26,17 @@ interface ISelectProps {
 }
 
 const Select = ({ range, setRange }: ISelectProps) => {
+  const { t } = useTranslation(["common"]);
+
   return (
     <RangePoint
       min={1000}
       max={30000}
       step={100}
-      title="Select your current Rating and desired Rating"
-      subtitle="ratings above 20000 are only available as piloted service"
-      startText="My Rating"
-      lastText="Desired Rating"
+      title={t("range_point.premier_title")}
+      startText={t("labels.my_rating")}
+      lastText={t("labels.desired_rating")}
+      subtitle={t("range_point.note")}
       defaultRange={range}
       onChange={setRange}
       marks={marks}

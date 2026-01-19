@@ -1,4 +1,4 @@
-import Marquee from "react-fast-marquee";
+﻿import Marquee from "react-fast-marquee";
 import { useTranslation } from "react-i18next";
 import { FaLocationCrosshairs, FaStar } from "react-icons/fa6";
 import cn from "~/libs/utils";
@@ -11,7 +11,7 @@ interface IBadgeProps {
   content: string;
 }
 
-const badgeCols1: IBadgeProps[] = [
+const reviews: IBadgeProps[] = [
   {
     image: "/assets/user/1.png",
     username: "fumodayo",
@@ -47,9 +47,6 @@ const badgeCols1: IBadgeProps[] = [
     content:
       "Played DUO with the booster, easiest grind of my life, from being stuck silver for 2 seasons I got Diamond in one week, 100% recommend",
   },
-];
-
-const badgeCols2: IBadgeProps[] = [
   {
     image: "/assets/user/6.png",
     username: "Paulions",
@@ -121,7 +118,10 @@ const Card = ({ image, username, country, content }: IBadgeProps) => (
 );
 
 const MarqueeComment = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["landing", "common"]);
+
+  const badgeCols1 = reviews.slice(0, 5);
+  const badgeCols2 = reviews.slice(5, 10);
 
   return (
     <div className="relative z-10 mx-auto mt-32 grid w-full grid-cols-1 justify-center gap-5 overflow-clip">
@@ -142,19 +142,21 @@ const MarqueeComment = () => {
               "md:mx-0 md:text-start",
             )}
           >
-            {t("MarqueeComment.heading")}
+            {t("marquee_comment.heading")}
           </h4>
 
           <div className="md:ml-auto">
             <div className="trustpilot-badge-bg flex flex-row gap-8 rounded-xl border border-border bg-card px-6 py-5">
               <div className="ml-auto flex select-none flex-col">
                 <h5 className="flex gap-1 text-sm font-bold text-foreground">
-                  {t("Globals.TrustpilotBadge.Excellent")}
+                  {t("trustpilot.excellent", { ns: "common" })}
                   <span className="text-[#00B67A]">4.6</span>
-                  {t("Globals.TrustpilotBadge.out of")} 5.0
+                  {t("trustpilot.out_of", { ns: "common" })} 5.0
                 </h5>
                 <p className="secondary mt-1 text-xs text-muted-foreground">
-                  {t("Globals.TrustpilotBadge.Based on 9,510 reviews")}
+                  {t("common:trustpilot.based_on_reviews", {
+                    count: 870,
+                  })}
                 </p>
               </div>
             </div>

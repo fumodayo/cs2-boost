@@ -1,12 +1,12 @@
-import jwt from 'jsonwebtoken';
+﻿import jwt from 'jsonwebtoken';
 import { Response } from 'express';
 import { IUser } from '../models/user.model';
 
 const MAX_VALUE = 1000000;
-const EXPIRED_ACCESS_TOKEN = '30m'; // 30 minutes
-const EXPIRED_REFRESH_TOKEN = '7d'; // 7 days
-const TIME_EXPIRED_ACCESS_TOKEN = 30 * 60 * 1000; // 30 minutes
-const TIME_EXPIRED_REFRESH_TOKEN = 7 * 24 * 60 * 60 * 1000; // 7 days
+const EXPIRED_ACCESS_TOKEN = '30m'; 
+const EXPIRED_REFRESH_TOKEN = '7d'; 
+const TIME_EXPIRED_ACCESS_TOKEN = 30 * 60 * 1000; 
+const TIME_EXPIRED_REFRESH_TOKEN = 7 * 24 * 60 * 60 * 1000; 
 const COOKIE_PATH = '/';
 
 /**
@@ -40,7 +40,6 @@ const generatePassword = () => {
 
     const getRandomChar = (chars: string) => chars[Math.floor(Math.random() * chars.length)];
 
-    // Lấy 1 ký tự từ mỗi loại
     const passwordArray = [
         getRandomChar(uppercase),
         getRandomChar(lowercase),
@@ -48,13 +47,11 @@ const generatePassword = () => {
         getRandomChar(specialCharacters),
     ];
 
-    // Điền vào ngẫu nhiên các ký tự còn lại
     const remainingLength = Math.floor(Math.random() * (20 - 8 + 1)) + 8 - passwordArray.length;
     for (let i = 0; i < remainingLength; i++) {
         passwordArray.push(getRandomChar(allCharacters));
     }
 
-    // Xáo trộn vị trí các ký tự (tránh việc 4 ký tự đầu tiên luôn là đại diện của từng nhóm)
     const shuffledPassword = passwordArray.sort(() => Math.random() - 0.5);
 
     return shuffledPassword.join('');
@@ -70,9 +67,13 @@ const generateAccessToken = (res: Response, user: IUser) => {
     if (!secret_token) {
         throw new Error('ACCESS_TOKEN_SECRET is not defined');
     }
-    const accessToken = jwt.sign({ id: user._id, role: user.role }, secret_token, {
-        expiresIn: EXPIRED_ACCESS_TOKEN,
-    });
+    const accessToken = jwt.sign(
+        { id: user._id, role: user.role, token_version: user.token_version },
+        secret_token,
+        {
+            expiresIn: EXPIRED_ACCESS_TOKEN,
+        },
+    );
 
     res.cookie('access_token', accessToken, {
         httpOnly: true,
@@ -94,9 +95,13 @@ const generateRefreshToken = (res: Response, user: IUser) => {
     if (!secret_token) {
         throw new Error('REFRESH_TOKEN_SECRET is not defined');
     }
-    const refreshToken = jwt.sign({ id: user._id, role: user.role }, secret_token, {
-        expiresIn: EXPIRED_REFRESH_TOKEN,
-    });
+    const refreshToken = jwt.sign(
+        { id: user._id, role: user.role, token_version: user.token_version },
+        secret_token,
+        {
+            expiresIn: EXPIRED_REFRESH_TOKEN,
+        },
+    );
 
     res.cookie('refresh_token', refreshToken, {
         httpOnly: true,

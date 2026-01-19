@@ -1,4 +1,4 @@
-import * as TabsPrimitive from "@radix-ui/react-tabs";
+﻿import * as TabsPrimitive from "@radix-ui/react-tabs";
 import cn from "~/libs/utils";
 
 interface ITabsProps {

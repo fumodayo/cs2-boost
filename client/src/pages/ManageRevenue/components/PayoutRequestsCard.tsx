@@ -1,11 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import useSWRMutation from "swr/mutation";
 import { toast } from "react-hot-toast";
 import { FaMoneyBillWave } from "react-icons/fa";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { IPayout, IUser } from "~/types";
 import { formatMoney } from "~/utils";
-import { Spinner } from "~/components/shared";
+import { Spinner } from "~/components/ui";
 import { useTranslation } from "react-i18next";
 import { payoutService } from "~/services/payout.service";
 import getErrorMessage from "~/utils/errorHandler";
@@ -23,7 +23,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
   isLoading,
   onActionSuccess,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["dashboard_page", "common"]);
   const [processingId, setProcessingId] = React.useState<string | null>(null);
 
   const { trigger: triggerApprove, isMutating: isApproving } = useSWRMutation(
@@ -39,12 +39,12 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
     setProcessingId(id);
     try {
       await triggerApprove(id);
-      toast.success("Payout approved!");
+      toast.success(t("common:toasts.payout_approved"));
       onActionSuccess();
     } catch (e) {
       const errorMessage = getErrorMessage(e);
       console.error(errorMessage);
-      toast.error("Failed to approve payout.");
+      toast.error(t("common:toasts.payout_approve_failed"));
     } finally {
       setProcessingId(null);
     }
@@ -54,12 +54,12 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
     setProcessingId(id);
     try {
       await triggerDecline(id);
-      toast.success("Payout declined!");
+      toast.success(t("common:toasts.payout_declined"));
       onActionSuccess();
     } catch (e) {
       const errorMessage = getErrorMessage(e);
       console.error(errorMessage);
-      toast.error("Failed to decline payout.");
+      toast.error("common:toasts.payout_decline_failed");
     } finally {
       setProcessingId(null);
     }
@@ -70,9 +70,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
       <div className="border-b border-border p-4">
         <h3 className="flex items-center text-lg font-semibold text-foreground">
           <FaMoneyBillWave className="mr-3 text-yellow-500" />
-          {t("ManageRevenuePage.PayoutRequests.title", {
-            count: data?.length || 0,
-          })}
+          {t("payout_requests.title", { count: data?.length || 0 })}
         </h3>
       </div>
       <div className="divide-y divide-border">
@@ -83,7 +81,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
         )}
         {error && !isLoading && (
           <div className="p-4 text-center text-red-500">
-            {t("ManageRevenuePage.PayoutRequests.error")}
+            {t("payout_requests.error")}
           </div>
         )}
         {!isLoading &&
@@ -120,7 +118,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
                     {isDeclining && processingId === req._id ? (
                       <Spinner size="sm" />
                     ) : (
-                      t("ManageRevenuePage.PayoutRequests.declineBtn")
+                      t("payout_requests.decline_btn")
                     )}
                   </Button>
                   <Button
@@ -132,7 +130,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
                     {isApproving && processingId === req._id ? (
                       <Spinner size="sm" />
                     ) : (
-                      t("ManageRevenuePage.PayoutRequests.approveBtn")
+                      t("payout_requests.approve_btn")
                     )}
                   </Button>
                 </div>
@@ -141,7 +139,7 @@ const PayoutRequestsCard: React.FC<PayoutRequestsCardProps> = ({
           })}
         {!isLoading && data?.length === 0 && (
           <p className="p-8 text-center text-sm text-muted-foreground">
-            {t("ManageRevenuePage.PayoutRequests.empty")}
+            {t("payout_requests.empty")}
           </p>
         )}
       </div>

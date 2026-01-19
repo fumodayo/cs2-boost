@@ -1,8 +1,8 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+﻿import mongoose, { Schema, Document, Model } from 'mongoose';
 import { TRANSACTION_TYPE, TRANSACTION_STATUS } from '../constants';
 
 export interface ITransaction extends Document {
-    user: mongoose.Types.ObjectId; // User hoặc Partner
+    user: mongoose.Types.ObjectId; 
     type: string;
     amount: number;
     description: string;

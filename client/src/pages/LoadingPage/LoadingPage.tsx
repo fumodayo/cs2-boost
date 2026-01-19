@@ -1,4 +1,4 @@
-import { BounceLoader } from "react-spinners";
+﻿import { BounceLoader } from "react-spinners";
 
 const LoadingPage = () => (
   <div className="flex h-screen items-center justify-center bg-background">

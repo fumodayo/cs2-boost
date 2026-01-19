@@ -1,8 +1,9 @@
-import { Response, NextFunction } from 'express';
+﻿import { Response, NextFunction } from 'express';
 import Notification from '../models/notification.model';
 import { errorHandler } from '../utils/error';
 import { getReceiverSocketID, io } from '../socket/socket';
 import { AuthRequest } from '../interfaces';
+import { NOTIFY_TYPE, ROLE } from '../constants';
 
 /**
  * @desc    Lấy danh sách thông báo cho người dùng đã đăng nhập.
@@ -12,9 +13,18 @@ import { AuthRequest } from '../interfaces';
  */
 const getNotifications = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const { id: user_id } = req.user;
+        const { id: user_id, role } = req.user;
 
-        const notifications = await Notification.find({ receiver: user_id })
+        const query = role.includes(ROLE.PARTNER)
+            ? {
+                  $or: [
+                      { receiver: user_id },
+                      { type: NOTIFY_TYPE.NEW_ORDER, receiver: { $exists: false } },
+                  ],
+              }
+            : { receiver: user_id };
+
+        const notifications = await Notification.find(query)
             .sort({ updatedAt: -1 })
             .populate({ path: 'sender', select: '-password' });
 

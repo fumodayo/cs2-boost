@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose';
+﻿import mongoose, { Types } from 'mongoose';
 import Payout, { IPayout } from '../models/payout.model';
 import Wallet from '../models/wallet.model';
 import Transaction from '../models/transaction.model';

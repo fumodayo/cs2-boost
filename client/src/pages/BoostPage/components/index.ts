@@ -1,4 +1,4 @@
-export { default as Header } from "./Header";
+﻿export { default as Header } from "./Header";
 export { default as WidgetList } from "./WidgetList";
 export { default as BoosterWidget } from "./BoosterWidget";
 export { default as AccountWidget } from "./AccountWidget";

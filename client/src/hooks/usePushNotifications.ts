@@ -1,7 +1,7 @@
-import useSWR from "swr";
+﻿import useSWR from "swr";
 import { pushService } from "~/services/push.service";
 
-const VAPID_PUBLIC_KEY = import.meta.env.VAPID_PUBLIC_KEY;
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
 export const usePushNotifications = () => {
   const { data, error, isLoading, mutate } = useSWR(
@@ -20,10 +20,16 @@ export const usePushNotifications = () => {
     if (permission !== "granted") {
       throw new Error("Permission for push notifications was denied.");
     }
+
+    const vapidKey = data?.data.vapidPublicKey || VAPID_PUBLIC_KEY;
+    if (!vapidKey) {
+      throw new Error("Missing VAPID public key.");
+    }
+
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: VAPID_PUBLIC_KEY,
+      applicationServerKey: urlBase64ToUint8Array(vapidKey),
     });
     await pushService.subscribe(subscription);
     mutate();
@@ -54,3 +60,16 @@ export const usePushNotifications = () => {
     error,
   };
 };
+
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}

@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import { getMessages, sendMessage } from '../controllers/chat.controller';
 import { protect } from '../middlewares/auth.middleware';
 

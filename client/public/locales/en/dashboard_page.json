@@ -1,0 +1,57 @@
+{
+    "helmet": "Dashboard · Admin Panel",
+    "kpi_error": "Could not load KPI statistics.",
+    "chart_error": "Could not load revenue chart.",
+    "transactions_error": "Could not load recent transactions.",
+    "stat_cards": {
+        "gross_revenue": "Gross Revenue ({{days}})",
+        "net_profit": "Net Profit ({{days}})",
+        "total_payouts": "Total Payouts ({{days}})",
+        "pending_payouts": "Pending Payouts",
+        "descriptions": {
+            "in_last_30_days": "In the last 30 days",
+            "in_last_n_days": "In the last {{count}} days",
+            "all_time": "All time",
+            "profit_margin": "{{percent}}% profit margin",
+            "no_revenue": "No revenue to calculate margin",
+            "paid_to_partners": "Paid to partners in 30 days",
+            "paid_to_partners_n_days": "Paid to partners ({{count}} days)",
+            "paid_to_partners_all_time": "Paid to partners (all time)",
+            "pending_requests": "{{count}} pending requests"
+        }
+    },
+    "chart": {
+        "title": "Revenue Trend (Last 30 Days)",
+        "subtitle": "Showing data for the last {{days}} days",
+        "gross_revenue": "Gross Revenue",
+        "net_profit": "Net Profit",
+        "total_revenue": "Total Revenue",
+        "total_profit": "Total Profit",
+        "time_ranges": {
+            "7_days": "7 Days",
+            "30_days": "30 Days",
+            "90_days": "90 Days",
+            "all_time": "All Time"
+        }
+    },
+    "recent_transactions": {
+        "title": "Recent Transactions",
+        "empty": "No recent transactions.",
+        "view_all_btn": "View All Transactions",
+        "types": {
+            "SALE": "Sale",
+            "PAYOUT": "Payout",
+            "PARTNER_COMMISSION": "Commission",
+            "PENALTY": "Penalty",
+            "REFUND": "Refund",
+            "FEE": "Fee"
+        }
+    },
+    "payout_requests": {
+        "title": "Pending Payouts ({{count}})",
+        "error": "Error loading payout requests.",
+        "empty": "No pending payout requests.",
+        "decline_btn": "Decline",
+        "approve_btn": "Approve"
+    }
+}

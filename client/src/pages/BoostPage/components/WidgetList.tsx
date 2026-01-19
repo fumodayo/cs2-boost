@@ -1,4 +1,4 @@
-import { Copy, Widget } from "~/components/shared";
+﻿import { Copy, Widget } from "~/components/ui";
 import ChatWidget from "./ChatWidget";
 import { listOfRanks } from "~/constants/games";
 import { listOfStatus } from "~/constants/order";
@@ -18,82 +18,42 @@ const showBoost = [
 
 const showBoostInfo = ["title", "boost_id", "status", "game", "type", "price"];
 
-const WidgetItemWithImage = ({
-  title,
-  label,
-}: {
-  title: string;
-  label: string | number;
-}) => {
-  const { t } = useTranslation();
-  const image = listOfRanks.find((i) => i.name === label);
-
-  return (
-    <Widget.Item>
-      <dt className="text-sm font-medium capitalize text-foreground">
-        {t(`Globals.Order.label.${title.split("_").join(" ")}`)}
-      </dt>
-      <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
-        <div className="flex items-center gap-x-2">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <img
-                className="w-16"
-                src={`/assets/games/counter-strike-2/wingman/${image?.image}.png`}
-                alt="rank"
-              />
-            </div>
-            <div className="ml-2.5 truncate">
-              <div className="truncate text-sm font-medium text-foreground">
-                {label}
-              </div>
-            </div>
-          </div>
-        </div>
-      </dd>
-    </Widget.Item>
-  );
-};
-
-const WidgetItemWithStatus = ({ status }: { status: string }) => {
-  const currentStatus = listOfStatus.filter((item) => item.value === status);
-
-  return currentStatus.map(({ icon: Icon, label }) => (
-    <div
-      key={uuidv4()}
-      className="inline-flex items-center rounded-md bg-secondary-light px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring"
-    >
-      <Icon className="mr-1.5" />
-      <span className="flex-1 shrink-0 truncate">{label}</span>
-    </div>
-  ));
-};
-
-const renderWidgetBoosItem = (key: string, value: string | number) => {
-  switch (key) {
-    case "boost_id":
-      return (
-        <Copy value={value} text="Id">
-          #{value}
-        </Copy>
-      );
-    case "type":
-      return (
-        <span>
-          {(value as string) && String(value).replace("_", " ")} Boost
-        </span>
-      );
-    case "status":
-      return <WidgetItemWithStatus status={value as string} />;
-    case "price":
-      return formatMoney(value as number, "vnd");
-    default:
-      return <span>{value}</span>;
-  }
-};
-
 const WidgetList = (order: IOrder) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["boost_page", "common", "datatable"]);
+
+  const renderWidgetBoostItem = (key: string, value: string | number) => {
+    switch (key) {
+      case "boost_id":
+        return (
+          <Copy value={value} text={t("widget_list.labels.boost_id")}>
+            #{value}
+          </Copy>
+        );
+      case "type": {
+        const translatedType = t(`common:game_modes.${value}`);
+        return (
+          <span>
+            {translatedType} {t("datatable:tooltip.boost_suffix")}
+          </span>
+        );
+      }
+      case "status": {
+        const currentStatus = listOfStatus.find((item) => item.value === value);
+        if (!currentStatus) return <span>{String(value)}</span>;
+        const { icon: Icon, translationKey } = currentStatus;
+        return (
+          <div className="inline-flex items-center rounded-md bg-secondary-light px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
+            {Icon && <Icon className="mr-1.5" />}
+            <span>{t(`datatable:order_statuses.${translationKey}`)}</span>
+          </div>
+        );
+      }
+      case "price":
+        return formatMoney(value as number, "vnd");
+      default:
+        return <span>{value}</span>;
+    }
+  };
 
   return (
     <div className="row-start-1 space-y-4 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:space-y-6">
@@ -104,17 +64,20 @@ const WidgetList = (order: IOrder) => {
       <Widget>
         <Widget.BigHeader>
           <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-            Boost Data
+            {t("widget_list.boost_data")}
           </h3>
         </Widget.BigHeader>
         <Widget.Content>
           <div className="grid grid-cols-2 lg:grid-cols-3">
             {Object.entries(order)
-              .filter(([key]) => showBoost.includes(key))
+              .filter(
+                ([key]) =>
+                  showBoost.includes(key) && order[key as keyof IOrder],
+              )
               .map(([key, value]) => (
                 <Widget.Item key={uuidv4()}>
                   <dt className="text-sm font-medium capitalize text-foreground">
-                    {t(`Globals.Order.label.${key.split("_").join(" ")}`)}
+                    {t(`widget_list.labels.${key}`)}
                   </dt>
                   <dd className="mt-1 text-sm capitalize leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                     <div className="flex items-center gap-x-2">
@@ -125,10 +88,41 @@ const WidgetList = (order: IOrder) => {
               ))}
 
             {Object.entries(order)
-              .filter(([key]) => ["begin_rank", "end_rank"].includes(key))
-              .map(([key, value]) => (
-                <WidgetItemWithImage key={uuidv4()} title={key} label={value} />
-              ))}
+              .filter(
+                ([key]) =>
+                  ["begin_rank", "end_rank"].includes(key) &&
+                  order[key as keyof IOrder],
+              )
+              .map(([key, value]) => {
+                const rankInfo = listOfRanks.find((r) => r.name === value);
+                return (
+                  <Widget.Item key={key}>
+                    <dt className="text-sm font-medium capitalize text-foreground">
+                      {t(`widget_list.labels.${key}`)}
+                    </dt>
+                    <dd className="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+                      <div className="flex items-center gap-x-2">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0">
+                            {rankInfo && (
+                              <img
+                                className="w-16"
+                                src={`/assets/games/counter-strike-2/wingman/${rankInfo.image}.png`}
+                                alt={rankInfo.name}
+                              />
+                            )}
+                          </div>
+                          <div className="ml-2.5 truncate">
+                            <div className="truncate text-sm font-medium text-foreground">
+                              {value}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </dd>
+                  </Widget.Item>
+                );
+              })}
           </div>
         </Widget.Content>
       </Widget>
@@ -138,7 +132,7 @@ const WidgetList = (order: IOrder) => {
         <Widget>
           <Widget.BigHeader>
             <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-              Boost Options
+              {t("widget_list.boost_options")}
             </h3>
           </Widget.BigHeader>
           <Widget.Content>
@@ -149,11 +143,14 @@ const WidgetList = (order: IOrder) => {
                   key={uuidv4()}
                 >
                   <dt className="text-sm font-medium capitalize text-foreground">
-                    {name}
+                    {t(
+                      `common:bill_card.options.${name.toLowerCase().replace(/ /g, "_")}`,
+                      { defaultValue: name },
+                    )}
                   </dt>
                   <dd className="mt-1 flex items-center text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                     <FaCheck className="mr-2 text-green-600 dark:text-green-500" />{" "}
-                    Yes
+                    {t("widget_list.yes")}
                   </dd>
                 </div>
               ))}
@@ -166,22 +163,25 @@ const WidgetList = (order: IOrder) => {
       <Widget>
         <Widget.BigHeader>
           <h3 className="font-display font-semibold leading-none text-card-surface-foreground">
-            Boost Information
+            {t("widget_list.boost_information")}
           </h3>
         </Widget.BigHeader>
         <Widget.Content>
           <div className="grid grid-cols-2 lg:grid-cols-3">
             {Object.entries(order)
-              .filter(([key]) => showBoostInfo.includes(key))
+              .filter(
+                ([key]) =>
+                  showBoostInfo.includes(key) && order[key as keyof IOrder],
+              )
               .map(([key, value]) => (
                 <div key={uuidv4()}>
                   <Widget.Item>
                     <dt className="text-sm font-medium capitalize text-foreground">
-                      {t(`Globals.Order.label.${key.split("_").join(" ")}`)}
+                      {t(`widget_list.labels.${key}`)}
                     </dt>
                     <dd className="mt-1 text-sm capitalize leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
                       <div className="flex items-center gap-x-2">
-                        {renderWidgetBoosItem(key, value)}
+                        {renderWidgetBoostItem(key, value)}
                       </div>
                     </dd>
                   </Widget.Item>

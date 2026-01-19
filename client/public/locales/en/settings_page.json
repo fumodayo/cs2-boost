@@ -1,0 +1,183 @@
+{
+    "navigation": {
+        "general": "General",
+        "information": "Information",
+        "notifications": "Notifications"
+    },
+    "user_widget": {
+        "title": "User Information",
+        "edit_profile_btn": "Edit Profile",
+        "change_password_btn": "Change Password",
+        "labels": {
+            "username": "Username",
+            "user_id": "User ID",
+            "email_address": "Email Address",
+            "language": "Language",
+            "phone_number": "Phone Number",
+            "cccd_number": "CCCD Number",
+            "full_name": "Full Name",
+            "date_of_birth": "Date of Birth",
+            "gender": "Gender",
+            "address": "Address",
+            "cccd_issue_date": "CCCD Issue Date"
+        }
+    },
+    "verification_widget": {
+        "title": "ID Verification",
+        "subtitle": "You can verify your identity here.",
+        "verify_btn": "Verify Identity",
+        "getting_started_title": "Getting started",
+        "getting_started_subtitle": "We need some information to help us confirm your identity.",
+        "begin_verify_btn": "Begin Verify",
+        "pending_title": "Pending Review",
+        "pending_subtitle": "Your partner registration request is being reviewed.",
+        "pending_badge": "Pending Approval",
+        "partner_title": "Hello, Partner!",
+        "partner_subtitle": "You are now a Partner. Start receiving orders!",
+        "partner_badge": "Verified Partner",
+        "cccd_expiring_warning": "⚠️ Your CCCD will expire on {{date}}. Please update with a new CCCD.",
+        "renew_cccd_btn": "Update CCCD"
+    },
+    "congrats_dialog": {
+        "title": "Congratulations! 🎉",
+        "subtitle": "You have become a successful Partner. Start receiving orders!"
+    },
+    "upload_image_modal": {
+        "verify_title": "Verify Your CCCD Information",
+        "scan_title": "Front of CCCD Card",
+        "verify_subtitle": "Please review and confirm your details below.",
+        "scan_subtitle": "Capture or upload a clear image of your CCCD card.",
+        "error_incomplete_data": "CCCD data is incomplete.",
+        "error_sample_data": "Sample data is invalid.",
+        "specific_case_btn": "Specific Case"
+    },
+    "login_sessions_widget": {
+        "title": "Login Sessions",
+        "show_ips_btn": "Show IPs",
+        "hide_ips_btn": "Hide IPs",
+        "logout_all_btn": "Logout All Devices",
+        "devices": {
+            "desktop": "Desktop",
+            "mobile": "Mobile",
+            "tablet": "Tablet"
+        },
+        "status": {
+            "online": "Online",
+            "offline": "Offline"
+        }
+    },
+    "information_page": {
+        "introduction_widget": {
+            "title": "Your Introduction",
+            "empty": "You haven't added an introduction yet. Click 'Edit' to get started.",
+            "edit_btn": "Edit"
+        },
+        "social_media_widget": {
+            "title": "Social Media Links",
+            "empty": "No social links added yet.",
+            "add_btn": "Add Link",
+            "placeholder": "https://facebook.com/your-username"
+        }
+    },
+    "notifications_page": {
+        "title": "Desktop Push Notifications",
+        "subscribed_subtitle": "You are currently receiving notifications on this device.",
+        "unsubscribed_subtitle": "Enable notifications to stay updated.",
+        "subscribe_btn": "Subscribe",
+        "unsubscribe_btn": "Unsubscribe",
+        "settings": {
+            "updated_order": {
+                "label": "My boost is updated",
+                "description": "Get notified when a partner accepts, completes, or cancels your order."
+            },
+            "new_order": {
+                "label": "New Boost Created (for Partners)",
+                "description": "Partners get notified when a new order is available on the platform."
+            }
+        }
+    },
+    "dialogs": {
+        "edit_profile_title": "Edit Your Profile",
+        "change_password_title": "Change password",
+        "change_current_password_title": "Change current password",
+        "change_current_password_subtitle": "Please enter your old password to change your password.",
+        "email_note": "Please contact support if you need to change your email.",
+        "password_note_google": "If you create an account with a google account, your password has been sent to gmail.",
+        "password_note_complexity": "Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!$@%)."
+    },
+    "scanner": {
+        "modes": {
+            "camera": "Camera",
+            "upload": "Upload Image"
+        },
+        "errors": {
+            "camera_access": "Unable to access camera. Please check permissions.",
+            "permission_denied": "Camera permission denied. Please enable camera access in your browser settings.",
+            "no_camera": "No camera found on your device.",
+            "not_supported": "Your browser doesn't support camera access.",
+            "camera_in_use": "Camera is being used by another application.",
+            "no_qr_found": "No QR code found in the image. Please try again.",
+            "invalid_file": "Invalid file. Please select an image file."
+        },
+        "upload": {
+            "title": "Upload or paste image (Ctrl+V)",
+            "subtitle": "Drag and drop an image here or click the button below",
+            "button": "Choose Image",
+            "new_image": "Choose Another"
+        },
+        "hints": {
+            "camera": "Position the QR code within the frame to scan",
+            "upload": "Supported: File upload, paste (Ctrl+V), or drag & drop"
+        },
+        "help": {
+            "title": "How to enable camera:",
+            "step1": "Click the lock/camera icon next to the URL",
+            "step2": "Select 'Allow' camera for this site",
+            "step3": "Reload the page and try again",
+            "use_upload": "Or use Upload Image",
+            "retry": "Retry"
+        },
+        "original_text": {
+            "QR code parse error, error =": "QR code parse error, error =",
+            "Error getting userMedia, error =": "Error getting userMedia, error =",
+            "The device doesn't support navigator.mediaDevices , only supported cameraIdOrConfig in this case is deviceId parameter (string).": "The device doesn't support navigator.mediaDevices , only supported cameraIdOrConfig in this case is deviceId parameter (string).",
+            "Camera streaming not supported by the browser.": "Camera streaming not supported by the browser.",
+            "Unable to query supported devices, unknown error.": "Unable to query supported devices, unknown error.",
+            "Camera access is only supported in secure context like https or localhost.": "Camera access is only supported in secure context like https or localhost.",
+            "Scanner paused": "Scanner paused",
+            "Scanning": "Scanning",
+            "Idle": "Idle",
+            "Error": "Error",
+            "Permission": "Permission",
+            "No Cameras": "No Cameras",
+            "Last Match:": "Last Match:",
+            "Code Scanner": "Code Scanner",
+            "Request Camera Permissions": "Request Camera Permissions",
+            "Requesting camera permissions...": "Requesting camera permissions...",
+            "No camera found": "No camera found",
+            "Stop Scanning": "Stop Scanning",
+            "Start Scanning": "Start Scanning",
+            "Switch On Torch": "Switch On Torch",
+            "Switch Off Torch": "Switch Off Torch",
+            "Failed to turn on torch": "Failed to turn on torch",
+            "Failed to turn off torch": "Failed to turn off torch",
+            "Launching Camera...": "Launching Camera...",
+            "Scan an Image File": "Scan an Image File",
+            "Scan using camera directly": "Scan using camera directly",
+            "Select Camera": "Select Camera",
+            "Choose Image": "Choose Image",
+            "Choose Another": "Choose Another",
+            "No image choosen": "No image choosen",
+            "Anonymous Camera": "Anonymous Camera",
+            "Or drop an image to scan": "Or drop an image to scan",
+            "Or drop an image to scan (other files not supported)": "Or drop an image to scan (other files not supported)",
+            "zoom": "zoom",
+            "Loading image...": "Loading image...",
+            "Camera based scan": "Camera based scan",
+            "Fule based scan": "Fule based scan",
+            "Powered by ": "Powered by ",
+            "Report issues": "Report issues",
+            "NotAllowedError: Permission denied": "NotAllowedError: Permission denied"
+        }
+    }
+}

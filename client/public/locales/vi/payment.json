@@ -1,0 +1,61 @@
+{
+    "loading": {
+        "verifying": "Đang xác minh thanh toán của bạn...",
+        "wait_notice": "Vui lòng không đóng cửa sổ này."
+    },
+    "error": "Đã xảy ra lỗi trong khi xác minh thanh toán. Vui lòng kiểm tra lịch sử đơn hàng hoặc liên hệ hỗ trợ.",
+    "status_card": {
+        "success_title": "Thanh toán thành công",
+        "failure_title": "Thanh toán thất bại",
+        "success_message": "Giao dịch của bạn đã được hoàn tất thành công.",
+        "failure_message": "Giao dịch của bạn không thể được xử lý."
+    },
+    "receipt": {
+        "order_info": "Thông tin đơn hàng",
+        "transaction_id": "Mã giao dịch",
+        "bank": "Ngân hàng",
+        "card_type": "Loại thẻ",
+        "payment_time": "Thời gian thanh toán",
+        "total_amount": "Tổng số tiền"
+    },
+    "pdf": {
+        "title": "BIÊN LAI THANH TOÁN",
+        "invoice_no": "Số hóa đơn:",
+        "transaction_label": "Giao dịch #",
+        "date_label": "Ngày:",
+        "time_label": "Giờ:",
+        "company_name": "CS2 BOOST",
+        "company_slogan": "Dịch Vụ Gaming Chuyên Nghiệp",
+        "company_email": "support@cs2boost.com",
+        "company_website": "www.cs2boost.com",
+        "bill_to": "THÔNG TIN KHÁCH HÀNG",
+        "customer": "Khách hàng",
+        "payment_details": "CHI TIẾT THANH TOÁN",
+        "order_info": "Mô tả đơn hàng",
+        "bank": "Ngân hàng",
+        "card_type": "Loại thẻ",
+        "ref_id": "Mã tham chiếu",
+        "transaction_id": "Mã giao dịch",
+        "payment_method": "Phương thức thanh toán",
+        "payment_summary": "TÓM TẮT THANH TOÁN",
+        "subtotal": "Tạm tính",
+        "discount": "Giảm giá",
+        "total_amount": "TỔNG CỘNG",
+        "amount_paid": "Đã thanh toán",
+        "status_label": "Trạng thái:",
+        "status_success": "ĐÃ THANH TOÁN",
+        "status_failed": "THẤT BẠI",
+        "status_badge_success": "✓ Thanh toán thành công",
+        "status_badge_failed": "✗ Thanh toán thất bại",
+        "thank_you": "Cảm ơn bạn đã sử dụng CS2 Boost!",
+        "support_note": "Nếu bạn có bất kỳ câu hỏi nào về biên lai này, vui lòng liên hệ đội ngũ hỗ trợ của chúng tôi.",
+        "file_name": "CS2Boost_BienLai",
+        "footer_note": "Đây là biên lai điện tử và không yêu cầu chữ ký.",
+        "page": "Trang",
+        "of": "/"
+    },
+    "buttons": {
+        "view_my_orders": "Xem đơn hàng của tôi",
+        "download_receipt": "Tải biên lai"
+    }
+}

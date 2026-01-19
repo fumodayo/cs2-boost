@@ -1,15 +1,16 @@
-import {
+﻿import {
   Banner,
   Footer,
   Header,
   Helmet,
+  Input,
   SubHeader,
-} from "~/components/shared";
+} from "~/components/ui";
 import { MarqueeComment, StepByStep } from "../HomePage/components";
 import cn from "~/libs/utils";
 import NewStandard from "../HomePage/components/NewStandard";
 import { useTranslation } from "react-i18next";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 
 interface INewGamePage {
   image: string;
@@ -17,11 +18,11 @@ interface INewGamePage {
 }
 
 const NewGamePage = ({ image, title }: INewGamePage) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["game", "common"]);
 
   return (
     <>
-      <Helmet title={`Buy ${title} Services`} />
+      <Helmet title={t("common:helmet.new_game_page", { gameTitle: title })} />
       <div
         className={cn(
           "relative isolate overflow-hidden bg-background",
@@ -53,19 +54,23 @@ const NewGamePage = ({ image, title }: INewGamePage) => {
                   <div className="flex flex-1 flex-col justify-center">
                     <h1 className="font-display max-w-4xl gap-4 text-lg font-semibold tracking-tight text-foreground sm:text-2xl">
                       <div className="mt-1 sm:mt-2.5" />
-                      {title} {t("NewGamePage.title")}
+                      {title} {t("new_game_page.coming_soon")}
                     </h1>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 text-foreground">
-                  <p className="mt-6 max-w-xl">{t("NewGamePage.subtitle1")}</p>
-                  <p className="mt-6 max-w-xl">{t("NewGamePage.subtitle2")}</p>
+                  <p className="mt-6 max-w-xl">
+                    {t("new_game_page.subtitle1")}
+                  </p>
+                  <p className="mt-6 max-w-xl">
+                    {t("new_game_page.subtitle2")}
+                  </p>
                   <div className="mb-20 mt-6">
                     <form>
                       <div className="flex flex-col sm:flex-row">
                         <div className="w-full sm:w-80">
-                          <input
+                          <Input
                             placeholder="Email Address"
                             className="block w-full rounded-md border-0 bg-field px-4 py-2.5 text-field-foreground shadow-sm ring-1 ring-field-ring placeholder:text-muted-foreground hover:ring-field-ring-hover focus:ring-field-ring-hover disabled:pointer-events-none disabled:opacity-50 sm:text-sm"
                           />
@@ -75,11 +80,11 @@ const NewGamePage = ({ image, title }: INewGamePage) => {
                           className="mt-2 rounded-md px-5 py-3 text-sm sm:ml-2 sm:mt-0 sm:py-2.5"
                           disabled
                         >
-                          {t("NewGamePage.btn")}
+                          {t("new_game_page.notify_btn")}
                         </Button>
                       </div>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        {t("NewGamePage.description")}
+                        {t("new_game_page.description")}
                       </p>
                     </form>
                   </div>

@@ -63,10 +63,52 @@ const resolveReport = async (reportId: string): Promise<IReport> => {
   return data;
 };
 
+/**
+ * @description Kiểm tra xem user đã report cho một order cụ thể chưa.
+ * @route   GET /api/report/check-order/:orderId
+ * @param   {string} orderId - ID của order cần kiểm tra.
+ * @returns {Promise<boolean>} - true nếu đã report, false nếu chưa.
+ */
+const checkOrderReport = async (orderId: string): Promise<boolean> => {
+  const { data } = await axiosPrivate.get(`/report/check-order/${orderId}`);
+  return data.hasReported;
+};
+
+/**
+ * @description (Admin) Từ chối một báo cáo không hợp lệ.
+ * @route   PATCH /api/report/:reportId/reject
+ * @param   {string} reportId - ID của báo cáo cần từ chối.
+ * @param   {string} resolution - Lý do từ chối báo cáo.
+ * @returns {Promise<IReport>} - Phản hồi từ server chứa báo cáo đã được cập nhật.
+ */
+const rejectReport = async (
+  reportId: string,
+  resolution: string,
+): Promise<IReport> => {
+  const { data } = await axiosPrivate.patch(`/report/${reportId}/reject`, {
+    resolution,
+  });
+  return data.data;
+};
+
+/**
+ * @description (Admin) Đánh dấu report đã đọc.
+ * @route   PATCH /api/report/:reportId/mark-read
+ * @param   {string} reportId - ID của báo cáo.
+ * @returns {Promise<IReport>} - Phản hồi từ server.
+ */
+const markReportAsRead = async (reportId: string): Promise<IReport> => {
+  const { data } = await axiosPrivate.patch(`/report/${reportId}/mark-read`);
+  return data.data;
+};
+
 export const reportService = {
   sendReport,
   getMyReports,
   getReports,
   acceptReport,
   resolveReport,
+  rejectReport,
+  checkOrderReport,
+  markReportAsRead,
 };

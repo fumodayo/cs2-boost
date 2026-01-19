@@ -1,10 +1,10 @@
-import { Helmet } from "~/components/shared";
-import { Heading, HowToWork, ListMode, Questions } from "./components";
+﻿import { Heading, Helmet } from "~/components/ui";
+import { HowToWork, ListMode, Questions } from "./components";
 
 const GameModePage = () => {
   return (
     <>
-      <Helmet title="Counter Strike 2 Boosting, Coaching & Accounts" />
+      <Helmet title="game_mode_page" />
       <main>
         {/* TITLE */}
         <Heading
@@ -15,8 +15,8 @@ const GameModePage = () => {
               alt="logo"
             />
           }
-          title="CS2 Classic Services Boost"
-          subtitle="Get The Best CS2 Classic Experience!"
+          title="game_mode_page_title"
+          subtitle="game_mode_page_subtitle"
         />
 
         {/* LIST MODE */}

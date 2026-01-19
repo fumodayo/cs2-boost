@@ -1,96 +1,17 @@
-import { useLocation, useNavigate } from "react-router-dom";
+﻿import { useLocation, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import { useTranslation } from "react-i18next";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { FiDownload, FiHome } from "react-icons/fi";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Helmet, Spinner, ErrorDisplay } from "~/components/shared";
+import { Helmet, Spinner, ErrorDisplay } from "~/components/ui";
 import { robotoBase64 } from "~/assets/fonts/robotobase64";
 import { logoBase64 } from "~/assets/image/logo";
 import { IBill } from "~/types";
 import { formatMoney } from "~/utils";
 import { verifyVnPayReturn } from "~/services/payment.service";
-import cn from "~/libs/utils";
-import { Button } from "~/components/shared/Button";
-
-const PaymentReceipt = ({ bill }: { bill: IBill }) => {
-  const { t } = useTranslation();
-
-  const details = [
-    { label: t("BillReturnPage.receipt.orderInfo"), value: bill.vnp_OrderInfo },
-    {
-      label: t("BillReturnPage.receipt.transactionId"),
-      value: bill.vnp_TransactionNo,
-    },
-    { label: t("BillReturnPage.receipt.bank"), value: bill.vnp_BankCode },
-    { label: t("BillReturnPage.receipt.cardType"), value: bill.vnp_CardType },
-    { label: t("BillReturnPage.receipt.paymentTime"), value: bill.vnp_PayDate },
-  ];
-
-  return (
-    <div className="space-y-4 rounded-lg border border-border bg-accent/50 p-4">
-      <dl className="space-y-3">
-        {details.map(
-          (item, index) =>
-            item.value && (
-              <div key={index} className="flex justify-between text-sm">
-                <dt className="text-muted-foreground">{item.label}:</dt>
-                <dd className="font-medium text-foreground">{item.value}</dd>
-              </div>
-            ),
-        )}
-      </dl>
-      <div className="flex justify-between border-t border-border pt-4 text-base">
-        <dt className="font-semibold text-foreground">
-          {t("BillReturnPage.receipt.totalAmount")}:
-        </dt>
-        <dd className="font-bold text-foreground">
-          {formatMoney(Number(bill.vnp_Amount) / 100, "vnd")}
-        </dd>
-      </div>
-    </div>
-  );
-};
-
-const StatusCard = ({
-  status,
-  title,
-  message,
-  children,
-}: {
-  status: "success" | "failure";
-  title: string;
-  message: string;
-  children: React.ReactNode;
-}) => {
-  const isSuccess = status === "success";
-  return (
-    <div className="mx-auto mt-10 max-w-2xl transform transition-all">
-      <div className="overflow-hidden rounded-2xl bg-card shadow-lg ring-1 ring-border">
-        <div
-          className={cn(
-            "flex flex-col items-center justify-center p-8 text-center",
-            isSuccess
-              ? "bg-green-50 dark:bg-green-900/20"
-              : "bg-red-50 dark:bg-red-900/20",
-          )}
-        >
-          {isSuccess ? (
-            <FaCheckCircle className="h-16 w-16 text-green-500" />
-          ) : (
-            <FaTimesCircle className="h-16 w-16 text-red-500" />
-          )}
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground">
-            {title}
-          </h1>
-          <p className="mt-2 text-base text-muted-foreground">{message}</p>
-        </div>
-        <div className="p-6">{children}</div>
-      </div>
-    </div>
-  );
-};
+import { Button } from "~/components/ui/Button";
+import { PaymentReceipt, StatusCard } from "./components";
 
 interface jsPDFWithAutoTable extends jsPDF {
   lastAutoTable: {
@@ -99,7 +20,7 @@ interface jsPDFWithAutoTable extends jsPDF {
 }
 
 const BillReturnPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["payment", "common"]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -125,84 +46,307 @@ const BillReturnPage = () => {
     doc.setFont("Roboto");
 
     const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 40;
-    let cursorY = margin;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 15;
+    const contentWidth = pageWidth - margin * 2;
+    let cursorY = 0;
 
-    doc.addImage(logoBase64, "SVG", margin, cursorY, 40, 40);
-    doc.setFontSize(24);
+    const primaryColor: [number, number, number] = [91, 78, 246];
+    const successColor: [number, number, number] = [16, 185, 129];
+    const failedColor: [number, number, number] = [239, 68, 68];
+    const grayColor: [number, number, number] = [107, 114, 128];
+    const darkColor: [number, number, number] = [31, 41, 55];
+    const grayBg: [number, number, number] = [249, 250, 251];
+    const borderColor: [number, number, number] = [229, 231, 235];
+    const footerBg: [number, number, number] = [249, 250, 251];
+
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, pageWidth, 45, "F");
+
+    doc.setFillColor(255, 255, 255, 0.2);
+    doc.roundedRect(margin, 10, 28, 25, 4, 4, "F");
+    doc.addImage(logoBase64, "SVG", margin + 4, 12, 20, 21);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
     doc.setFont("Roboto", "bold");
-    doc.text(t("BillReturnPage.pdf.title"), pageWidth - margin, cursorY + 15, {
+    doc.text(t("pdf.company_name"), margin + 35, 22);
+    doc.setFontSize(9);
+    doc.setFont("Roboto", "normal");
+    doc.text(t("pdf.company_slogan"), margin + 35, 30);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont("Roboto", "bold");
+    doc.text(t("pdf.title").toUpperCase(), pageWidth - margin, 20, {
       align: "right",
     });
+    doc.setFontSize(8);
+    doc.setFont("Roboto", "normal");
+    doc.setTextColor(199, 210, 254);
+    doc.text(t("pdf.thank_you"), pageWidth - margin, 28, { align: "right" });
 
+    cursorY = 60;
+
+    const infoBoxHeight = 45;
+    doc.setFillColor(...grayBg);
+    doc.setDrawColor(...borderColor);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(
+      margin,
+      cursorY,
+      contentWidth * 0.7,
+      infoBoxHeight,
+      4,
+      4,
+      "FD",
+    );
+
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(7);
+    doc.setFont("Roboto", "bold");
+    doc.text("INVOICE NO", margin + 8, cursorY + 10);
+    doc.setTextColor(...darkColor);
+    doc.setFontSize(11);
+    doc.setFont("Roboto", "bold");
+    doc.text(bill.vnp_TxnRef || "N/A", margin + 8, cursorY + 18);
+
+    const dateX = margin + contentWidth * 0.35;
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(7);
+    doc.setFont("Roboto", "bold");
+    doc.text("DATE", dateX, cursorY + 10);
+    doc.setTextColor(...darkColor);
     doc.setFontSize(10);
     doc.setFont("Roboto", "normal");
-    doc.setTextColor(100);
-    doc.text(
-      `${t("BillReturnPage.pdf.transactionLabel")}${bill.vnp_TransactionNo}`,
-      pageWidth - margin,
-      cursorY + 30,
-      { align: "right" },
+    const payDate = bill.vnp_PayDate || new Date().toLocaleString();
+    doc.text(payDate, dateX, cursorY + 18);
+
+    doc.setDrawColor(...borderColor);
+    doc.line(
+      margin + 8,
+      cursorY + 26,
+      margin + contentWidth * 0.7 - 8,
+      cursorY + 26,
     );
-    doc.text(
-      `${t("BillReturnPage.pdf.dateLabel")} ${bill.vnp_PayDate}`,
-      pageWidth - margin,
-      cursorY + 45,
-      { align: "right" },
-    );
-
-    cursorY += 80;
-    doc.setDrawColor(221, 221, 221);
-    doc.line(margin, cursorY, pageWidth - margin, cursorY);
-    cursorY += 25;
-
-    const tableBody = [
-      [t("BillReturnPage.pdf.orderInfo"), bill.vnp_OrderInfo || "N/A"],
-      [t("BillReturnPage.pdf.bank"), bill.vnp_BankCode || "N/A"],
-      [t("BillReturnPage.pdf.cardType"), bill.vnp_CardType || "N/A"],
-      [t("BillReturnPage.pdf.refId"), bill.vnp_TxnRef || "N/A"],
-    ];
-
-    autoTable(doc, {
-      body: tableBody,
-      startY: cursorY,
-      theme: "plain",
-      styles: {
-        font: "Roboto",
-        fontSize: 11,
-        cellPadding: { top: 6, right: 0, bottom: 6, left: 0 },
-      },
-      columnStyles: {
-        0: { fontStyle: "bold", textColor: "#333" },
-        1: { halign: "right" },
-      },
-    });
-
-    cursorY = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 30;
-
-    doc.line(margin, cursorY, pageWidth - margin, cursorY);
-    cursorY += 25;
-    doc.setFontSize(14);
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(7);
     doc.setFont("Roboto", "bold");
-    doc.text(t("BillReturnPage.pdf.totalAmount"), margin, cursorY);
-    doc.text(
-      formatMoney(Number(bill.vnp_Amount) / 100, "vnd"),
-      pageWidth - margin,
-      cursorY,
-      { align: "right" },
-    );
+    doc.text("TRANSACTION ID", margin + 8, cursorY + 34);
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(9);
+    doc.setFont("Roboto", "normal");
+    doc.text(`#${bill.vnp_TransactionNo || "N/A"}`, margin + 8, cursorY + 42);
 
-    cursorY += 40;
-    doc.setFontSize(10);
-    doc.setTextColor(150);
-    const statusText = `${t("BillReturnPage.pdf.statusLabel")} ${bill.isSuccess ? t("BillReturnPage.pdf.status.success") : t("BillReturnPage.pdf.status.failed")} - ${bill.message}`;
-    doc.text(statusText, pageWidth / 2, cursorY, { align: "center" });
-    cursorY += 15;
-    doc.text(t("BillReturnPage.pdf.thankYou"), pageWidth / 2, cursorY, {
+    const statusBadgeColor = bill.isSuccess ? successColor : failedColor;
+    const statusText = bill.isSuccess
+      ? t("pdf.status_badge_success")
+      : t("pdf.status_badge_failed");
+    const badgeWidth = 55;
+    const badgeX = pageWidth - margin - badgeWidth;
+    const badgeY = cursorY + 15;
+
+    doc.setFillColor(...statusBadgeColor);
+    doc.roundedRect(badgeX, badgeY, badgeWidth, 16, 4, 4, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont("Roboto", "bold");
+    doc.text(statusText, badgeX + badgeWidth / 2, badgeY + 11, {
       align: "center",
     });
 
-    doc.save(`${t("BillReturnPage.pdf.fileName")}_${bill.vnp_TxnRef}.pdf`);
+    cursorY += infoBoxHeight + 20;
+
+    doc.setTextColor(...primaryColor);
+    doc.setFontSize(10);
+    doc.setFont("Roboto", "bold");
+    doc.text(t("pdf.payment_details").toUpperCase(), margin + 5, cursorY);
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(0.5);
+    const textWidth = doc.getTextWidth(t("pdf.payment_details").toUpperCase());
+    doc.line(margin + 5, cursorY + 2, margin + 5 + textWidth, cursorY + 2);
+
+    cursorY += 10;
+
+    const paymentDetailsBody = [
+      [t("pdf.order_info"), bill.vnp_OrderInfo || "N/A"],
+      [t("pdf.payment_method"), "VNPay"],
+      [t("pdf.bank"), bill.vnp_BankCode || "N/A"],
+      [t("pdf.card_type"), bill.vnp_CardType || "N/A"],
+      [t("pdf.ref_id"), bill.vnp_TxnRef || "N/A"],
+      [t("pdf.transaction_id"), bill.vnp_TransactionNo || "N/A"],
+    ];
+
+    autoTable(doc, {
+      body: paymentDetailsBody,
+      startY: cursorY,
+      theme: "plain",
+      margin: { left: margin, right: margin },
+      tableWidth: contentWidth,
+      styles: {
+        font: "Roboto",
+        fontSize: 10,
+        cellPadding: { top: 6, right: 12, bottom: 6, left: 12 },
+      },
+      columnStyles: {
+        0: {
+          fontStyle: "normal",
+          textColor: grayColor,
+          cellWidth: contentWidth * 0.45,
+        },
+        1: { halign: "right", textColor: darkColor, fontStyle: "bold" },
+      },
+      willDrawCell: (data) => {
+        if (data.row.index % 2 === 0) {
+          doc.setFillColor(...grayBg);
+          doc.rect(
+            data.cell.x,
+            data.cell.y,
+            data.cell.width,
+            data.cell.height,
+            "F",
+          );
+        }
+      },
+      didDrawCell: (data) => {
+        if (
+          data.row.index < paymentDetailsBody.length - 1 &&
+          data.column.index === 1
+        ) {
+          doc.setDrawColor(...borderColor);
+          doc.setLineWidth(0.2);
+          doc.line(
+            margin,
+            data.cell.y + data.cell.height,
+            pageWidth - margin,
+            data.cell.y + data.cell.height,
+          );
+        }
+      },
+      didDrawPage: (data) => {
+        const table = data.table as { startY?: number; finalY?: number };
+
+        if (table.finalY === undefined || table.startY === undefined) return;
+
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(
+          margin,
+          table.startY,
+          contentWidth,
+          table.finalY - table.startY,
+          4,
+          4,
+          "S",
+        );
+      },
+    });
+
+    cursorY = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 20;
+
+    doc.setTextColor(...primaryColor);
+    doc.setFontSize(10);
+    doc.setFont("Roboto", "bold");
+    doc.text(t("pdf.payment_summary").toUpperCase(), margin + 5, cursorY);
+    const summaryTextWidth = doc.getTextWidth(
+      t("pdf.payment_summary").toUpperCase(),
+    );
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(
+      margin + 5,
+      cursorY + 2,
+      margin + 5 + summaryTextWidth,
+      cursorY + 2,
+    );
+
+    cursorY += 10;
+
+    const summaryBoxHeight = 45;
+    doc.setFillColor(...grayBg);
+    doc.setDrawColor(...borderColor);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(
+      margin,
+      cursorY,
+      contentWidth,
+      summaryBoxHeight,
+      4,
+      4,
+      "FD",
+    );
+
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(10);
+    doc.setFont("Roboto", "normal");
+    doc.text(t("pdf.subtotal"), margin + 12, cursorY + 14);
+    doc.setFont("Roboto", "bold");
+    doc.text(
+      formatMoney(Number(bill.vnp_Amount), "vnd"),
+      pageWidth - margin - 12,
+      cursorY + 14,
+      { align: "right" },
+    );
+
+    doc.setDrawColor(...borderColor);
+    doc.setLineWidth(0.3);
+    doc.line(margin + 12, cursorY + 22, pageWidth - margin - 12, cursorY + 22);
+
+    doc.setTextColor(...primaryColor);
+    doc.setFontSize(11);
+    doc.setFont("Roboto", "bold");
+    doc.text(t("pdf.total_amount"), margin + 12, cursorY + 36);
+    doc.setFontSize(14);
+    doc.text(
+      formatMoney(Number(bill.vnp_Amount), "vnd"),
+      pageWidth - margin - 12,
+      cursorY + 36,
+      { align: "right" },
+    );
+
+    const footerHeight = 40;
+    const footerY = pageHeight - footerHeight;
+
+    doc.setFillColor(...footerBg);
+    doc.rect(0, footerY, pageWidth, footerHeight, "F");
+
+    doc.setDrawColor(...borderColor);
+    doc.setLineWidth(0.3);
+    doc.line(0, footerY, pageWidth, footerY);
+
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(8);
+    doc.setFont("Roboto", "normal");
+    doc.text(t("pdf.footer_note"), pageWidth / 2, footerY + 12, {
+      align: "center",
+    });
+
+    doc.setFontSize(9);
+    doc.text(
+      `${t("pdf.company_email")}   |   ${t("pdf.company_website")}`,
+      pageWidth / 2,
+      footerY + 22,
+      { align: "center" },
+    );
+
+    doc.setDrawColor(...borderColor);
+    doc.line(
+      pageWidth / 2 - 25,
+      footerY + 28,
+      pageWidth / 2 + 25,
+      footerY + 28,
+    );
+
+    doc.setFontSize(7);
+    const currentYear = new Date().getFullYear();
+    doc.text(
+      `${t("pdf.company_name")} © ${currentYear}`.toUpperCase(),
+      pageWidth / 2,
+      footerY + 35,
+      { align: "center" },
+    );
+
+    doc.save(`${t("pdf.file_name")}_${bill.vnp_TxnRef}.pdf`);
   };
 
   if (isLoading) {
@@ -210,33 +354,29 @@ const BillReturnPage = () => {
       <div className="flex h-[80vh] flex-col items-center justify-center gap-4">
         <Spinner size="lg" />
         <p className="text-lg font-medium text-muted-foreground">
-          Verifying your payment...
+          {t("loading.verifying")}
         </p>
         <p className="text-sm text-muted-foreground">
-          Please do not close this window.
+          {t("loading.wait_notice")}
         </p>
       </div>
     );
   }
 
   if (error || !bill) {
-    return (
-      <ErrorDisplay message="An error occurred while verifying the payment. Please check your order history or contact support." />
-    );
+    return <ErrorDisplay message={t("error")} />;
   }
 
   const isSuccess = bill.isSuccess;
   const statusTitle = isSuccess
-    ? t("BillReturnPage.statusCard.title.success")
-    : t("BillReturnPage.statusCard.title.failure");
+    ? t("status_card.success_title")
+    : t("status_card.failure_title");
   const statusMessage =
     bill.message ??
     (isSuccess
-      ? t("BillReturnPage.statusCard.message.success")
-      : t("BillReturnPage.statusCard.message.failure"));
-  const helmetTitle = isSuccess
-    ? t("BillReturnPage.helmet.success")
-    : t("BillReturnPage.helmet.failure");
+      ? t("status_card.success_message")
+      : t("status_card.failure_message"));
+  const helmetTitle = isSuccess ? t("helmet.success") : t("helmet.failure");
 
   return (
     <>
@@ -256,7 +396,7 @@ const BillReturnPage = () => {
               className="w-full sm:w-auto"
             >
               <FiHome className="mr-2" />
-              {t("Globals.Button.ViewMyOrders")}
+              {t("buttons.view_my_orders")}
             </Button>
             {isSuccess && (
               <Button
@@ -266,7 +406,7 @@ const BillReturnPage = () => {
                 onClick={handleDownloadPDF}
               >
                 <FiDownload className="mr-2" />
-                {t("Globals.Button.DownloadReceipt")}
+                {t("buttons.download_receipt")}
               </Button>
             )}
           </div>

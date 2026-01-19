@@ -1,4 +1,6 @@
+﻿import { useContext, useEffect } from "react";
 import {
+  DeleteAccountWidget,
   LoginSessionsWidget,
   UserWidget,
   VerificationWidget,
@@ -6,9 +8,22 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
 import { IUser } from "~/types";
+import { AppContext } from "~/components/context/AppContext";
 
 const GeneralPage = () => {
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const { toggleConfetti, toggleCongratsDialog } = useContext(AppContext);
+
+  useEffect(() => {
+    const shouldCelebrate = localStorage.getItem("showPartnerCelebration");
+    if (shouldCelebrate === "true") {
+      localStorage.removeItem("showPartnerCelebration");
+      setTimeout(() => {
+        toggleConfetti();
+        toggleCongratsDialog();
+      }, 500);
+    }
+  }, [toggleConfetti, toggleCongratsDialog]);
 
   return (
     <div className="mx-auto grid grid-cols-1 grid-rows-1 items-start gap-x-5 gap-y-5 lg:mx-0 lg:grid-cols-3">
@@ -22,6 +37,9 @@ const GeneralPage = () => {
       <div className="space-y-4 lg:col-span-2 lg:row-span-2 lg:row-end-2 lg:space-y-6">
         {/* USER INFORMATION */}
         <UserWidget />
+
+        {/* DELETE ACCOUNT */}
+        <DeleteAccountWidget />
 
         {/* LOGIN SESSIONS */}
         <LoginSessionsWidget currentUser={currentUser as IUser} />

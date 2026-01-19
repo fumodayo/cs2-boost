@@ -1,4 +1,4 @@
-export interface IListOfGames {
+﻿export interface IListOfGames {
   label: string;
   value: string;
   isAvailable: boolean;

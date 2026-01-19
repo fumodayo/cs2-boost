@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { ITheme, ICurrency } from "~/types";
 import { AppContext, IAppContextTypeProps } from "./AppContext";
 
@@ -27,8 +27,10 @@ export default function AppContextProvider({
 
   const toggleConfetti = () => setIsOpenConfetti((prev) => !prev);
 
-  const toggleLoginModal = () => setIsOpenLoginModal((prev) => !prev);
-  const toggleRegisterModal = () => setIsOpenRegisterModal((prev) => !prev);
+  const toggleLoginModal = (isOpen?: boolean) =>
+    setIsOpenLoginModal((prev) => (isOpen !== undefined ? isOpen : !prev));
+  const toggleRegisterModal = (isOpen?: boolean) =>
+    setIsOpenRegisterModal((prev) => (isOpen !== undefined ? isOpen : !prev));
   const toggleForgotModal = () => setIsOpenForgotModal((prev) => !prev);
   const toggleInputOTPModal = () => setIsOpenInputOTPModal((prev) => !prev);
   const toggleResetPasswordModal = () =>

@@ -1,0 +1,22 @@
+{
+    "admin_live_chats_title": "Live Chats",
+    "admin_live_chats_subtitle": "Manage live support conversations",
+    "active_chats": "Active Chats",
+    "no_chats": "No active chats",
+    "select_chat": "Select a chat to view",
+    "unknown_user": "Unknown User",
+    "status": {
+        "waiting": "Waiting",
+        "in_progress": "In Progress"
+    },
+    "assign_to_me": "Assign to Me",
+    "close": "Close",
+    "assigned_success": "Chat assigned successfully",
+    "assign_failed": "Failed to assign chat",
+    "closed_success": "Chat closed successfully",
+    "close_failed": "Failed to close chat",
+    "send_failed": "Failed to send message",
+    "new_chat_notification": "New support chat!",
+    "assign_to_chat": "Assign this chat to yourself to respond",
+    "not_your_chat": "This chat is assigned to another admin"
+}

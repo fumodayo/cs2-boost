@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import * as Accordion from "@radix-ui/react-accordion";
 import { toast } from "react-hot-toast";
 import { FiChevronDown, FiRotateCcw, FiSettings } from "react-icons/fi";
-import { ErrorDisplay, Input, Spinner } from "~/components/shared";
+import { ErrorDisplay, Input, Spinner } from "~/components/ui";
+import { Select } from "~/components/ui/Form";
 import { formatMoney } from "~/utils";
 import cn from "~/libs/utils";
 import {
@@ -13,10 +14,11 @@ import {
   IUpdateWingmanConfigPayload,
   IUpdateWingmanRegionPayload,
 } from "~/types";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { FaSave } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { rateService } from "~/services/rate.service";
+import { HiOutlineCalculator } from "react-icons/hi2";
 
 const GET_WINGMAN_RATES_KEY = "/rates/get-wingman-rates";
 const UPDATE_WINGMAN_CONFIG_KEY = "/rates/update-wingman-config";
@@ -54,7 +56,8 @@ const WingmanRegionAccordionItem = ({
   onSave,
   onReset,
 }: WingmanRegionAccordionItemProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["manage_boost_page", "common"]);
+
   const isDirty = useMemo(
     () => JSON.stringify(originalRegion) !== JSON.stringify(editedRegion),
     [originalRegion, editedRegion],
@@ -93,7 +96,7 @@ const WingmanRegionAccordionItem = ({
         >
           <div className="flex items-center gap-3">
             <div
-              title={isDirty ? "Unsaved changes" : "No changes"}
+              title={isDirty ? t("unsaved_changes") : t("no_changes")}
               className={cn(
                 "h-2.5 w-2.5 rounded-full transition-all",
                 isDirty ? (isOpen ? "bg-white" : "bg-primary") : "bg-muted",
@@ -117,42 +120,43 @@ const WingmanRegionAccordionItem = ({
           <table className="min-w-full table-fixed text-sm">
             <thead className="text-xs uppercase text-muted-foreground">
               <tr>
-                <th className="w-1/4 px-3 py-3 text-left font-semibold">
-                  {t("ManageBoostPage.Table.start")}
+                <th className="w-2/5 px-3 py-3 text-left font-semibold">
+                  {t("table.rank")}
                 </th>
-                <th className="w-1/4 px-3 py-3 text-left font-semibold">
-                  {t("ManageBoostPage.Table.end")}
+                <th className="w-1/5 px-3 py-3 text-center font-semibold">
+                  {t("table.rate")}
                 </th>
-                <th className="w-1/4 px-3 py-3 text-left font-semibold">
-                  {t("ManageBoostPage.Table.rate")}
-                </th>
-                <th className="w-1/4 px-3 py-3 text-right font-semibold">
-                  {t("ManageBoostPage.Table.costForTier")}
+                <th className="w-2/5 px-3 py-3 text-right font-semibold">
+                  {t("table.cost_for_tier")}
                 </th>
               </tr>
             </thead>
             <tbody>
               {editedRegion.rates.map((rank, rankIndex) => (
                 <tr key={rank.code} className="border-t border-border">
-                  <td className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground">
-                    <img
-                      src={`/assets/games/counter-strike-2/wingman/${rank.image}.png`}
-                      alt={rank.name}
-                      className="h-7 w-auto"
-                    />
-                    {rank.name}
+                  <td className="px-3 py-2.5">
+                    <div className="flex items-center gap-3 font-medium text-foreground">
+                      <img
+                        src={`/assets/games/counter-strike-2/wingman/${rank.image}.png`}
+                        alt={rank.name}
+                        className="h-7 w-auto"
+                      />
+                      {rank.name}
+                    </div>
                   </td>
                   <td className="px-3 py-2.5">
-                    <Input
-                      type="number"
-                      step="0.1"
-                      min="0"
-                      value={rank.rate}
-                      onChange={(e) =>
-                        handleRateChange(rankIndex, e.target.value)
-                      }
-                      className="h-9 w-24 rounded-md p-2 text-right"
-                    />
+                    <div className="flex justify-center">
+                      <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        value={rank.rate}
+                        onChange={(e) =>
+                          handleRateChange(rankIndex, e.target.value)
+                        }
+                        className="h-9 w-20 rounded-md p-2 text-center"
+                      />
+                    </div>
                   </td>
                   <td className="font-mono px-3 py-2.5 text-right font-semibold tabular-nums text-foreground">
                     {formatMoney(rank.rate * unitPrice)}
@@ -170,7 +174,7 @@ const WingmanRegionAccordionItem = ({
             disabled={!isDirty || isSaving}
             className="gap-2"
           >
-            <FiRotateCcw size={14} /> Reset
+            <FiRotateCcw size={14} /> {t("common:buttons.reset")}
           </Button>
           <Button
             size="sm"
@@ -182,7 +186,7 @@ const WingmanRegionAccordionItem = ({
               <Spinner size="sm" />
             ) : (
               <>
-                <FaSave size={14} /> Save
+                <FaSave size={14} /> {t("common:buttons.save")}
               </>
             )}
           </Button>
@@ -192,8 +196,184 @@ const WingmanRegionAccordionItem = ({
   );
 };
 
+interface WingmanPriceCalculatorProps {
+  regions: IWingmanRegionRates[];
+  unitPrice: number;
+}
+
+const WingmanPriceCalculator = ({
+  regions,
+  unitPrice,
+}: WingmanPriceCalculatorProps) => {
+  const { t } = useTranslation(["manage_boost_page"]);
+  const [selectedRegion, setSelectedRegion] = useState<string>(
+    regions[0]?.value || "",
+  );
+  const [fromRankIndex, setFromRankIndex] = useState<number>(0);
+  const [toRankIndex, setToRankIndex] = useState<number>(3);
+
+  const currentRegion = useMemo(
+    () => regions.find((r) => r.value === selectedRegion),
+    [regions, selectedRegion],
+  );
+
+  const priceBreakdown = useMemo(() => {
+    if (!currentRegion || toRankIndex <= fromRankIndex) return [];
+    const breakdown: {
+      rankName: string;
+      rankImage: string;
+      rate: number;
+      price: number;
+    }[] = [];
+
+    for (let i = fromRankIndex; i < toRankIndex; i++) {
+      const rank = currentRegion.rates[i];
+      if (rank) {
+        breakdown.push({
+          rankName: rank.name,
+          rankImage: rank.image,
+          rate: rank.rate,
+          price: rank.rate * unitPrice,
+        });
+      }
+    }
+    return breakdown;
+  }, [currentRegion, fromRankIndex, toRankIndex, unitPrice]);
+
+  const totalPrice = useMemo(() => {
+    return priceBreakdown.reduce((sum, row) => sum + row.price, 0);
+  }, [priceBreakdown]);
+
+  const ranks = currentRegion?.rates || [];
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+      <div className="mb-5 flex items-center gap-4">
+        <div className="grid h-11 w-11 place-items-center rounded-lg bg-purple-500/10 text-muted-foreground text-purple-500">
+          <HiOutlineCalculator size={20} />
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">
+            {t("wingman.calculator_title")}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t("wingman.calculator_subtitle")}
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
+            {t("wingman.select_region")}
+          </label>
+          <Select
+            value={selectedRegion}
+            onChange={(e) => {
+              setSelectedRegion(e.target.value);
+              setFromRankIndex(0);
+              setToRankIndex(3);
+            }}
+          >
+            {regions.map((region) => (
+              <option key={region.value} value={region.value}>
+                {region.name} ({region.value})
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
+            {t("wingman.from_rank")}
+          </label>
+          <Select
+            value={fromRankIndex}
+            onChange={(e) => setFromRankIndex(parseInt(e.target.value))}
+          >
+            {ranks.slice(0, -1).map((rank, idx) => (
+              <option key={rank.code} value={idx}>
+                {rank.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
+            {t("wingman.to_rank")}
+          </label>
+          <Select
+            value={toRankIndex}
+            onChange={(e) => setToRankIndex(parseInt(e.target.value))}
+          >
+            {ranks.slice(fromRankIndex + 1).map((rank, idx) => (
+              <option key={rank.code} value={fromRankIndex + 1 + idx}>
+                {rank.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+      </div>
+
+      <div className="mb-5 flex items-center justify-between rounded-lg border border-primary/20 bg-primary/10 p-4">
+        <span className="font-medium text-foreground">
+          {t("wingman.estimated_price")}
+        </span>
+        <span className="text-2xl font-bold text-primary">
+          {formatMoney(totalPrice)}
+        </span>
+      </div>
+
+      {priceBreakdown.length > 0 && (
+        <div>
+          <h3 className="mb-3 text-sm font-semibold uppercase text-muted-foreground">
+            {t("wingman.price_breakdown")}
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="border-b border-border text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="px-3 py-2 text-left font-semibold">
+                    {t("table.rank")}
+                  </th>
+                  <th className="px-3 py-2 text-right font-semibold">
+                    {t("table.rate")}
+                  </th>
+                  <th className="px-3 py-2 text-right font-semibold">
+                    {t("table.cost_for_tier")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="font-mono tabular-nums">
+                {priceBreakdown.map((row, idx) => (
+                  <tr key={idx} className="border-t border-border">
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-3 font-medium text-foreground">
+                        <img
+                          src={`/assets/games/counter-strike-2/wingman/${row.rankImage}.png`}
+                          alt={row.rankName}
+                          className="h-6 w-auto"
+                        />
+                        {row.rankName}
+                      </div>
+                    </td>
+                    <td className="px-3 py-2 text-right">{row.rate}×</td>
+                    <td className="px-3 py-2 text-right font-semibold text-foreground">
+                      {formatMoney(row.price)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ManageWingman = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["manage_boost_page", "common"]);
+
   const {
     data: wingmanData,
     isLoading: isLoadingSWR,
@@ -229,13 +409,15 @@ const ManageWingman = () => {
   );
   const [openRegions, setOpenRegions] = useState<string[]>([]);
 
-  const originalConfig = useMemo(() => wingmanData, [wingmanData]);
+  const originalConfig = wingmanData;
 
   useEffect(() => {
     if (originalConfig) {
       setEditedConfig(structuredClone(originalConfig));
-      if (originalConfig.regions.length > 0 && openRegions.length === 0) {
-        setOpenRegions([originalConfig.regions[0].value]);
+      if (originalConfig.regions.length > 0) {
+        setOpenRegions((prev) =>
+          prev.length === 0 ? [originalConfig.regions[0].value] : prev,
+        );
       }
     }
   }, [originalConfig]);
@@ -257,7 +439,7 @@ const ManageWingman = () => {
     );
     if (originalRegion) {
       handleRegionChange(structuredClone(originalRegion));
-      toast("Region has been reset.", { icon: "🔄" });
+      toast(t("common:toasts.region_reset"), { icon: "🔄" });
     }
   };
 
@@ -267,12 +449,15 @@ const ManageWingman = () => {
       payload: { rates: regionToSave.rates },
     });
     await toast.promise(promise, {
-      loading: `Saving rates for ${regionToSave.name}...`,
+      loading: t("common:toasts.saving", {
+        item: `rates for ${regionToSave.name}`,
+      }),
       success: () => {
         mutate();
-        return `Successfully saved!`;
+        return t("common:toasts.save_success", { item: "Rates" });
       },
-      error: (err) => err?.message || "Failed to save rates.",
+      error: (err) =>
+        err?.message || t("common:toasts.save_error", { item: "rates" }),
     });
   };
 
@@ -280,12 +465,13 @@ const ManageWingman = () => {
     if (!editedConfig) return;
     const promise = triggerUpdateGlobal({ unitPrice: editedConfig.unitPrice });
     await toast.promise(promise, {
-      loading: "Saving global settings...",
+      loading: t("common:toasts.saving", { item: "global settings" }),
       success: () => {
         mutate();
-        return "Global settings updated!";
+        return t("common:toasts.save_success", { item: "Global settings" });
       },
-      error: (err) => err?.message || "Failed to update settings.",
+      error: (err) =>
+        err?.message || t("common:toasts.save_error", { item: "settings" }),
     });
   };
 
@@ -293,12 +479,8 @@ const ManageWingman = () => {
     originalConfig?.unitPrice !== editedConfig?.unitPrice;
 
   if (isLoadingSWR) return <SkeletonLoader />;
-  if (error)
-    return (
-      <ErrorDisplay message="Error loading data. Please refresh the page." />
-    );
-  if (!editedConfig)
-    return <ErrorDisplay message="No configuration data found." />;
+  if (error) return <ErrorDisplay message={t("errors.load_data")} />;
+  if (!editedConfig) return <ErrorDisplay message={t("errors.no_config")} />;
 
   return (
     <div className="space-y-5">
@@ -310,10 +492,10 @@ const ManageWingman = () => {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">
-                {t("ManageBoostPage.basePriceTitle")}
+                {t("base_price_title")}
               </h2>
               <p className="text-sm text-muted-foreground">
-                {t("ManageBoostPage.basePriceSubtitle")}
+                {t("base_price_subtitle")}
               </p>
             </div>
           </div>
@@ -341,13 +523,17 @@ const ManageWingman = () => {
                 <Spinner size="sm" />
               ) : (
                 <>
-                  <FaSave size={14} /> Save
+                  <FaSave size={14} /> {t("common:buttons.save")}
                 </>
               )}
             </Button>
           </div>
         </div>
       </div>
+      <WingmanPriceCalculator
+        regions={editedConfig.regions}
+        unitPrice={editedConfig.unitPrice}
+      />
       <Accordion.Root
         type="multiple"
         value={openRegions}

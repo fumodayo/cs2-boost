@@ -1,4 +1,4 @@
-import { Widget } from "~/components/shared";
+﻿import { Widget } from "~/components/ui";
 import { IOrder } from "~/types";
 import { format } from "date-fns";
 import { v4 as uuidv4 } from "uuid";

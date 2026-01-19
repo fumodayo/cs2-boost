@@ -1,15 +1,19 @@
-import parse from "html-react-parser";
+﻿import parse from "html-react-parser";
 
-const Information = ({ details }: { details?: string }) => {
+const Information = ({
+  details,
+  noIntroductionText,
+}: {
+  details?: string;
+  noIntroductionText: string;
+}) => {
   if (!details || details.trim() === "<p><br></p>") {
     return (
-      <p className="text-sm text-muted-foreground">
-        This partner hasn't added an introduction yet.
-      </p>
+      <p className="text-sm text-muted-foreground">{noIntroductionText}</p>
     );
   }
   return (
-    <div className="prose prose-sm dark:prose-invert max-w-none">
+    <div className="prose prose-sm dark:prose-invert line-clamp-6 max-w-none overflow-hidden">
       {parse(details)}
     </div>
   );

@@ -1,6 +1,6 @@
-import { IntroductionWidget, SocialMediaWidget } from "./components";
+﻿import { IntroductionWidget, SocialMediaWidget } from "./components";
 import { useSelector } from "react-redux";
-import { SkeletonLoader } from "~/components/shared";
+import { SkeletonLoader } from "~/components/ui";
 import { RootState } from "~/redux/store";
 
 const InformationPage = () => {

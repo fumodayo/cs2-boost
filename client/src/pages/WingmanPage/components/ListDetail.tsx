@@ -1,45 +1,30 @@
-import { Details } from "~/components/shared";
+﻿import { useTranslation } from "react-i18next";
+import { Details } from "~/components/ui";
+import { FaqItem, Tab, TabDataFromJSON } from "~/types/translate.types";
 
-const tabs = [
-  {
-    heading: "Requirements",
-    panel: [
-      {
-        title: "Have prime",
-        subtitle: "Only players with prime can drop weekly",
-      },
-      {
-        title: "Complete the first 10 win matches",
-        subtitle: "We need your starting rank to conveniently boost",
-      },
-    ],
-  },
-  {
-    heading: "Extra Options",
-    panel: [
-      {
-        title: "Play with Partners (Duo)",
-        subtitle: "Your booster will team up with you in duo mode",
-      },
-      {
-        title: "Live Stream",
-        subtitle: "Watch your booster's gameplay in real-time",
-      },
-    ],
-  },
-  {
-    heading: "FAQ",
-    isQuestions: true,
-    panel: [],
-  },
-];
+const ListDetail = () => {
+  const { t } = useTranslation("common");
 
-const ListDetail = () => (
-  <Details
-    title="Info"
-    subtitle="All the important details about our Premier Boost"
-    tabs={tabs}
-  />
-);
+  const detailsTabsData = t("details.tabs", {
+    returnObjects: true,
+  }) as Record<string, TabDataFromJSON>;
+  const faqData =
+    (t("faq.questions", { returnObjects: true }) as FaqItem[]) || [];
+
+  const tabs: Tab[] = Object.values(detailsTabsData).map((tabData) => ({
+    heading: tabData.heading,
+    panel: tabData.items ? Object.values(tabData.items) : [],
+    isQuestions: tabData.heading === detailsTabsData.faq.heading,
+  }));
+
+  return (
+    <Details
+      title={t("details.title")}
+      subtitle={t("details.subtitle.wingman")}
+      tabs={tabs}
+      questions={faqData}
+    />
+  );
+};
 
 export default ListDetail;

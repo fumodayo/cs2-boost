@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import useSWR from "swr";
-import { Helmet, ErrorDisplay } from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+import { Helmet, ErrorDisplay, Heading } from "~/components/ui";
 import {
   FaTachometerAlt,
   FaChartLine,
@@ -20,14 +19,16 @@ import { payoutService } from "~/services/payout.service";
 import { revenueService } from "~/services/revenue.service";
 
 const DashboardPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["dashboard_page", "common"]);
   const [chartDays, setChartDays] = useState(30);
 
   const {
     data: statsData,
     error: statsError,
     isLoading: isLoadingStats,
-  } = useSWR("/revenue/statistics", revenueService.getDashboardStatistics);
+  } = useSWR(`/revenue/statistics?days=${chartDays}`, () =>
+    revenueService.getDashboardStatistics(chartDays),
+  );
 
   const {
     data: chartData,
@@ -59,16 +60,15 @@ const DashboardPage: React.FC = () => {
   );
 
   const kpi = statsData?.kpi;
-  const descriptions = statsData?.descriptions;
 
   return (
     <>
-      <Helmet title="Dashboard · Admin Panel" />
+      <Helmet title="dashboard_page" />
       <div className="space-y-8 p-4 md:p-8">
         <Heading
           icon={FaTachometerAlt}
-          title="Dashboard"
-          subtitle="Welcome back, Admin! Here's a summary of your platform's activity."
+          title="dashboard_page_title"
+          subtitle="dashboard_page_subtitle"
         />
         {isLoadingStats && (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -80,36 +80,72 @@ const DashboardPage: React.FC = () => {
             ))}
           </div>
         )}
-        {statsError && (
-          <ErrorDisplay message="Could not load KPI statistics." />
-        )}
-        {kpi && descriptions && (
+        {statsError && <ErrorDisplay message={t("dashboard_page:kpi_error")} />}
+        {kpi && (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             <FinancialKpiCard
-              title={t("DashboardPage.StatCards.grossRevenue")}
+              title={t("stat_cards.gross_revenue", {
+                days:
+                  chartDays > 1000
+                    ? t("chart.time_ranges.all_time")
+                    : `${chartDays} days`,
+              })}
               value={formatMoney(kpi.grossRevenue, "vnd")}
-              description={descriptions.grossRevenue}
+              description={
+                chartDays > 1000
+                  ? t("stat_cards.descriptions.all_time")
+                  : t("stat_cards.descriptions.in_last_n_days", {
+                      count: chartDays,
+                    })
+              }
               icon={FaChartLine}
               colorClass="text-green-500"
             />
             <FinancialKpiCard
-              title={t("DashboardPage.StatCards.netProfit")}
+              title={t("stat_cards.net_profit", {
+                days:
+                  chartDays > 1000
+                    ? t("chart.time_ranges.all_time")
+                    : `${chartDays} days`,
+              })}
               value={formatMoney(kpi.netProfit, "vnd")}
-              description={descriptions.netProfit}
+              description={
+                kpi.grossRevenue > 0
+                  ? t("stat_cards.descriptions.profit_margin", {
+                      percent: (
+                        (kpi.netProfit / kpi.grossRevenue) *
+                        100
+                      ).toFixed(1),
+                    })
+                  : t("stat_cards.descriptions.no_revenue")
+              }
               icon={FaPiggyBank}
               colorClass="text-blue-500"
             />
             <FinancialKpiCard
-              title={t("DashboardPage.StatCards.totalPayouts")}
+              title={t("stat_cards.total_payouts", {
+                days:
+                  chartDays > 1000
+                    ? t("chart.time_ranges.all_time")
+                    : `${chartDays} days`,
+              })}
               value={formatMoney(kpi.totalPayouts, "vnd")}
-              description={descriptions.totalPayouts}
+              description={
+                chartDays > 1000
+                  ? t("stat_cards.descriptions.paid_to_partners_all_time")
+                  : t("stat_cards.descriptions.paid_to_partners_n_days", {
+                      count: chartDays,
+                    })
+              }
               icon={FaMoneyBillWave}
               colorClass="text-yellow-500"
             />
             <FinancialKpiCard
-              title={t("DashboardPage.StatCards.pendingPayouts")}
+              title={t("stat_cards.pending_payouts")}
               value={formatMoney(kpi.pendingPayouts, "vnd")}
-              description={descriptions.pendingPayouts}
+              description={t("stat_cards.descriptions.pending_requests", {
+                count: kpi.pendingPayoutsCount || 0,
+              })}
               icon={FaFileInvoiceDollar}
               colorClass="text-red-500"
             />
@@ -122,7 +158,7 @@ const DashboardPage: React.FC = () => {
               <div className="h-full min-h-[420px] animate-pulse rounded-xl bg-card"></div>
             )}
             {chartError && (
-              <ErrorDisplay message="Could not load revenue chart." />
+              <ErrorDisplay message={t("dashboard_page:chart_error")} />
             )}
             {chartData && (
               <RevenueChartCard
@@ -147,7 +183,7 @@ const DashboardPage: React.FC = () => {
             <div className="h-96 animate-pulse rounded-xl bg-card"></div>
           )}
           {transactionsError && (
-            <ErrorDisplay message="Could not load recent transactions." />
+            <ErrorDisplay message={t("dashboard_page:transactions_error")} />
           )}
           {transactionsData && (
             <RecentTransactions transactions={transactionsData.data} />

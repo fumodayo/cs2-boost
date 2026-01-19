@@ -1,0 +1,48 @@
+{
+    "page_title": "My Income",
+    "page_subtitle": "Track your earnings and request payouts.",
+    "loading_message": "Loading Your Financial Data...",
+    "error_message": "Failed to load statistics. Please try again.",
+    "request_payout_btn": "Request Payout",
+    "minimum_balance_tooltip": "Minimum balance of 50,000 VND required to request a payout.",
+    "stat_cards": {
+        "available_balance": "Available Balance",
+        "potential_revenue": "Potential Revenue",
+        "pending_payouts": "Pending Payouts",
+        "total_earnings": "Total Earnings"
+    },
+    "chart": {
+        "title": "Financial Overview",
+        "label": "Amount (VND)",
+        "available_balance": "Available Balance",
+        "potential_revenue": "Potential Revenue",
+        "pending_payouts": "Pending Payouts"
+    },
+    "recent_transactions": {
+        "title": "Recent Transactions",
+        "header_description": "Description",
+        "header_date": "Date",
+        "header_type": "Type",
+        "header_amount": "Amount",
+        "empty_title": "No Transactions Yet",
+        "empty_subtitle": "When you complete orders, your earnings will appear here.",
+        "view_more": "View All Transactions →",
+        "types": {
+            "commission": "Commission",
+            "penalty": "Penalty",
+            "payout": "Payout"
+        }
+    },
+    "payout_modal": {
+        "title": "Request a Payout",
+        "balance_info": "Available Balance: {{balance}}",
+        "amount_label": "Payout Amount",
+        "amount_placeholder": "Enter amount to withdraw",
+        "submit_btn": "Submit Request",
+        "validation": {
+            "amount_required": "Amount is required.",
+            "amount_exceed": "Amount cannot exceed your balance.",
+            "minimum_amount": "Minimum payout amount is 50,000 VND."
+        }
+    }
+}

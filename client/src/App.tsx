@@ -6,12 +6,12 @@ import {
   LoginModal,
   RegisterModal,
   ResetPasswordModal,
-} from "./components/shared";
+} from "./components/ui";
 import { AdminRoutes, ComingRoutes, DefaultRoutes, UserRoutes } from "./routes";
-import ScrollToTopRouter from "./components/shared/ScrollToTopRouter";
+import { ScrollToTopRouter } from "./components/ui/Misc";
 import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
-import InputOtpModal from "./components/shared/Modal/InputOtpModal";
+import { InputOtpModal } from "./components/ui/Modal";
 import { LoadingPage } from "./pages";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 

@@ -1,4 +1,4 @@
-import { FilterQuery, isValidObjectId } from 'mongoose';
+﻿import { FilterQuery, isValidObjectId } from 'mongoose';
 import { IUser } from '../models/user.model';
 import escapeRegex from '../utils/escapeRegex';
 
@@ -40,6 +40,20 @@ const buildQueryUserOptions = (queryParams: any, searchFields: string[]) => {
             ? queryParams['filter-status']
             : [queryParams['filter-status']];
         filters.status = { $in: statuses };
+    }
+
+    if (queryParams.is_banned) {
+        const bannedValues = Array.isArray(queryParams.is_banned)
+            ? queryParams.is_banned
+            : [queryParams.is_banned];
+
+        const booleanValues = bannedValues.map((v: string) => v === 'true');
+
+        if (booleanValues.length === 1) {
+            filters.is_banned = booleanValues[0];
+        } else if (booleanValues.length === 2) {
+
+        }
     }
 
     if (queryParams.search && searchFields.length > 0) {
@@ -98,6 +112,26 @@ const buildQueryOrderOptions = (queryParams: any, searchFields: string[] = []) =
         const orConditions = searchFields.map((field) => ({ [field]: searchRegex }));
         if (orConditions.length > 0) {
             allConditions.push({ $or: orConditions });
+        }
+    }
+
+    if (queryParams.startDate || queryParams.endDate) {
+        const dateFilter: { $gte?: Date; $lte?: Date } = {};
+
+        if (queryParams.startDate) {
+            const startDate = new Date(queryParams.startDate);
+            startDate.setHours(0, 0, 0, 0);
+            dateFilter.$gte = startDate;
+        }
+
+        if (queryParams.endDate) {
+            const endDate = new Date(queryParams.endDate);
+            endDate.setHours(23, 59, 59, 999);
+            dateFilter.$lte = endDate;
+        }
+
+        if (Object.keys(dateFilter).length > 0) {
+            allConditions.push({ createdAt: dateFilter });
         }
     }
 

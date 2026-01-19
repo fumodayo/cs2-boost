@@ -1,22 +1,22 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import toast from "react-hot-toast";
 import { FaPlus, FaUsers } from "react-icons/fa6";
-import { Heading } from "../GameModePage/components";
 import {
+  Heading,
   Helmet,
   PlusButton,
   ResetButton,
   Search,
   ViewButton,
-} from "~/components/shared";
+} from "~/components/ui";
 import { AddUserModal } from "./components";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { usersHeaders } from "~/constants/headers";
 import { IUser, IPaginatedResponse } from "~/types";
 import getErrorMessage from "~/utils/errorHandler";
 import { adminService } from "~/services/admin.service";
-import { DataTableLayout, UsersTable } from "~/components/shared/DataTable";
+import { DataTableLayout, UsersTable } from "~/components/ui/DataTable";
 import { filterBanStatus, filterUserRole } from "~/constants/order";
 import { useDataTable } from "~/hooks/useDataTable";
 
@@ -86,7 +86,7 @@ const ManageUserPage = () => {
 
   return (
     <>
-      <Helmet title="Manage Users · CS2Boost" />
+      <Helmet title="manage_users_page" />
       <AddUserModal
         isOpen={isAddUserModalOpen}
         onClose={() => setIsAddUserModalOpen(false)}
@@ -95,11 +95,12 @@ const ManageUserPage = () => {
           mutate();
         }}
       />
+
       <div>
         <Heading
           icon={FaUsers}
-          title="Manage Users"
-          subtitle="List of all registered users in the system."
+          title="manage_users_page_title"
+          subtitle="manage_users_page_subtitle"
         />
         <main>
           <div className="mt-8">

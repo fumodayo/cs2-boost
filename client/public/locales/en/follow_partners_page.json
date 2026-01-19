@@ -1,0 +1,19 @@
+{
+    "search_placeholder": "Search in your followed partners...",
+    "card": {
+        "verified_tooltip": "Verified Partner",
+        "online": "Online",
+        "offline": "Offline",
+        "rating": "Rating",
+        "followers": "Followers",
+        "unfollow_btn": "Unfollow",
+        "unfollowed_toast": "Unfollowed {{username}}"
+    },
+    "empty_state": {
+        "search_title": "No Partners Found",
+        "no_follow_title": "You Haven't Followed Any Partners Yet",
+        "search_subtitle": "We couldn't find any partners matching your search. Try a different name.",
+        "no_follow_subtitle": "Start exploring and follow partners to see them here. They will help you on your journey!",
+        "explore_btn": "Explore Partners"
+    }
+}

@@ -8,9 +8,6 @@
         "strict": true,
         "skipLibCheck": true,
         "baseUrl": "./"
-        // Nếu bạn muốn chắc chắn hơn, có thể thêm typeRoots
-        // "typeRoots": ["./src/types", "./node_modules/@types"]
     },
-    // Mục này quan trọng nhất, nó báo cho TypeScript quét toàn bộ thư mục src
     "include": ["src/**/*"]
 }

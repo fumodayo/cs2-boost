@@ -1,0 +1,22 @@
+{
+    "list_mode": {
+        "level_farming": {
+            "subtitle": "Farming levels to gain experience points and rewards"
+        },
+        "premier": {
+            "subtitle": "A competitive ranked mode with the new Elo system"
+        },
+        "wingman": {
+            "subtitle": "A 2v2 mode on smaller maps, focused on strategy and teamwork"
+        }
+    },
+    "how_to_work": {
+        "title": "How Does Premier and Wingman Carry Work?",
+        "subtitle": "The fastest & easiest way to get your desired gear, rating, titles & achievements",
+        "steps": {
+            "step1": "Choose between Premier and Wingman services",
+            "step2": "Pick the Boost service that fits your goals",
+            "step3": "Make a secured payment & enjoy your Boost"
+        }
+    }
+}

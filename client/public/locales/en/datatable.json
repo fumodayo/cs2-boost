@@ -1,0 +1,105 @@
+{
+    "labels": {
+        "no_results": "No results.",
+        "unassigned": "Unassigned",
+        "not_applicable": "N/A"
+    },
+    "headers": {
+        "id": "ID",
+        "price": "Price",
+        "order": "Order",
+        "status": "Status",
+        "transaction_id": "Transaction ID",
+        "payment_method": "Payment Method",
+        "amount": "Amount",
+        "last_updated": "Last Updated",
+        "customer": "Customer",
+        "assign_partner": "Assigned Partner",
+        "partner": "Partner",
+        "actions": "Actions",
+        "type": "Type",
+        "user": "User",
+        "role": "Role",
+        "created_at": "Created At",
+        "full_name": "Full Name",
+        "cccd_number": "CCCD Number"
+    },
+    "actions": {
+        "pay_now": "Pay Now",
+        "accept_order": "Accept Order",
+        "refuse": "Refuse",
+        "completed": "Completed",
+        "cancel": "Cancel",
+        "renew_order": "Renew Order",
+        "recovery_order": "Recovery Order"
+    },
+    "filters": {
+        "search_placeholder": "Search...",
+        "selected": "selected",
+        "no_results_found": "No results found.",
+        "labels": {
+            "status": "Status",
+            "type": "Type",
+            "reset": "Reset",
+            "pending": "Pending",
+            "waiting": "Waiting",
+            "in_progress": "In Progress",
+            "completed": "Completed",
+            "cancel": "Cancel",
+            "in_active": "In Active",
+            "wingman": "Wingman",
+            "premier": "Premier",
+            "level_farming": "Level Farming",
+            "role": "Role",
+            "client": "Client",
+            "partner": "Partner",
+            "admin": "Admin",
+            "banned": "Banned",
+            "active": "Active",
+            "sale": "Sale",
+            "payout": "Payout",
+            "commission": "Partner Commission",
+            "penalty": "Penalty",
+            "fee": "Fee",
+            "refund": "Refund",
+            "not_responding": "Not Responding",
+            "overcharging": "Overcharging",
+            "slow_delivery": "Slow Delivery",
+            "low_quality": "Low Quality",
+            "fraud": "Fraud",
+            "terms_violation": "Terms Violation",
+            "resolved": "Resolved",
+            "reject": "Rejected",
+            "approved": "Approved"
+        }
+    },
+    "sort": {
+        "asc": "Asc",
+        "desc": "Desc",
+        "hide": "Hide"
+    },
+    "view_button": {
+        "view": "View",
+        "toggle_columns": "Toggle columns"
+    },
+    "pagination": {
+        "rows_per_page": "Rows per page",
+        "page_info_simple": "Page {{currentPage}} of {{maxPage}}",
+        "page_info_full": "{{total}} rows - Page {{currentPage}} of {{maxPage}}"
+    },
+    "tooltip": {
+        "view_boost": "View Boost",
+        "boost_suffix": "Boost"
+    },
+    "order_statuses": {
+        "pending": "Waiting For Payment",
+        "waiting": "Waiting For Booster",
+        "in_active": "Waiting For Booster",
+        "in_progress": "Boost in progress",
+        "cancel": "Boost has been cancelled",
+        "completed": "Boost completed"
+    },
+    "errors": {
+        "load_data_failed": "Failed to load data. Please try again."
+    }
+}

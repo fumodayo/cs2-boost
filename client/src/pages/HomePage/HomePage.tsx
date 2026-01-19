@@ -1,5 +1,5 @@
-import cn from "~/libs/utils";
-import { Helmet, Header, Footer } from "~/components/shared";
+﻿import cn from "~/libs/utils";
+import { Helmet, Header, Footer, SEOStructuredData } from "~/components/ui";
 import {
   AskList,
   Hero,
@@ -8,13 +8,16 @@ import {
   QuantityClient,
   StepByStep,
   Stepup,
+  CS2News,
 } from "./components";
 import NewStandard from "./components/NewStandard";
 
 const HomePage = () => {
   return (
     <>
-      <Helmet title="CS2Boost - The All-In-One Platform for Gamers" />
+      <Helmet title="landing_page" />
+      <SEOStructuredData type="organization" />
+      <SEOStructuredData type="website" />
       <div>
         {/* HEADER */}
         <Header />
@@ -35,6 +38,9 @@ const HomePage = () => {
             >
               {/* OUR SERVICES */}
               <OurServices />
+
+              {/* CS2 NEWS */}
+              <CS2News />
 
               {/* STEP BY STEP */}
               <div

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+﻿import React, { useCallback } from "react";
 import { ordersHeaders } from "~/constants/headers";
 import { IOrder, IPaginatedResponse } from "~/types";
 import {
@@ -6,8 +6,8 @@ import {
   PlusButton,
   ResetButton,
   ViewButton,
-} from "~/components/shared";
-import { DataTableLayout, BoostsTable } from "~/components/shared/DataTable";
+} from "~/components/ui";
+import { DataTableLayout, BoostsTable } from "~/components/ui/DataTable";
 import { useDataTable } from "~/hooks/useDataTable";
 import { filterOrderStatus } from "~/constants/order";
 import { adminService } from "~/services/admin.service";
@@ -17,9 +17,14 @@ interface UserOrdersTableProps {
 }
 
 const UserOrdersTable: React.FC<UserOrdersTableProps> = ({ userId }) => {
-  const fetcherWithUserId = useCallback(() => {
-    return adminService.getAdminOrders(userId!);
-  }, [userId]);
+  const fetcherWithUserId = useCallback(
+    (params: URLSearchParams) => {
+      const newParams = new URLSearchParams(params);
+      newParams.set("userId", userId);
+      return adminService.getAdminOrders(newParams);
+    },
+    [userId],
+  );
 
   const {
     data: ordersData,

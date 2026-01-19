@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { FaCheck, FaTrashAlt, FaTimes } from "react-icons/fa";
 import { HiPlus } from "react-icons/hi";
-import { Input, Select, Spinner, Widget } from "~/components/shared";
+import { Input, Select, Spinner, Widget } from "~/components/ui";
 import { v4 as uuidv4 } from "uuid";
 import { SOCIAL_MEDIA } from "~/constants/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,20 +14,17 @@ import toast from "react-hot-toast";
 import { RootState } from "~/redux/store";
 import getErrorMessage from "~/utils/errorHandler";
 import { ISocialLink, IUser } from "~/types";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { userService } from "~/services/user.service";
-
 interface IEditingSocialLink extends ISocialLink {
   id: string;
   isValid: boolean;
 }
-
 const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["settings_page", "common"]);
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.user);
-
   const initialLinks = useMemo(
     () =>
       (currentUser.social_links || []).map((link) => ({
@@ -37,20 +34,26 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
       })),
     [currentUser.social_links],
   );
-
   const [socialLinks, setSocialLinks] =
     useState<IEditingSocialLink[]>(initialLinks);
-
   useEffect(() => {
     setSocialLinks(initialLinks);
   }, [initialLinks]);
-
+  const usedTypes = useMemo(
+    () => socialLinks.map((link) => link.type),
+    [socialLinks],
+  );
+  const getAvailableTypes = (currentType?: string) => {
+    return SOCIAL_MEDIA.filter(
+      (social) =>
+        social.value === currentType || !usedTypes.includes(social.value),
+    );
+  };
   const validateLink = (type: string, link: string): boolean => {
     if (!link.trim()) return false;
     const social = SOCIAL_MEDIA.find((s) => s.value === type);
     return social ? social.regex.test(link.trim()) : false;
   };
-
   const handleLinkChange = (
     id: string,
     field: "type" | "link",
@@ -69,27 +72,26 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
       }),
     );
   };
-
   const addSocialLink = () => {
+    const availableType = SOCIAL_MEDIA.find(
+      (social) => !usedTypes.includes(social.value),
+    );
+    if (!availableType) return; 
     setSocialLinks((prev) => [
       ...prev,
-      { id: uuidv4(), type: "facebook", link: "", isValid: false },
+      { id: uuidv4(), type: availableType.value, link: "", isValid: false },
     ]);
   };
-
   const removeSocialLink = (id: string) => {
     setSocialLinks((prev) => prev.filter((item) => item.id !== id));
   };
-
   const handleCancel = () => {
     setSocialLinks(initialLinks);
   };
-
   const handleSave = async () => {
     const validLinks = socialLinks
       .filter((item) => item.isValid)
       .map(({ type, link }) => ({ type, link }));
-
     dispatch(updatedStart());
     try {
       const data = await userService.updateUser({
@@ -103,26 +105,24 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
       toast.error(message);
     }
   };
-
   const hasChanges = useMemo(
     () => JSON.stringify(initialLinks) !== JSON.stringify(socialLinks),
     [initialLinks, socialLinks],
   );
-
   return (
     <Widget>
       <Widget.Header>
-        {t("SettingsPage.Information.SocialMediaWidget.title")}
+        {t("information_page.social_media_widget.title")}
       </Widget.Header>
       <Widget.Content>
-        <div className="mb-4 space-y-4">
+        <div className="relative w-full space-y-4 p-3 sm:p-5">
           {socialLinks.length > 0 ? (
             socialLinks.map((item) => (
               <div
                 key={item.id}
                 className="grid grid-cols-12 items-center gap-2"
               >
-                <div className="relative col-span-7">
+                <div className="relative col-span-6 md:col-span-7">
                   <Input
                     type="text"
                     value={item.link}
@@ -135,9 +135,9 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
                   {item.link && (
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                       {item.isValid ? (
-                        <FaCheck className="h-4 w-4 text-success" />
+                        <FaCheck className="h-2 w-2 text-success md:h-4 md:w-4" />
                       ) : (
-                        <FaTimes className="h-4 w-4 text-danger" />
+                        <FaTimes className="h-2 w-2 text-danger md:h-4 md:w-4" />
                       )}
                     </div>
                   )}
@@ -149,11 +149,13 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
                       handleLinkChange(item.id, "type", e.target.value)
                     }
                   >
-                    {SOCIAL_MEDIA.map(({ label, value }) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
+                    {getAvailableTypes(item.type).map(
+                      ({ value, translationKey }) => (
+                        <option key={value} value={value}>
+                          {t(`common:socials.${translationKey}`)}
+                        </option>
+                      ),
+                    )}
                   </Select>
                 </div>
                 <div className="col-span-1">
@@ -163,27 +165,26 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
                     className="text-muted-foreground hover:bg-danger/10 hover:text-danger"
                     onClick={() => removeSocialLink(item.id)}
                   >
-                    <FaTrashAlt className="h-4 w-4" />
+                    <FaTrashAlt className="h-3 w-3 md:h-4 md:w-4" />
                   </Button>
                 </div>
               </div>
             ))
           ) : (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              {t("SettingsPage.Information.SocialMediaWidget.empty")}
+              {t("information_page.social_media_widget.empty")}
             </p>
           )}
-
           <Button
-            size="lg"
+            size="sm"
             variant="outline"
             onClick={addSocialLink}
-            className="w-full"
+            disabled={usedTypes.length >= SOCIAL_MEDIA.length}
+            className="w-full text-xs md:text-sm"
           >
             <HiPlus className="mr-2 h-4 w-4" />
-            {t("SettingsPage.Information.SocialMediaWidget.addBtn")}
+            {t("information_page.social_media_widget.add_btn")}
           </Button>
-
           {hasChanges && (
             <div className="flex justify-end space-x-2 border-t border-border pt-4">
               <Button
@@ -192,7 +193,7 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
                 onClick={handleCancel}
                 disabled={loading}
               >
-                {t("Dialog.btn.Cancel")}
+                {t("common:buttons.cancel")}
               </Button>
               <Button
                 size="sm"
@@ -206,7 +207,7 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
                 ) : (
                   <FaCheck className="mr-2 h-4 w-4" />
                 )}
-                {t("Dialog.btn.Save Changes")}
+                {t("common:buttons.save_changes")}
               </Button>
             </div>
           )}
@@ -215,5 +216,4 @@ const SocialMediaWidget = ({ currentUser }: { currentUser: IUser }) => {
     </Widget>
   );
 };
-
 export default SocialMediaWidget;

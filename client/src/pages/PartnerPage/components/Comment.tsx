@@ -1,4 +1,4 @@
-import { StarRating } from "~/components/shared";
+﻿import { StarRating } from "~/components/ui";
 import { IReview, IUser } from "~/types";
 import { formatDateTime } from "~/utils";
 

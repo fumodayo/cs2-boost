@@ -1,4 +1,4 @@
-const reportPopulates = [
+﻿const reportPopulates = [
     { path: 'sender', select: 'username profile_picture user_id' },
     { path: 'receiver', select: 'username profile_picture user_id' },
     { path: 'handler', select: 'username profile_picture user_id' },

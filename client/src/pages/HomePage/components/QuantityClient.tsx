@@ -1,53 +1,53 @@
-import { useTranslation } from "react-i18next";
+﻿import { useTranslation } from "react-i18next";
 import { IconType } from "react-icons";
 import { BsRocketTakeoff } from "react-icons/bs";
 import { FaCalendarDay, FaRankingStar } from "react-icons/fa6";
 import { IoPeople } from "react-icons/io5";
 import cn from "~/libs/utils";
-import { v4 as uuidv4 } from "uuid";
 
 interface ICardProps {
   icon: IconType;
   title: string;
-  subtitle: string;
-  label: string;
+  subtitleKey: string;
+  labelKey: string;
   isActive: boolean;
 }
 
-const cards: ICardProps[] = [
+const cardsData = [
   {
+    key: "gamers",
     icon: IoPeople,
     title: "97.000+",
-    subtitle: "Gamers we Empowered",
-    label:
-      "Proudly serving a thriving community of passionate gamers worldwide",
     isActive: false,
   },
   {
+    key: "orders",
     icon: BsRocketTakeoff,
     title: "180.000+",
-    subtitle: "Orders Completed",
-    label: "Boosting, Coaching, Accounts and we're just getting started",
     isActive: true,
   },
   {
+    key: "since",
     icon: FaCalendarDay,
     title: "2018",
-    subtitle: "Operating Since",
-    label: "That's all it took us to revolutionize the game services industry",
     isActive: false,
   },
   {
+    key: "partners",
     icon: FaRankingStar,
     title: "800+",
-    subtitle: "Partners",
-    label: "The very best gamers stand ready to fulfill your orders",
     isActive: false,
   },
 ];
 
-const Card = ({ icon: Icon, title, subtitle, label, isActive }: ICardProps) => {
-  const { t } = useTranslation();
+const Card = ({
+  icon: Icon,
+  title,
+  subtitleKey,
+  labelKey,
+  isActive,
+}: ICardProps) => {
+  const { t } = useTranslation("landing");
 
   return (
     <div className="w-full">
@@ -75,18 +75,16 @@ const Card = ({ icon: Icon, title, subtitle, label, isActive }: ICardProps) => {
           >
             {title}
           </h3>
-          <p className="z-10 text-primary-foreground">
-            {t(`QuantityClient.card.subtitle.${subtitle}`)}
-          </p>
+          <p className="z-10 text-primary-foreground">{t(subtitleKey)}</p>
           <p className="z-10 mt-auto text-sm text-primary-foreground">
-            {t(`QuantityClient.card.label.${label}`)}
+            {t(labelKey)}
           </p>
 
           <img
             src={`/assets/backgrounds/active_numbers.svg`}
             loading="lazy"
             className="absolute bottom-0 right-0 h-auto w-full overflow-hidden rounded-xl"
-            alt={title}
+            alt={t(subtitleKey)}
           />
         </div>
       ) : (
@@ -113,11 +111,9 @@ const Card = ({ icon: Icon, title, subtitle, label, isActive }: ICardProps) => {
           >
             {title}
           </h3>
-          <p className="z-10 text-foreground/90">
-            {t(`QuantityClient.card.subtitle.${subtitle}`)}
-          </p>
+          <p className="z-10 text-foreground/90">{t(subtitleKey)}</p>
           <p className="secondary z-10 mt-auto text-sm text-foreground/90">
-            {t(`QuantityClient.card.label.${label}`)}
+            {t(labelKey)}
           </p>
           <img
             className="absolute bottom-0 right-0 h-auto w-full overflow-hidden rounded-xl"
@@ -132,7 +128,7 @@ const Card = ({ icon: Icon, title, subtitle, label, isActive }: ICardProps) => {
 };
 
 const QuantityClient = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("landing");
 
   return (
     <div
@@ -148,7 +144,7 @@ const QuantityClient = () => {
             "md:mx-0 md:max-w-xs md:text-start",
           )}
         >
-          {t("QuantityClient.heading")}
+          {t("quantity_client.heading")}
         </h2>
         <p
           className={cn(
@@ -156,9 +152,9 @@ const QuantityClient = () => {
             "md:ml-auto md:mr-0 md:mt-0 md:text-start",
           )}
         >
-          {t("QuantityClient.subheading")}
+          {t("quantity_client.subheading")}
           <span className="mt-1 block font-medium text-foreground">
-            {t("QuantityClient.quotes")}
+            {t("quantity_client.quotes")}
           </span>
         </p>
       </div>
@@ -168,8 +164,15 @@ const QuantityClient = () => {
           "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
         )}
       >
-        {cards.map((props) => (
-          <Card key={uuidv4()} {...props} />
+        {cardsData.map((card) => (
+          <Card
+            key={card.key}
+            icon={card.icon}
+            title={card.title}
+            isActive={card.isActive}
+            subtitleKey={`quantity_client.${card.key}.subtitle`}
+            labelKey={`quantity_client.${card.key}.label`}
+          />
         ))}
       </div>
     </div>

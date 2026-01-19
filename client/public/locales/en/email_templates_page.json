@@ -1,0 +1,38 @@
+{
+    "title": "Email Templates",
+    "subtitle": "Manage and customize email templates sent to users",
+    "available_templates": "Available Templates",
+    "select_template": "Select a template to edit",
+    "subject": "Subject",
+    "html_content": "HTML Content",
+    "available_variables": "Available variables",
+    "preview": "Preview",
+    "save_changes": "Save Changes",
+    "saving": "Saving...",
+    "email_preview": "Email Preview",
+    "send_announcement_email": "Send Announcement Email",
+    "send_dialog": {
+        "title": "Send Announcement Email",
+        "description": "This will send the announcement email to all client users (not admins or partners).",
+        "image_url": "Image URL (optional)",
+        "image_placeholder": "https://example.com/banner.jpg",
+        "title_field": "Title",
+        "title_placeholder": "Announcement title...",
+        "content_field": "Content",
+        "content_placeholder": "Announcement content...",
+        "send_button": "Send Email to All Clients",
+        "sending": "Sending..."
+    },
+    "template_names": {
+        "welcome": "Welcome Email (Google OAuth)",
+        "forgot_password": "Forgot Password (OTP)",
+        "announcement": "Announcement (Broadcast)",
+        "password_reset_by_admin": "Password Reset (Admin)",
+        "payment_success": "Payment Success"
+    },
+    "toasts": {
+        "template_updated": "Template updated successfully!",
+        "email_sent": "Announcement email sent!",
+        "title_content_required": "Title and content are required"
+    }
+}

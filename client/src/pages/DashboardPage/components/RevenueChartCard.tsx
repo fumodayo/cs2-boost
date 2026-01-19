@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+﻿import React, { useContext } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,16 +12,20 @@ import {
   ChartData,
   ChartOptions,
   TooltipItem,
+  BarController,
+  LineController,
+  Filler,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { FaArrowUpRightDots, FaPiggyBank } from "react-icons/fa6";
 import { formatMoney } from "~/utils";
 import { useTranslation } from "react-i18next";
-import { Button } from "~/components/shared/Button";
 import cn from "~/libs/utils";
 import { AppContext } from "~/components/context/AppContext";
 
 ChartJS.register(
+  BarController,
+  LineController,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -30,6 +34,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  Filler,
 );
 
 interface ChartDataPoint {
@@ -45,9 +50,10 @@ interface RevenueChartCardProps {
 }
 
 const timeRangeOptions = [
-  { label: "7 Days", value: 7 },
-  { label: "30 Days", value: 30 },
-  { label: "90 Days", value: 90 },
+  { key: "7_days", value: 7 },
+  { key: "30_days", value: 30 },
+  { key: "90_days", value: 90 },
+  { key: "all_time", value: 36500 },
 ];
 
 const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
@@ -55,15 +61,19 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
   days,
   setDays,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("dashboard_page");
   const { theme } = useContext(AppContext);
 
+  const filteredData = React.useMemo(() => {
+    return data.filter((d) => d.grossRevenue > 0 || d.netProfit > 0);
+  }, [data]);
+
   const themeColors = {
-    tickColor: theme === "dark" ? "#9ca3af" : "#4b5563",
-    gridColor: theme === "dark" ? "#374151" : "#e5e7eb",
+    tickColor: theme === "dark" ? "#9ca3af" : "#6b7280",
+    gridColor:
+      theme === "dark" ? "rgba(55, 65, 81, 0.5)" : "rgba(229, 231, 235, 0.5)",
     tooltipBg: theme === "dark" ? "#1f2937" : "#ffffff",
     tooltipBorder: theme === "dark" ? "#374151" : "#e5e7eb",
-
     tooltipTitle: theme === "dark" ? "#f9fafb" : "#111827",
   };
 
@@ -77,7 +87,7 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
   );
 
   const chartData: ChartData<"bar" | "line"> = {
-    labels: data.map((d) =>
+    labels: filteredData.map((d) =>
       new Date(d.date).toLocaleDateString("en-GB", {
         day: "numeric",
         month: "short",
@@ -86,23 +96,27 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
     datasets: [
       {
         type: "bar" as const,
-        label: t("DashboardPage.Chart.grossRevenue"),
-        data: data.map((d) => d.grossRevenue),
-        backgroundColor: "rgba(59, 130, 246, 0.5)",
-        borderColor: "rgba(59, 130, 246, 1)",
+        label: t("chart.gross_revenue"),
+        data: filteredData.map((d) => d.grossRevenue),
+        backgroundColor: "rgba(59, 130, 246, 0.2)",
+        borderColor: "rgba(59, 130, 246, 0.8)",
         borderWidth: 1,
         borderRadius: 4,
+        barPercentage: 0.6,
         order: 2,
       },
       {
         type: "line" as const,
-        label: t("DashboardPage.Chart.netProfit"),
-        data: data.map((d) => d.netProfit),
+        label: t("chart.net_profit"),
+        data: filteredData.map((d) => d.netProfit),
         borderColor: "rgba(234, 179, 8, 1)",
-        backgroundColor: "rgba(234, 179, 8, 1)",
-        tension: 0.3,
-        pointRadius: 2,
+        backgroundColor: "rgba(234, 179, 8, 0.1)",
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 4,
         pointBackgroundColor: "rgba(234, 179, 8, 1)",
+        borderWidth: 2,
+        fill: true,
         order: 1,
       },
     ],
@@ -113,15 +127,7 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top",
-        align: "end",
-        labels: {
-          boxWidth: 12,
-          usePointStyle: true,
-          pointStyle: "rectRounded",
-          padding: 20,
-          color: themeColors.tickColor,
-        },
+        display: false,
       },
       tooltip: {
         backgroundColor: themeColors.tooltipBg,
@@ -129,7 +135,9 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
         bodyColor: themeColors.tickColor,
         borderColor: themeColors.tooltipBorder,
         borderWidth: 1,
-        padding: 10,
+        padding: 12,
+        boxPadding: 4,
+        usePointStyle: true,
         callbacks: {
           label: (context: TooltipItem<"bar" | "line">) => {
             const label = context.dataset.label || "";
@@ -142,16 +150,22 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
     scales: {
       y: {
         beginAtZero: true,
-        grid: { color: themeColors.gridColor },
+        grid: { color: themeColors.gridColor, drawTicks: false },
+        border: { display: false },
         ticks: {
           color: themeColors.tickColor,
+          font: { size: 11 },
           callback: (value) => formatMoney(Number(value), "vnd"),
         },
       },
       x: {
         grid: { display: false },
+        border: { display: false },
         ticks: {
           color: themeColors.tickColor,
+          font: { size: 11 },
+          maxRotation: 0,
+          autoSkip: true,
         },
       },
     },
@@ -159,64 +173,91 @@ const RevenueChartCard: React.FC<RevenueChartCardProps> = ({
   };
 
   return (
-    <div className="h-full rounded-xl border border-border bg-card p-4 shadow-sm md:p-6">
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+    <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm">
+      {/* Header Section */}
+      <div className="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-center">
         <div>
-          <h3 className="text-lg font-semibold text-foreground">
-            {t("DashboardPage.Chart.title")}
+          <h3 className="text-xl font-bold tracking-tight text-foreground">
+            {t("chart.title")}
           </h3>
-          <p className="text-sm text-muted-foreground">
-            {t("DashboardPage.Chart.subtitle", { days })}
+          <p className="mt-1 text-sm font-medium text-muted-foreground">
+            {t("chart.subtitle", { days: days > 1000 ? "All Time" : days })}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-1 rounded-md bg-muted p-1">
+
+        {/* Modern Time Selector */}
+        <div className="flex rounded-lg border border-border/50 bg-muted/50 p-1">
           {timeRangeOptions.map((option) => (
-            <Button
+            <button
               key={option.value}
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 flex-1 px-4 text-xs font-semibold",
-                days === option.value
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground",
-              )}
               onClick={() => setDays(option.value)}
+              className={cn(
+                "relative rounded-md px-4 py-1.5 text-xs font-semibold transition-all duration-200 ease-in-out",
+                days === option.value
+                  ? "bg-background text-foreground shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                  : "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+              )}
             >
-              {option.label}
-            </Button>
+              {option.key === "all_time"
+                ? t("chart.time_ranges.all_time", "All time")
+                : t(`chart.time_ranges.${option.key}`)}
+            </button>
           ))}
         </div>
       </div>
-      <div className="my-6 grid grid-cols-1 gap-x-8 gap-y-4 border-t border-border pt-4 sm:grid-cols-2">
-        <div className="flex items-start gap-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-            <FaArrowUpRightDots className="h-5 w-5 text-blue-500" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">
-              {t("DashboardPage.Chart.totalRevenue")}
-            </p>
-            <p className="text-2xl font-bold text-foreground">
-              {formatMoney(totals.revenue, "vnd")}
-            </p>
+
+      {/* Stats Cards Row */}
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-8">
+        <div className="relative overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50/50 to-transparent p-5 dark:border-blue-900/20 dark:from-blue-900/10">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500 text-white shadow-lg shadow-blue-500/20">
+              <FaArrowUpRightDots className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("chart.total_revenue")}
+              </p>
+              <p className="text-2xl font-bold tracking-tight text-foreground">
+                {formatMoney(totals.revenue, "vnd")}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="flex items-start gap-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-500/10">
-            <FaPiggyBank className="h-5 w-5 text-yellow-500" />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">
-              {t("DashboardPage.Chart.totalProfit")}
-            </p>
-            <p className="text-2xl font-bold text-foreground">
-              {formatMoney(totals.profit, "vnd")}
-            </p>
+
+        <div className="relative overflow-hidden rounded-xl border border-yellow-100 bg-gradient-to-br from-yellow-50/50 to-transparent p-5 dark:border-yellow-900/20 dark:from-yellow-900/10">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-500 text-white shadow-lg shadow-yellow-500/20">
+              <FaPiggyBank className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("chart.total_profit")}
+              </p>
+              <p className="text-2xl font-bold tracking-tight text-foreground">
+                {formatMoney(totals.profit, "vnd")}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      <div className="h-72 w-full">
+
+      {/* Chart Container */}
+      <div className="relative min-h-[300px] w-full flex-1">
+        {/* Custom Legend */}
+        <div className="absolute -top-4 right-0 flex items-center gap-4 text-xs font-medium">
+          <div className="flex items-center gap-2">
+            <span className="block h-2 w-2 rounded-full bg-blue-500"></span>
+            <span className="text-muted-foreground">
+              {t("chart.gross_revenue")}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="block h-2 w-2 rounded-full bg-yellow-500"></span>
+            <span className="text-muted-foreground">
+              {t("chart.net_profit")}
+            </span>
+          </div>
+        </div>
         <Chart type="bar" data={chartData} options={options} />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import { createReceipt, getReceipts } from '../controllers/receipt.controller';
 import { protect } from '../middlewares/auth.middleware';
 

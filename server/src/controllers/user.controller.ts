@@ -1,10 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import User, { IUser } from '../models/user.model';
 import { errorHandler } from '../utils/error';
-import { ROLE } from '../constants';
+import { ROLE, NOTIFY_TYPE } from '../constants';
 import bcryptjs from 'bcryptjs';
 import { AuthRequest } from '../interfaces';
 import { FilterQuery } from 'mongoose';
+import PartnerRequest, { PARTNER_REQUEST_STATUS } from '../models/partnerRequest.model';
+import Notification from '../models/notification.model';
+import { getAdminSocketIds, io } from '../socket/socket';
 
 /**
  * @desc    Lấy thông tin công khai của một người dùng bằng ID.
@@ -196,7 +199,7 @@ const unfollowPartner = async (req: AuthRequest, res: Response, next: NextFuncti
  */
 const updateUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const { username, profile_picture, social_links, details } = req.body;
+        const { username, profile_picture, banner_picture, social_links, details } = req.body;
 
         const updateFields: Partial<IUser> = {};
 
@@ -212,6 +215,7 @@ const updateUser = async (req: AuthRequest, res: Response, next: NextFunction) =
         }
 
         if (profile_picture) updateFields.profile_picture = profile_picture;
+        if (banner_picture) updateFields.banner_picture = banner_picture;
         if (social_links) updateFields.social_links = social_links;
         if (details) updateFields.details = details;
 
@@ -268,7 +272,7 @@ const changePassword = async (req: AuthRequest, res: Response, next: NextFunctio
 };
 
 /**
- * @desc    Người dùng xác minh tài khoản để trở thành Partner.
+ * @desc    Người dùng gửi yêu cầu trở thành Partner (chờ admin duyệt).
  * @route   POST /api/users/me/verify
  * @access  Private
  */
@@ -279,8 +283,15 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
             return next(errorHandler(404, 'User not found'));
         }
 
-        if (userToVerify.is_verified) {
-            return next(errorHandler(400, 'User already verified'));
+        if (userToVerify.partner_request_status === 'pending') {
+            return next(errorHandler(400, 'Partner request is pending approval'));
+        }
+
+        if (
+            userToVerify.partner_request_status === 'approved' ||
+            userToVerify.role.includes(ROLE.PARTNER)
+        ) {
+            return next(errorHandler(400, 'User is already a partner'));
         }
 
         const {
@@ -293,22 +304,44 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
             full_name,
         } = req.body;
 
-        const updateFields = {
-            is_verified: true,
-            address,
-            cccd_number,
-            cccd_issue_date,
-            date_of_birth,
-            gender,
-            phone_number,
-            full_name,
-        };
+        const existingRequest = await PartnerRequest.findOne({ user: req.user.id });
+        if (existingRequest) {
+            if (existingRequest.status === PARTNER_REQUEST_STATUS.PENDING) {
+                return next(errorHandler(400, 'Partner request is pending approval'));
+            }
+
+            existingRequest.status = PARTNER_REQUEST_STATUS.PENDING;
+            existingRequest.full_name = full_name;
+            existingRequest.cccd_number = cccd_number;
+            existingRequest.cccd_issue_date = cccd_issue_date;
+            existingRequest.date_of_birth = date_of_birth;
+            existingRequest.gender = gender;
+            existingRequest.address = address;
+            existingRequest.phone_number = phone_number;
+            existingRequest.reject_reason = undefined;
+            existingRequest.reviewed_by = undefined;
+            existingRequest.reviewed_at = undefined;
+            await existingRequest.save();
+        } else {
+
+            await PartnerRequest.create({
+                user: req.user.id,
+                full_name,
+                cccd_number,
+                cccd_issue_date,
+                date_of_birth,
+                gender,
+                address,
+                phone_number,
+            });
+        }
 
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,
             {
-                $addToSet: { role: ROLE.PARTNER },
-                $set: { ...updateFields },
+                $set: {
+                    partner_request_status: 'pending',
+                },
             },
             { new: true },
         ).select('-password');
@@ -317,10 +350,67 @@ const verifyUser = async (req: AuthRequest, res: Response, next: NextFunction) =
             return next(errorHandler(500, 'Could not verify user'));
         }
 
+        const latestRequest = await PartnerRequest.findOne({ user: req.user.id }).populate(
+            'user',
+            'username profile_picture email',
+        );
+
+        const adminUsers = await User.find({ role: ROLE.ADMIN }).select('_id');
+        const adminNotifications = adminUsers.map((admin) =>
+            new Notification({
+                receiver: admin._id,
+                title: 'New Partner Request',
+                content: `${updatedUser.username} has submitted a partner request and is waiting for review.`,
+                type: NOTIFY_TYPE.NEW_PARTNER_REQUEST,
+            }).save(),
+        );
+        await Promise.all(adminNotifications);
+
+        const adminSocketIds = getAdminSocketIds();
+        if (adminSocketIds.length > 0 && latestRequest) {
+            adminSocketIds.forEach((socketId) => {
+                io.to(socketId).emit('new_partner_request', latestRequest);
+            });
+        }
+
         res.status(200).json({
             success: true,
-            message: 'Verification successful!',
+            message: 'Partner request submitted successfully! Waiting for admin approval.',
             data: updatedUser,
+        });
+    } catch (e) {
+        next(e);
+    }
+};
+
+/**
+ * @desc    Người dùng tự xóa tài khoản của mình (Soft Delete).
+ * @route   DELETE /api/users/me
+ * @access  Private
+ */
+const deleteAccount = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return next(errorHandler(404, 'User not found'));
+        }
+
+        if (user.is_deleted) {
+            return next(errorHandler(400, 'Account has already been deleted'));
+        }
+
+        user.is_deleted = true;
+        user.deleted_at = new Date();
+
+        user.token_version = (user.token_version || 0) + 1;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Account deleted successfully.',
         });
     } catch (e) {
         next(e);
@@ -337,4 +427,5 @@ export {
     verifyUser,
     getUserById,
     searchUsers,
+    deleteAccount,
 };

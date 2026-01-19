@@ -1,0 +1,24 @@
+{
+    "title": "Thông báo của tôi",
+    "subtitle": "Xem và quản lý tất cả thông báo của bạn.",
+    "failed_to_load": "Không thể tải thông báo.",
+    "mark_all_as_read": "Đánh dấu tất cả là đã đọc",
+    "tabs": {
+        "all": "Tất cả",
+        "unread": "Chưa đọc"
+    },
+    "empty_state": {
+        "all_caught_up": "Bạn đã xem hết rồi!",
+        "no_unread": "Không có thông báo chưa đọc.",
+        "no_notifications_yet": "Chưa có thông báo nào."
+    },
+    "view_all": "Xem tất cả thông báo",
+    "date_groups": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua"
+    },
+    "menu": {
+        "title": "Thông báo",
+        "unread_count": "Chưa đọc ({{count}})"
+    }
+}

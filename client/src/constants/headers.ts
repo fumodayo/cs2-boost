@@ -1,188 +1,71 @@
-export interface IDataListHeaders {
-  label: string;
+﻿export interface IDataListHeaders {
+  translationKey: string;
   value: string;
   isSort?: boolean;
 }
-
 const pendingBoostsHeaders: IDataListHeaders[] = [
-  {
-    label: "order",
-    value: "order",
-  },
-  {
-    label: "ID",
-    value: "boost_id",
-    isSort: true,
-  },
-  {
-    label: "status",
-    value: "status",
-  },
-  {
-    label: "price",
-    value: "price",
-    isSort: true,
-  },
-  {
-    label: "last updated",
-    value: "updatedAt",
-    isSort: true,
-  },
-  {
-    label: "",
-    value: "actions",
-  },
+  { translationKey: "order", value: "order" },
+  { translationKey: "id", value: "boost_id", isSort: true },
+  { translationKey: "status", value: "status" },
+  { translationKey: "price", value: "price", isSort: true },
+  { translationKey: "last_updated", value: "updatedAt", isSort: true },
+  { translationKey: "actions", value: "actions" },
 ];
-
 const progressBoostsHeaders: IDataListHeaders[] = [
-  {
-    label: "order",
-    value: "order",
-  },
-  {
-    label: "ID",
-    value: "boost_id",
-    isSort: true,
-  },
-  {
-    label: "status",
-    value: "status",
-  },
-  {
-    label: "price",
-    value: "price",
-    isSort: true,
-  },
-  {
-    label: "last updated",
-    value: "updatedAt",
-    isSort: true,
-  },
-  {
-    label: "",
-    value: "actions",
-  },
+  { translationKey: "order", value: "order" },
+  { translationKey: "id", value: "boost_id", isSort: true },
+  { translationKey: "status", value: "status" },
+  { translationKey: "price", value: "price", isSort: true },
+  { translationKey: "last_updated", value: "updatedAt", isSort: true },
+  { translationKey: "actions", value: "actions" },
 ];
-
 const ordersHeaders: IDataListHeaders[] = [
-  {
-    label: "order",
-    value: "order",
-  },
-  {
-    label: "ID",
-    value: "boost_id",
-    isSort: true,
-  },
-  {
-    label: "status",
-    value: "status",
-  },
-  {
-    label: "price",
-    value: "price",
-    isSort: true,
-  },
-  {
-    label: "assign partner",
-    value: "assign_partner",
-  },
-  {
-    label: "last updated",
-    value: "updatedAt",
-    isSort: true,
-  },
-  {
-    label: "",
-    value: "actions",
-  },
+  { translationKey: "order", value: "order" },
+  { translationKey: "id", value: "boost_id", isSort: true },
+  { translationKey: "status", value: "status" },
+  { translationKey: "price", value: "price", isSort: true },
+  { translationKey: "assign_partner", value: "assign_partner" },
+  { translationKey: "last_updated", value: "updatedAt", isSort: true },
+  { translationKey: "actions", value: "actions" },
 ];
-
 const walletHeaders: IDataListHeaders[] = [
-  {
-    label: "order",
-    value: "order",
-  },
-  {
-    label: "payment method",
-    value: "payment_method",
-  },
-  {
-    label: "status",
-    value: "status",
-    isSort: true,
-  },
-  {
-    label: "transaction id",
-    value: "receipt_id",
-    isSort: true,
-  },
-  {
-    label: "amount",
-    value: "price",
-    isSort: true,
-  },
-  {
-    label: "last updated",
-    value: "updatedAt",
-    isSort: true,
-  },
+  { translationKey: "order", value: "order" },
+  { translationKey: "payment_method", value: "payment_method" },
+  { translationKey: "status", value: "status", isSort: true },
+  { translationKey: "transaction_id", value: "receipt_id", isSort: true },
+  { translationKey: "amount", value: "price", isSort: true },
+  { translationKey: "last_updated", value: "updatedAt", isSort: true },
 ];
-
-const usersHeaders = [
-  { label: "user", value: "username", isSort: true },
-  { label: "role", value: "role", isSort: false },
-  { label: "status", value: "status", isSort: false },
-  { label: "created at", value: "createdAt", isSort: true },
-  { label: "actions", value: "actions", isSort: false },
+const usersHeaders: IDataListHeaders[] = [
+  { translationKey: "user", value: "username", isSort: true },
+  { translationKey: "role", value: "role", isSort: false },
+  { translationKey: "status", value: "status", isSort: false },
+  { translationKey: "created_at", value: "createdAt", isSort: true },
+  { translationKey: "actions", value: "actions", isSort: false },
 ];
-
-const adminOrdersHeaders = [
-  {
-    label: "order",
-    value: "order",
-  },
-  {
-    label: "ID",
-    value: "boost_id",
-    isSort: true,
-  },
-  {
-    label: "status",
-    value: "status",
-  },
-  {
-    label: "price",
-    value: "price",
-    isSort: true,
-  },
-
-  {
-    label: "customer",
-    value: "customer",
-    isSort: true,
-    isVisible: true,
-  },
-  {
-    label: "partner",
-    value: "partner",
-    isSort: true,
-    isVisible: true,
-  },
-  {
-    label: "last updated",
-    value: "updatedAt",
-    isSort: true,
-  },
+const adminOrdersHeaders: IDataListHeaders[] = [
+  { translationKey: "order", value: "order" },
+  { translationKey: "id", value: "boost_id", isSort: true },
+  { translationKey: "status", value: "status" },
+  { translationKey: "price", value: "price", isSort: true },
+  { translationKey: "customer", value: "customer", isSort: true },
+  { translationKey: "partner", value: "partner", isSort: true },
+  { translationKey: "last_updated", value: "updatedAt", isSort: true },
 ];
-
 const transactionsHeaders: IDataListHeaders[] = [
-  { label: "user", value: "info", isSort: false },
-  { label: "type", value: "type", isSort: false },
-  { label: "amount", value: "amount", isSort: true },
-  { label: "created at", value: "createdAt", isSort: true },
+  { translationKey: "user", value: "info", isSort: false },
+  { translationKey: "type", value: "type", isSort: false },
+  { translationKey: "amount", value: "amount", isSort: true },
+  { translationKey: "order", value: "order", isSort: false },
+  { translationKey: "created_at", value: "createdAt", isSort: true },
+  { translationKey: "actions", value: "actions", isSort: false },
 ];
-
+const partnerTransactionsHeaders: IDataListHeaders[] = [
+  { translationKey: "order", value: "order", isSort: false },
+  { translationKey: "type", value: "type", isSort: false },
+  { translationKey: "amount", value: "amount", isSort: true },
+  { translationKey: "created_at", value: "createdAt", isSort: true },
+];
 export {
   pendingBoostsHeaders,
   progressBoostsHeaders,
@@ -191,4 +74,5 @@ export {
   usersHeaders,
   adminOrdersHeaders,
   transactionsHeaders,
+  partnerTransactionsHeaders,
 };

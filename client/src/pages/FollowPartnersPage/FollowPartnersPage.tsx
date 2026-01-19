@@ -1,17 +1,16 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Helmet, Search } from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+import { Heading, Helmet, Search } from "~/components/ui";
 import { FaUsers, FaSearch } from "react-icons/fa";
 import { Card } from "./components";
 import { RootState } from "~/redux/store";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { IUser } from "~/types";
 import { useTranslation } from "react-i18next";
 
 const FollowPartnersPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["follow_partners_page", "common"]);
   const [searchTerm, setSearchTerm] = useState("");
   const { currentUser } = useSelector((state: RootState) => state.user);
 
@@ -21,17 +20,23 @@ const FollowPartnersPage = () => {
 
   return (
     <>
-      <Helmet title="My Following Partners" />
+      <Helmet title="follow_partners_page" />
       <div>
         <Heading
           icon={FaUsers}
-          title="Following Partners"
-          subtitle="A list of all the partners you are following."
+          title="follow_partners_page_title"
+          subtitle="follow_partners_page_subtitle"
         />
         <main className="mt-8">
           {currentUser && currentUser.following.length > 0 && (
             <div className="mb-8 flex">
-              <Search value={searchTerm} onChangeValue={setSearchTerm} />
+              <Search
+                placeholder={t("search_placeholder", {
+                  ns: "follow_partners_page",
+                })}
+                value={searchTerm}
+                onChangeValue={setSearchTerm}
+              />
             </div>
           )}
 
@@ -48,18 +53,28 @@ const FollowPartnersPage = () => {
               </div>
               <h3 className="text-xl font-semibold text-foreground">
                 {searchTerm
-                  ? t("FollowPartnersPage.emptyState.searchTitle")
-                  : t("FollowPartnersPage.emptyState.noFollowTitle")}
+                  ? t("empty_state.search_title", {
+                      ns: "follow_partners_page",
+                    })
+                  : t("empty_state.no_follow_title", {
+                      ns: "follow_partners_page",
+                    })}
               </h3>
               <p className="mt-2 max-w-sm text-muted-foreground">
                 {searchTerm
-                  ? t("FollowPartnersPage.emptyState.searchSubtitle")
-                  : t("FollowPartnersPage.emptyState.noFollowSubtitle")}
+                  ? t("empty_state.search_subtitle", {
+                      ns: "follow_partners_page",
+                    })
+                  : t("empty_state.no_follow_subtitle", {
+                      ns: "follow_partners_page",
+                    })}
               </p>
               {!searchTerm && (
                 <Link to="/partners">
                   <Button size="sm" variant="primary" className="mt-6">
-                    {t("FollowPartnersPage.emptyState.exploreBtn")}
+                    {t("empty_state.explore_btn", {
+                      ns: "follow_partners_page",
+                    })}
                   </Button>
                 </Link>
               )}

@@ -1,6 +1,5 @@
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+﻿import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 import cn from "~/libs/utils";
 
@@ -10,7 +9,6 @@ interface ICollapsibleProps {
 }
 
 const Collapsible = ({ title, subtitle }: ICollapsibleProps) => {
-  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -23,9 +21,7 @@ const Collapsible = ({ title, subtitle }: ICollapsibleProps) => {
       onOpenChange={setIsOpen}
     >
       <CollapsiblePrimitive.Trigger className="flex w-full flex-1 p-6">
-        <p className="text-left font-semibold text-foreground">
-          {t(`AskList.card.title.${title}`)}
-        </p>
+        <p className="text-left font-semibold text-foreground">{title}</p>
         {isOpen ? (
           <IoChevronDownOutline
             className={cn(
@@ -49,7 +45,7 @@ const Collapsible = ({ title, subtitle }: ICollapsibleProps) => {
         )}
       >
         <div className="pb-6">
-          <p>{t(`AskList.card.subtitle.${subtitle}`)}</p>
+          <p>{subtitle}</p>
         </div>
       </CollapsiblePrimitive.Content>
     </CollapsiblePrimitive.Root>

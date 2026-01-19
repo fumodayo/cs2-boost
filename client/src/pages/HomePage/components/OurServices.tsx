@@ -1,40 +1,32 @@
-import { useContext } from "react";
+﻿import { useContext } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { GiSamuraiHelmet } from "react-icons/gi";
 import { IoRocketSharp } from "react-icons/io5";
 import cn from "~/libs/utils";
 import { AppContext } from "~/components/context/AppContext";
 import { useTranslation } from "react-i18next";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 
 const services = [
   {
     icon: IoRocketSharp,
-    title: "Boosting",
+    key: "boosting",
     image: "boosting",
-    subtitle:
-      "Ranking up and progressing has never been easier and more stress-free.",
-    label: "Rank Up Now",
   },
   {
     icon: GiSamuraiHelmet,
-    title: "Accounts",
+    key: "accounts",
     image: "accounts",
-    subtitle:
-      "Step up your game with our vast catalog of affordable, top-quality accounts.",
-    label: "Browse Accounts",
   },
   {
     icon: FaGraduationCap,
-    title: "Coaching",
+    key: "coaching",
     image: "coaching",
-    subtitle: "Expert coaching by former C9 analysts, LCS players, and more.",
-    label: "Get Coaching",
   },
 ];
 
 const OurServices = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("landing");
   const { theme } = useContext(AppContext);
 
   return (
@@ -45,7 +37,7 @@ const OurServices = () => {
       )}
     >
       <h2 className="font-display z-10 text-4xl font-bold text-foreground">
-        {t("OurServices.heading")}
+        {t("our_services.heading")}
       </h2>
       <p
         className={cn(
@@ -53,7 +45,7 @@ const OurServices = () => {
           "sm:text-base",
         )}
       >
-        {t("OurServices.subheading")}
+        {t("our_services.subheading")}
       </p>
       <img
         className={cn("absolute -top-36 hidden", "dark:block")}
@@ -67,9 +59,9 @@ const OurServices = () => {
           "md:grid-cols-2 lg:grid-cols-3",
         )}
       >
-        {services.map(({ icon: Icon, image, title, subtitle, label }) => (
+        {services.map(({ icon: Icon, image, key }) => (
           <div
-            key={label}
+            key={key}
             className={cn(
               "col-span-1 flex w-full flex-col rounded-xl border border-border bg-card shadow-lg",
               "dark:border-[#1a2037] dark:bg-[#141825]/60",
@@ -79,7 +71,7 @@ const OurServices = () => {
               <div className="flex items-center gap-4 text-foreground">
                 <Icon size={24} />
                 <h3 className="tracking-light font-display text-2xl font-bold">
-                  {t(`OurServices.card.title.${title}`)}
+                  {t(`our_services.${key}.title`)}
                 </h3>
               </div>
               <p
@@ -88,14 +80,14 @@ const OurServices = () => {
                   "sm:text-base",
                 )}
               >
-                {t(`OurServices.card.subtitle.${subtitle}`)}
+                {t(`our_services.${key}.subtitle`)}
               </p>
             </div>
             <img
               className="my-auto h-auto w-full"
               src={`/assets/services/${image}${theme === "light" ? "_w" : ""}.png`}
               loading="lazy"
-              alt={label}
+              alt={t(`our_services.${key}.title`)}
             />
             {theme === "dark" && (
               <img
@@ -117,7 +109,7 @@ const OurServices = () => {
                 variant="primary"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
-                {t(`OurServices.card.label.${label}`)} →{" "}
+                {t(`our_services.${key}.label`)} →
               </Button>
             </div>
           </div>

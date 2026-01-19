@@ -1,8 +1,7 @@
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+﻿import * as DialogPrimitive from "@radix-ui/react-dialog";
 import React from "react";
 import { HiXMark } from "react-icons/hi2";
-import { useTranslation } from "react-i18next";
-import { Button } from "../shared/Button";
+import { Button } from "../ui/Button";
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -13,8 +12,6 @@ export const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof DialogPrimitive.Content>
 >(({ children, title, ...props }, forwardRef) => {
-  const { t } = useTranslation();
-
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
@@ -23,10 +20,14 @@ export const DialogContent = React.forwardRef<
         {...props}
         ref={forwardRef}
       >
-        <DialogPrimitive.Title className="font-display text-lg font-medium text-foreground">
-          {title && t(`Dialog.title.${title}`)}
-        </DialogPrimitive.Title>
-        {children}
+        {/* HEADER */}
+        <div className="flex flex-col space-y-2 text-center">
+          <DialogPrimitive.Title className="text-lg font-semibold text-foreground">
+            {title}
+          </DialogPrimitive.Title>
+        </div>
+        {/* CONTENT */}
+        <div>{children}</div>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );
@@ -36,8 +37,6 @@ export const EditDialogContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof DialogPrimitive.Content>
 >(({ children, title, ...props }, forwardRef) => {
-  const { t } = useTranslation();
-
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-show data-[state=closed]:animate-overlay-close fixed inset-0 z-40 bg-background/80" />
@@ -51,7 +50,7 @@ export const EditDialogContent = React.forwardRef<
           <div className="border-b border-border px-4 py-6 sm:px-6">
             <div className="flex items-start justify-between">
               <DialogPrimitive.Title className="font-display text-lg font-medium text-foreground">
-                {t(`Dialog.title.${title}`)}
+                {title}
               </DialogPrimitive.Title>
               <DialogPrimitive.Close>
                 <div className="ml-3 flex h-7 items-center">
@@ -87,8 +86,6 @@ export const AlertDialogContent = React.forwardRef<
   HTMLDivElement,
   IAlertDialogContentProps
 >(({ children, title, subtitle, ...props }, forwardRef) => {
-  const { t } = useTranslation();
-
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
@@ -101,10 +98,10 @@ export const AlertDialogContent = React.forwardRef<
         {/* HEADER */}
         <div className="flex flex-col space-y-2 text-center sm:text-left">
           <DialogPrimitive.Title className="text-lg font-semibold text-foreground">
-            {t(`Dialog.title.${title}`)}
+            {title}
           </DialogPrimitive.Title>
           <DialogPrimitive.Description className="text-sm text-muted-foreground">
-            {t(`Dialog.subtitle.${subtitle}`)}
+            {subtitle}
           </DialogPrimitive.Description>
         </div>
         {/* CONTENT */}

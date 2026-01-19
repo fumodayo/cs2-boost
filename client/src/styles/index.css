@@ -200,7 +200,8 @@ body {
   width: 100%;
   height: 100%;
   border: solid 2px transparent;
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       90deg,
       transparent -100%,
       hsl(var(--card)) 100%,
@@ -254,8 +255,9 @@ body {
   border-radius: var(--radius);
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 0.3s;
@@ -366,8 +368,8 @@ body {
 
 /* Trustpilot Badge */
 .dark .trustpilot-badge-bg {
-  background: radial-gradient(44.73% 58.02% at 50% 100%, #00b67a4d, #00b67a00),
-    #141825 !important;
+  background:
+    radial-gradient(44.73% 58.02% at 50% 100%, #00b67a4d, #00b67a00), #141825 !important;
 }
 
 /* Verify modal */
@@ -410,4 +412,106 @@ body {
 #html5-qrcode-anchor-scan-type-change:hover {
   background-color: #2563eb;
   transform: scale(1.05);
+}
+
+/* Quill Editor Custom Styles */
+.introduction-editor .ql-toolbar {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid hsl(var(--border) / 0.5) !important;
+}
+
+.introduction-editor .ql-toolbar .ql-formats {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 12px !important;
+}
+
+/* Custom B, I, U buttons with text instead of SVG */
+.introduction-editor .ql-toolbar button.ql-bold,
+.introduction-editor .ql-toolbar button.ql-italic,
+.introduction-editor .ql-toolbar button.ql-underline {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  color: hsl(var(--muted-foreground)) !important;
+  transition: color 0.15s ease !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-bold svg,
+.introduction-editor .ql-toolbar button.ql-italic svg,
+.introduction-editor .ql-toolbar button.ql-underline svg {
+  display: none !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-bold::before {
+  content: "B" !important;
+  font-weight: 700 !important;
+  font-family: inherit !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-italic::before {
+  content: "I" !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-family: Georgia, serif !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-underline::before {
+  content: "U" !important;
+  text-decoration: underline !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+}
+
+.introduction-editor .ql-toolbar button:hover {
+  color: hsl(var(--foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-active {
+  color: hsl(var(--primary)) !important;
+}
+
+/* List buttons */
+.introduction-editor .ql-toolbar button.ql-list .ql-stroke {
+  stroke: hsl(var(--muted-foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-list:hover .ql-stroke {
+  stroke: hsl(var(--foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-list.ql-active .ql-stroke {
+  stroke: hsl(var(--primary)) !important;
+}
+
+/* Clean button */
+.introduction-editor .ql-toolbar button.ql-clean .ql-stroke {
+  stroke: hsl(var(--muted-foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-clean .ql-fill {
+  fill: hsl(var(--muted-foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-clean:hover .ql-stroke {
+  stroke: hsl(var(--foreground)) !important;
+}
+
+.introduction-editor .ql-toolbar button.ql-clean:hover .ql-fill {
+  fill: hsl(var(--foreground)) !important;
+}
+
+/* Divider between button groups */
+.introduction-editor .ql-toolbar .ql-formats:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: hsl(var(--border));
+  margin-left: 10px;
 }

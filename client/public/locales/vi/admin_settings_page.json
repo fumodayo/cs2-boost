@@ -1,0 +1,30 @@
+{
+    "loading": "Đang tải dữ liệu quản trị...",
+    "navigation": {
+        "general": "Chung",
+        "security": "Bảo mật",
+        "commission": "Hoa hồng"
+    },
+    "profile_card": {
+        "title": "Thông tin hồ sơ",
+        "subtitle": "Cập nhật thông tin cá nhân của bạn tại đây."
+    },
+    "password_card": {
+        "title": "Thay đổi mật khẩu",
+        "subtitle": "Cập nhật mật khẩu để giữ an toàn cho tài khoản của bạn.",
+        "update_btn": "Cập nhật mật khẩu"
+    },
+    "commission_card": {
+        "title": "Cài đặt hoa hồng",
+        "subtitle": "Cấu hình tỷ lệ chia hoa hồng giữa Website và Partner",
+        "partner_rate": "% Partner nhận",
+        "website_rate": "% Website giữ",
+        "penalty_rate": "% Phạt khi hủy đơn",
+        "penalty_if_cancel": "Nếu Partner hủy đơn",
+        "preview": "Xem trước",
+        "example": "Ví dụ với đơn hàng {{amount}}",
+        "save_btn": "Lưu thay đổi",
+        "saved": "Đã lưu cấu hình thành công",
+        "warning": "Tỷ lệ mới sẽ chỉ áp dụng cho các đơn hàng được nhận SAU khi cập nhật. Các đơn hàng đã được Partner nhận trước đó sẽ giữ nguyên tỷ lệ cũ."
+    }
+}

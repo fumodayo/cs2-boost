@@ -1,9 +1,9 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+﻿import { useForm, SubmitHandler } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { formatMoney } from "~/utils";
-import { FormField, Spinner } from "~/components/shared";
+import { FormField, Spinner } from "~/components/ui";
 import { Dialog, DialogContent } from "~/components/@radix-ui/Dialog";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { payoutService } from "~/services/payout.service";
 
@@ -20,7 +20,7 @@ const RequestPayoutModal = ({
   onSuccess,
   currentBalance,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["income_page", "common"]);
   const {
     register,
     handleSubmit,
@@ -47,11 +47,9 @@ const RequestPayoutModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
-        <h2 className="text-xl font-bold">
-          {t("IncomePage.PayoutModal.title")}
-        </h2>
+        <h2 className="text-xl font-bold">{t("payout_modal.title")}</h2>
         <p className="text-sm text-muted-foreground">
-          {t("IncomePage.PayoutModal.balanceInfo", {
+          {t("payout_modal.balance_info", {
             balance: formatMoney(currentBalance, "vnd"),
           })}
         </p>
@@ -59,26 +57,26 @@ const RequestPayoutModal = ({
           <FormField
             id="amount"
             type="number"
-            label={t("IncomePage.PayoutModal.amountLabel")}
-            placeholder={t("IncomePage.PayoutModal.amountPlaceholder")}
+            label={t("payout_modal.amount_label")}
+            placeholder={t("payout_modal.amount_placeholder")}
             register={register}
             errors={errors}
             rules={{
-              required: "Amount is required.",
+              required: t("payout_modal.validation.amount_required"),
               valueAsNumber: true,
               max: {
                 value: currentBalance,
-                message: "Amount cannot exceed your balance.",
+                message: t("payout_modal.validation.amount_exceed"),
               },
               min: {
                 value: 50000,
-                message: "Minimum payout amount is 50,000 VND.",
+                message: t("payout_modal.validation.minimum_amount"),
               },
             }}
           />
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={onClose}>
-              {t("Dialog.btn.Cancel")}
+              {t("common:buttons.cancel")}
             </Button>
             <Button
               type="submit"
@@ -87,7 +85,7 @@ const RequestPayoutModal = ({
               {isMutating ? (
                 <Spinner size="sm" />
               ) : (
-                t("IncomePage.PayoutModal.submitBtn")
+                t("payout_modal.submit_btn")
               )}
             </Button>
           </div>

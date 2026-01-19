@@ -1,0 +1,31 @@
+{
+  "navigation": {
+    "general": "Chung",
+    "notifications": "Thông báo",
+    "information": "Thông tin"
+  },
+  "user_widget": {
+    "title": "Thông tin người dùng",
+    "edit_profile": "Chỉnh sửa hồ sơ",
+    "change_password": "Đổi mật khẩu"
+  },
+  "verification_widget": {
+    "title": "Xác minh danh tính",
+    "subtitle": "Bạn có thể xác minh danh tính của mình tại đây.",
+    "button": "Xác minh danh tính"
+  },
+  "user_labels": {
+    "username": "tên người dùng",
+    "user_id": "ID người dùng",
+    "email_address": "địa chỉ email",
+    "phone_number": "số điện thoại",
+    "full_name": "họ và tên",
+    "language": "ngôn ngữ"
+  },
+  "dialog": {
+    "edit_profile_title": "Chỉnh sửa hồ sơ của bạn",
+    "change_password_title": "Thay đổi mật khẩu",
+    "getting_started_title": "Bắt đầu nào",
+    "contact_support_for_email": "Vui lòng liên hệ bộ phận hỗ trợ nếu bạn cần thay đổi email."
+  }
+}

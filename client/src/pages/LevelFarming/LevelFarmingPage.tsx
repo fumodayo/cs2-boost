@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useContext } from "react";
+﻿import { useEffect, useMemo, useState, useContext } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useNavigate } from "react-router-dom";
@@ -8,10 +8,10 @@ import { FaPlus } from "react-icons/fa6";
 import {
   BillCard,
   ErrorDisplay,
+  Heading,
   Helmet,
   SkeletonLoader,
-} from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+} from "~/components/ui";
 import { ListBoard, ListDetail, Select } from "./components";
 import { AppContext } from "~/components/context/AppContext";
 import { getLocalStorage, setLocalStorage } from "~/utils/localStorage";
@@ -55,7 +55,7 @@ const LevelFarmingPage = () => {
     setLocalStorage("level-farming", range);
   }, [range]);
 
-  const configData = useMemo(() => configSWR, [configSWR]);
+  const configData = configSWR;
 
   const totalCostOfLevelFarming = useMemo(() => {
     if (!configData?.unitPrice) return 0;
@@ -115,12 +115,12 @@ const LevelFarmingPage = () => {
 
   return (
     <>
-      <Helmet title="CS2 Power Leveling Boost" />
+      <Helmet title="level_farming_page" />
       <div>
         <Heading
           icon={FaPlus}
-          title="Counter Strike 2 Leveling"
-          subtitle="Maximize Your Level In No Time!"
+          title="level_farming_page_title"
+          subtitle="level_farming_page_subtitle"
         />
         <main className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-4 xl:grid-cols-5 xl:gap-8">
           <div className="space-y-4 lg:col-span-2 lg:space-y-6 xl:col-span-3">
@@ -130,12 +130,15 @@ const LevelFarmingPage = () => {
           </div>
           {configData && (
             <BillCard
-              serverLabel="global"
+              serverLabelKey="servers.global"
               modeIcon={FaPlus}
-              modeLabel="Level Farming"
+              modeLabelKey="game_modes.level_farming"
               displayItems={{
-                begin: { label: "My XP", value: beginExp.toLocaleString() },
-                end: { label: "Desired XP", value: endExp.toLocaleString() },
+                begin: { labelKey: "my_exp", value: beginExp.toLocaleString() },
+                end: {
+                  labelKey: "desired_exp",
+                  value: endExp.toLocaleString(),
+                },
               }}
               baseCost={totalCostOfLevelFarming}
               totalTime={totalTimeOfLevelFarming}

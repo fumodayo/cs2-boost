@@ -1,0 +1,22 @@
+{
+    "verified_tooltip": "Verified Partner",
+    "online": "Online",
+    "offline": "Offline",
+    "follow_btn": "Follow",
+    "unfollow_btn": "Unfollow",
+    "stats_title": "Stats",
+    "rating": "Rating",
+    "followers": "Followers",
+    "hours_boosted": "Hours Boosted",
+    "completion_rate": "Completion Rate",
+    "contact_title": "Contact via",
+    "introduction_title": "Introduction",
+    "no_introduction": "This partner hasn't added an introduction yet.",
+    "reviews_title": "Reviews",
+    "latest": "Latest",
+    "filter_all": "All",
+    "no_reviews": "No reviews yet.",
+    "no_reviews_title": "No reviews yet",
+    "no_reviews_subtitle": "This partner hasn't received any reviews yet. Be the first to leave a review after your session!",
+    "error_not_found": "Partner not found."
+}

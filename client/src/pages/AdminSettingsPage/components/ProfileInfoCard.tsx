@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import toast from "react-hot-toast";
@@ -8,13 +8,14 @@ import { RootState } from "~/redux/store";
 import { updateSuccess } from "~/redux/user/userSlice";
 import { IUpdateUserPayload } from "~/types";
 import getErrorMessage from "~/utils/errorHandler";
-import { FormField, Spinner } from "~/components/shared";
-import { Button } from "~/components/shared/Button";
+import { FormField, Spinner } from "~/components/ui";
+import { Button } from "~/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { userService } from "~/services/user.service";
 
 const ProfileInfoCard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["admin_settings_page", "common"]);
+
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
@@ -38,7 +39,7 @@ const ProfileInfoCard: React.FC = () => {
     try {
       const updatedUser = await trigger(formData);
       dispatch(updateSuccess(updatedUser));
-      toast.success("Profile updated successfully!");
+      toast.success(t("common:toasts.profile_updated_success"));
     } catch (err) {
       toast.error(getErrorMessage(err));
     }
@@ -53,10 +54,10 @@ const ProfileInfoCard: React.FC = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-foreground">
-              {t("AdminSettingsPage.ProfileCard.title")}
+              {t("profile_card.title")}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("AdminSettingsPage.ProfileCard.subtitle")}
+              {t("profile_card.subtitle")}
             </p>
           </div>
         </div>
@@ -65,14 +66,14 @@ const ProfileInfoCard: React.FC = () => {
         <div className="space-y-4 p-6 pt-0">
           <FormField
             id="username"
-            label="Username"
+            label={t("common:form.username_label")}
             register={register}
             errors={errors}
             required
           />
           <FormField
             id="email_address"
-            label="Email Address"
+            label={t("common:form.email_label")}
             type="email"
             register={register}
             errors={errors}
@@ -80,8 +81,8 @@ const ProfileInfoCard: React.FC = () => {
           />
         </div>
         <div className="flex items-center justify-end gap-3 bg-muted/50 px-6 py-4">
-          <Button type="submit" disabled={!isDirty || isMutating}>
-            {isMutating ? <Spinner size="sm" /> : "Save Changes"}
+          <Button size="sm" type="submit" disabled={!isDirty || isMutating}>
+            {isMutating ? <Spinner /> : t("common:buttons.save_changes")}
           </Button>
         </div>
       </form>

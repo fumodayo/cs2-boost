@@ -32,18 +32,9 @@ const updateSettings = (settings: Record<string, boolean>) => {
   return axiosPrivate.patch("/push/settings", { settings });
 };
 
-/**
- * @desc Gửi yêu cầu kích hoạt một thông báo đẩy kiểm tra.
- * @route POST /api/push/test
- */
-const sendTestNotification = () => {
-  return axiosPrivate.post("/push/test");
-};
-
 export const pushService = {
   subscribe,
   unsubscribe,
   getSettings,
   updateSettings,
-  sendTestNotification,
 };

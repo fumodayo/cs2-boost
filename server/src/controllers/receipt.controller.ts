@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+﻿import { NextFunction, Response } from 'express';
 import Order from '../models/order.model';
 import Receipt from '../models/receipt.model';
 import { errorHandler } from '../utils/error';
@@ -64,11 +64,13 @@ const getReceipts = async (req: AuthRequest, res: Response, next: NextFunction) 
             search = '',
             page = '1',
             'per-page': perPageRaw = '5',
+            startDate,
+            endDate,
         } = req.query as Record<string, string>;
         const pageNum = parseInt(page);
         const perPageNum = parseInt(perPageRaw);
 
-        const filters = search
+        const filters: any = search
             ? {
                   $or: [
                       { boost_id: { $regex: search, $options: 'i' } },
@@ -78,6 +80,26 @@ const getReceipts = async (req: AuthRequest, res: Response, next: NextFunction) 
                   ],
               }
             : {};
+
+        if (startDate || endDate) {
+            const dateFilter: { $gte?: Date; $lte?: Date } = {};
+
+            if (startDate) {
+                const start = new Date(startDate);
+                start.setHours(0, 0, 0, 0);
+                dateFilter.$gte = start;
+            }
+
+            if (endDate) {
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+                dateFilter.$lte = end;
+            }
+
+            if (Object.keys(dateFilter).length > 0) {
+                filters.createdAt = dateFilter;
+            }
+        }
 
         const query = { user: user_id, ...filters };
 

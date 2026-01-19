@@ -1,34 +1,39 @@
-import { Helmet } from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+﻿import { Heading, Helmet } from "~/components/ui";
 import { HiMiniRocketLaunch } from "react-icons/hi2";
 import { ManageLevelFarming, ManagePremier, ManageWingman } from "./components";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Tabs from "~/components/@radix-ui/Tabs";
 import { useTranslation } from "react-i18next";
-
 const ManageBoostPage = () => {
-  const { t } = useTranslation();
-  const [tab, setTab] = useState("premier");
-
+  const { t } = useTranslation(["manage_boost_page", "common"]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathParts = location.pathname.split("/");
+  const currentTab = pathParts[pathParts.length - 1] || "premier";
+  const validTabs = ["premier", "wingman", "level-farming"];
+  const tab = validTabs.includes(currentTab) ? currentTab : "premier";
+  const handleTabChange = (newTab: string) => {
+    navigate(`/admin/manage-boost/${newTab}`);
+  };
   return (
     <>
-      <Helmet title="Manage Boost · CS2Boost" />
+      <Helmet title="manage_boost_page" />
       <div>
         <Heading
           icon={HiMiniRocketLaunch}
-          title="Manage Boost"
-          subtitle="Adjust rate multipliers for each region"
+          title="manage_boost_page_title"
+          subtitle="manage_boost_page_subtitle"
         />
         <main className="mt-8">
           <Tabs
             value={tab}
-            onValueChange={setTab}
+            onValueChange={handleTabChange}
             tabs={[
-              { value: "premier", label: t("ManageBoostPage.tabs.premier") },
-              { value: "wingman", label: t("ManageBoostPage.tabs.wingman") },
+              { value: "premier", label: t("tabs.premier") },
+              { value: "wingman", label: t("tabs.wingman") },
               {
                 value: "level-farming",
-                label: t("ManageBoostPage.tabs.levelFarming"),
+                label: t("tabs.level_farming"),
               },
             ]}
             contents={[
@@ -42,5 +47,4 @@ const ManageBoostPage = () => {
     </>
   );
 };
-
 export default ManageBoostPage;

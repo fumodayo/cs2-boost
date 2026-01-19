@@ -1,0 +1,22 @@
+{
+    "verified_tooltip": "Đối tác đã xác minh",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến",
+    "follow_btn": "Theo dõi",
+    "unfollow_btn": "Bỏ theo dõi",
+    "stats_title": "Thống kê",
+    "rating": "Đánh giá",
+    "followers": "Người theo dõi",
+    "hours_boosted": "Số giờ đã boost",
+    "completion_rate": "Tỷ lệ hoàn thành",
+    "contact_title": "Liên hệ qua",
+    "introduction_title": "Giới thiệu",
+    "no_introduction": "Đối tác này chưa thêm phần giới thiệu.",
+    "reviews_title": "Đánh giá",
+    "latest": "Mới nhất",
+    "filter_all": "Tất cả",
+    "no_reviews": "Chưa có đánh giá nào.",
+    "no_reviews_title": "Chưa có đánh giá",
+    "no_reviews_subtitle": "Đối tác này chưa nhận được đánh giá nào. Hãy là người đầu tiên để lại đánh giá sau phiên làm việc của bạn!",
+    "error_not_found": "Không tìm thấy đối tác."
+}

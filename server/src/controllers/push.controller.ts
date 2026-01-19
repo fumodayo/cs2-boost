@@ -1,16 +1,15 @@
-import { Response, NextFunction } from 'express';
+﻿import { Response, NextFunction } from 'express';
 import Subscription from '../models/subscription.model';
 import { AuthRequest } from '../interfaces';
 import { errorHandler } from '../utils/error';
 
-// Lưu subscription
 const subscribe = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const subscription = req.body;
     try {
         await Subscription.findOneAndUpdate(
             { user: req.user.id },
             { user: req.user.id, ...subscription },
-            { upsert: true }, // Tạo mới nếu chưa có, cập nhật nếu đã có
+            { upsert: true }, 
         );
         res.status(201).json({ message: 'Subscribed successfully' });
     } catch (e) {
@@ -18,7 +17,6 @@ const subscribe = async (req: AuthRequest, res: Response, next: NextFunction) =>
     }
 };
 
-// Hủy subscription
 const unsubscribe = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         await Subscription.deleteOne({ user: req.user.id });
@@ -28,21 +26,27 @@ const unsubscribe = async (req: AuthRequest, res: Response, next: NextFunction) 
     }
 };
 
-// Lấy cài đặt
 const getSettings = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const sub = await Subscription.findOne({ user: req.user.id });
         if (sub) {
-            res.status(200).json({ isSubscribed: true, settings: sub.settings });
+            res.status(200).json({
+                isSubscribed: true,
+                settings: sub.settings,
+                vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
+            });
         } else {
-            res.status(200).json({ isSubscribed: false, settings: {} });
+            res.status(200).json({
+                isSubscribed: false,
+                settings: {},
+                vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
+            });
         }
     } catch (e) {
         next(e);
     }
 };
 
-// Cập nhật cài đặt
 const updateSettings = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const { settings } = req.body;
     try {

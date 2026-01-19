@@ -1,9 +1,9 @@
-import cn from "~/libs/utils";
-import { Questions } from "~/components/shared";
+﻿import cn from "~/libs/utils";
+import { Questions } from "~/components/ui";
 import { useTranslation } from "react-i18next";
 
 const AskList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("landing");
 
   return (
     <div
@@ -25,7 +25,7 @@ const AskList = () => {
               "md:max-w-xs",
             )}
           >
-            {t("AskList.heading")}
+            {t("ask_list.heading")}
           </h2>
           <p
             className={cn(
@@ -33,7 +33,7 @@ const AskList = () => {
               "md:max-w-xs",
             )}
           >
-            {t("AskList.subheading")}
+            {t("ask_list.subheading")}
           </p>
         </div>
         <div

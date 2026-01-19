@@ -1,0 +1,150 @@
+{
+    "hero": {
+        "the": "Nền tảng",
+        "all_in_one": "Game",
+        "platform_for_gamers": "dành cho Game thủ",
+        "description": {
+            "part1": "Tài khoản chất lượng cao",
+            "part2": "Dịch vụ Game cao cấp",
+            "part3": "Huấn luyện chuyên nghiệp"
+        },
+        "card": {
+            "new": "Mới",
+            "coming_soon": "Sắp ra mắt"
+        }
+    },
+    "our_services": {
+        "heading": "Dịch vụ của chúng tôi",
+        "subheading": "Dù bạn đang tìm kiếm boosting hàng đầu, huấn luyện chuyên nghiệp, hay tài khoản chất lượng cao, chúng tôi đều có thể đáp ứng.",
+        "boosting": {
+            "title": "Boosting",
+            "subtitle": "Việc lên hạng và tiến bộ chưa bao giờ dễ dàng và thoải mái đến thế.",
+            "label": "Lên hạng ngay"
+        },
+        "accounts": {
+            "title": "Tài khoản",
+            "subtitle": "Nâng tầm trò chơi của bạn với danh mục tài khoản chất lượng hàng đầu, giá cả phải chăng của chúng tôi.",
+            "label": "Xem tài khoản"
+        },
+        "coaching": {
+            "title": "Huấn luyện",
+            "subtitle": "Huấn luyện chuyên nghiệp bởi các nhà phân tích C9 cũ, người chơi LCS, và nhiều hơn nữa.",
+            "label": "Nhận huấn luyện"
+        }
+    },
+    "step_by_step": {
+        "heading": "Chúng tôi luôn muốn mọi thứ nhanh chóng và dễ dàng",
+        "subheading": "Mua boosting, tài khoản và huấn luyện chưa bao giờ dễ dàng đến thế. Chỉ cần chọn dịch vụ, thanh toán và tận hưởng!",
+        "select_service": {
+            "title": "Chọn dịch vụ",
+            "subtitle": "Chọn trò chơi, dịch vụ và tùy chỉnh đơn hàng của bạn"
+        },
+        "secure_payment": {
+            "title": "Thanh toán an toàn",
+            "subtitle": "Chúng tôi chấp nhận tất cả các loại thẻ tín dụng chính, PaySafe, Apple Pay, Google Pay, Crypto, và nhiều hơn nữa!"
+        },
+        "order_starts": {
+            "title": "Đơn hàng bắt đầu",
+            "subtitle": "Hãy ngồi xuống, thư giãn và tận hưởng - Chúng tôi sẽ lo mọi thứ cho bạn"
+        },
+        "order_completed": {
+            "title": "Đơn hàng hoàn thành",
+            "subtitle": "Như một phép màu, bạn đã sẵn sàng! Chúng tôi đánh giá cao phản hồi của bạn, vì vậy đừng quên chia sẻ trải nghiệm của bạn với chúng tôi"
+        }
+    },
+    "new_standard": {
+        "heading": "Dịch vụ Game vừa được cải tiến",
+        "subheading": "Chúng tôi đang thiết lập một tiêu chuẩn mới trong ngành công nghiệp game.",
+        "support": {
+            "title": "Hỗ trợ 24/7 bởi người thật",
+            "subtitle": "Không bot, không ChatGPT – chỉ có con người."
+        },
+        "privacy": {
+            "title": "Bảo mật & Ẩn danh hoàn toàn",
+            "subtitle": "Bạn là ai? Chúng tôi không biết."
+        },
+        "cashback": {
+            "title": "Hoàn tiền 3-6% cho tất cả các giao dịch mua"
+        },
+        "payments": {
+            "title": "Thanh toán an toàn & tức thì",
+            "subtitle": "Mua dịch vụ game bằng PaysafeCard, Apple Pay, và nhiều hơn nữa."
+        }
+    },
+    "marquee_comment": {
+        "heading": "Hơn 97.000+ Game thủ tin tưởng chúng tôi"
+    },
+    "quantity_client": {
+        "heading": "CS2Boost qua những con số",
+        "subheading": "Đội ngũ của chúng tôi đã quy tụ những người có kinh nghiệm nhất trong ngành công nghiệp game, từ khắp nơi trên thế giới, với một sứ mệnh:",
+        "quotes": "“Thực sự thay đổi cuộc sống của mỗi game thủ hàng ngày.”",
+        "gamers": {
+            "subtitle": "Game thủ chúng tôi đã hỗ trợ",
+            "label": "Tự hào phục vụ một cộng đồng game thủ đam mê đang phát triển trên toàn thế giới."
+        },
+        "orders": {
+            "subtitle": "Đơn hàng đã hoàn thành",
+            "label": "Boosting, Huấn luyện, Tài khoản và chúng tôi chỉ mới bắt đầu."
+        },
+        "since": {
+            "subtitle": "Hoạt động từ năm",
+            "label": "Đó là tất cả những gì chúng tôi cần để cách mạng hóa ngành dịch vụ game."
+        },
+        "partners": {
+            "subtitle": "Đối tác",
+            "label": "Những game thủ giỏi nhất sẵn sàng thực hiện đơn hàng của bạn."
+        }
+    },
+    "ask_list": {
+        "heading": "Câu hỏi thường gặp",
+        "subheading": "Còn câu hỏi nào khác không? Hãy liên hệ với chúng tôi trên Discord hoặc Live Chat!",
+        "faq": [
+            {
+                "key": "what_is_cs2boost",
+                "question": "CS2Boost là gì?",
+                "answer": "GameBoost là giải pháp chơi game tất cả trong một của bạn cho Boosting giá cả phải chăng, Huấn luyện chuyên nghiệp và tài khoản game chất lượng hàng đầu. Chúng tôi hỗ trợ các trò chơi phổ biến như League of Legends, Valorant, Overwatch 2, LoL_Wild Rift, Teamfight Tactics, CS2, và World of Warcraft."
+            },
+            {
+                "key": "payment_methods",
+                "question": "CS2Boost chấp nhận những phương thức thanh toán nào?",
+                "answer": "CS2Boost chấp nhận tất cả các loại thẻ ghi nợ và tín dụng chính, PayPal, PaySafeCard, Apple Pay, Google Pay, Chuyển khoản ngân hàng trực tiếp và Skrill, cung cấp cho bạn nhiều lựa chọn thanh toán."
+            },
+            {
+                "key": "why_choose_cs2boost",
+                "question": "Tại sao tôi nên chọn CS2Boost?",
+                "answer": "CS2Boost là nền tảng được đánh giá cao nhất trên TrustPilot, với xếp hạng 5.0 sao và giá thấp hơn tới 40% so với đối thủ cạnh tranh. Kết hợp với hỗ trợ trực tiếp 24/7, điều này làm cho chúng tôi trở thành nền tảng dịch vụ game giá cả phải chăng và đáng tin cậy nhất trên thị trường."
+            },
+            {
+                "key": "how_to_leave_feedback",
+                "question": "Làm cách nào để để lại phản hồi hoặc đánh giá cho các dịch vụ?",
+                "answer": "Chúng tôi rất coi trọng phản hồi của khách hàng, vì vậy nếu bạn muốn dành một chút thời gian để lại đánh giá cho chúng tôi, bạn có thể làm điều đó trên Trustpilot và Discord. Chúng tôi thực sự đánh giá cao điều đó."
+            },
+            {
+                "key": "discounts_and_promotions",
+                "question": "CS2Boost có cung cấp giảm giá hoặc khuyến mãi cho các dịch vụ của mình không?",
+                "answer": "Tại CS2Boost, chúng tôi cung cấp giảm giá, khuyến mãi và các sự kiện với cơ hội giành được những giải thưởng tuyệt vời. Hãy liên hệ với LiveChat của chúng tôi để nhận mã giảm giá nếu bạn chưa có và theo dõi Discord của chúng tôi để biết các sự kiện mới!"
+            },
+            {
+                "key": "more_questions",
+                "question": "Tôi có thêm câu hỏi, tôi có thể nhận thêm thông tin ở đâu?",
+                "answer": "Chúng tôi ở đây 24/7. Hãy liên hệ với chúng tôi trên Live Chat của chúng tôi!"
+            }
+        ]
+    },
+    "stepup": {
+        "heading": "Bạn còn chờ gì nữa?",
+        "subheading": "Nâng tầm trò chơi của bạn ngay bây giờ! Hãy để các chuyên gia của chúng tôi boost cấp độ của bạn và hướng dẫn bạn đến những thứ hạng cao hơn mà bạn xứng đáng."
+    },
+    "faq": {
+        "title": "Câu hỏi thường gặp về Boosting Counter Strike 2",
+        "heading": "Các câu hỏi thường gặp",
+        "subheading": "Còn câu hỏi nào khác không? Hãy liên hệ với chúng tôi trên Discord hoặc Live Chat!"
+    },
+    "news": {
+        "badge": "Cập Nhật Chính Thức",
+        "title": "Tin Tức CS2 Mới Nhất",
+        "subtitle": "Cập nhật tin tức và thay đổi chính thức từ Valve",
+        "read_more": "Đọc Thêm",
+        "view_all": "Xem Tất Cả"
+    }
+}

@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+﻿import express, { RequestHandler } from 'express';
 import {
     getLevelFarmingConfig,
     getPremierRates,
@@ -14,7 +14,6 @@ import { ROLE } from '../constants';
 
 const router = express.Router();
 
-// PREMIER ROUTES
 router.get('/premier', getPremierRates as RequestHandler);
 router.patch(
     '/premier/config',
@@ -29,7 +28,6 @@ router.put(
     updatePremierRatesForRegion as RequestHandler,
 );
 
-// WINGMAN ROUTES
 router.get('/wingman', getWingmanRates as RequestHandler);
 router.patch(
     '/wingman/config',
@@ -44,7 +42,6 @@ router.put(
     updateWingmanRatesForRegion as RequestHandler,
 );
 
-// LEVEL FARMING ROUTES
 router.get('/level-farming', getLevelFarmingConfig as RequestHandler);
 router.patch(
     '/level-farming/config',

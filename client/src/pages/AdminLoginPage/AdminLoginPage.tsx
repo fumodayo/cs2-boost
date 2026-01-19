@@ -1,15 +1,18 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+﻿import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Trans, useTranslation } from "react-i18next";
 import { FaArrowRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FormField, Helmet, Logo } from "~/components/shared";
-import { Button } from "~/components/shared/Button";
+import { FormField, Helmet, Logo } from "~/components/ui";
+import { Button } from "~/components/ui/Button";
 import { RootState } from "~/redux/store";
 import { authFailure, authStart, authSuccess } from "~/redux/user/userSlice";
 import { authService } from "~/services/auth.service";
 import getErrorMessage from "~/utils/errorHandler";
 
 const AdminLoginPage = () => {
+  const { t } = useTranslation(["auth", "common"]);
+
   const dispatch = useDispatch();
   const navigator = useNavigate();
   const { loading, error } = useSelector((state: RootState) => state.user);
@@ -19,6 +22,7 @@ const AdminLoginPage = () => {
     reset,
     formState: { errors },
   } = useForm<FieldValues>({
+    mode: "onBlur",
     defaultValues: {
       username: "",
       password: "",
@@ -48,7 +52,7 @@ const AdminLoginPage = () => {
 
   return (
     <>
-      <Helmet title="CS2Boost - Login Admin" />
+      <Helmet title="admin_login_page" />
       <div className="h-screen bg-background text-foreground">
         <div className="grid min-h-full grid-cols-1 lg:grid-cols-2">
           {/* Left Panel - Form */}
@@ -59,14 +63,16 @@ const AdminLoginPage = () => {
 
             <main className="flex flex-1 items-center justify-center">
               <div className="w-full max-w-md space-y-6 rounded-2xl bg-card p-8 shadow-lg">
-                <h1 className="font-display text-3xl font-bold">Admin Login</h1>
+                <h1 className="font-display text-3xl font-bold">
+                  {t("admin_login.title")}
+                </h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
                     disabled={loading}
                     autoFocus
                     id="username"
-                    placeholder="Username"
+                    placeholder={t("labels.username")}
                     className="px-4 py-3"
                     register={register}
                     errors={errors}
@@ -75,7 +81,7 @@ const AdminLoginPage = () => {
                   <FormField
                     disabled={loading}
                     id="password"
-                    placeholder="Password"
+                    placeholder={t("labels.password")}
                     type="password"
                     className="px-4 py-3"
                     register={register}
@@ -87,14 +93,28 @@ const AdminLoginPage = () => {
                     variant="primary"
                     className="mt-4 w-full rounded-md px-5 py-3 text-sm font-medium"
                   >
-                    Login <FaArrowRight className="ml-2" />
+                    {t("admin_login.login_button")}{" "}
+                    <FaArrowRight className="ml-2" />
                   </Button>
                 </form>
               </div>
             </main>
 
             <footer className="mx-auto w-full max-w-md pt-6 text-center text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} CS2Boost
+              <div className="flex flex-col">
+                <p className="mb-0.5 text-sm font-medium text-muted-foreground">
+                  {t("common:footer.copyright", {
+                    year: new Date().getFullYear(),
+                  })}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  <Trans
+                    i18nKey="common:footer.clone_by"
+                    t={t}
+                    components={{ b: <b /> }}
+                  />
+                </p>
+              </div>
             </footer>
           </div>
 

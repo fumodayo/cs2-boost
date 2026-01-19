@@ -1,4 +1,4 @@
-const IconSlash = () => (
+﻿const IconSlash = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     height="12"
@@ -9,5 +9,4 @@ const IconSlash = () => (
     <path d="M319.9 0H248.8L.1 512H71.2L319.9 0z"></path>
   </svg>
 );
-
 export default IconSlash;

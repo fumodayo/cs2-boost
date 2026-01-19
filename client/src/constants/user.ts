@@ -1,4 +1,4 @@
-import {
+﻿import {
   FaFacebook,
   FaInstagram,
   FaTiktok,
@@ -15,40 +15,40 @@ const ROLE_USER = {
 const SOCIAL_MEDIA = [
   {
     value: "facebook",
-    label: "Facebook",
+    translationKey: "facebook",
     icon: FaFacebook,
     color: "bg-[#1877F2] hover:bg-[#166fe5]",
-    regex: /^(https?:\/\/)?(www\.)?facebook\.com\/[a-zA-Z0-9().?]+/,
+    regex: /^(https?:\/\/)?(www\.)?facebook\.com\/[a-zA-Z0-9_.]+\/?$/,
   },
   {
     value: "instagram",
-    label: "Instagram",
+    translationKey: "instagram",
     icon: FaInstagram,
     color:
       "bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 text-white hover:opacity-90 transition-opacity",
-    regex: /^(https?:\/\/)?(www\.)?instagram\.com\/[a-zA-Z0-9_.]+/,
+    regex: /^(https?:\/\/)?(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/,
   },
   {
     value: "x",
-    label: "X (Twitter)",
+    translationKey: "x",
     icon: FaXTwitter,
     color: "bg-black text-white hover:bg-gray-800",
-    regex: /^(https?:\/\/)?(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]+/,
+    regex: /^(https?:\/\/)?(www\.)?(twitter|x)\.com\/[a-zA-Z0-9_]+\/?$/,
   },
   {
     value: "youtube",
-    label: "YouTube",
+    translationKey: "youTube",
     icon: FaYoutube,
     color: "bg-[#FF0000] text-white hover:bg-[#E60000]",
     regex:
-      /^(https?:\/\/)?(www\.)?youtube\.com\/(c\/|channel\/|user\/|@)?[a-zA-Z0-9_-]+/,
+      /^(https?:\/\/)?(www\.)?youtube\.com\/(c\/|channel\/|user\/|@)?[a-zA-Z0-9_-]+\/?$/,
   },
   {
     value: "tiktok",
-    label: "TikTok",
+    translationKey: "tikTok",
     icon: FaTiktok,
     color: "bg-black text-white hover:bg-gray-800",
-    regex: /^(https?:\/\/)?(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+/,
+    regex: /^(https?:\/\/)?(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/,
   },
 ];
 

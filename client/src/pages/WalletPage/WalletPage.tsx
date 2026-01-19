@@ -1,12 +1,19 @@
-import { Helmet, ResetButton, Search, ViewButton } from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+﻿import {
+  DatePicker,
+  Heading,
+  Helmet,
+  ResetButton,
+  Search,
+  ViewButton,
+} from "~/components/ui";
 import { FaWallet } from "react-icons/fa6";
 import { walletHeaders } from "~/constants/headers";
-import { ReceiptsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { ReceiptsTable, DataTableLayout } from "~/components/ui/DataTable";
 import { useDataTable } from "~/hooks/useDataTable";
 import { receiptService } from "~/services/receipt.service";
 import { IReceipt, IPaginatedResponse } from "~/types";
-
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 const WalletPage = () => {
   const {
     data: receiptsData,
@@ -24,24 +31,45 @@ const WalletPage = () => {
     fetcher: receiptService.getReceipts,
     initialFilters: {
       search: "",
+      startDate: "",
+      endDate: "",
     },
     columnConfig: {
       key: "wallet-headers",
       headers: walletHeaders,
     },
   });
-
   const receiptsFromAPI = receiptsData?.data || [];
   const paginationFromAPI = receiptsData?.pagination;
-
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    if (range) {
+      setFilter(
+        "startDate",
+        range.from ? format(range.from, "yyyy-MM-dd") : "",
+      );
+      setFilter("endDate", range.to ? format(range.to, "yyyy-MM-dd") : "");
+    } else {
+      setFilter("startDate", "");
+      setFilter("endDate", "");
+    }
+  };
+  const dateRangeValue: DateRange | undefined =
+    filters.startDate || filters.endDate
+      ? {
+          from: filters.startDate
+            ? new Date(filters.startDate as string)
+            : undefined,
+          to: filters.endDate ? new Date(filters.endDate as string) : undefined,
+        }
+      : undefined;
   return (
     <>
-      <Helmet title="My Wallet · CS2Boost" />
+      <Helmet title="wallet_page" />
       <div>
         <Heading
           icon={FaWallet}
-          title="My Wallet"
-          subtitle="List of all your payments and transactions."
+          title="wallet_page_title"
+          subtitle="wallet_page_subtitle"
         />
         <main className="mt-8">
           <div className="space-y-4">
@@ -53,9 +81,12 @@ const WalletPage = () => {
                       value={filters.search as string}
                       onChangeValue={(val) => setFilter("search", val)}
                     />
+                    <DatePicker
+                      value={dateRangeValue}
+                      onChange={handleDateRangeChange}
+                    />
                     {isAnyFilterActive && <ResetButton onReset={handleReset} />}
                   </div>
-
                   <ViewButton
                     headers={walletHeaders}
                     toggleColumn={toggleColumn}
@@ -82,5 +113,4 @@ const WalletPage = () => {
     </>
   );
 };
-
 export default WalletPage;

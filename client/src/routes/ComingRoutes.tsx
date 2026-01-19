@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+﻿import { Route } from "react-router-dom";
 import { NewGamePage } from "~/pages";
 
 interface INewGame {

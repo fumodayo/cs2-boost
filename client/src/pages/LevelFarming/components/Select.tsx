@@ -1,4 +1,5 @@
-import { RangePoint } from "~/components/shared";
+﻿import { useTranslation } from "react-i18next";
+import { RangePoint } from "~/components/ui";
 
 const MarkOfPoint = ({ point }: { point: string }) => (
   <div className="py-2">
@@ -19,14 +20,16 @@ interface ISelectProps {
 }
 
 const Select = ({ range, setRange }: ISelectProps) => {
+  const { t } = useTranslation(["common"]);
+
   return (
     <RangePoint
       min={0}
       max={12000}
       step={100}
-      title="Select your current Exp and desired Exp"
-      startText="My Exp"
-      lastText="Desired Exp"
+      title={t("range_point.level_farming_title")}
+      startText={t("labels.my_exp")}
+      lastText={t("labels.desired_exp")}
       defaultRange={range}
       onChange={setRange}
       marks={marks}

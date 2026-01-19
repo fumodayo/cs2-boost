@@ -1,56 +1,64 @@
-import { Board } from "~/components/shared";
-
-const XPEarnDetail = [
-  {
-    header: "Game mode",
-    content: ["Arms Race", "Casual", "Competitive", "Deathmatch", "Wingman"],
-  },
-  {
-    header: "XP multiplier",
-    content: [
-      "1.0*score",
-      "4.0*score",
-      "30*rounds won",
-      "0.2*score",
-      "15*rounds won",
-    ],
-  },
-];
-
-const XPPenaltyDetail = [
-  {
-    header: "Approximate",
-    content: [
-      "Less than 4,500 XP",
-      "Between 4,500 XP and 7,500 XP",
-      "Between 7,500 XP and 11,167 XP",
-      "Greater than 11,167 XP",
-    ],
-  },
-  {
-    header: "Bonus XP multiplier",
-    content: [
-      "4.0 * gained XP (1x Earned XP + 3x Weekly XP Bonus)",
-      "2.0 * gained XP (1x Earned XP + 1x Weekly XP Bonus)",
-      "1.0 * gained XP (1x Earned XP, No Weekly XP Bonus)",
-      "0.175 * gained XP (0.175x Earned XP)",
-    ],
-  },
-];
-
-const ListBoard = () => (
-  <>
-    <Board
-      title="Earned XP"
-      subtitle="All important details about experience points of each mode"
-      boards={XPEarnDetail}
-    />
-    <Board
-      title="XP Penalty"
-      subtitle="All important details about experience points"
-      boards={XPPenaltyDetail}
-    />
-  </>
-);
-
+﻿import { useTranslation } from "react-i18next";
+import { Board } from "~/components/ui";
+interface BoardTableData {
+  headers: string[];
+  rows: string[][];
+}
+interface BoardData {
+  title: string;
+  subtitle: string;
+  table?: BoardTableData;
+}
+interface TransformedBoard {
+  header: string;
+  content: string[];
+}
+/**
+ * Chuyển đổi dữ liệu bảng từ định dạng "row-based" (hàng ngang) sang "column-based" (hàng dọc).
+ * @param data - Dữ liệu bảng được lấy từ file JSON.
+ * @returns Một mảng các object, mỗi object đại diện cho một cột của bảng.
+ */
+const transformBoardData = (
+  data: BoardData | undefined,
+): TransformedBoard[] => {
+  if (!data?.table?.headers || !data.table.rows) {
+    return [];
+  }
+  const { headers, rows } = data.table;
+  return headers.map((header: string, index: number): TransformedBoard => {
+    return {
+      header: header,
+      content: rows.map((row: string[]) => row[index]),
+    };
+  });
+};
+const ListBoard = () => {
+  const { t } = useTranslation("level_farming");
+  const earnedXpData = t("boards.earned_xp", {
+    returnObjects: true,
+  }) as BoardData;
+  const xpPenaltyData = t("boards.xp_penalty", {
+    returnObjects: true,
+  }) as BoardData;
+  const transformedEarnedXp = transformBoardData(earnedXpData);
+  const transformedXpPenalty = transformBoardData(xpPenaltyData);
+  return (
+    <>
+      {earnedXpData && (
+        <Board
+          title={earnedXpData.title}
+          subtitle={earnedXpData.subtitle}
+          boards={transformedEarnedXp}
+        />
+      )}
+      {xpPenaltyData && (
+        <Board
+          title={xpPenaltyData.title}
+          subtitle={xpPenaltyData.subtitle}
+          boards={transformedXpPenalty}
+        />
+      )}
+    </>
+  );
+};
 export default ListBoard;

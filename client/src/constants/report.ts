@@ -1,28 +1,26 @@
-const reasonReports = [
-  {
-    value: "NOT_RESPONDING",
-    description: "Partner is not responding to order requests",
-  },
-  {
-    value: "OVERCHARGING",
-    description: "Partner is charging more than the agreed price",
-  },
-  {
-    value: "SLOW_DELIVERY",
-    description: "Partner is delivering boost services slower than promised",
-  },
-  {
-    value: "LOW_QUALITY",
-    description: "Partner is providing low-quality boost services",
-  },
-  {
-    value: "FRAUD",
-    description: "Partner is involved in fraudulent activities",
-  },
-  {
-    value: "TERMS_VIOLATION",
-    description: "Partner is violating the terms of service",
-  },
+﻿const reasonReports = [
+  { value: "NOT_RESPONDING" },
+  { value: "OVERCHARGING" },
+  { value: "SLOW_DELIVERY" },
+  { value: "LOW_QUALITY" },
+  { value: "FRAUD" },
+  { value: "TERMS_VIOLATION" },
 ];
 
-export { reasonReports };
+const filterReportTypes = [
+  { translationKey: "not_responding", value: "NOT_RESPONDING" },
+  { translationKey: "overcharging", value: "OVERCHARGING" },
+  { translationKey: "slow_delivery", value: "SLOW_DELIVERY" },
+  { translationKey: "low_quality", value: "LOW_QUALITY" },
+  { translationKey: "fraud", value: "FRAUD" },
+  { translationKey: "terms_violation", value: "TERMS_VIOLATION" },
+];
+
+const filterReportStatus = [
+  { translationKey: "pending", value: "PENDING" },
+  { translationKey: "resolved", value: "RESOLVED" },
+  { translationKey: "reject", value: "REJECT" },
+  { translationKey: "in_progress", value: "IN_PROGRESS" },
+];
+
+export { reasonReports, filterReportTypes, filterReportStatus };

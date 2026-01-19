@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+﻿import { IconType } from "react-icons";
 import { FaPlus } from "react-icons/fa6";
 import { HiSparkles } from "react-icons/hi2";
 import { PiUsersDuotone, PiUsersThreeDuotone } from "react-icons/pi";
@@ -12,74 +12,74 @@ import {
 
 export interface IGameModeProps {
   icon: IconType;
-  label: string;
+  tabKey: string;
   path: string;
 }
 
 const gameMode: IGameModeProps[] = [
   {
     icon: HiSparkles,
-    label: "Services",
+    tabKey: "services",
     path: "/counter-strike-2",
   },
   {
     icon: FaPlus,
-    label: "Level Farming",
+    tabKey: "level_farming",
     path: "/counter-strike-2/level-farming",
   },
   {
     icon: PiUsersThreeDuotone,
-    label: "Premier",
+    tabKey: "premier",
     path: "/counter-strike-2/premier",
   },
   {
     icon: PiUsersDuotone,
-    label: "Wingman",
+    tabKey: "wingman",
     path: "/counter-strike-2/wingman",
   },
 ];
 
 export interface IGameServerProps {
-  label: string;
   value: string;
   icon: IconType;
+  translationKey: string;
 }
 
 const gameServer: IGameServerProps[] = [
   {
-    label: "Africa",
     value: "AF",
     icon: FaEarthAfrica,
+    translationKey: "africa",
   },
   {
-    label: "Asia",
     value: "AS",
     icon: FaEarthAsia,
+    translationKey: "asia",
   },
   {
-    label: "Australia",
     value: "AU",
     icon: BsGlobeAsiaAustralia,
+    translationKey: "australia",
   },
   {
-    label: "China",
     value: "CN",
     icon: FaEarthAsia,
+    translationKey: "china",
   },
   {
-    label: "Europe",
     value: "EU",
     icon: FaEarthEurope,
+    translationKey: "europe",
   },
   {
-    label: "North America",
     value: "NA",
     icon: FaEarthAmericas,
+    translationKey: "north_america",
   },
   {
-    label: "South America",
     value: "SA",
     icon: FaEarthAmericas,
+    translationKey: "south_america",
   },
 ];
 

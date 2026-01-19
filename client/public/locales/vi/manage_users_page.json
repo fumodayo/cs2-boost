@@ -1,0 +1,55 @@
+{
+    "title": "Quản lý người dùng",
+    "subtitle": "Danh sách tất cả người dùng đã đăng ký trong hệ thống.",
+    "add_user_btn": "Thêm người dùng",
+    "add_user_modal": {
+        "title": "Thêm người dùng mới",
+        "labels": {
+            "username": "Tên người dùng",
+            "email": "Email",
+            "password": "Mật khẩu",
+            "role": "Vai trò"
+        },
+        "placeholders": {
+            "username": "ví dụ: john.doe",
+            "email": "ví dụ: user@example.com",
+            "password": "Nhập một mật khẩu mạnh"
+        },
+        "notes": {
+            "password": "Tối thiểu 8 ký tự."
+        },
+        "roles": {
+            "CLIENT": "Khách hàng",
+            "ADMIN": "Quản trị viên"
+        },
+        "create_user_btn": "Tạo người dùng"
+    },
+    "ban_dialog": {
+        "ban_btn": "Cấm",
+        "ban_title": "Cấm người dùng {{username}}?",
+        "ban_desc": "Hành động này sẽ khóa tài khoản người dùng. Vui lòng cung cấp lý do.",
+        "unban_btn": "Bỏ cấm",
+        "unban_title": "Bỏ cấm người dùng {{username}}?",
+        "unban_desc": "Tài khoản sẽ được mở khóa. Lý do bị cấm: ",
+        "confirm_unban": "Xác nhận bỏ cấm",
+        "reason_label": "Lý do cấm",
+        "reason_placeholder": "Lý do cấm...",
+        "reason_required": "Vui lòng cung cấp lý do cấm."
+    },
+    "announcement_modal": {
+        "title": "Phát thông báo",
+        "image_label": "Hình ảnh banner (Tùy chọn)",
+        "image_hint": "Kéo thả hoặc nhấn để tải lên",
+        "title_label": "Tiêu đề",
+        "title_placeholder": "ví dụ: Đừng bỏ lỡ 7 ngày hoàn tiền!",
+        "description_label": "Mô tả",
+        "description_placeholder": "Nhập nội dung thông báo...",
+        "send_btn": "Gửi đến tất cả người dùng",
+        "sending": "Đang gửi...",
+        "success": "Đã gửi thông báo thành công!",
+        "error": "Gửi thông báo thất bại.",
+        "validation": {
+            "required": "Tiêu đề và mô tả là bắt buộc."
+        }
+    }
+}

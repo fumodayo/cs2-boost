@@ -1,48 +1,36 @@
-import * as RadioGroup from "@radix-ui/react-radio-group";
+﻿import * as RadioGroup from "@radix-ui/react-radio-group";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IconChecked, IconUnChecked } from "~/icons";
 import cn from "~/libs/utils";
 
 const listPaymentMethods = [
-  {
-    title: "VN Pay",
-    subtitle: "Prepaid card for online payments.",
-    image: "vn-pay",
-  },
-  {
-    title: "Debit/Credit cards (Stripe)",
-    subtitle: "Alternative cards payment method.",
-    image: "stripe",
-  },
-  {
-    title: "Zalo Pay",
-    subtitle: "Prepaid card for online payments.",
-    image: "zalo-pay",
-  },
+  { key: "vn_pay", image: "vn-pay" },
+  { key: "stripe", image: "stripe" },
+  { key: "zalo_pay", image: "zalo-pay" },
 ];
 
 const ListPayment = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("checkout_page");
   const [selectedValue, setSelectedValue] = useState("0");
 
   return (
-    <div className="mt-6">
-      <h3 className="text-lg font-medium text-foreground">
-        {t("CheckoutPage.label.Pay with")}
+    <div className="mt-6 px-4 sm:px-0">
+      <h3 className="text-base font-medium text-foreground sm:text-lg">
+        {t("payment.pay_with")}
       </h3>
       <RadioGroup.Root
-        className="mt-2 flex flex-wrap gap-2"
+        className="mt-4 flex flex-wrap gap-3"
         value={selectedValue}
         onValueChange={(value) => setSelectedValue(value)}
       >
-        {listPaymentMethods.map(({ title, subtitle, image }, idx) => {
+        {listPaymentMethods.map(({ key, image }, idx) => {
           const isDisabled = idx !== 0;
           const isSelected = selectedValue === idx.toString();
 
           return (
             <RadioGroup.Item
-              key={title}
+              key={key}
               value={idx.toString()}
               disabled={isDisabled}
               className={cn(
@@ -58,20 +46,18 @@ const ListPayment = () => {
                   <img
                     className="h-10 w-10 shrink-0 rounded-lg object-contain"
                     src={`/assets/payment-methods/${image}.png`}
-                    alt={title}
+                    alt={key}
                   />
                 </div>
                 <div className="flex max-w-[250px] flex-col truncate text-sm sm:max-w-lg">
                   <span className="text-base font-medium text-foreground">
-                    {t(`CheckoutPage.label.${title}`, { defaultValue: title })}
+                    {t(`payment.methods.${key}.title`)}
                     <div className="ml-1 inline-flex items-center rounded-md bg-secondary-light px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-secondary-ring">
                       <span className="flex-1 shrink-0 truncate"> +0%</span>
                     </div>
                   </span>
                   <span className="block truncate text-muted-foreground sm:inline">
-                    {t(`CheckoutPage.label.${subtitle}`, {
-                      defaultValue: subtitle,
-                    })}
+                    {t(`payment.methods.${key}.subtitle`)}
                   </span>
                 </div>
               </div>

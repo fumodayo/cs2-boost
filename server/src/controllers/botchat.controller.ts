@@ -1,4 +1,4 @@
-import { Response, NextFunction, Request } from 'express';
+﻿import { Response, NextFunction, Request } from 'express';
 import { errorHandler } from '../utils/error';
 import { getReceiverSocketID, io } from '../socket/socket';
 import { GoogleGenerativeAI, Part } from '@google/generative-ai';
@@ -9,7 +9,7 @@ import { PERSONALITY_INSTRUCTION } from '../constants';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const geminiModel = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash-latest',
+    model: 'gemini-2.5-flash',
     systemInstruction: PERSONALITY_INSTRUCTION,
 });
 

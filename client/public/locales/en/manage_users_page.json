@@ -1,0 +1,55 @@
+{
+    "title": "Manage Users",
+    "subtitle": "List of all registered users in the system.",
+    "add_user_btn": "Add User",
+    "add_user_modal": {
+        "title": "Add New User",
+        "labels": {
+            "username": "Username",
+            "email": "Email",
+            "password": "Password",
+            "role": "Role"
+        },
+        "placeholders": {
+            "username": "e.g. john.doe",
+            "email": "e.g. user@example.com",
+            "password": "Enter a strong password"
+        },
+        "notes": {
+            "password": "Minimum 8 characters long."
+        },
+        "roles": {
+            "CLIENT": "Client",
+            "ADMIN": "Admin"
+        },
+        "create_user_btn": "Create User"
+    },
+    "ban_dialog": {
+        "ban_btn": "Ban",
+        "ban_title": "Ban user {{username}}?",
+        "ban_desc": "This action will lock the user's account. Please provide a reason.",
+        "unban_btn": "Unban",
+        "unban_title": "Unban user {{username}}?",
+        "unban_desc": "The account will be unlocked. Banned for: ",
+        "confirm_unban": "Confirm Unban",
+        "reason_label": "Ban Reason",
+        "reason_placeholder": "Reason for banning...",
+        "reason_required": "Please provide a reason for banning."
+    },
+    "announcement_modal": {
+        "title": "Broadcast Announcement",
+        "image_label": "Banner Image (Optional)",
+        "image_hint": "Drag & drop or click to upload",
+        "title_label": "Title",
+        "title_placeholder": "e.g. Don't Miss 7 Days of Cashback!",
+        "description_label": "Description",
+        "description_placeholder": "Enter your announcement message...",
+        "send_btn": "Send to All Users",
+        "sending": "Sending...",
+        "success": "Announcement sent successfully!",
+        "error": "Failed to send announcement.",
+        "validation": {
+            "required": "Title and description are required."
+        }
+    }
+}

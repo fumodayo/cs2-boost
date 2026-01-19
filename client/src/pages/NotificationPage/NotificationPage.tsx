@@ -1,10 +1,10 @@
-import {
+﻿import {
   Button,
+  Heading,
   Helmet,
   NewNotify,
   SegmentedControl,
-} from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+} from "~/components/ui";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
@@ -12,18 +12,23 @@ import { INotification } from "~/types";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { notificationService } from "~/services/notification.service";
 import { LuBellRing, LuCheckCheck } from "react-icons/lu";
-import NotificationSkeleton from "~/components/shared/notifications/NotificationSkeleton";
+import { NotificationSkeleton } from "~/components/ui/Misc";
+import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
-const groupNotificationsByDate = (notifications: INotification[]) => {
+const groupNotificationsByDate = (
+  notifications: INotification[],
+  t: TFunction,
+) => {
   return notifications.reduce(
     (acc, notification) => {
       const date = parseISO(notification.createdAt as unknown as string);
       let groupTitle: string;
 
       if (isToday(date)) {
-        groupTitle = "Today";
+        groupTitle = t("date_groups.today");
       } else if (isYesterday(date)) {
-        groupTitle = "Yesterday";
+        groupTitle = t("date_groups.yesterday");
       } else {
         groupTitle = format(date, "MMMM d, yyyy");
       }
@@ -39,6 +44,8 @@ const groupNotificationsByDate = (notifications: INotification[]) => {
 };
 
 const NotificationsPage = () => {
+  const { t } = useTranslation(["notifications_page", "common"]);
+
   const { socket } = useSocketContext();
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
@@ -72,8 +79,8 @@ const NotificationsPage = () => {
   }, [notifications, filter]);
 
   const groupedNotifications = useMemo(
-    () => groupNotificationsByDate(filteredNotifications),
-    [filteredNotifications],
+    () => groupNotificationsByDate(filteredNotifications, t),
+    [filteredNotifications, t],
   );
   const notificationGroups = Object.entries(groupedNotifications);
 
@@ -88,12 +95,12 @@ const NotificationsPage = () => {
 
   return (
     <>
-      <Helmet title="Notifications · CS2Boost" />
+      <Helmet title="notifications_page" />
       <div>
         <Heading
           icon={LuBellRing}
-          title="Notifications"
-          subtitle="A log of all your account and order-related alerts."
+          title="notifications_page_title"
+          subtitle="notifications_page_subtitle"
         />
         <main className="mt-8">
           <div className="space-y-6">
@@ -101,8 +108,8 @@ const NotificationsPage = () => {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <SegmentedControl
                 options={[
-                  { label: "All", value: "all" },
-                  { label: "Unread", value: "unread" },
+                  { label: t("tabs.all"), value: "all" },
+                  { label: t("tabs.unread"), value: "unread" },
                 ]}
                 value={filter}
                 onChange={setFilter}
@@ -113,7 +120,7 @@ const NotificationsPage = () => {
                 size="sm"
               >
                 <LuCheckCheck className="mr-2 h-4 w-4" />
-                Mark all as read
+                {t("mark_all_as_read")}
               </Button>
             </div>
             {isLoading ? (
@@ -124,19 +131,19 @@ const NotificationsPage = () => {
               </div>
             ) : error ? (
               <p className="text-center text-destructive">
-                Failed to load notifications.
+                {t("failed_to_load")}
               </p>
             ) : notificationGroups.length > 0 ? (
               <div className="space-y-8">
                 {notificationGroups.map(([date, items]) => (
                   <div key={date}>
-                    <div className="mb-3 flex items-center gap-3">
+                    <div className="mb-4 flex items-center gap-3">
                       <h3 className="text-sm font-semibold text-foreground">
                         {date}
                       </h3>
                       <div className="h-px flex-1 bg-border"></div>
                     </div>
-                    <div className="flex flex-col">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {items.map((item) => (
                         <NewNotify key={item._id} {...item} mutate={mutate} />
                       ))}
@@ -147,11 +154,13 @@ const NotificationsPage = () => {
             ) : (
               <div className="flex flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed py-20 text-center">
                 <LuBellRing className="h-14 w-14 text-muted-foreground/50" />
-                <h3 className="text-xl font-semibold">You're all caught up!</h3>
+                <h3 className="text-xl font-semibold">
+                  {t("empty_state.all_caught_up")}
+                </h3>
                 <p className="text-muted-foreground">
                   {filter === "unread"
-                    ? "No unread notifications."
-                    : "There are no notifications yet."}
+                    ? t("empty_state.no_unread")
+                    : t("empty_state.no_notifications_yet")}
                 </p>
               </div>
             )}

@@ -1,0 +1,625 @@
+{
+    "currency": "USD",
+    "back": "Back",
+    "home": "Home",
+    "coming_soon": "Coming Soon",
+    "go_back": "Go Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save_changes": "Save Changes",
+    "continue": "Continue",
+    "view": "View",
+    "edit": "Edit",
+    "remove": "Remove",
+    "search": "Search",
+    "search_by_sender": "Search by sender...",
+    "reset": "Reset",
+    "pay_now": "Pay Now",
+    "no_results": "No results.",
+    "processing": "Processing...",
+    "uploading": "Uploading...",
+    "drop_image_hint": "Drag & drop or click to upload",
+    "join_discord": "Join Discord",
+    "languages": {
+        "en": "English",
+        "vi": "Vietnamese"
+    },
+    "currencies": {
+        "usd": "US Dollar",
+        "vnd": "VND"
+    },
+    "buttons": {
+        "select_game": "Select Game",
+        "sign_up_today": "Sign up Today",
+        "join_discord": "Join Discord",
+        "lets_chat": "Let's Chat",
+        "my_orders": "My Orders",
+        "log_in": "Log in",
+        "continue": "Continue",
+        "view_my_orders": "View My Orders",
+        "download_receipt": "Download Receipt",
+        "login_with_google": "Login with Google",
+        "signup_with_google": "Signup with Google",
+        "checkout": "Checkout",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "save_changes": "Save Changes",
+        "back": "Back",
+        "change_password": "Change Password",
+        "close": "Close",
+        "creating": "Creating...",
+        "save": "Save",
+        "reset": "Reset",
+        "delete_account": "Delete Account",
+        "deleting": "Deleting..."
+    },
+    "helmet": {
+        "not_found_page": "Not Found · CS2Boost",
+        "new_game_page": "Buy {{gameTitle}} Services",
+        "landing_page": "CS2Boost · The All-In-One Platform for Gamers",
+        "game_mode_page": "Counter Strike 2 Boosting, Coaching & Accounts",
+        "level_farming_page": "CS2 Power Leveling Boost",
+        "premier_page": "CS2 Power Premier Boost",
+        "wingman_page": "CS2 Power Wingman Boost",
+        "checkout_page": "Checkout · {{boostTitle}}",
+        "payment_page_successful": "Payment Successful",
+        "payment_page_failed": "Payment Failed",
+        "orders_page": "Orders List · CS2Boost",
+        "wallet_page": "My Wallet · CS2Boost",
+        "pending_boosts_page": "Pending Boosts List · CS2Boost",
+        "progress_boosts_page": "Progress Boosts List · CS2Boost",
+        "admin_login_page": "Login Admin · Admin Panel",
+        "admin_settings_page": "My Settings · Admin Panel",
+        "dashboard_page": "Dashboard · Admin Panel",
+        "banned_page": "Account Banned · CS2Boost",
+        "follow_partners_page": "My Following Partners",
+        "income_page": "Income · CS2Boost",
+        "manage_boost_page": "Manage Boost · CS2Boost",
+        "manage_orders_page": "Manage Orders · CS2Boost",
+        "manage_reports_page": "Manage Reports · CS2Boost",
+        "manage_revenue_page": "Manage Revenue · CS2Boost",
+        "manage_users_page": "Manage Users · CS2Boost",
+        "notifications_page": "Notifications · CS2Boost",
+        "general_page": "General Settings",
+        "push_settings_page": "Push Notifications Settings",
+        "supports_page": "My Supports · CS2Boost",
+        "partners_page": "Partners · CS2Boost",
+        "commission_page": "Commission Settings · Admin Panel",
+        "promo_codes_page": "Promo Codes · Admin Panel"
+    },
+    "navigation": {
+        "dashboard": "Dashboard",
+        "boosting": "Boosting",
+        "accounts": "Accounts",
+        "items": "Items",
+        "pending_boosts": "Pending Boosts",
+        "progress_boosts": "Progress Boosts",
+        "income": "Income",
+        "orders": "Orders",
+        "wallet": "Wallet",
+        "settings": "Settings",
+        "follow_partners": "Follow Partners",
+        "supports": "Supports"
+    },
+    "sidebar": {
+        "main": "MAIN",
+        "dashboard": "Dashboard",
+        "manage": "MANAGE",
+        "manage_orders": "Manage Orders",
+        "manage_users": "Manage Users",
+        "partner_requests": "Partner Requests",
+        "manage_boost": "Manage Boost",
+        "promo_codes": "Promo Codes",
+        "manage_reports": "Manage Reports",
+        "live_chats": "Live Chats",
+        "manage_revenue": "Manage Revenue",
+        "commission": "Commission",
+        "notifications": "Notifications",
+        "email_templates": "Email Templates",
+        "user": "USER",
+        "settings": "Settings",
+        "admin_mode": "Admin Mode",
+        "change_language": "Change Language",
+        "change_theme": "Change Theme",
+        "logout": "Logout"
+    },
+    "headings": {
+        "titles": {
+            "game_mode_page_title": "CS2 Classic Services Boost",
+            "level_farming_page_title": "Counter Strike 2 Leveling",
+            "premier_page_title": "Counter Strike 2 Premier",
+            "wingman_page_title": "Counter Strike 2 Wingman",
+            "orders_page_title": "My Orders",
+            "wallet_page_title": "My Wallet",
+            "pending_boosts_page_title": "Pending Boosts List",
+            "progress_boosts_page_title": "List of all pending boosts.",
+            "notifications_page_title": "List of all notifications.",
+            "follow_partners_page_title": "Following Partners",
+            "general_page_title": "My Settings",
+            "supports_page_title": "My Support Tickets",
+            "income_page_title": "My Income",
+            "dashboard_page_title": "Dashboard",
+            "manage_users_page_title": "Manage Users",
+            "manage_orders_page_title": "Manage Orders",
+            "manage_boost_page_title": "Manage Boost",
+            "manage_reports_page_title": "Manage User Reports",
+            "manage_revenue_page_title": "Manage Revenue",
+            "admin_settings_page_title": "My Account Settings",
+            "commission_page_title": "Commission Settings",
+            "page_title": "Promo Codes"
+        },
+        "subtitles": {
+            "game_mode_page_subtitle": "Get The Best CS2 Classic Experience!",
+            "level_farming_page_subtitle": "Maximize Your Level In No Time!",
+            "premier_page_subtitle": "Maximize Your Rating In No Time!",
+            "wingman_page_subtitle": "Maximize Your Rank In No Time!",
+            "orders_page_subtitle": "List of all your products and services.",
+            "wallet_page_subtitle": "List of all your payments and transactions.",
+            "pending_boosts_page_subtitle": "Progress Boosts List",
+            "progress_boosts_page_subtitle": "List of all progress boosts.",
+            "notifications_page_subtitle": "A log of all your account and order-related alerts.",
+            "follow_partners_page_subtitle": "A list of all the partners you are following.",
+            "general_page_subtitle": "View and update your account settings.",
+            "supports_page_subtitle": "Track status and chat with admins about your issues.",
+            "income_page_subtitle": "Track your earnings and request payouts.",
+            "dashboard_page_subtitle": "Welcome back, Admin! Here's a summary of your platform's activity.",
+            "manage_users_page_subtitle": "List of all registered users in the system.",
+            "manage_orders_page_subtitle": "Manage all orders across the platform.",
+            "manage_boost_page_subtitle": "Adjust rate multipliers for each region",
+            "manage_reports_page_subtitle": "Handle reports and mediate conversations.",
+            "manage_revenue_page_subtitle": "Track, filter, and manage all financial activities on the platform.",
+            "admin_settings_page_subtitle": "Manage your personal information and security settings.",
+            "commission_page_subtitle": "Configure partner commission rates and cancellation penalties.",
+            "page_subtitle": "Manage promotional codes and discounts"
+        }
+    },
+    "labels": {
+        "my_exp": "My XP",
+        "desired_exp": "Desired XP",
+        "my_rating": "My Rating",
+        "desired_rating": "Desired Rating",
+        "my_rank": "My Rank",
+        "desired_rank": "Desired Rank"
+    },
+    "servers": {
+        "africa": "Africa",
+        "asia": "Asia",
+        "australia": "Australia",
+        "china": "China",
+        "europe": "Europe",
+        "north_america": "North America",
+        "south_america": "South America"
+    },
+    "select_server": {
+        "title": "Server",
+        "subtitle": "Select the server you play on"
+    },
+    "select_rank": {
+        "current_rank_title": "Current Rank",
+        "current_rank_subtitle": "Select your current rank.",
+        "desired_rank_title": "Desired Rank",
+        "desired_rank_subtitle": "Select your desired rank."
+    },
+    "bill_card": {
+        "header": "Order Summary",
+        "title_prompt": "Start by selecting the server!",
+        "total_price": "Total Price",
+        "extra_options_heading": "Extra Options",
+        "estimated_time": "Estimated time",
+        "hours": "hours",
+        "vpn_warning": "Using a VPN is prohibited when making a purchase.",
+        "options": {
+            "live_stream": "Live Stream",
+            "play_with_partner": "Play with Partner"
+        }
+    },
+    "game_modes": {
+        "services": "Services",
+        "level_farming": "Level Farming",
+        "premier": "Premier",
+        "wingman": "Wingman"
+    },
+    "trustpilot": {
+        "excellent": "Excellent",
+        "out_of": "out of",
+        "based_on_reviews": "Based on {{count}} reviews"
+    },
+    "form": {
+        "email_or_username_label": "Email or Username",
+        "email_or_username_placeholder": "Enter your email or username",
+        "email_label": "Email Address",
+        "email_placeholder": "Enter your email address",
+        "password_label": "Password",
+        "password_placeholder": "Enter your password",
+        "username_label": "Username",
+        "current_password_label": "Current Password",
+        "current_password_placeholder": "Enter your current password",
+        "new_password_label": "New Password",
+        "new_password_placeholder": "Enter your new password",
+        "confirm_password_label": "Confirm New Password",
+        "confirm_password_placeholder": "Confirm your new password"
+    },
+    "menu_games": {
+        "select_game": "Select Game",
+        "switch_game": "Switch Game"
+    },
+    "header": {
+        "active_partners": "Active Partners"
+    },
+    "menu_language": {
+        "change_language": "Change Language",
+        "change_currency": "Change Currency",
+        "sr_only": "Change language and currency"
+    },
+    "menu_theme": {
+        "change_theme": "Change Theme",
+        "dark_mode": "Dark Mode",
+        "light_mode": "Light Mode"
+    },
+    "services_menu": {
+        "dashboard": "Dashboard",
+        "boosting": "Boosting",
+        "accounts": "Accounts",
+        "items": "Items",
+        "pending_boosts": "Pending Boosts",
+        "progress_boosts": "Progress Boosts",
+        "income": "Income",
+        "orders": "Orders",
+        "wallet": "Wallet",
+        "settings": "Settings",
+        "follow_partners": "Follow Partners",
+        "supports": "Supports"
+    },
+    "server": {
+        "africa": "Africa",
+        "asia": "Asia",
+        "australia": "Australia",
+        "china": "China",
+        "europe": "Europe",
+        "north_america": "North America",
+        "south_america": "South America",
+        "AF": "Africa",
+        "AS": "Asia",
+        "AU": "Australia",
+        "CN": "China",
+        "EU": "Europe",
+        "NA": "North America",
+        "SA": "South America"
+    },
+    "game_mode": {
+        "services": "Services",
+        "level_farming": "Level Farming",
+        "premier": "Premier",
+        "wingman": "Wingman"
+    },
+    "footer": {
+        "title1": "The All-In-One Platform for Gamers",
+        "subtitle1": "Changing the lives of everyday gamers, one game at a time.",
+        "title2": "Need Help?",
+        "subtitle2": "We're here to help. Our expert human-support team is at your service 24/7.",
+        "copyright": "NoCopyright © {{year}} Global Gaming Services d.o.o.",
+        "clone_by": "Clone website by: <strong>fumodayo</strong>",
+        "terms": "Terms of Service",
+        "privacy": "Privacy Policy",
+        "refund": "Refund Policy"
+    },
+    "socials": {
+        "discord": "Discord",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "x": "X (Twitter)",
+        "youtube": "Youtube",
+        "tiktok": "TikTok"
+    },
+    "avatar_menu": {
+        "user_id": "ID: {{userId}}",
+        "logout": "Logout"
+    },
+    "faq": {
+        "title": "FAQs About Counter Strike 2 Boosting",
+        "questions": [
+            {
+                "key": "what_is_cs2_boost",
+                "question": "What is Counter Strike 2 Boost?",
+                "answer": "If you’re seeking to elevate your gaming experience in Counter Strike 2 but lack the time or dedication to climb the ranks on your own, you can explore the option of utilizing a CS2 boosting service. This service enables you to enlist the expertise of a skilled player who will play on your behalf and help you attain your desired rank."
+            },
+            {
+                "key": "is_it_safe",
+                "question": "CS2 Boosting is it safe?",
+                "answer": "When striving for progress in the gaming world, the preservation of your achievements becomes paramount. To guarantee a secure and discreet CS2 boost, we exclusively enlist the services of exceptional and trustworthy boosters, each equipped with our premium private VPN. This extensively tested approach has proven its effectiveness in countless games, providing you with peace of mind and assurance of a risk-free experience when utilizing our service."
+            },
+            {
+                "key": "steam_account_security",
+                "question": "How can I be sure my Steam account won't be stolen?",
+                "answer": "The combination of your unique login credentials and the protection provided by Steam Guard makes it virtually impossible for anyone to steal your account. We prioritize the utmost security measures to ensure your peace of mind and safeguard your valuable gaming assets."
+            },
+            {
+                "key": "how_does_it_work",
+                "question": "How does CS2 boosting work?",
+                "answer": "CS2 boosting involves hiring professional players who will play on your account to help you achieve your desired rank. They use their skills and expertise to win matches and enhance your in-game performance."
+            },
+            {
+                "key": "duration",
+                "question": "How long does CS2 boosting take?",
+                "answer": "The duration of CS2 boosting depends on various factors, including your current rank and the desired rank. Generally, our boosters work efficiently to complete the boosting process as quickly as possible while maintaining the highest quality standards. You can check the estimated completion time for your specific order in our Members Area dashboard."
+            }
+        ]
+    },
+    "details": {
+        "title": "Info",
+        "subtitle": {
+            "level_farming": "All the important details about our Level Farming",
+            "premier": "All the important details about our Premier Boost",
+            "wingman": "All the important details about our Wingman Boost"
+        },
+        "tabs": {
+            "requirements": {
+                "heading": "Requirements",
+                "items": {
+                    "have_prime": {
+                        "title": "Have prime",
+                        "subtitle": "Only players with prime can drop weekly"
+                    },
+                    "complete_first_ten_wins": {
+                        "title": "Complete the first 10 win matches",
+                        "subtitle": "We need your starting rank to conveniently boost"
+                    }
+                }
+            },
+            "extra_options": {
+                "heading": "Extra Options",
+                "items": {
+                    "live_stream": {
+                        "title": "Live Stream",
+                        "subtitle": "Watch your booster's gameplay in real-time"
+                    },
+                    "duo_play": {
+                        "title": "Play with Partners (Duo)",
+                        "subtitle": "Your booster will team up with you in duo mode"
+                    }
+                }
+            },
+            "faq": {
+                "heading": "FAQ"
+            }
+        }
+    },
+    "range_point": {
+        "level_farming_title": "Select your current Exp and desired Exp",
+        "premier_title": "Select your current Rating and desired Rating",
+        "note": "ratings above 20000 are only available as piloted service"
+    },
+    "not_found_page": {
+        "title": "Page not found",
+        "subtitle": "Sorry, we couldn’t find the page you’re looking for.",
+        "footer_contact": "Contact 24/7",
+        "footer_status": "Status",
+        "footer_discord": "Discord"
+    },
+    "banned_page": {
+        "account_suspended": "Account Suspended",
+        "title": "Your account has been banned",
+        "subtitle": "We detected activity on your account that violates our Terms of Service. As a result, your access to our platform has been restricted.",
+        "reason_label": "Reason for ban",
+        "footer_contact": "Contact 24/7",
+        "footer_status": "Status",
+        "footer_discord": "Discord"
+    },
+    "sr_only": {
+        "counter_strike_2": "Counter Strike 2",
+        "open_user_menu": "Open user menu for user"
+    },
+    "toasts": {
+        "login_to_order": "Please log in to create an order.",
+        "order_created_success": "Order created successfully!",
+        "order_created_failed": "Order creation failed.",
+        "followed": "Followed {{username}}",
+        "unfollowed": "Unfollowed {{username}}",
+        "no_changes_to_save": "No changes to save.",
+        "profile_updated_success": "Profile updated successfully!",
+        "password_changed_success": "Change Password Successfully",
+        "introduction_updated_success": "Introduction updated successfully!",
+        "social_links_updated_success": "Social links updated successfully!",
+        "no_user_info_to_submit": "No user information to submit.",
+        "verification_successful": "Verification successful!",
+        "partner_request_submitted": "Request submitted! Please wait for admin approval.",
+        "notifications_subscribed": "Successfully subscribed to notifications!",
+        "notifications_unsubscribed": "Successfully unsubscribed from notifications.",
+        "order_status_updated": "Order status has been updated!",
+        "add_account_success": "Account added successfully!",
+        "add_account_failed": "Failed to add account.",
+        "edit_account_success": "Account updated successfully!",
+        "edit_account_failed": "Failed to edit account.",
+        "review_sent": "Review sent successfully!",
+        "review_deleted": "Review deleted successfully!",
+        "review_delete_failed": "Failed to delete review.",
+        "fill_at_least_one_field": "Please fill at least one field to update.",
+        "report_reason_required": "Please select a reason and provide more information for the report.",
+        "report_failed": "Failed to send report. Please try again.",
+        "review_failed": "Failed to send review.",
+        "support_chat_started": "An admin has opened a support chat with you!",
+        "message_send_failed": "Could not send message. Conversation context is missing.",
+        "payout_request_success": "Payout request submitted successfully!",
+        "payout_approved": "Payout approved!",
+        "payout_declined": "Payout declined!",
+        "payout_approve_failed": "Failed to approve payout.",
+        "payout_decline_failed": "Failed to decline payout.",
+        "user_banned": "User {{username}} has been banned.",
+        "user_unbanned": "User {{username}} has been unbanned.",
+        "user_created_success": "New user created successfully!",
+        "creating": "Creating {{item}}...",
+        "created_success": "{{item}} created successfully!",
+        "created_error": "Failed to create {{item}}.",
+        "fill_required_fields": "Please fill in all required fields correctly.",
+        "saving": "Saving {{item}}...",
+        "save_success": "{{item}} updated successfully!",
+        "save_error": "Failed to update {{item}}.",
+        "region_reset": "Region has been reset.",
+        "new_report_from": "New report from {{username}}",
+        "report_accepted": "Report accepted! Conversations are now open.",
+        "report_resolved": "Report has been resolved.",
+        "report_rejected": "Report has been rejected.",
+        "marked_all_as_read": "Marked all as read!",
+        "mark_all_as_read_failed": "Failed to mark all as read.",
+        "upload_error": "Failed to upload image."
+    },
+    "time": {
+        "just_now": "just now",
+        "minutes_ago": "{{count}} minute ago",
+        "minutes_ago_plural": "{{count}} minutes ago",
+        "hours_ago": "{{count}} hour ago",
+        "hours_ago_plural": "{{count}} hours ago",
+        "days_ago": "{{count}} day ago",
+        "days_ago_plural": "{{count}} days ago",
+        "weeks_ago": "{{count}} week ago",
+        "weeks_ago_plural": "{{count}} weeks ago",
+        "months_ago": "{{count}} month ago",
+        "months_ago_plural": "{{count}} months ago",
+        "years_ago": "{{count}} year ago",
+        "years_ago_plural": "{{count}} years ago"
+    },
+    "upload_image": {
+        "title": "Avatar",
+        "subtitle": "Select or drag max 1 file | PNG, JPEG, WEBP, GIF",
+        "labels": {
+            "type": "Type",
+            "remove": "Remove"
+        },
+        "errors": {
+            "upload_failed": "Failed to upload image",
+            "invalid_format": "Invalid file format. Please select an image file."
+        }
+    },
+    "upload_avatar": {
+        "title": "Upload\nAvatar",
+        "placeholder": "Avatar"
+    },
+    "upload_banner": {
+        "subtitle": "Drag and drop your image here or click to browse",
+        "dimensions_hint": "Recommended banner dimensions: 1920x330",
+        "upload_complete": "Upload complete",
+        "tap_to_undo": "tap to undo"
+    },
+    "ai_chat": {
+        "title": "AI Assistant",
+        "placeholder": "Type a message...",
+        "open_chat": "Open AI Chat",
+        "greeting": "Hello! Select a question below or type a message to get help.",
+        "hi_there": "Hi there",
+        "how_can_we_help": "How can we help?",
+        "chat_with_us": "Chat with us",
+        "ai_typing": "AI is typing",
+        "ai_agent": "AI Assistant",
+        "today": "Today",
+        "go_back": "Go back",
+        "open_options": "Open options",
+        "close_options": "Close options",
+        "minimize": "Minimize",
+        "turn_off_notifications": "Turn off notifications",
+        "turn_on_notifications": "Turn on notifications",
+        "other_questions": "Other questions",
+        "suggested_questions": {
+            "is_legit": "Is CS2Boost legit?",
+            "how_to_sell": "How do I sell?",
+            "account_terms": "Account Usage Terms",
+            "refund_policy": "Refund & Warranty Policy",
+            "how_to_order": "How to place an order?",
+            "payment_methods": "Payment methods?",
+            "boost_duration": "How long does boost take?",
+            "account_security": "Is my account safe?",
+            "become_partner": "How to become a Partner?",
+            "contact_support": "Contact support?"
+        },
+        "faq_answers": {
+            "is_legit": "CS2Boost is a trusted rank boosting service with over 5 years of experience. We have thousands of positive reviews from customers and guarantee absolute security for your account. Our professional boosters are carefully selected.",
+            "how_to_sell": "To become a seller (Partner) on CS2Boost:\n\n1. Register an account and complete ID verification\n2. Submit a Partner request\n3. Wait for Admin approval (usually within 24h)\n4. Once approved, you can accept boost orders and earn money",
+            "account_terms": "Account Usage Terms:\n\n- Do not share your account with others\n- Account needs Prime to use services\n- No hacks/cheats while boosting\n- We use VPN to protect your account",
+            "refund_policy": "Refund Policy:\n\n- 100% refund if boost hasn't started\n- Partial refund based on completion if in progress\n- 7-day rank warranty after completion\n- Contact support for refund assistance",
+            "how_to_order": "How to place an order:\n\n1. Choose a service (Premier, Wingman, Leveling)\n2. Select server and current/desired rank\n3. Add extra options (if needed)\n4. Click 'Checkout' and complete payment\n5. Provide Steam account information\n6. Booster will start within minutes",
+            "payment_methods": "We support the following payment methods:\n\n- VNPay (ATM, Visa, MasterCard)\n- E-wallets (MoMo, ZaloPay)\n- Bank transfer\n- CS2Boost Wallet (prepaid)",
+            "boost_duration": "Boost duration depends on:\n\n- Rank distance (further = longer)\n- Server and queue time\n- Extra options (Duo play is slower)\n\nEstimate: 100-200 rating/day for Premier",
+            "account_security": "We guarantee absolute security:\n\n- Private VPN for each booster\n- Passwords not stored after boost\n- Steam Guard protects your account\n- Boosters are carefully selected and monitored",
+            "become_partner": "Requirements to become a Partner:\n\n1. Minimum rank: Global Elite or 20,000+ Premier\n2. ID verification (for trust)\n3. Available at least 4h/day\n4. Commitment to follow rules\n\nCommission: 70-80% of order value",
+            "contact_support": "You can contact support via:\n\n- Live chat on website (24/7)\n- Discord: discord.gg/cs2boost\n- Email: support@cs2boost.com\n- Hotline: 1900-xxxx"
+        },
+        "faq_follow_ups": {
+            "is_legit": [
+                "how_to_order",
+                "account_security",
+                "refund_policy"
+            ],
+            "how_to_sell": [
+                "become_partner",
+                "payment_methods",
+                "contact_support"
+            ],
+            "account_terms": [
+                "account_security",
+                "refund_policy",
+                "contact_support"
+            ],
+            "refund_policy": [
+                "contact_support",
+                "how_to_order",
+                "account_terms"
+            ],
+            "how_to_order": [
+                "payment_methods",
+                "boost_duration",
+                "account_security"
+            ],
+            "payment_methods": [
+                "how_to_order",
+                "refund_policy",
+                "contact_support"
+            ],
+            "boost_duration": [
+                "how_to_order",
+                "account_security",
+                "refund_policy"
+            ],
+            "account_security": [
+                "account_terms",
+                "refund_policy",
+                "is_legit"
+            ],
+            "become_partner": [
+                "how_to_sell",
+                "payment_methods",
+                "contact_support"
+            ],
+            "contact_support": [
+                "refund_policy",
+                "account_terms",
+                "how_to_order"
+            ]
+        },
+        "tabs": {
+            "home": "Home",
+            "chat": "Chat"
+        },
+        "talk_to_human": "Talk to Human",
+        "continue_live_chat": "Continue Live Chat",
+        "live_support": "Live Support",
+        "waiting_for_support": "Waiting for support...",
+        "connected_with": "Connected with {{name}}",
+        "describe_issue": "Describe your issue and an agent will assist you shortly.",
+        "issue_placeholder": "Tell us what you need help with...",
+        "start_live_chat": "Start Live Chat",
+        "type_message": "Type a message...",
+        "end_chat": "End Chat",
+        "login_required": "Please login to chat with support",
+        "message_required": "Please enter a message",
+        "support_request": "Support Request",
+        "live_chat_created": "Chat started! Waiting for support...",
+        "live_chat_failed": "Failed to start chat. Please try again.",
+        "send_failed": "Failed to send message.",
+        "chat_closed": "Chat closed successfully.",
+        "close_failed": "Failed to close chat.",
+        "support_team": "Support Team"
+    },
+    "date_picker": {
+        "from_date": "From date",
+        "to_date": "To date"
+    }
+}

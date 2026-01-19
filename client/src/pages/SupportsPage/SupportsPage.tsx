@@ -1,21 +1,28 @@
-import { useEffect, useState, useMemo } from "react";
+﻿import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import useSWR from "swr";
-import { Helmet, Spinner, ErrorDisplay } from "~/components/shared";
+import {
+  Helmet,
+  Spinner,
+  ErrorDisplay,
+  Heading,
+  Search,
+  PlusButton,
+} from "~/components/ui";
 import { BiSupport } from "react-icons/bi";
 import toast from "react-hot-toast";
 import cn from "~/libs/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "~/redux/store";
 import { IReport, IConversation } from "~/types";
-import { Heading } from "../GameModePage/components";
 import { Conversation } from "../BoostPage/components";
-import ChatInput from "~/components/shared/ChatInput/ChatInput";
+import ChatInput from "~/components/ui/ChatInput/ChatInput";
 import { useSocketContext } from "~/hooks/useSocketContext";
 import { isUserObject } from "~/utils/typeGuards";
 import { useTranslation } from "react-i18next";
 import { reportService } from "~/services/report.service";
 import { useChat } from "~/hooks/useChat";
-
+import { filterReportTypes, filterReportStatus } from "~/constants/report";
 const SupportTicketItem = ({
   report,
   isActive,
@@ -27,29 +34,28 @@ const SupportTicketItem = ({
   onClick: () => void;
   currentUserId: string;
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("supports_page");
   const isSender =
     isUserObject(report.sender) && report.sender._id === currentUserId;
   const receiverUsername = isUserObject(report.receiver)
     ? report.receiver.username
-    : t("SupportsPage.aPartner");
+    : t("a_partner");
   const senderUsername = isUserObject(report.sender)
     ? report.sender.username
-    : t("SupportsPage.aUser");
-
+    : t("a_user");
+  const reportType = filterReportTypes.find(
+    (type) => type.value === report.title,
+  );
+  const translatedTitle = reportType
+    ? t(`report_types.${reportType.translationKey}`)
+    : report.title;
   const title = isSender
-    ? t("SupportsPage.TicketItem.myReportTitle", { title: report.title })
-    : t("SupportsPage.TicketItem.investigationTitle");
+    ? t("ticket_item.my_report_title", { title: translatedTitle })
+    : t("ticket_item.investigation_title", { title: translatedTitle });
   const subTitle = isSender
-    ? t("SupportsPage.TicketItem.myReportSubtitle", {
-        username: receiverUsername,
-      })
-    : t("SupportsPage.TicketItem.investigationSubtitle", {
-        username: senderUsername,
-      });
-
-  const statusKey = `SupportsPage.TicketItem.status${report.status.replace("_", "")}`;
-
+    ? t("ticket_item.my_report_subtitle", { username: receiverUsername })
+    : t("ticket_item.investigation_subtitle", { username: senderUsername });
+  const statusKey = `ticket_item.status_${report.status.toLowerCase().replace("_", "")}`;
   return (
     <li
       onClick={onClick}
@@ -79,13 +85,15 @@ const SupportTicketItem = ({
     </li>
   );
 };
-
 const SupportsPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["supports_page", "common"]);
   const [activeTicketId, setActiveTicketId] = useState<string | null>(null);
   const { socket } = useSocketContext();
   const { currentUser } = useSelector((state: RootState) => state.user);
-
+  const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string[]>([]);
+  const [filterType, setFilterType] = useState<string[]>([]);
   const {
     data: tickets = [],
     error,
@@ -95,12 +103,36 @@ const SupportsPage = () => {
     currentUser ? "/report/my-reports" : null,
     reportService.getMyReports,
   );
-
+  const filteredTickets = useMemo(() => {
+    return tickets.filter((ticket) => {
+      if (searchTerm) {
+        const senderMatch =
+          isUserObject(ticket.sender) &&
+          ticket.sender.username
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        const receiverMatch =
+          isUserObject(ticket.receiver) &&
+          ticket.receiver.username
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        if (!senderMatch && !receiverMatch) {
+          return false;
+        }
+      }
+      if (filterStatus.length > 0 && !filterStatus.includes(ticket.status)) {
+        return false;
+      }
+      if (filterType.length > 0 && !filterType.includes(ticket.title)) {
+        return false;
+      }
+      return true;
+    });
+  }, [tickets, searchTerm, filterStatus, filterType]);
   const activeTicket = useMemo(
     () => tickets.find((t) => t._id === activeTicketId),
     [tickets, activeTicketId],
   );
-
   const conversationToShow = useMemo(() => {
     if (!activeTicket || !currentUser || !isUserObject(activeTicket.sender))
       return null;
@@ -108,22 +140,24 @@ const SupportsPage = () => {
       ? activeTicket.conversations.client
       : activeTicket.conversations.partner;
   }, [activeTicket, currentUser]) as IConversation;
-
   const {
     messages,
     isLoading: isLoadingMessages,
     handleSendMessage,
   } = useChat(conversationToShow?._id, currentUser);
-
   useEffect(() => {
-    if (!activeTicketId && tickets.length > 0) {
+    const reportIdFromUrl = searchParams.get("report");
+    if (reportIdFromUrl && tickets.length > 0) {
+      const reportExists = tickets.find((t) => t._id === reportIdFromUrl);
+      if (reportExists) {
+        setActiveTicketId(reportIdFromUrl);
+      }
+    } else if (!activeTicketId && tickets.length > 0) {
       setActiveTicketId(tickets[0]._id);
     }
-  }, [tickets, activeTicketId]);
-
+  }, [tickets, searchParams, activeTicketId]);
   useEffect(() => {
     if (!socket || !currentUser) return;
-
     const updateTicketInCache = (updatedReport: IReport) => {
       mutate(
         (currentTickets = []) =>
@@ -133,60 +167,79 @@ const SupportsPage = () => {
         false,
       );
     };
-
     const handleSupportStarted = (updatedReport: IReport) => {
-      toast.success("An admin has opened a support chat with you!");
+      toast.success(t("common:toasts.support_chat_started"));
       updateTicketInCache(updatedReport);
     };
-
+    const handleReportRejected = (updatedReport: IReport) => {
+      updateTicketInCache(updatedReport);
+    };
     socket.on("support_chat_started", handleSupportStarted);
     socket.on("investigation_chat_started", handleSupportStarted);
-
+    socket.on("report_rejected", handleReportRejected);
     return () => {
       socket.off("support_chat_started", handleSupportStarted);
       socket.off("investigation_chat_started", handleSupportStarted);
+      socket.off("report_rejected", handleReportRejected);
     };
-  }, [socket, currentUser, mutate]);
-
-  const performSendMessage = async (message: string) => {
+  }, [socket, currentUser, mutate, t]);
+  const performSendMessage = async (message: string, images?: string[]) => {
     if (!conversationToShow._id || !activeTicket?._id) {
-      toast.error("Could not send message. Conversation context is missing.");
+      toast.error(t("common:toasts.message_send_failed"));
       return;
     }
     await handleSendMessage({
       message,
+      images,
+      report_id: activeTicket._id,
     });
   };
-
   if (error)
-    return (
-      <ErrorDisplay
-        message="Failed to load your support tickets."
-        onRetry={mutate}
-      />
-    );
-
+    return <ErrorDisplay message={t("error_loading")} onRetry={mutate} />;
   return (
     <>
-      <Helmet title="My Supports · CS2Boost" />
+      <Helmet title="supports_page" />
       <div>
         <Heading
           icon={BiSupport}
-          title="My Support Tickets"
-          subtitle="Track status and chat with admins about your issues."
+          title="supports_page_title"
+          subtitle="supports_page_subtitle"
         />
-        <main className="mt-8 grid h-[calc(100vh-220px)] grid-cols-1 gap-4 px-4 md:grid-cols-3">
-          <aside className="col-span-1 flex flex-col overflow-y-auto rounded-xl border border-border bg-background p-4 shadow-sm">
-            <h2 className="mb-4 text-lg font-semibold text-foreground">
-              {t("SupportsPage.myTickets")}
+        <main className="mt-8 flex flex-col gap-4 px-4 md:grid md:h-[calc(100vh-140px)] md:grid-cols-3 md:overflow-hidden">
+          <aside className="flex min-h-[120px] flex-col overflow-y-auto rounded-xl border border-border bg-background p-4 shadow-sm md:col-span-1 md:h-full">
+            <h2 className="mb-4 text-base font-semibold text-foreground md:text-lg">
+              {t("my_tickets")}
             </h2>
+            {/* Search and Filter */}
+            <div className="mb-4 space-y-3">
+              <Search
+                value={searchTerm}
+                onChangeValue={setSearchTerm}
+                placeholder={t("search_placeholder")}
+                className="bg-background/50"
+              />
+              <div className="flex flex-wrap gap-2">
+                <PlusButton
+                  name="status"
+                  lists={filterReportStatus}
+                  selectValues={filterStatus}
+                  setSelectValues={setFilterStatus}
+                />
+                <PlusButton
+                  name="type"
+                  lists={filterReportTypes}
+                  selectValues={filterType}
+                  setSelectValues={setFilterType}
+                />
+              </div>
+            </div>
             {isLoading ? (
-              <div className="flex h-full items-center justify-center">
+              <div className="flex flex-1 items-center justify-center py-8">
                 <Spinner />
               </div>
-            ) : (
+            ) : filteredTickets.length > 0 ? (
               <ul className="space-y-2">
-                {tickets.map((ticket) => (
+                {filteredTickets.map((ticket) => (
                   <SupportTicketItem
                     key={ticket._id}
                     report={ticket}
@@ -196,22 +249,50 @@ const SupportsPage = () => {
                   />
                 ))}
               </ul>
+            ) : (
+              <p className="py-4 text-center text-sm text-muted-foreground">
+                {t("no_tickets")}
+              </p>
             )}
           </aside>
-          <section className="col-span-2 flex flex-col overflow-hidden rounded-xl border border-border bg-background shadow-sm">
+          <section className="flex min-h-[300px] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-sm md:col-span-2 md:h-full">
             {activeTicket ? (
               <>
-                <header className="border-b border-border px-6 py-4">
-                  <h2 className="text-lg font-semibold text-foreground">
-                    {t("SupportsPage.ticketTitle", {
-                      title: activeTicket.title,
-                    })}
+                <header className="border-b border-border px-4 py-3 md:px-6 md:py-4">
+                  <h2 className="text-base font-semibold text-foreground md:text-lg">
+                    {(() => {
+                      const isSender =
+                        isUserObject(activeTicket.sender) &&
+                        activeTicket.sender._id === currentUser!._id;
+                      const receiverUsername = isUserObject(
+                        activeTicket.receiver,
+                      )
+                        ? activeTicket.receiver.username
+                        : t("a_partner");
+                      const senderUsername = isUserObject(activeTicket.sender)
+                        ? activeTicket.sender.username
+                        : t("a_user");
+                      const reportType = filterReportTypes.find(
+                        (type) => type.value === activeTicket.title,
+                      );
+                      const translatedTitle = reportType
+                        ? t(`report_types.${reportType.translationKey}`)
+                        : activeTicket.title;
+                      return isSender
+                        ? t("ticket_item.my_report_title", {
+                            title: translatedTitle,
+                            username: receiverUsername,
+                          })
+                        : t("ticket_item.investigation_title", {
+                            username: senderUsername,
+                            title: translatedTitle,
+                          });
+                    })()}
                   </h2>
-                  <p className="text-sm capitalize text-muted-foreground">
-                    {t("SupportsPage.statusLabel")}:{" "}
+                  <p className="text-xs capitalize text-muted-foreground md:text-sm">
+                    {t("status_label")}:{" "}
                     {t(
-                      `SupportsPage.TicketItem.status${activeTicket.status.replace("_", "")}`,
-                      activeTicket.status,
+                      `ticket_item.status_${activeTicket.status.toLowerCase()}`,
                     )}
                   </p>
                 </header>
@@ -226,31 +307,31 @@ const SupportsPage = () => {
                     )
                   ) : (
                     <div className="flex h-full items-center justify-center text-muted-foreground">
-                      <p>{t("SupportsPage.pendingReview")}</p>
+                      <p className="text-sm">{t("pending_review")}</p>
                     </div>
                   )}
                 </div>
-                <footer className="border-t border-border bg-muted/50 p-4">
+                <footer className="border-t border-border bg-muted/50 p-3 md:p-4">
                   {activeTicket.status === "IN_PROGRESS" &&
                   conversationToShow ? (
                     <ChatInput onSendMessage={performSendMessage} />
                   ) : (
-                    <div className="text-center text-sm text-muted-foreground">
+                    <div className="text-center text-xs text-muted-foreground md:text-sm">
                       {activeTicket.status === "RESOLVED"
-                        ? t("SupportsPage.conversationClosed")
-                        : t("SupportsPage.canChatWhenAdminReviews")}
+                        ? t("conversation_closed")
+                        : t("can_chat_when_admin_reviews")}
                     </div>
                   )}
                 </footer>
               </>
             ) : (
-              <div className="flex h-full items-center justify-center text-muted-foreground">
+              <div className="flex h-full min-h-[200px] items-center justify-center text-sm text-muted-foreground">
                 {isLoading ? (
                   <Spinner />
                 ) : tickets.length > 0 ? (
-                  t("SupportsPage.selectTicket")
+                  t("select_ticket")
                 ) : (
-                  t("SupportsPage.noTickets")
+                  t("no_tickets")
                 )}
               </div>
             )}
@@ -260,5 +341,4 @@ const SupportsPage = () => {
     </>
   );
 };
-
 export default SupportsPage;

@@ -1,0 +1,61 @@
+{
+    "loading": {
+        "verifying": "Verifying your payment...",
+        "wait_notice": "Please do not close this window."
+    },
+    "error": "An error occurred while verifying the payment. Please check your order history or contact support.",
+    "status_card": {
+        "success_title": "Payment Successful",
+        "failure_title": "Payment Failed",
+        "success_message": "Your transaction has been completed successfully.",
+        "failure_message": "Your transaction could not be processed."
+    },
+    "receipt": {
+        "order_info": "Order Information",
+        "transaction_id": "Transaction ID",
+        "bank": "Bank",
+        "card_type": "Card Type",
+        "payment_time": "Payment Time",
+        "total_amount": "Total Amount"
+    },
+    "pdf": {
+        "title": "PAYMENT RECEIPT",
+        "invoice_no": "Invoice No:",
+        "transaction_label": "Transaction #",
+        "date_label": "Date:",
+        "time_label": "Time:",
+        "company_name": "CS2 BOOST",
+        "company_slogan": "Professional Gaming Services",
+        "company_email": "support@cs2boost.com",
+        "company_website": "www.cs2boost.com",
+        "bill_to": "BILL TO",
+        "customer": "Customer",
+        "payment_details": "PAYMENT DETAILS",
+        "order_info": "Order Description",
+        "bank": "Bank",
+        "card_type": "Card Type",
+        "ref_id": "Reference ID",
+        "transaction_id": "Transaction ID",
+        "payment_method": "Payment Method",
+        "payment_summary": "PAYMENT SUMMARY",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "total_amount": "TOTAL AMOUNT",
+        "amount_paid": "Amount Paid",
+        "status_label": "Status:",
+        "status_success": "PAID",
+        "status_failed": "FAILED",
+        "status_badge_success": "✓ Payment Successful",
+        "status_badge_failed": "✗ Payment Failed",
+        "thank_you": "Thank you for choosing CS2 Boost!",
+        "support_note": "If you have any questions about this receipt, please contact our support team.",
+        "file_name": "CS2Boost_Receipt",
+        "footer_note": "This is a computer-generated receipt and does not require a signature.",
+        "page": "Page",
+        "of": "of"
+    },
+    "buttons": {
+        "view_my_orders": "View My Orders",
+        "download_receipt": "Download Receipt"
+    }
+}

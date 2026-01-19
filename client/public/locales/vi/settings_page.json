@@ -1,0 +1,193 @@
+﻿{
+    "navigation": {
+        "general": "Chung",
+        "information": "Thông tin",
+        "notifications": "Thông báo"
+    },
+    "user_widget": {
+        "title": "Thông tin người dùng",
+        "edit_profile_btn": "Chỉnh sửa hồ sơ",
+        "change_password_btn": "Đổi mật khẩu",
+        "labels": {
+            "username": "Tên người dùng",
+            "user_id": "ID người dùng",
+            "email_address": "Địa chỉ Email",
+            "language": "Ngôn ngữ",
+            "phone_number": "Số điện thoại",
+            "cccd_number": "Số CCCD",
+            "full_name": "Họ và tên",
+            "date_of_birth": "Ngày sinh",
+            "gender": "Giới tính",
+            "address": "Địa chỉ",
+            "cccd_issue_date": "Ngày cấp CCCD"
+        }
+    },
+    "verification_widget": {
+        "title": "Xác minh danh tính",
+        "subtitle": "Bạn có thể xác minh danh tính của mình tại đây.",
+        "verify_btn": "Xác minh danh tính",
+        "getting_started_title": "Bắt đầu nào",
+        "getting_started_subtitle": "Chúng tôi cần một số thông tin để giúp chúng tôi xác nhận danh tính của bạn.",
+        "begin_verify_btn": "Bắt đầu xác minh",
+        "pending_title": "Đang chờ xét duyệt",
+        "pending_subtitle": "Yêu cầu đăng ký Partner của bạn đang được xem xét.",
+        "pending_badge": "Đang chờ duyệt",
+        "partner_title": "Xin chào, Partner!",
+        "partner_subtitle": "Bạn đã là Partner của chúng tôi. Hãy bắt đầu nhận đơn hàng!",
+        "partner_badge": "Đã xác thực Partner",
+        "cccd_expiring_warning": "⚠️ CCCD của bạn sẽ hết hạn vào ngày {{date}}. Vui lòng cập nhật CCCD mới.",
+        "renew_cccd_btn": "Cập nhật CCCD mới"
+    },
+    "congrats_dialog": {
+        "title": "Chúc mừng! 🎉",
+        "subtitle": "Bạn đã trở thành Partner thành công. Hãy bắt đầu nhận đơn hàng!"
+    },
+    "upload_image_modal": {
+        "verify_title": "Xác minh thông tin CCCD của bạn",
+        "scan_title": "Mặt trước thẻ CCCD",
+        "verify_subtitle": "Vui lòng xem lại và xác nhận các chi tiết của bạn dưới đây.",
+        "scan_subtitle": "Chụp hoặc tải lên một hình ảnh rõ nét của thẻ CCCD của bạn.",
+        "error_incomplete_data": "Dữ liệu CCCD không đầy đủ.",
+        "error_sample_data": "Dữ liệu mẫu không hợp lệ.",
+        "specific_case_btn": "Trường hợp đặc biệt"
+    },
+    "login_sessions_widget": {
+        "title": "Phiên đăng nhập",
+        "show_ips_btn": "Hiển thị IP",
+        "hide_ips_btn": "Ẩn IP",
+        "logout_all_btn": "Đăng xuất khỏi tất cả thiết bị",
+        "devices": {
+            "desktop": "Máy tính để bàn",
+            "mobile": "Di động",
+            "tablet": "Máy tính bảng"
+        },
+        "status": {
+            "online": "Trực tuyến",
+            "offline": "Ngoại tuyến"
+        },
+        "logout_all_success": "Đăng xuất khỏi tất cả thiết bị thành công",
+        "logout_all_error": "Đăng xuất khỏi tất cả thiết bị thất bại"
+    },
+    "information_page": {
+        "introduction_widget": {
+            "title": "Giới thiệu của bạn",
+            "empty": "Bạn chưa thêm phần giới thiệu. Nhấp vào 'Chỉnh sửa' để bắt đầu.",
+            "edit_btn": "Chỉnh sửa"
+        },
+        "social_media_widget": {
+            "title": "Liên kết mạng xã hội",
+            "empty": "Chưa có liên kết xã hội nào được thêm.",
+            "add_btn": "Thêm liên kết",
+            "placeholder": "https://facebook.com/ten-nguoi-dung-cua-ban"
+        }
+    },
+    "notifications_page": {
+        "title": "Thông báo đẩy trên máy tính",
+        "subscribed_subtitle": "Bạn hiện đang nhận thông báo trên thiết bị này.",
+        "unsubscribed_subtitle": "Bật thông báo để luôn được cập nhật.",
+        "subscribe_btn": "Đăng ký",
+        "unsubscribe_btn": "Hủy đăng ký",
+        "settings": {
+            "updated_order": {
+                "label": "Boost của tôi được cập nhật",
+                "description": "Nhận thông báo khi một đối tác chấp nhận, hoàn thành hoặc hủy đơn hàng của bạn."
+            },
+            "new_order": {
+                "label": "Boost mới được tạo (dành cho Đối tác)",
+                "description": "Đối tác nhận thông báo khi có đơn hàng mới trên nền tảng."
+            }
+        }
+    },
+    "dialogs": {
+        "edit_profile_title": "Chỉnh sửa hồ sơ của bạn",
+        "change_password_title": "Đổi mật khẩu",
+        "change_current_password_title": "Đổi mật khẩu hiện tại",
+        "change_current_password_subtitle": "Vui lòng nhập mật khẩu cũ của bạn để thay đổi mật khẩu.",
+        "email_note": "Vui lòng liên hệ bộ phận hỗ trợ nếu bạn cần thay đổi email của mình.",
+        "password_note_google": "Nếu bạn tạo tài khoản bằng tài khoản google, mật khẩu của bạn đã được gửi đến gmail.",
+        "password_note_complexity": "Mật khẩu của bạn phải có ít nhất 6 ký tự và bao gồm sự kết hợp của số, chữ cái và ký tự đặc biệt (!$@%)."
+    },
+    "scanner": {
+        "modes": {
+            "camera": "Camera",
+            "upload": "Tải ảnh"
+        },
+        "errors": {
+            "camera_access": "Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập.",
+            "permission_denied": "Quyền truy cập camera bị từ chối. Vui lòng bật quyền camera trong cài đặt trình duyệt.",
+            "no_camera": "Không tìm thấy camera trên thiết bị của bạn.",
+            "not_supported": "Trình duyệt của bạn không hỗ trợ truy cập camera.",
+            "camera_in_use": "Camera đang được sử dụng bởi ứng dụng khác.",
+            "no_qr_found": "Không tìm thấy mã QR trong ảnh. Vui lòng thử lại.",
+            "invalid_file": "File không hợp lệ. Vui lòng chọn file ảnh."
+        },
+        "upload": {
+            "title": "Tải ảnh lên hoặc dán ảnh (Ctrl+V)",
+            "subtitle": "Kéo thả ảnh vào đây hoặc nhấn nút bên dưới",
+            "button": "Chọn ảnh"
+        },
+        "hints": {
+            "camera": "Đưa mã QR vào khung hình để quét",
+            "upload": "Hỗ trợ: Tải file, dán (Ctrl+V), hoặc kéo thả ảnh"
+        },
+        "help": {
+            "title": "Cách bật quyền camera:",
+            "step1": "Nhấp vào biểu tượng khóa/camera bên cạnh URL",
+            "step2": "Chọn 'Cho phép' camera cho trang web này",
+            "step3": "Tải lại trang và thử lại",
+            "use_upload": "Hoặc dùng Upload ảnh",
+            "retry": "Thử lại"
+        },
+        "original_text": {
+            "QR code parse error, error =": "Lỗi phân tích mã QR, lỗi =",
+            "Error getting userMedia, error =": "Lỗi lấy userMedia, lỗi =",
+            "The device doesn't support navigator.mediaDevices , only supported cameraIdOrConfig in this case is deviceId parameter (string).": "Thiết bị không hỗ trợ navigator.mediaDevices, chỉ hỗ trợ tham số cameraIdOrConfig trong trường hợp này là deviceId (chuỗi).",
+            "Camera streaming not supported by the browser.": "Trình duyệt không hỗ trợ truyền phát camera.",
+            "Unable to query supported devices, unknown error.": "Không thể truy vấn các thiết bị được hỗ trợ, lỗi không xác định.",
+            "Camera access is only supported in secure context like https or localhost.": "Truy cập camera chỉ được hỗ trợ trong ngữ cảnh an toàn như https hoặc localhost.",
+            "Scanner paused": "Máy quét đã tạm dừng",
+            "Scanning": "Đang quét",
+            "Idle": "Không hoạt động",
+            "Error": "Lỗi",
+            "Permission": "Quyền",
+            "No Cameras": "Không có Camera",
+            "Last Match:": "Kết quả cuối:",
+            "Code Scanner": "Máy quét mã",
+            "Request Camera Permissions": "Yêu cầu quyền truy cập Camera",
+            "Requesting camera permissions...": "Đang yêu cầu quyền truy cập camera...",
+            "No camera found": "Không tìm thấy camera",
+            "Stop Scanning": "Dừng quét",
+            "Start Scanning": "Bắt đầu quét",
+            "Switch On Torch": "Bật đèn pin",
+            "Switch Off Torch": "Tắt đèn pin",
+            "Failed to turn on torch": "Không thể bật đèn pin",
+            "Failed to turn off torch": "Không thể tắt đèn pin",
+            "Launching Camera...": "Đang khởi động Camera...",
+            "Scan an Image File": "Quét tệp hình ảnh",
+            "Scan using camera directly": "Quét trực tiếp bằng camera",
+            "Select Camera": "Chọn Camera",
+            "Choose Image": "Chọn ảnh",
+            "Choose Another": "Chọn ảnh khác",
+            "No image choosen": "Chưa chọn ảnh nào",
+            "Anonymous Camera": "Camera ẩn danh",
+            "Or drop an image to scan": "Hoặc kéo thả ảnh vào để quét",
+            "Or drop an image to scan (other files not supported)": "Hoặc kéo thả ảnh vào để quét (không hỗ trợ các tệp khác)",
+            "zoom": "thu phóng",
+            "Loading image...": "Đang tải ảnh...",
+            "Camera based scan": "Quét bằng camera",
+            "Fule based scan": "Quét từ tệp",
+            "Powered by ": "Được cung cấp bởi ",
+            "Report issues": "Báo cáo sự cố",
+            "NotAllowedError: Permission denied": "Lỗi không cho phép: Quyền bị từ chối"
+        }
+    },
+    "delete_account": {
+        "title": "Xóa Tài Khoản",
+        "warning": "Hành động này không thể hoàn tác. Chúng tôi sẽ xóa vĩnh viễn tài khoản của bạn, bạn sẽ mất tất cả số dư và điểm thưởng hiện có.",
+        "modal_title": "Xóa Tài Khoản",
+        "confirm_instruction": "Nhập tên người dùng của bạn để xác nhận xóa tài khoản.",
+        "username_placeholder": "Nhập tên người dùng của bạn",
+        "username_mismatch": "Tên người dùng không khớp.",
+        "success": "Tài khoản đã được xóa thành công."
+    }
+}

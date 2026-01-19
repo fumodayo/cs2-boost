@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+﻿import mongoose, { Schema, Document, Model } from 'mongoose';
 import { PAYOUT_STATUS } from '../constants';
 
 export interface IPayout extends Document {

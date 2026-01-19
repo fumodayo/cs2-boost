@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+﻿import { useCallback, useContext, useEffect, useState } from "react";
 import { FaCreditCard } from "react-icons/fa6";
 import { GiPartyPopper } from "react-icons/gi";
 import { HiOutlineCursorClick } from "react-icons/hi";
@@ -9,38 +9,31 @@ import { useTranslation } from "react-i18next";
 
 const stepToOrder = [
   {
+    key: "select_service",
     icon: HiOutlineCursorClick,
-    title: "Select Service",
-    subtitle: "Select the game, service and customize your order",
   },
   {
+    key: "secure_payment",
     icon: FaCreditCard,
-    title: "Secure Payment",
-    subtitle:
-      "We accept all major credit cards, PaySafe, Apple Pay, Google Pay, Crypto, and more!",
   },
   {
+    key: "order_starts",
     icon: IoPlayForward,
-    title: "Order Starts",
-    subtitle:
-      "Sit back, relax and enjoy - We will take care of everything for you",
   },
   {
+    key: "order_completed",
     icon: GiPartyPopper,
-    title: "Order Completed",
-    subtitle:
-      "Just like magic, you're now all set! We appreciate your feedback, so don't forget to share your experience with us",
   },
 ];
 
 const StepByStep = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("landing");
   const { theme } = useContext(AppContext);
 
   const [progress, setProgress] = useState(0);
   const [currentCard, setCurrentCard] = useState(0);
 
-  const startProgress = () => {
+  const startProgress = useCallback(() => {
     const start = Date.now();
     const duration = 5000;
 
@@ -56,7 +49,7 @@ const StepByStep = () => {
     };
 
     requestAnimationFrame(animated);
-  };
+  }, []);
 
   useEffect(() => {
     if (progress >= 100) {
@@ -71,7 +64,7 @@ const StepByStep = () => {
 
   useEffect(() => {
     startProgress();
-  }, [currentCard]);
+  }, [currentCard, startProgress]);
 
   return (
     <div
@@ -87,7 +80,7 @@ const StepByStep = () => {
         )}
       >
         <h4 className="font-display z-20 max-w-xs text-4xl font-bold tracking-tight text-foreground">
-          {t("StepByStep.heading")}
+          {t("step_by_step.heading")}
         </h4>
         <p
           className={cn(
@@ -95,7 +88,7 @@ const StepByStep = () => {
             "sm:text-base",
           )}
         >
-          {t("StepByStep.subheading")}
+          {t("step_by_step.subheading")}
         </p>
       </div>
       <div
@@ -104,7 +97,7 @@ const StepByStep = () => {
           "lg:order-1 lg:col-span-3 lg:mt-10",
         )}
       >
-        {stepToOrder.map(({ icon: Icon, title, subtitle }, index) =>
+        {stepToOrder.map(({ icon: Icon, key }, index) =>
           currentCard === index ? (
             <div
               key={index}
@@ -117,10 +110,10 @@ const StepByStep = () => {
               <Icon size={24} />
               <div className="flex flex-col gap-3">
                 <h3 className="font-display text-2xl font-bold">
-                  {t(`StepByStep.card.title.${title}`)}
+                  {t(`step_by_step.${key}.title`)}
                 </h3>
                 <p className="secondary max-w-sm text-sm">
-                  {t(`StepByStep.card.subtitle.${subtitle}`)}
+                  {t(`step_by_step.${key}.subtitle`)}
                 </p>
               </div>
               <div
@@ -140,7 +133,7 @@ const StepByStep = () => {
               <Icon size={24} />
               <div className="flex flex-col gap-3">
                 <h3 className="font-display text-2xl font-bold">
-                  {t(`StepByStep.card.title.${title}`)}
+                  {t(`step_by_step.${key}.title`)}
                 </h3>
               </div>
             </div>
@@ -159,7 +152,7 @@ const StepByStep = () => {
             "lg:absolute lg:top-10 lg:h-[800px] lg:w-[800px]",
           )}
           src={`/assets/services/howitworks${currentCard + 1}${theme === "light" ? "_w" : ""}.png`}
-          alt="Illustration"
+          alt={t(`step_by_step.${stepToOrder[currentCard].key}.title`)}
         />
       </div>
     </div>

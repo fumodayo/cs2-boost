@@ -1,0 +1,19 @@
+{
+    "search_placeholder": "Tìm kiếm trong các đối tác bạn đã theo dõi...",
+    "card": {
+        "verified_tooltip": "Đối tác đã xác minh",
+        "online": "Trực tuyến",
+        "offline": "Ngoại tuyến",
+        "rating": "Đánh giá",
+        "followers": "Người theo dõi",
+        "unfollow_btn": "Bỏ theo dõi",
+        "unfollowed_toast": "Đã bỏ theo dõi {{username}}"
+    },
+    "empty_state": {
+        "search_title": "Không tìm thấy đối tác nào",
+        "no_follow_title": "Bạn chưa theo dõi đối tác nào",
+        "search_subtitle": "Chúng tôi không thể tìm thấy đối tác nào phù hợp với tìm kiếm của bạn. Hãy thử một tên khác.",
+        "no_follow_subtitle": "Hãy bắt đầu khám phá và theo dõi các đối tác để thấy họ ở đây. Họ sẽ giúp bạn trên hành trình của mình!",
+        "explore_btn": "Khám phá đối tác"
+    }
+}

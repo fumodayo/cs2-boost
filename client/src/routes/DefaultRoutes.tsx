@@ -1,4 +1,4 @@
-import { Navigate, Route } from "react-router-dom";
+﻿import { Navigate, Route } from "react-router-dom";
 import PATH from "~/constants/path";
 import { DefaultLayout } from "~/layouts";
 import {
@@ -10,6 +10,9 @@ import {
   PartnersPage,
   PremierPage,
   WingmanPage,
+  TermsOfServicePage,
+  PrivacyPolicyPage,
+  RefundPolicyPage,
 } from "~/pages";
 
 const DefaultRoutes = () => {
@@ -18,6 +21,10 @@ const DefaultRoutes = () => {
       <Route index element={<HomePage />} />
       <Route path={PATH.DEFAULT.PARTNERS} element={<PartnersPage />} />
       <Route path={PATH.DEFAULT.PARTNER} element={<PartnerPage />} />
+      {/* Legal Pages */}
+      <Route path={PATH.LEGAL.TERMS} element={<TermsOfServicePage />} />
+      <Route path={PATH.LEGAL.PRIVACY} element={<PrivacyPolicyPage />} />
+      <Route path={PATH.LEGAL.REFUND} element={<RefundPolicyPage />} />
       <Route path={PATH.DEFAULT.GAME_MODE} element={<DefaultLayout />}>
         <Route index element={<GameModePage />} />
         <Route path={PATH.DEFAULT.PREMIER} element={<PremierPage />} />

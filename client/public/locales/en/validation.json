@@ -1,0 +1,13 @@
+{
+    "invalid_email": "Please enter a valid email address",
+    "password_complexity": "The password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
+    "field_required": "{{fieldName}} is required.",
+    "wrong_credentials": "Wrong email address or password",
+    "passwords_do_not_match": "Passwords do not match.",
+    "turn_off_vpn": "Please turn off your VPN",
+    "not_empty": "Must not be empty",
+    "required": "This field is required",
+    "min_length": "Must not be shorter than {{count}} characters",
+    "max_length": "Must not exceed {{count}} characters",
+    "email_taken": "Email address has taken"
+}

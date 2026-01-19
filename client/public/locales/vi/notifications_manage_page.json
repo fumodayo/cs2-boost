@@ -1,0 +1,23 @@
+{
+    "title": "Quản lý Thông báo",
+    "subtitle": "Tạo và quản lý các thông báo cho tất cả người dùng",
+    "create_announcement": "Tạo Thông báo",
+    "image_url": "URL Hình ảnh (Banner)",
+    "image_placeholder": "https://example.com/banner.jpg",
+    "title_field": "Tiêu đề",
+    "title_placeholder": "Tiêu đề thông báo...",
+    "description_field": "Mô tả",
+    "description_placeholder": "Nội dung thông báo...",
+    "add_to_list": "Thêm vào danh sách",
+    "adding": "Đang thêm...",
+    "announcements_list": "Danh sách Thông báo",
+    "no_announcements": "Chưa có thông báo nào",
+    "broadcast": "Phát sóng",
+    "delete": "Xóa",
+    "toasts": {
+        "created": "Tạo thông báo thành công!",
+        "deleted": "Xóa thông báo thành công!",
+        "broadcasted": "Đã gửi thông báo đến tất cả người dùng!",
+        "title_content_required": "Tiêu đề và nội dung là bắt buộc"
+    }
+}

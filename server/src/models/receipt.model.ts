@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 import { RECEIPT_STATUS } from '../constants';
 
 const receiptSchema = new mongoose.Schema(

@@ -1,4 +1,4 @@
-import { useContext, useRef, useEffect } from "react";
+﻿import { useContext, useRef, useEffect } from "react";
 import gsap from "gsap";
 import { AppContext } from "~/components/context/AppContext";
 import cn from "~/libs/utils";
@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 
 interface ICardProps {
   image: string;
-  title?: string;
-  subtitle?: string;
+  titleKey: string;
+  subtitleKey?: string;
 }
 
 const Circle: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({
@@ -65,8 +65,8 @@ const Circle: React.FC<{ containerRef: React.RefObject<HTMLDivElement> }> = ({
   );
 };
 
-const Card = ({ image, title, subtitle }: ICardProps) => {
-  const { t } = useTranslation();
+const Card = ({ image, titleKey, subtitleKey }: ICardProps) => {
+  const { t } = useTranslation("landing");
   const { theme } = useContext(AppContext);
 
   return (
@@ -80,21 +80,42 @@ const Card = ({ image, title, subtitle }: ICardProps) => {
       <img
         className="h-full w-full rounded-2xl object-cover"
         src={`/assets/illustrations/s${image}${theme === "light" ? "_w" : ""}.png`}
+        alt={t(titleKey)}
       />
       <div className="absolute bottom-4 flex flex-col gap-2 p-8 pt-0">
-        <h5 className="text-2xl font-bold text-foreground">
-          {t(`NewStandard.card.title.${title}`)}
-        </h5>
+        <h5 className="text-2xl font-bold text-foreground">{t(titleKey)}</h5>
         <p className="text-base text-foreground/90">
-          {subtitle && t(`NewStandard.card.subtitle.${subtitle}`)}
+          {subtitleKey && t(subtitleKey)}
         </p>
       </div>
     </div>
   );
 };
 
+const cards = {
+  support: {
+    image: "1",
+    titleKey: "new_standard.support.title",
+    subtitleKey: "new_standard.support.subtitle",
+  },
+  privacy: {
+    image: "2",
+    titleKey: "new_standard.privacy.title",
+    subtitleKey: "new_standard.privacy.subtitle",
+  },
+  cashback: {
+    image: "3",
+    titleKey: "new_standard.cashback.title",
+  },
+  payments: {
+    image: "4",
+    titleKey: "new_standard.payments.title",
+    subtitleKey: "new_standard.payments.subtitle",
+  },
+};
+
 const NewStandard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("landing");
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -105,12 +126,12 @@ const NewStandard = () => {
           "md:mx-0",
         )}
       >
-        {t("NewStandard.heading")}
+        {t("new_standard.heading")}
       </h2>
       <p
         className={cn("mx-auto mt-4 text-center text-foreground/90", "md:mx-0")}
       >
-        {t("NewStandard.subheading")}
+        {t("new_standard.subheading")}
       </p>
       <div
         className="z-20 mt-20 grid w-full grid-cols-5 gap-4"
@@ -118,31 +139,19 @@ const NewStandard = () => {
       >
         <Circle containerRef={containerRef} />
         <div className={cn("col-span-5 w-full", "lg:col-span-2")}>
-          <Card
-            image="1"
-            title="Instant 24/7 Human Support"
-            subtitle="No bots, no ChatGPT – just humans."
-          />
+          <Card {...cards.support} />
         </div>
         <div
           className={cn("col-span-5 grid grid-cols-2 gap-4", "lg:col-span-3")}
         >
           <div className="col-span-2 w-full md:col-span-1">
-            <Card image="3" title="3-6% Cashback on all purchases" />
+            <Card {...cards.cashback} />
           </div>
           <div className={cn("col-span-2 w-full", "md:col-span-1")}>
-            <Card
-              image="2"
-              title="Full Privacy & Anonymity"
-              subtitle="Who are you? We don't know."
-            />
+            <Card {...cards.privacy} />
           </div>
           <div className="col-span-2">
-            <Card
-              image="4"
-              title="Secure & Instant Payments"
-              subtitle="Buy gaming services with PaysafeCard, Apple Pay, and more."
-            />
+            <Card {...cards.payments} />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { chatService } from "./../services/chat.service";
+﻿import { chatService } from "./../services/chat.service";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { IMessage, ISendMessagePayload, IUser } from "~/types";
@@ -9,7 +9,10 @@ import { useSocketContext } from "./useSocketContext";
  * @param conversationId - ID của cuộc hội thoại.
  * @param currentUser - Đối tượng người dùng hiện tại, cần thiết cho optimistic updates.
  */
-export const useChat = (conversationId?: string, currentUser?: IUser | null) => {
+export const useChat = (
+  conversationId?: string,
+  currentUser?: IUser | null,
+) => {
   const swrKey = conversationId ? `/chat/${conversationId}` : null;
   const { socket } = useSocketContext();
 
@@ -27,18 +30,15 @@ export const useChat = (conversationId?: string, currentUser?: IUser | null) => 
 
     const handleNewMessage = (newMessage: IMessage) => {
       if (newMessage.conversation_id === conversationId) {
-        mutate(
-          (currentMessages = []) => {
-            const newMessages = currentMessages.filter(
-              (msg) => !msg._id.startsWith("temp_"),
-            );
-            if (!newMessages.some((msg) => msg._id === newMessage._id)) {
-              newMessages.push(newMessage);
-            }
-            return newMessages;
-          },
-          false,
-        );
+        mutate((currentMessages = []) => {
+          const newMessages = currentMessages.filter(
+            (msg) => !msg._id.startsWith("temp_"),
+          );
+          if (!newMessages.some((msg) => msg._id === newMessage._id)) {
+            newMessages.push(newMessage);
+          }
+          return newMessages;
+        }, false);
       }
     };
 
@@ -49,17 +49,19 @@ export const useChat = (conversationId?: string, currentUser?: IUser | null) => 
     };
   }, [socket, conversationId, mutate]);
 
-
   const handleSendMessage = async (payload: ISendMessagePayload) => {
     if (!conversationId || !currentUser) {
-      console.error("Không thể gửi tin nhắn: thiếu ID cuộc hội thoại hoặc người dùng.");
+      console.error(
+        "Không thể gửi tin nhắn: thiếu ID cuộc hội thoại hoặc người dùng.",
+      );
       return;
     }
     const tempMessage: IMessage = {
-      _id: `temp_${Date.now()}`, 
+      _id: `temp_${Date.now()}`,
       conversation_id: conversationId,
       sender: currentUser,
       message: payload.message,
+      images: payload.images || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

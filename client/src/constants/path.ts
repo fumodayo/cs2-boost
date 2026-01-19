@@ -1,9 +1,14 @@
-const PATH = {
+﻿const PATH = {
   AUTH: {
     LOGIN: "/login",
     REGISTER: "/register",
     FORGOT_PASSWORD: "/forgot-password",
     RESET_PASSWORD: "/reset-password",
+  },
+  LEGAL: {
+    TERMS: "/terms-of-service",
+    PRIVACY: "/privacy-policy",
+    REFUND: "/refund-policy",
   },
   DEFAULT: {
     HOME: "/",

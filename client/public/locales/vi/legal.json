@@ -1,0 +1,161 @@
+{
+    "page_title": {
+        "terms": "Điều Khoản Dịch Vụ",
+        "privacy": "Chính Sách Bảo Mật",
+        "refund": "Chính Sách Hoàn Tiền"
+    },
+    "breadcrumb": {
+        "home": "Trang chủ"
+    },
+    "last_updated": "Cập nhật lần cuối",
+    "terms": {
+        "title": "Điều Khoản Dịch Vụ",
+        "intro": "Chào mừng bạn đến với CS2 Boost. Bằng việc sử dụng dịch vụ của chúng tôi, bạn đồng ý với các điều khoản này. Vui lòng đọc kỹ.",
+        "sections": {
+            "acceptance": {
+                "title": "1. Chấp Nhận Điều Khoản",
+                "content": "Bằng việc truy cập hoặc sử dụng dịch vụ CS2 Boost, bạn xác nhận đã đọc, hiểu và đồng ý tuân theo các Điều Khoản Dịch Vụ này. Nếu bạn không đồng ý với các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi."
+            },
+            "services": {
+                "title": "2. Mô Tả Dịch Vụ",
+                "content": "CS2 Boost cung cấp dịch vụ boost rank cho Counter-Strike 2, bao gồm Premier Mode, Wingman và Level Farming. Đội ngũ booster chuyên nghiệp sẽ giúp bạn đạt rank mong muốn trong khi đảm bảo an toàn cho tài khoản của bạn."
+            },
+            "account": {
+                "title": "3. Tài Khoản Người Dùng",
+                "content": "Bạn có trách nhiệm bảo mật thông tin đăng nhập tài khoản của mình. Bạn phải cung cấp thông tin chính xác và đầy đủ khi tạo tài khoản. Bạn hoàn toàn chịu trách nhiệm cho mọi hoạt động xảy ra trên tài khoản của mình."
+            },
+            "payment": {
+                "title": "4. Điều Khoản Thanh Toán",
+                "content": "Tất cả thanh toán phải được thực hiện trước khi dịch vụ boost bắt đầu. Chúng tôi chấp nhận nhiều phương thức thanh toán bao gồm chuyển khoản ngân hàng, ví điện tử và các phương thức được chấp nhận khác. Tất cả giá được hiển thị bằng VND trừ khi có quy định khác."
+            },
+            "user_obligations": {
+                "title": "5. Nghĩa Vụ Người Dùng",
+                "content": "Người dùng không được can thiệp vào quá trình boost sau khi đã bắt đầu. Bạn đồng ý không chia sẻ quyền truy cập tài khoản với bên thứ ba trong quá trình boost. Mọi vi phạm có thể dẫn đến việc chấm dứt dịch vụ mà không hoàn tiền."
+            },
+            "prohibited": {
+                "title": "6. Hoạt Động Bị Cấm",
+                "content": "Người dùng bị cấm: sử dụng dịch vụ cho mục đích bất hợp pháp, cố gắng gian lận hoặc thao túng hệ thống của chúng tôi, chia sẻ hoặc bán lại dịch vụ mà không được phép, cung cấp thông tin sai lệch, hoặc tham gia vào bất kỳ hoạt động nào có thể gây hại cho nền tảng hoặc người dùng khác."
+            },
+            "intellectual_property": {
+                "title": "7. Sở Hữu Trí Tuệ",
+                "content": "Tất cả nội dung, thương hiệu và tài liệu trên CS2 Boost thuộc sở hữu của chúng tôi hoặc các đối tác cấp phép. Bạn không được sao chép, tái tạo, phân phối hoặc tạo ra các tác phẩm phái sinh mà không có sự cho phép bằng văn bản của chúng tôi."
+            },
+            "disclaimer": {
+                "title": "8. Miễn Trừ Bảo Hành",
+                "content": "Dịch vụ của chúng tôi được cung cấp 'nguyên trạng' mà không có bất kỳ bảo hành nào, dù rõ ràng hay ngụ ý. Chúng tôi không đảm bảo đạt rank cụ thể vì kết quả phụ thuộc vào nhiều yếu tố. Chúng tôi không liên kết với Valve Corporation hoặc Counter-Strike 2."
+            },
+            "limitation": {
+                "title": "9. Giới Hạn Trách Nhiệm",
+                "content": "CS2 Boost không chịu trách nhiệm cho bất kỳ thiệt hại gián tiếp, ngẫu nhiên, đặc biệt hoặc hậu quả nào phát sinh từ việc sử dụng dịch vụ. Tổng trách nhiệm của chúng tôi không vượt quá số tiền đã thanh toán cho dịch vụ cụ thể đang được đề cập."
+            },
+            "termination": {
+                "title": "10. Chấm Dứt",
+                "content": "Chúng tôi có quyền chấm dứt hoặc tạm ngưng tài khoản và quyền truy cập dịch vụ của bạn bất cứ lúc nào, có hoặc không có lý do, và không cần thông báo trước. Khi bị chấm dứt, quyền sử dụng dịch vụ của bạn sẽ ngay lập tức chấm dứt."
+            },
+            "changes": {
+                "title": "11. Thay Đổi Điều Khoản",
+                "content": "Chúng tôi có thể sửa đổi các Điều Khoản Dịch Vụ này bất cứ lúc nào. Các thay đổi sẽ có hiệu lực khi được đăng trên trang này. Việc tiếp tục sử dụng dịch vụ sau khi thay đổi đồng nghĩa với việc chấp nhận các điều khoản đã sửa đổi."
+            },
+            "contact": {
+                "title": "12. Thông Tin Liên Hệ",
+                "content": "Nếu bạn có bất kỳ câu hỏi nào về các Điều Khoản Dịch Vụ này, vui lòng liên hệ với chúng tôi qua các kênh hỗ trợ hoặc Discord server."
+            }
+        }
+    },
+    "privacy": {
+        "title": "Chính Sách Bảo Mật",
+        "intro": "Tại CS2 Boost, chúng tôi cam kết bảo vệ quyền riêng tư của bạn. Chính sách này giải thích cách chúng tôi thu thập, sử dụng và bảo mật thông tin cá nhân của bạn.",
+        "sections": {
+            "collection": {
+                "title": "1. Thông Tin Chúng Tôi Thu Thập",
+                "content": "Chúng tôi thu thập thông tin bạn cung cấp trực tiếp, bao gồm: tên, địa chỉ email, số điện thoại, thông tin thanh toán và chi tiết tài khoản game cần thiết cho dịch vụ. Chúng tôi cũng tự động thu thập một số thông tin như địa chỉ IP, loại trình duyệt và thông tin thiết bị."
+            },
+            "use": {
+                "title": "2. Cách Chúng Tôi Sử Dụng Thông Tin",
+                "content": "Chúng tôi sử dụng thông tin của bạn để: cung cấp và cải thiện dịch vụ, xử lý giao dịch, liên lạc với bạn về đơn hàng và cập nhật, hỗ trợ khách hàng, phát hiện và ngăn chặn gian lận, và tuân thủ nghĩa vụ pháp lý."
+            },
+            "sharing": {
+                "title": "3. Chia Sẻ Thông Tin",
+                "content": "Chúng tôi không bán thông tin cá nhân của bạn. Chúng tôi có thể chia sẻ thông tin với: các nhà cung cấp dịch vụ đáng tin cậy hỗ trợ hoạt động của chúng tôi, các đơn vị xử lý thanh toán, và cơ quan chức năng khi có yêu cầu pháp luật. Các booster chỉ nhận được thông tin tối thiểu cần thiết để hoàn thành đơn hàng của bạn."
+            },
+            "security": {
+                "title": "4. Bảo Mật Dữ Liệu",
+                "content": "Chúng tôi áp dụng các biện pháp bảo mật tiêu chuẩn ngành để bảo vệ dữ liệu của bạn, bao gồm mã hóa, máy chủ an toàn và kiểm tra bảo mật thường xuyên. Tuy nhiên, không có phương thức truyền tải qua internet nào an toàn 100%."
+            },
+            "cookies": {
+                "title": "5. Cookies và Theo Dõi",
+                "content": "Chúng tôi sử dụng cookies và các công nghệ tương tự để nâng cao trải nghiệm của bạn, phân tích mẫu sử dụng và cung cấp nội dung cá nhân hóa. Bạn có thể kiểm soát cài đặt cookie thông qua tùy chọn trình duyệt."
+            },
+            "retention": {
+                "title": "6. Lưu Trữ Dữ Liệu",
+                "content": "Chúng tôi lưu trữ thông tin cá nhân của bạn trong thời gian cần thiết để cung cấp dịch vụ và tuân thủ nghĩa vụ pháp lý. Bạn có thể yêu cầu xóa dữ liệu của mình, tùy thuộc vào một số ngoại lệ nhất định."
+            },
+            "rights": {
+                "title": "7. Quyền Của Bạn",
+                "content": "Bạn có quyền: truy cập, sửa đổi hoặc xóa thông tin cá nhân, từ chối nhận thông tin marketing, yêu cầu chuyển dữ liệu, và rút lại sự đồng ý khi áp dụng. Liên hệ với chúng tôi để thực hiện các quyền này."
+            },
+            "children": {
+                "title": "8. Quyền Riêng Tư Trẻ Em",
+                "content": "Dịch vụ của chúng tôi không dành cho trẻ em dưới 18 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em. Nếu bạn tin rằng chúng tôi đã thu thập thông tin như vậy, vui lòng liên hệ ngay với chúng tôi."
+            },
+            "international": {
+                "title": "9. Chuyển Giao Quốc Tế",
+                "content": "Thông tin của bạn có thể được chuyển đến và xử lý tại các quốc gia khác ngoài quốc gia của bạn. Chúng tôi đảm bảo các biện pháp bảo vệ thích hợp được áp dụng cho các việc chuyển giao như vậy."
+            },
+            "changes": {
+                "title": "10. Thay Đổi Chính Sách",
+                "content": "Chúng tôi có thể cập nhật Chính Sách Bảo Mật này định kỳ. Chúng tôi sẽ thông báo cho bạn về các thay đổi quan trọng qua website hoặc email. Ngày 'Cập nhật lần cuối' ở trên cho biết khi nào các thay đổi được thực hiện."
+            },
+            "contact": {
+                "title": "11. Liên Hệ",
+                "content": "Đối với bất kỳ câu hỏi hoặc lo ngại nào liên quan đến quyền riêng tư, vui lòng liên hệ với đội ngũ Bảo vệ Dữ liệu của chúng tôi qua các kênh hỗ trợ."
+            }
+        }
+    },
+    "refund": {
+        "title": "Chính Sách Hoàn Tiền",
+        "intro": "Chúng tôi muốn bạn hoàn toàn hài lòng với dịch vụ của chúng tôi. Chính sách này phác thảo các thủ tục và điều kiện hoàn tiền.",
+        "sections": {
+            "eligibility": {
+                "title": "1. Điều Kiện Hoàn Tiền",
+                "content": "Bạn có thể đủ điều kiện hoàn tiền nếu: dịch vụ boost chưa bắt đầu, chúng tôi không thể hoàn thành đơn hàng do lỗi của chúng tôi, hoặc có các trường hợp đặc biệt do đội ngũ hỗ trợ xác định."
+            },
+            "full_refund": {
+                "title": "2. Điều Kiện Hoàn Tiền 100%",
+                "content": "Hoàn tiền đầy đủ (100%) sẽ được thực hiện nếu: bạn hủy trước khi bất kỳ công việc boost nào bắt đầu, chúng tôi không thể thực hiện đơn hàng do sự cố kỹ thuật từ phía chúng tôi, hoặc đơn hàng được hủy trong vòng 2 giờ sau khi đặt và chưa có công việc nào bắt đầu."
+            },
+            "partial_refund": {
+                "title": "3. Điều Kiện Hoàn Tiền Một Phần",
+                "content": "Hoàn tiền một phần có thể được thực hiện dựa trên phần trăm công việc đã hoàn thành. Nếu 50% boost đã hoàn thành, bạn có thể nhận được tới 50% số tiền gốc. Số tiền chính xác được tính dựa trên tiến độ đã thực hiện."
+            },
+            "no_refund": {
+                "title": "4. Trường Hợp Không Hoàn Tiền",
+                "content": "KHÔNG hoàn tiền nếu: dịch vụ boost đã hoàn thành, bạn can thiệp vào quá trình boost, bạn thay đổi mật khẩu tài khoản trong quá trình boost, tài khoản của bạn bị Valve khóa vì lý do không liên quan đến dịch vụ của chúng tôi, hoặc bạn cung cấp thông tin tài khoản sai."
+            },
+            "process": {
+                "title": "5. Quy Trình Hoàn Tiền",
+                "content": "Để yêu cầu hoàn tiền: 1) Liên hệ đội ngũ hỗ trợ qua website hoặc Discord. 2) Cung cấp mã đơn hàng và lý do hoàn tiền. 3) Chờ đội ngũ xem xét yêu cầu (thường trong 24-48 giờ). 4) Nếu được chấp thuận, hoàn tiền sẽ được xử lý trong 5-7 ngày làm việc."
+            },
+            "method": {
+                "title": "6. Phương Thức Hoàn Tiền",
+                "content": "Hoàn tiền được thực hiện bằng cùng phương thức thanh toán đã sử dụng cho giao dịch gốc. Nếu không thể, chúng tôi sẽ làm việc với bạn để tìm giải pháp thay thế."
+            },
+            "disputes": {
+                "title": "7. Giải Quyết Tranh Chấp",
+                "content": "Nếu bạn không đồng ý với quyết định hoàn tiền của chúng tôi, bạn có thể yêu cầu xem xét lại bởi đội ngũ quản lý. Tất cả các quyết định sau quá trình xem xét là cuối cùng."
+            },
+            "promo_codes": {
+                "title": "8. Đơn Hàng Khuyến Mãi",
+                "content": "Các đơn hàng sử dụng mã khuyến mãi hoặc giảm giá có thể có điều khoản hoàn tiền khác. Số tiền hoàn sẽ dựa trên số tiền thực tế đã thanh toán, không phải giá gốc."
+            },
+            "timeframe": {
+                "title": "9. Thời Hạn Yêu Cầu Hoàn Tiền",
+                "content": "Yêu cầu hoàn tiền phải được gửi trong vòng 7 ngày kể từ ngày đặt hàng hoặc trong vòng 48 giờ sau khi hoàn thành đơn hàng, tùy theo điều kiện nào đến trước."
+            },
+            "contact": {
+                "title": "10. Liên Hệ Hỗ Trợ",
+                "content": "Đối với yêu cầu hoàn tiền hoặc câu hỏi về chính sách này, vui lòng liên hệ đội ngũ hỗ trợ của chúng tôi. Chúng tôi cam kết giải quyết mọi vấn đề một cách công bằng và nhanh chóng."
+            }
+        }
+    }
+}

@@ -1,15 +1,15 @@
-import {
+﻿import {
+  Heading,
   Helmet,
   PlusButton,
   ResetButton,
   Search,
   ViewButton,
-} from "~/components/shared";
-import { Heading } from "../GameModePage/components";
+} from "~/components/ui";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { pendingBoostsHeaders } from "~/constants/headers";
 import { filterOrderType } from "~/constants/order";
-import { BoostsTable, DataTableLayout } from "~/components/shared/DataTable";
+import { BoostsTable, DataTableLayout } from "~/components/ui/DataTable";
 import { useDataTable } from "~/hooks/useDataTable";
 import { orderService } from "~/services/order.service";
 import { IOrder, IPaginatedResponse } from "~/types";
@@ -45,12 +45,12 @@ const PendingBoostsPage = () => {
 
   return (
     <>
-      <Helmet title="Pending Boosts List · CS2Boost" />
+      <Helmet title="pending_boosts_page" />
       <div>
         <Heading
           icon={MdOutlinePendingActions}
-          title="Pending Boosts List"
-          subtitle="List of all pending boosts."
+          title="pending_boosts_page_title"
+          subtitle="pending_boosts_page_subtitle"
         />
         <main className="mt-8">
           <div className="space-y-4">

@@ -1,0 +1,63 @@
+{
+    "title": "Các đối tác của chúng tôi",
+    "hero": {
+        "badge": "Chương trình Đối tác Xác nhận",
+        "title_part1": "Nâng cấp cùng",
+        "title_part2": "Đối tác Tin cậy",
+        "subtitle": "Mở khóa các ưu đãi độc quyền về phần cứng, dịch vụ boosting đã xác minh, và vé tham dự giải đấu cao cấp dành cho cộng đồng CS2.",
+        "view_all_deals": "Xem Tất cả Ưu đãi",
+        "apply_partnership": "Đăng ký Đối tác"
+    },
+    "breadcrumb": {
+        "home": "Trang chủ",
+        "partners": "Đối tác"
+    },
+    "filters_title": "Bộ lọc",
+    "filters_subtitle": "Lọc theo danh mục",
+    "category": {
+        "all_partners": "Tất cả Đối tác",
+        "streamers": "Streamer",
+        "hardware": "Phần cứng",
+        "tournaments": "Giải đấu",
+        "services": "Dịch vụ"
+    },
+    "search_placeholder": "Tìm đối tác, mã giảm giá...",
+    "online_partners_btn": "Đối tác trực tuyến",
+    "rating_filter": "Đánh giá",
+    "completion_filter": "Hoàn thành",
+    "sort_by": "Sắp xếp theo",
+    "sort_options": {
+        "popular": "Phổ biến nhất",
+        "rating": "Đánh giá cao nhất",
+        "newest": "Mới nhất"
+    },
+    "results_found": "Tìm thấy {{count}} kết quả",
+    "error_loading": "Không thể lấy danh sách đối tác. Vui lòng thử lại.",
+    "range_filter": {
+        "title": "Đặt khoảng {{label}}",
+        "subtitle": "Điều chỉnh thanh trượt để lọc đối tác.",
+        "aria_min_value": "Giá trị nhỏ nhất",
+        "aria_max_value": "Giá trị lớn nhất"
+    },
+    "card": {
+        "view_profile_tooltip": "Xem hồ sơ của {{username}}",
+        "verified_tooltip": "Đối tác đã xác minh",
+        "verified": "Đã xác minh",
+        "online": "Trực tuyến",
+        "partner_label": "Đối tác",
+        "no_bio": "Đối tác này chưa thêm tiểu sử.",
+        "rating": "Đánh giá",
+        "completion": "Hoàn thành",
+        "completion_short": "hoàn thành",
+        "reviews": "Đánh giá",
+        "followers": "Người theo dõi",
+        "followers_short": "theo dõi",
+        "discount_label": "Mã giảm giá",
+        "special_offer": "Ưu đãi đặc biệt",
+        "view_profile_btn": "Xem hồ sơ"
+    },
+    "empty_state": {
+        "title": "Không tìm thấy đối tác",
+        "subtitle": "Không có đối tác nào khớp với bộ lọc hiện tại của bạn. Hãy thử điều chỉnh tìm kiếm."
+    }
+}

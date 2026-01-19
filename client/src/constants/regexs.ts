@@ -1,4 +1,4 @@
-const regexPassword =
+﻿const regexPassword =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
 
 const regexEmail =

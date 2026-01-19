@@ -1,12 +1,14 @@
-import { useParams } from "react-router-dom";
-import { ErrorDisplay, Spinner } from "~/components/shared";
+﻿import { useParams } from "react-router-dom";
+import { ErrorDisplay, Spinner } from "~/components/ui";
 import { IAccount, IOrder } from "~/types";
 import { orderService } from "~/services/order.service";
 import useSWR from "swr";
 import EditAccountWidget from "./EditAccountWidget";
 import BlankAccountWidget from "./BlankAccountWidget";
+import { useTranslation } from "react-i18next";
 
 const AccountWidget = () => {
+  const { t } = useTranslation("boost_page");
   const { id: boost_id } = useParams<{ id: string }>();
 
   const {
@@ -23,7 +25,9 @@ const AccountWidget = () => {
   }
 
   if (error || !order) {
-    return <ErrorDisplay message={error?.message || "Order not found."} />;
+    return (
+      <ErrorDisplay message={error?.message || t("errors.order_not_found")} />
+    );
   }
 
   return order.account ? (

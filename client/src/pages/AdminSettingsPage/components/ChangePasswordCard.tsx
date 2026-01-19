@@ -1,17 +1,17 @@
-import React from "react";
+﻿import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import toast from "react-hot-toast";
 import { FaShieldAlt } from "react-icons/fa";
 import { IChangePasswordPayload } from "~/types";
 import getErrorMessage from "~/utils/errorHandler";
-import { FormField, Spinner } from "~/components/shared";
-import { Button } from "~/components/shared/Button";
+import { FormField, Spinner } from "~/components/ui";
+import { Button } from "~/components/ui/Button";
 import { useTranslation } from "react-i18next";
 import { userService } from "~/services/user.service";
 
 const ChangePasswordCard: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["admin_settings_page", "common", "validation"]);
   const {
     register,
     handleSubmit,
@@ -29,7 +29,7 @@ const ChangePasswordCard: React.FC = () => {
   const onSubmit: SubmitHandler<IChangePasswordPayload> = async (formData) => {
     try {
       await trigger(formData);
-      toast.success("Password changed successfully!");
+      toast.success(t("common:toasts.password_changed_success"));
       reset();
     } catch (err) {
       toast.error(getErrorMessage(err));
@@ -45,10 +45,10 @@ const ChangePasswordCard: React.FC = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-foreground">
-              {t("AdminSettingsPage.PasswordCard.title")}
+              {t("password_card.title")}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("AdminSettingsPage.PasswordCard.subtitle")}
+              {t("password_card.subtitle")}
             </p>
           </div>
         </div>
@@ -58,7 +58,8 @@ const ChangePasswordCard: React.FC = () => {
           <FormField
             id="current_password"
             type="password"
-            label="Current Password"
+            label={t("common:form.current_password_label")}
+            placeholder={t("common:form.current_password_placeholder")}
             register={register}
             errors={errors}
             required
@@ -66,37 +67,36 @@ const ChangePasswordCard: React.FC = () => {
           <FormField
             id="new_password"
             type="password"
-            label="New Password"
+            label={t("common:form.new_password_label")}
+            placeholder={t("common:form.new_password_placeholder")}
             register={register}
             errors={errors}
             required
             rules={{
               minLength: {
                 value: 8,
-                message: "Password must be at least 8 characters long.",
+                message: t("validation:min_length", { count: 8 }),
               },
             }}
           />
           <FormField
             id="confirm_password"
             type="password"
-            label="Confirm New Password"
+            label={t("common:form.confirm_password_label")}
+            placeholder={t("common:form.confirm_password_placeholder")}
             register={register}
             errors={errors}
             required
             rules={{
               validate: (value) =>
-                value === watch("new_password") || "Passwords do not match.",
+                value === watch("new_password") ||
+                t("validation:passwords_do_not_match"),
             }}
           />
         </div>
         <div className="flex items-center justify-end gap-3 bg-muted/50 px-6 py-4">
-          <Button type="submit" disabled={isMutating}>
-            {isMutating ? (
-              <Spinner size="sm" />
-            ) : (
-              t("AdminSettingsPage.PasswordCard.updateBtn")
-            )}
+          <Button size="sm" type="submit" disabled={isMutating}>
+            {isMutating ? <Spinner /> : t("password_card.update_btn")}
           </Button>
         </div>
       </form>

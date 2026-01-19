@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
+﻿import { useState } from "react";
 import {
   AlertDialogContent,
   Dialog,
   DialogClose,
 } from "~/components/@radix-ui/Dialog";
 import ScannerQR from "./ScannerQR";
-import { AppContext } from "~/components/context/AppContext";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -16,14 +15,12 @@ import {
 import toast from "react-hot-toast";
 import { IVerifyUserPayload } from "~/types";
 import getErrorMessage from "~/utils/errorHandler";
-import { Button } from "~/components/shared/Button";
+import { Button } from "~/components/ui/Button";
 import { userService } from "~/services/user.service";
-
 interface IUploadImageModalProps {
   open: boolean;
   onOpenChange: (state: boolean) => void;
 }
-
 const parseUserString = (scanString: string) => {
   const parts = scanString.split("|");
   if (parts.length < 7) {
@@ -39,15 +36,12 @@ const parseUserString = (scanString: string) => {
     cccd_issue_date: parts[6],
   };
 };
-
 const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
-  const { t } = useTranslation();
-  const { toggleConfetti, toggleCongratsDialog } = useContext(AppContext);
+  const { t } = useTranslation(["settings_page", "common"]);
   const [cccdInfo, setCccdInfo] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState<IVerifyUserPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
-
   const handleScanResult = (result: string) => {
     try {
       const parsedData = parseUserString(result);
@@ -59,30 +53,26 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
     } catch (err) {
       setCccdInfo(null);
       setUserInfo(null);
-      setError((err as Error).message);
+      setError(t("upload_image_modal.error_incomplete_data"));
     }
   };
-
   const handleSubmit = async (verificationData: IVerifyUserPayload) => {
     if (!verificationData) {
-      toast.error("No user information to submit.");
+      toast.error(t("common:toasts.no_user_info_to_submit"));
       return;
     }
     try {
       dispatch(verifyStart());
       const data = await userService.verifyUser(verificationData);
       onOpenChange(false);
-      toggleConfetti();
-      toggleCongratsDialog();
       dispatch(verifySuccess(data));
-      toast.success("Verification successful!");
+      toast.success(t("common:toasts.partner_request_submitted"));
     } catch (err) {
       const message = getErrorMessage(err);
       dispatch(verifyFailure(message));
       toast.error(message);
     }
   };
-
   const handleSpecialCase = async () => {
     try {
       const parsedData = parseUserString(
@@ -94,18 +84,21 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
       await handleSubmit(parsedData);
     } catch (err) {
       setError((err as Error).message);
-      toast.error("Dữ liệu mẫu không hợp lệ");
+      toast.error(t("upload_image_modal.error_sample_data"));
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent
-        title={cccdInfo ? "Verify Your CCCD Information" : "Front of CCCD Card"}
+        title={
+          cccdInfo
+            ? t("upload_image_modal.verify_title")
+            : t("upload_image_modal.scan_title")
+        }
         subtitle={
           cccdInfo
-            ? "Please review and confirm your details below."
-            : "Capture or upload a clear image of your CCCD card."
+            ? t("upload_image_modal.verify_subtitle")
+            : t("upload_image_modal.scan_subtitle")
         }
       >
         {cccdInfo && userInfo ? (
@@ -114,7 +107,7 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
               {Object.entries(userInfo).map(([key, value]) => (
                 <div className="flex items-center space-x-2" key={key}>
                   <dt className="text-sm font-medium capitalize text-foreground">
-                    {key.split("_").join(" ")}
+                    {t(`user_widget.labels.${key}`, { ns: "settings_page" })}
                   </dt>
                   <dd className="mt-1 text-sm text-muted-foreground">
                     {String(value)}
@@ -122,7 +115,6 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
                 </div>
               ))}
             </div>
-
             <div className="flex flex-col justify-end space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
               <Button
                 onClick={() => {
@@ -132,14 +124,14 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
                 variant="light"
                 className="w-full rounded-md px-4 py-2 sm:w-auto"
               >
-                {t("Dialog.btn.Back")}
+                {t("common:buttons.back")}
               </Button>
               <Button
                 variant="primary"
                 className="w-full rounded-md px-4 py-2 sm:w-auto"
                 onClick={() => handleSubmit(userInfo)}
               >
-                {t("Dialog.btn.Confirm")}
+                {t("common:buttons.confirm")}
               </Button>
             </div>
           </div>
@@ -155,7 +147,7 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
                   variant="light"
                   className="w-full rounded-md px-4 py-2 sm:w-auto"
                 >
-                  {t("Dialog.btn.Cancel")}
+                  {t("common:buttons.cancel")}
                 </Button>
               </DialogClose>
               <Button
@@ -163,7 +155,7 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
                 className="w-full rounded-md px-4 py-2 sm:w-auto"
                 onClick={handleSpecialCase}
               >
-                Specific case
+                {t("upload_image_modal.specific_case_btn")}
               </Button>
             </div>
           </div>
@@ -172,5 +164,4 @@ const UploadImageModal = ({ open, onOpenChange }: IUploadImageModalProps) => {
     </Dialog>
   );
 };
-
 export default UploadImageModal;

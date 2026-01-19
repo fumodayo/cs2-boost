@@ -1,4 +1,4 @@
-import Slider, { SliderProps } from "rc-slider";
+﻿import Slider, { SliderProps } from "rc-slider";
 import Tooltip from "rc-tooltip";
 import "rc-slider/assets/index.css";
 import "rc-tooltip/assets/bootstrap_white.css";

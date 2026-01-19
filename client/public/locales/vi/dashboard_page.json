@@ -1,0 +1,57 @@
+{
+    "helmet": "Bảng điều khiển · Admin Panel",
+    "kpi_error": "Không thể tải số liệu thống kê KPI.",
+    "chart_error": "Không thể tải biểu đồ doanh thu.",
+    "transactions_error": "Không thể tải các giao dịch gần đây.",
+    "stat_cards": {
+        "gross_revenue": "Doanh thu gộp ({{days}})",
+        "net_profit": "Lợi nhuận ròng ({{days}})",
+        "total_payouts": "Tổng thanh toán ({{days}})",
+        "pending_payouts": "Thanh toán đang chờ",
+        "descriptions": {
+            "in_last_30_days": "Trong 30 ngày qua",
+            "in_last_n_days": "Trong {{count}} ngày qua",
+            "all_time": "Tất cả thời gian",
+            "profit_margin": "{{percent}}% biên lợi nhuận",
+            "no_revenue": "Chưa có doanh thu",
+            "paid_to_partners": "Đã trả cho đối tác (30 ngày)",
+            "paid_to_partners_n_days": "Đã trả cho đối tác ({{count}} ngày)",
+            "paid_to_partners_all_time": "Đã trả cho đối tác (tất cả)",
+            "pending_requests": "{{count}} yêu cầu đang chờ"
+        }
+    },
+    "chart": {
+        "title": "Xu hướng doanh thu (30 ngày qua)",
+        "subtitle": "Hiển thị dữ liệu trong {{days}} ngày qua",
+        "gross_revenue": "Doanh thu gộp",
+        "net_profit": "Lợi nhuận ròng",
+        "total_revenue": "Tổng doanh thu",
+        "total_profit": "Tổng lợi nhuận",
+        "time_ranges": {
+            "7_days": "7 ngày",
+            "30_days": "30 ngày",
+            "90_days": "90 ngày",
+            "all_time": "Tất cả"
+        }
+    },
+    "recent_transactions": {
+        "title": "Các giao dịch gần đây",
+        "empty": "Không có giao dịch gần đây.",
+        "view_all_btn": "Xem tất cả giao dịch",
+        "types": {
+            "SALE": "Bán hàng",
+            "PAYOUT": "Thanh toán",
+            "PARTNER_COMMISSION": "Hoa hồng",
+            "PENALTY": "Phạt",
+            "REFUND": "Hoàn tiền",
+            "FEE": "Phí"
+        }
+    },
+    "payout_requests": {
+        "title": "Thanh toán đang chờ ({{count}})",
+        "error": "Lỗi khi tải yêu cầu thanh toán.",
+        "empty": "Không có yêu cầu thanh toán nào đang chờ.",
+        "decline_btn": "Từ chối",
+        "approve_btn": "Phê duyệt"
+    }
+}
